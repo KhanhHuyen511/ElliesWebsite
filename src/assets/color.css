@@ -1,0 +1,18 @@
+:root {
+  --Y500: #fbb825;
+  --Y600: #fbcf67;
+  --Y200: #fbe8c9;
+  --O500: #ed8728;
+  --O200: #f6ca97;
+  --W: #fff;
+  --B: #000;
+  --G100: #f5f5f5;
+  --G400: #adb5bd;
+  --G800: #424242;
+  --G900: #212121;
+
+  --primary-color: var(--Y500);
+  --secondary-color: var(--O500);
+  --text-bold-color: var(--G900);
+  --text-light-color: var(--G800);
+}
