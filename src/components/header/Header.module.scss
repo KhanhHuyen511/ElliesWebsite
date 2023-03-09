@@ -1,0 +1,6 @@
+@import "../../assets/font.scss";
+@import "../../assets/mixins.scss";
+
+.test {
+  @include typo-heading-1;
+}
