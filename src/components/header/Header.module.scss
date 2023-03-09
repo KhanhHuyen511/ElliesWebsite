@@ -1,8 +1,9 @@
-@import "../../assets/font.scss";
-@import "../../assets/mixins.scss";
+@import "../../assets/style/shared.scss";
+@import "../../assets/color.css";
 
 .test {
   @include typo-heading-1;
+  color: var(--primary-color);
 }
 
 .icon {
