@@ -1,0 +1,68 @@
+@mixin typo-heading-1 {
+  font-family: quicksand;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+@mixin typo-heading-2 {
+  font-family: quicksand;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+@mixin typo-heading-3 {
+  font-family: quicksand;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+@mixin typo-body {
+  font-family: quicksand;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+@mixin typo-body-small {
+  font-family: quicksand;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@mixin typo-caption {
+  font-family: quicksand;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+@mixin typo-button {
+  font-family: quicksand;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+// BREAKPOINT
+// phone
+@mixin for-phone-only {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
+// tablet
+@mixin for-tablet {
+  @media (min-width: 600px) {
+    @content;
+  }
+}
+//desktop
+@mixin for-desktop {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}

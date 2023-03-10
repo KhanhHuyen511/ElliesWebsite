@@ -6,7 +6,7 @@ import { Study, Document, Exercise, Profile, Forum } from "./pages";
 
 function App() {
   return (
-    <>
+    <div className="app">
       <BrowserRouter>
         <Header />
         <Routes>
@@ -18,7 +18,7 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 
