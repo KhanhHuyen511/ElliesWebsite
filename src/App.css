@@ -1,0 +1,6 @@
+@import "./assets/reset.css";
+/* @import "./assets/style/shared.scss"; */
+
+.app {
+  height: 100vh;
+}

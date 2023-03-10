@@ -1,12 +1,89 @@
 @import "../../assets/style/shared.scss";
 @import "../../assets/color.css";
 
-.test {
-  @include typo-heading-1;
-  color: var(--primary-color);
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--W);
+  position: sticky;
+  top: 0;
 }
 
-.icon {
-  width: 24px;
-  height: 24px;
+.navbar {
+  display: none;
+
+  @include for-desktop {
+    display: flex;
+    flex-grow: 1;
+    justify-content: right;
+    align-items: center;
+    column-gap: 32px;
+  }
+}
+
+.logo-text {
+  display: none;
+
+  @include for-tablet {
+    display: block;
+    @include typo-heading-1;
+    color: var(--text-bold-color);
+  }
+}
+
+.profile {
+  width: fit-content;
+  height: fit-content;
+}
+
+.navbar-icon {
+  width: 32px;
+  height: 32px;
+
+  @include for-desktop {
+    display: none;
+  }
+}
+
+.profile-icon {
+  width: 32px;
+  height: 32px;
+  margin-left: 32px;
+}
+
+.slider-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--W);
+  box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.25);
+  width: 50%;
+  height: 100vh;
+  padding: 0 22px;
+  z-index: 2;
+
+  @include for-desktop {
+    display: none;
+  }
+}
+
+.back-slide {
+  text-align: right;
+  margin: 20px 0 32px 0;
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 1;
+
+  @include for-desktop {
+    display: none;
+  }
 }

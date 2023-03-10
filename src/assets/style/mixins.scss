@@ -46,3 +46,23 @@
   font-size: 14px;
   line-height: 18px;
 }
+
+// BREAKPOINT
+// phone
+@mixin for-phone-only {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
+// tablet
+@mixin for-tablet {
+  @media (min-width: 600px) {
+    @content;
+  }
+}
+//desktop
+@mixin for-desktop {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}
