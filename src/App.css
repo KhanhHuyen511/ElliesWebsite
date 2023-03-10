@@ -4,3 +4,7 @@
 .app {
   height: 100vh;
 }
+
+* {
+  font-family: quicksand;
+}

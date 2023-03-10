@@ -1,0 +1,16 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/color.css";
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--G100);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  @include typo-body-small;
+}
