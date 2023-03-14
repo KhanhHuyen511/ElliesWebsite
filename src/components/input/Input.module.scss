@@ -1,0 +1,80 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/color.css";
+
+.input-wrapper {
+  color: var(--text-bold-color);
+  & > .label {
+    @include typo-body-small;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  & > .input {
+    border: 2px solid var(--text-bold-color);
+    border-radius: 8px;
+    outline: none;
+    padding: 16px 12px;
+    color: var(--text-bold-color);
+    @include typo-button;
+
+    &::placeholder {
+      /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: var(--G400);
+      opacity: 1; /* Firefox */
+    }
+
+    &:-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      color: var(--G400);
+    }
+
+    &::-ms-input-placeholder {
+      /* Microsoft Edge */
+      color: var(--G400);
+    }
+
+    &:hover {
+      &::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: var(--G800);
+        opacity: 1; /* Firefox */
+      }
+
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: var(--G800);
+      }
+
+      &::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: var(--G800);
+      }
+    }
+
+    &:focus {
+      border-color: var(--primary-color);
+      caret-color: var(--text-bold-color);
+
+      &::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: var(--G800);
+        opacity: 1; /* Firefox */
+      }
+
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: var(--G800);
+      }
+
+      &::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: var(--G800);
+      }
+    }
+  }
+
+  & > .small-text {
+    @include typo-caption;
+    margin-top: 4px;
+  }
+}

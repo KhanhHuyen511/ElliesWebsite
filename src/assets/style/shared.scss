@@ -4,11 +4,5 @@
 .icon {
   width: 24px;
   height: 24px;
-  color: var(--text-bold-color);
   cursor: pointer;
-
-  &:hover {
-    color: var(--primary-color);
-    stroke-width: 2px;
-  }
 }
