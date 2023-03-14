@@ -1,15 +1,8 @@
 import React from "react";
-import { Button, Input } from "../../components";
+import { Button, Input, StudyRoute } from "../../components";
 
 const Study = () => {
-  return (
-    <div>
-      <Input label="Name" placeholder="hihi" />
-      <Button isPrimary={true} onClick={() => {}}>
-        hoho
-      </Button>
-    </div>
-  );
+  return <div>Study</div>;
 };
 
 export default Study;
