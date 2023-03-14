@@ -5,6 +5,7 @@ import {
   StudyRoute,
   CheckinPanel,
   CategoryPanel,
+  AnswerPanel,
 } from "../../components";
 
 const Study = () => {

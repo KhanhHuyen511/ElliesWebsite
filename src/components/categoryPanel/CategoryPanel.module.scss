@@ -16,7 +16,17 @@
     padding: 10px;
   }
 
-  &.active {
+  &:not(.active):hover {
+    background-color: var(--Y200);
+    cursor: pointer;
+
+    & > .icon {
+      color: var(--Y500);
+    }
+  }
+
+  &.active,
+  &:active {
     color: var(--text-bold-color);
     background-color: var(--Y400);
     cursor: default;
@@ -28,15 +38,6 @@
 
     & > .label {
       font-weight: 700;
-    }
-  }
-
-  &:not(.active):hover {
-    background-color: var(--Y200);
-    cursor: pointer;
-
-    & > .icon {
-      color: var(--Y500);
     }
   }
 }

@@ -24,6 +24,11 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 28px;
+
+  @include for-desktop() {
+    font-size: 20px;
+    line-height: 28px;
+  }
 }
 
 @mixin typo-body-small {

@@ -1,9 +1,19 @@
-import React from 'react'
+import React from "react";
+import classNames from "classnames/bind";
+import style from "./AnswerPanel.module.scss";
+const cx = classNames.bind(style);
 
-const AnswerPanel = () => {
-  return (
-    <div>AnswerPanel</div>
-  )
+interface Props {
+  isActive?: boolean;
+  children?: string;
 }
 
-export default AnswerPanel
+const AnswerPanel = (props: Props) => {
+  return (
+    <div className={cx("wrapper", { active: props.isActive })}>
+      {props.children}
+    </div>
+  );
+};
+
+export default AnswerPanel;
