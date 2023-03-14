@@ -6,13 +6,14 @@ const cx = classNames.bind(style);
 
 interface Props {
   isActive?: boolean;
+  label?: string;
 }
 
 const CheckinPanel = (props: Props) => {
   return (
     <div className={cx("wrapper", { active: props.isActive })}>
       <FireIcon className={cx("icon")} />
-      <p className={cx("label")}>day</p>
+      <p className={cx("label")}>{props.label}</p>
     </div>
   );
 };
