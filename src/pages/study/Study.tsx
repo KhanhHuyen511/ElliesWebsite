@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Input, StudyRoute } from "../../components";
+import { Button, Input, StudyRoute, CheckinPanel } from "../../components";
 
 const Study = () => {
-  return <div>Study</div>;
+  return <div></div>;
 };
 
 export default Study;
