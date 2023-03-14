@@ -1,9 +1,15 @@
-import React from 'react'
+import React from "react";
+import {
+  Button,
+  Input,
+  StudyRoute,
+  CheckinPanel,
+  CategoryPanel,
+  AnswerPanel,
+} from "../../components";
 
 const Study = () => {
-  return (
-    <div>Study</div>
-  )
-}
+  return <div></div>;
+};
 
-export default Study
+export default Study;

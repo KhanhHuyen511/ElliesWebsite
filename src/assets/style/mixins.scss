@@ -24,6 +24,11 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 28px;
+
+  @include for-desktop() {
+    font-size: 20px;
+    line-height: 28px;
+  }
 }
 
 @mixin typo-body-small {
@@ -45,6 +50,11 @@
   font-weight: 700;
   font-size: 14px;
   line-height: 18px;
+
+  @include for-desktop() {
+    font-size: 16px;
+    line-height: 22px;
+  }
 }
 
 // BREAKPOINT
@@ -64,5 +74,15 @@
 @mixin for-desktop {
   @media (min-width: 1200px) {
     @content;
+  }
+}
+
+//
+@mixin hover-icon-primary {
+  color: var(--text-bold-color);
+
+  &:hover {
+    color: var(--primary-color);
+    stroke-width: 2px;
   }
 }

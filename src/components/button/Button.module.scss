@@ -1,0 +1,52 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/color.css";
+
+.btn {
+  @include typo-button;
+  padding: 16px;
+  border-radius: 8px;
+  border: none;
+  border: var(--border-color-250);
+  background-color: var(--W);
+  display: flex;
+  column-gap: 4px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-medium-color);
+  text-transform: uppercase;
+
+  &:hover {
+    border: var(--border-color-500);
+  }
+
+  &:active {
+    border: var(--border-color-1000);
+    color: var(--text-bold-color);
+    background-color: var(--G100);
+  }
+}
+
+.primary {
+  background-color: var(--primary-color);
+  color: var(--text-bold-color);
+  box-sizing: content-box;
+
+  &:hover {
+    background-color: var(--Y400);
+  }
+
+  &:active {
+    background-color: var(--O500);
+  }
+}
+
+.right-icon {
+  width: 16px;
+  height: 16px;
+
+  @include for-desktop {
+    width: 24px;
+    height: 24px;
+  }
+}
