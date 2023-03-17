@@ -1,8 +1,17 @@
-@import "./assets/reset.css";
-/* @import "./assets/style/shared.scss"; */
+@import './assets/theme/shared.css';
 
 .app {
   height: 100vh;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    padding: 0 120px;
+  }
 }
 
 * {

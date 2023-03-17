@@ -1,0 +1,37 @@
+@import '../../assets/style/shared.scss';
+
+.wrapper {
+  .logo {
+    @include typo-heading-1;
+    text-align: center;
+    margin-top: 64px;
+
+    @include for-desktop {
+      display: none;
+    }
+  }
+
+  .page-name {
+    @include typo-heading-1;
+    text-align: center;
+    margin-top: 55px;
+  }
+
+  .input {
+    margin-top: 24px;
+  }
+
+  .forgot-pass-text {
+    @include typo-caption;
+    text-align: right;
+    margin-top: 14px;
+  }
+
+  .button-wrapper {
+    display: grid;
+    margin-top: 50px;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    align-items: end;
+  }
+}
