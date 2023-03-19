@@ -7,12 +7,14 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/config';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
 
   const isValid = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,10 +30,12 @@ const Register = () => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
+        toast.success('Regiter successfull!');
+        navigate('/login');
       })
       .catch((error) => {
         const errorMessage = error.message;
-        toast(errorMessage);
+        toast.error(errorMessage);
       });
   };
 
