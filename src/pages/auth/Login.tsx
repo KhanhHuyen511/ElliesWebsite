@@ -6,7 +6,12 @@ import styles from './auth.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth';
 import { auth } from '../../firebase/config';
 
 const cx = classNames.bind(styles);
@@ -24,6 +29,30 @@ const Login = () => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
+        toast.success('Login successfull!');
+        navigate('/');
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
+  };
+
+  const loginByFacebook = () => {
+    signInWithPopup(auth, new FacebookAuthProvider())
+      .then((result) => {
+        toast.success('Login successfull!');
+        navigate('/');
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
+  };
+
+  const loginByGoogle = () => {
+    signInWithPopup(auth, new GoogleAuthProvider())
+      .then((result) => {
         toast.success('Login successfull!');
         navigate('/');
       })
@@ -61,7 +90,9 @@ const Login = () => {
         </div>
         <p className={cx('forgot-pass-text')}>Quên mật khẩu</p>
         <div className={cx('button-wrapper')}>
-          <embed src='images/facebook-icon.svg'></embed>
+          <button onClick={loginByFacebook}>
+            <embed src='images/facebook-icon.svg'></embed>
+          </button>
           <div className={cx('submit-button')}>
             <Button
               type='submit'
