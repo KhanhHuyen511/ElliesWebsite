@@ -11,6 +11,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 
@@ -62,6 +63,18 @@ const Login = () => {
       });
   };
 
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        toast.success('Logout successfull!');
+        navigate('/login');
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
+  };
+
   return (
     <Col xs={12} md={6} lg={4} xl={3} className={cx('wrapper', 'container')}>
       <ToastContainer />
@@ -90,9 +103,7 @@ const Login = () => {
         </div>
         <p className={cx('forgot-pass-text')}>Quên mật khẩu</p>
         <div className={cx('button-wrapper')}>
-          <button onClick={loginByFacebook}>
-            <embed src='images/facebook-icon.svg'></embed>
-          </button>
+          <embed src='images/facebook-icon.svg'></embed>
           <div className={cx('submit-button')}>
             <Button
               type='submit'
