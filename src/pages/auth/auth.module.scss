@@ -34,4 +34,16 @@
     column-gap: 20px;
     align-items: end;
   }
+
+  .login-facebook {
+    width: fit-content;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  .form-reset {
+    display: flex;
+    flex-direction: column;
+    row-gap: 32px;
+  }
 }

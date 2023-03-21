@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { Header, Footer } from './components';
+import { Header } from './components';
 import { Study, Document, Exercise, Profile, Forum } from './pages';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
+import { Login, Register, ResetPassword } from './pages/auth';
 
 function App() {
   return (
@@ -19,6 +18,7 @@ function App() {
           <Route path='/forum' element={<Forum />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
         </Routes>
         {/* <Footer /> */}
       </BrowserRouter>

@@ -103,7 +103,12 @@ const Login = () => {
         </div>
         <p className={cx('forgot-pass-text')}>Quên mật khẩu</p>
         <div className={cx('button-wrapper')}>
-          <embed src='images/facebook-icon.svg'></embed>
+          <img
+            src='images/facebook-icon.svg'
+            onClick={loginByFacebook}
+            alt='facebook icon'
+            className={cx('login-facebook')}
+          ></img>
           <div className={cx('submit-button')}>
             <Button
               type='submit'
