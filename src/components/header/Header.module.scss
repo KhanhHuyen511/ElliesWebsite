@@ -1,5 +1,5 @@
-@import "../../assets/style/shared.scss";
-@import "../../assets/color.css";
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
 
 .header {
   display: flex;
@@ -26,7 +26,7 @@
 .logo-text {
   display: none;
 
-  @include for-tablet {
+  @include for-desktop {
     display: block;
     @include typo-heading-1;
     color: var(--text-bold-color);
