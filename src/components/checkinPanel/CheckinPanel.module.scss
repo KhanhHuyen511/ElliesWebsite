@@ -11,22 +11,36 @@
   padding: 5px;
   margin: 2px;
 
+  * {
+    cursor: default;
+  }
+
   @include for-desktop {
     @include typo-body-small;
     padding: 8px;
   }
 
-  &:not(.active):hover {
+  &.current {
     background-color: var(--Y200);
-    cursor: pointer;
+    * {
+      cursor: pointer;
+    }
 
     & > .icon {
-      color: var(--Y500);
+      color: var(--secondary-color);
+    }
+
+    transition: all 0.3s ease-in;
+  }
+
+  &.current:not(.checked):hover {
+    & > .icon {
+      color: var(--Y400);
     }
   }
 
-  &.active,
-  &:active {
+  &.checked,
+  &.current:active {
     color: var(--text-bold-color);
     background-color: var(--Y400);
     cursor: default;
@@ -39,6 +53,27 @@
     & > .label {
       font-weight: 700;
     }
+
+    transition: all 0.3s ease-in;
+  }
+
+  &.before {
+    opacity: 0.5;
+
+    // &:hover,
+    // &:active {
+    //   * {
+    //     pointer-events: none;
+    //     color: var(--text-medium-color);
+    //   }
+
+    //   cursor: default;
+    //   background: var(--W);
+
+    //   & > .label {
+    //     font-weight: 500;
+    //   }
+    // }
   }
 }
 
