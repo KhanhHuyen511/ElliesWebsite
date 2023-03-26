@@ -11,7 +11,6 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
 } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 
@@ -56,18 +55,6 @@ const Login = () => {
       .then((result) => {
         toast.success('Login successfull!');
         navigate('/');
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        toast.error(errorMessage);
-      });
-  };
-
-  const logout = () => {
-    signOut(auth)
-      .then(() => {
-        toast.success('Logout successfull!');
-        navigate('/login');
       })
       .catch((error) => {
         const errorMessage = error.message;
