@@ -1,53 +1,65 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Study.module.scss';
-import {
-  Button,
-  Input,
-  StudyRoute,
-  CheckinPanel,
-  CategoryPanel,
-  AnswerPanel,
-} from '../../components';
+import { StudyRoute, CheckinPanel } from '../../components';
 import classNames from 'classnames/bind';
-import { Col, Row } from 'react-flexbox-grid';
+import { Col } from 'react-flexbox-grid';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { getCheckedInDays, getStudyRoutes } from '../../redux/slice/studySlice';
 const cx = classNames.bind(styles);
 
 const Study = () => {
-  const [checkedDays, setCheckedDays] = useState(-2);
-  const [currentRoute, setCurrentRoute] = useState(-2);
+  // const [checkedDays, setCheckedDays] = useState(-2);
+  const dispatch = useDispatch<AppDispatch>();
 
   // get checked days in this week from Firebase
+  const routes = useSelector((state: RootState) => state.study.studyRoutes); // show 4 routes
+  const storeDays = useSelector(
+    (state: RootState) => state.study.checkedInDays
+  );
 
-  const days = [1, 2, 3, 4, 5, 6, 7]; // 7 days in a week, order from 1 to 7
-  const routes = [8, 9, 10, 11]; // show 4 routes
+  const days = [0, 1, 2, 3, 4, 5, 6]; // 7 days in a week, order from 1 to 7
+
+  var tempdays: number[] = [];
 
   const d = new Date();
-  console.log(d.getDay());
-  console.log(checkedDays);
+  days.forEach((e) => {
+    const dd = new Date();
+    dd.setDate(d.getDate() - e);
+    if (storeDays.indexOf(dd.toLocaleDateString()) >= 0)
+      tempdays.push(dd.getDay() < 1 ? dd.getDay() + 5 : dd.getDay());
+  });
 
-  const CheckIn = (item: number) => {
-    // check if item is current day
-    if (item === d.getDay() + 6) setCheckedDays(item);
-  };
+  useEffect(() => {
+    dispatch(getStudyRoutes());
+    dispatch(getCheckedInDays());
+  }, [dispatch]);
+
+  // const CheckIn = (item: number) => {
+  //   // check if item is current day
+  //   if (item === (d.getDay() < 1 ? d.getDay() + 7 : d.getDay()))
+  //     // setCheckedDays(item);
+  // };
 
   const GetStateCheckIn = (day: number) => {
-    return day === d.getDay() + 6
+    return day === (d.getDay() < 1 ? d.getDay() + 6 : d.getDay())
       ? 'current'
-      : day <= d.getDay() + 5
+      : day <= (d.getDay() < 1 ? d.getDay() + 5 : d.getDay())
       ? 'before'
       : 'default';
   };
 
   const CheckCheckedDays = (day: number) => {
-    return day === checkedDays;
+    return tempdays.indexOf(day) >= 0;
   };
 
-  const GetCurrentRoute = () => {};
-
   const generateCheckInList = days.map((item, index) => (
-    <li className={cx('check-in-item')} onClick={() => CheckIn(item)}>
+    <li
+      className={cx('check-in-item')}
+      // onClick={() => CheckIn(item)}
+    >
       <CheckinPanel
-        label={'day' + item}
+        label={'day' + (item + 1)}
         isChecked={CheckCheckedDays(item)}
         state={GetStateCheckIn(item)}
       />
@@ -56,7 +68,7 @@ const Study = () => {
 
   const generateRouteList = routes.map((item, index) => (
     <li className={cx('route-study-item')}>
-      <StudyRoute label={'Chặng' + item} />
+      <StudyRoute label={'Chặng ' + item.name} />
     </li>
   ));
 

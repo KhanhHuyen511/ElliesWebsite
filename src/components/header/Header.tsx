@@ -49,7 +49,6 @@ const Header = () => {
             setCurrentUserName(
               tempName?.charAt(0).toUpperCase() + tempName?.slice(1)
             );
-            console.log(tempName);
           }
         } else {
           setCurrentUserName(user.displayName);

@@ -5,7 +5,7 @@ import { Col } from 'react-flexbox-grid';
 import styles from './auth.module.scss';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
@@ -31,6 +31,15 @@ const Register = () => {
         const user = userCredential.user;
         console.log(user);
         toast.success('Regiter successfull!');
+        // log out
+        signOut(auth)
+          .then(() => {
+            navigate('/login');
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            toast.error(errorMessage);
+          });
         navigate('/login');
       })
       .catch((error) => {
