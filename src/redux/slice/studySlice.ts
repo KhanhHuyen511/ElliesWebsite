@@ -2,12 +2,15 @@ import { async } from '@firebase/util';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   query,
+  setDoc,
   Timestamp,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -39,8 +42,28 @@ export const getStudyRoutes = createAsyncThunk('study/getRoutes', async () => {
   return routes;
 });
 
+// Write reducer set check in today
+export const setCheckInToday = createAsyncThunk(
+  'study/setCheckIn',
+  async (day: Date) => {
+    // var day: Date;
+    const q = query(
+      collection(db, 'students'),
+      where('id', '==', 'Q4hq6CKSQUXrofY2HWLsl1L7Xhn2')
+    );
+
+    const querySnapshot = (await getDocs(q)).docs[0];
+
+    await updateDoc(querySnapshot.ref, {
+      checkinDays: arrayUnion(day),
+    });
+
+    return day;
+  }
+);
+
 // Write reducer get checkedInDay
-// Get data of 7 days of current week
+// TODO: Get data of 7 days of current week
 export const getCheckedInDays = createAsyncThunk(
   'study/getCheckedIn',
   async () => {
@@ -65,10 +88,7 @@ export const getCheckedInDays = createAsyncThunk(
 const studySlice = createSlice({
   name: 'study',
   initialState,
-  reducers: {
-    // Action: checkin
-    // TODO: Only checkin current date
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getStudyRoutes.pending, (state) => {})
@@ -82,6 +102,12 @@ const studySlice = createSlice({
         state.checkedInDays = action.payload;
       })
       .addCase(getCheckedInDays.rejected, (state, action) => {});
+    builder
+      .addCase(setCheckInToday.pending, (state) => {})
+      .addCase(setCheckInToday.fulfilled, (state, action) => {
+        state.checkedInDays.push(action.payload.toLocaleDateString());
+      })
+      .addCase(setCheckInToday.rejected, (state, action) => {});
   },
 });
 

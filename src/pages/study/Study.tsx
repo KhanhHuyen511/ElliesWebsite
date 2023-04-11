@@ -5,11 +5,15 @@ import classNames from 'classnames/bind';
 import { Col } from 'react-flexbox-grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { getCheckedInDays, getStudyRoutes } from '../../redux/slice/studySlice';
+import {
+  getCheckedInDays,
+  getStudyRoutes,
+  setCheckInToday,
+} from '../../redux/slice/studySlice';
 const cx = classNames.bind(styles);
 
 const Study = () => {
-  // const [checkedDays, setCheckedDays] = useState(-2);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   // get checked days in this week from Firebase
@@ -23,41 +27,52 @@ const Study = () => {
   var tempdays: number[] = [];
 
   const d = new Date();
+
   days.forEach((e) => {
     const dd = new Date();
-    dd.setDate(d.getDate() - e);
-    if (storeDays.indexOf(dd.toLocaleDateString()) >= 0)
-      tempdays.push(dd.getDay() < 1 ? dd.getDay() + 5 : dd.getDay());
+    if (d.getDay() - e - 1 > 0) {
+      dd.setDate(d.getDate() - e - 1);
+    } else {
+      dd.setDate(d.getDate() - e + 6);
+    }
+    if (storeDays.indexOf(dd.toLocaleDateString()) >= 0) {
+      tempdays.push(dd.getDay() < 1 ? dd.getDay() + 5 : dd.getDay() - 1);
+    }
   });
+
+  console.log(tempdays);
 
   useEffect(() => {
     dispatch(getStudyRoutes());
     dispatch(getCheckedInDays());
-  }, [dispatch]);
+  }, [dispatch, isCheckedIn]);
 
-  // const CheckIn = (item: number) => {
-  //   // check if item is current day
-  //   if (item === (d.getDay() < 1 ? d.getDay() + 7 : d.getDay()))
-  //     // setCheckedDays(item);
-  // };
+  const CheckIn = (item: number) => {
+    // check if item is current day
+    if (
+      !isCheckedIn &&
+      item === (d.getDay() < 1 ? d.getDay() + 6 : d.getDay() - 1)
+    ) {
+      dispatch(setCheckInToday(d));
+      setIsCheckedIn(true);
+    }
+  };
 
   const GetStateCheckIn = (day: number) => {
-    return day === (d.getDay() < 1 ? d.getDay() + 6 : d.getDay())
+    return day === (d.getDay() < 1 ? d.getDay() + 6 : d.getDay() - 1)
       ? 'current'
-      : day <= (d.getDay() < 1 ? d.getDay() + 5 : d.getDay())
+      : day <= (d.getDay() < 1 ? d.getDay() + 5 : d.getDay() - 1)
       ? 'before'
       : 'default';
   };
 
   const CheckCheckedDays = (day: number) => {
+    // if (isCheckedIn && day === d.getDay()) return true;
     return tempdays.indexOf(day) >= 0;
   };
 
   const generateCheckInList = days.map((item, index) => (
-    <li
-      className={cx('check-in-item')}
-      // onClick={() => CheckIn(item)}
-    >
+    <li className={cx('check-in-item')} onClick={() => CheckIn(item)}>
       <CheckinPanel
         label={'day' + (item + 1)}
         isChecked={CheckCheckedDays(item)}
