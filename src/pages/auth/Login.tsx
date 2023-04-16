@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input } from '../../components';
 import { Col } from 'react-flexbox-grid';
 import styles from './auth.module.scss';
@@ -9,10 +9,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from 'firebase/auth';
 import { auth } from '../../firebase/config';
+import { REMOVE_ACTIVE_USER } from '../../redux/slice/authSlice';
+import { useDispatch } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +24,23 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // remove current account
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       signOut(auth);
+  //       // dispatch(REMOVE_ACTIVE_USER({}));
+  //     }
+  //   });
+  // }, [dispatch]);
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     signOut(auth);
+  //     // dispatch(REMOVE_ACTIVE_USER({}));
+  //   }
+  // });
 
   const isValid = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +49,6 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
         toast.success('Login successfull!');
         navigate('/');
       })

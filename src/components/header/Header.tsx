@@ -59,6 +59,7 @@ const Header = () => {
             email: user.email,
             userName: user.displayName ? user.displayName : currentUserName,
             userID: user.uid,
+            userRole: null,
           })
         );
       } else {
