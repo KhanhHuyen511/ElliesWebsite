@@ -1,1 +1,2 @@
-export { default } from './CreateStudy';
+export { default as IndexStudy } from './IndexStudy';
+export { default as CreateStudyForm } from './CreateStudyForm';

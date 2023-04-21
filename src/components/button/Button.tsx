@@ -1,7 +1,7 @@
-import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
-import classNames from "classnames/bind";
-import React from "react";
-import style from "./Button.module.scss";
+import { ArrowSmallRightIcon } from '@heroicons/react/24/outline';
+import classNames from 'classnames/bind';
+import React from 'react';
+import style from './Button.module.scss';
 const cx = classNames.bind(style);
 
 interface Props {
@@ -11,17 +11,21 @@ interface Props {
   children?: string;
   haveIcon?: boolean;
   icon?: string;
+  isDanger?: boolean;
 }
 
 const Button = (props: Props) => {
   return (
     <button
-      onClick={props.onClick}
-      className={cx("btn", { primary: props.isPrimary })}
+      onClick={(e) => {
+        e.preventDefault();
+        props.onClick();
+      }}
+      className={cx('btn', { primary: props.isPrimary })}
     >
       {props.children}
       {props.haveIcon && (
-        <ArrowSmallRightIcon className={cx("icon", "right-icon")} />
+        <ArrowSmallRightIcon className={cx('icon', 'right-icon')} />
       )}
     </button>
   );

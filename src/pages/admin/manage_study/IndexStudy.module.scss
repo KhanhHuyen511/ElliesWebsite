@@ -1,0 +1,66 @@
+@import '../../../assets/style/shared.scss';
+@import '../../../assets/theme/shared.css';
+
+.table {
+  width: 100%;
+  border-spacing: 0;
+  border-radius: 8px;
+  position: relative;
+
+  td,
+  th {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    @include typo-body-small;
+  }
+
+  th {
+    background-color: var(--Y500);
+  }
+
+  tr:hover {
+    background-color: var(--Y200);
+  }
+}
+
+.handler {
+  width: 100%;
+  display: flex;
+}
+
+.modal {
+  width: 100%;
+  height: 100%;
+  background-color: var(--B);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  opacity: 0.3;
+  visibility: hidden;
+
+  &.display {
+    visibility: visible;
+  }
+}
+
+.form {
+  width: 40%;
+  visibility: hidden;
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  margin: auto;
+  height: fit-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background-color: var(--W);
+
+  &.open {
+    visibility: visible;
+  }
+}

@@ -15,11 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { getDate, getDateString } from '../../utils';
-
-interface StudyRoute {
-  desc: string;
-  name: string;
-}
+import { StudyRoute } from '../../types';
 
 interface types {
   studyRoutes: StudyRoute[];

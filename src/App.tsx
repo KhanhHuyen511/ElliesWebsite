@@ -4,7 +4,7 @@ import './App.css';
 import { Header } from './components';
 import { Study, Document, Exercise, Profile, Forum } from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
-import CreateStudy from './pages/admin/manage_study';
+import { IndexStudy } from './pages/admin/manage_study';
 // import Admin from './pages/admin';
 // import { selectUserRole } from './redux/slice/authSlice';
 import { AppDispatch, RootState } from './redux/store';
@@ -16,8 +16,6 @@ function App() {
   // const userRole = useSelector((state: RootState) => state.auth.userRole);
   const [userRole, setUserRole] = useState('student');
   const userID = useSelector((state: RootState) => state.auth.userID);
-  // console.log(userRole);
-  console.log('user id' + userID);
 
   useEffect(() => {
     if (userID)
@@ -57,7 +55,7 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path='/' element={<CreateStudy />} />
+            <Route path='/' element={<IndexStudy />} />
             <Route path='/login' element={<Login />} />
           </Routes>
         </BrowserRouter>
