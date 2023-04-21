@@ -12,6 +12,12 @@
   z-index: 1;
 }
 
+.navigation_bar {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
 .navbar {
   display: none;
 
@@ -105,14 +111,6 @@
   @include for-desktop {
     display: none;
   }
-}
-
-.profile-icon {
-  width: 32px;
-  height: 32px;
-  margin-left: 32px;
-
-  @include hover-icon-primary;
 }
 
 .slider-container {

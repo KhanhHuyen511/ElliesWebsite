@@ -104,43 +104,44 @@ const Header = () => {
 
       {showMenu && <div className={cx('modal')}></div>}
 
-      <div className={cx('navbar')}>
-        <Navbar isSlider={false} />
-      </div>
-
-      <div className={cx('profile')}>
-        <div
-          className={cx('user-name-wrapper')}
-          onClick={() => toggleAuthWrapper()}
-        >
-          <span className={cx('user-name')}>
-            Hi {currentUserName ? currentUserName : 'user'}
-          </span>
-          <ChevronDownIcon
-            className={cx('dropdown-icon', 'icon', {
-              checked: showAuthWrapper,
-            })}
-          />
-          {showAuthWrapper && (
-            <ul className={cx('auth-wrapper')}>
-              {currentUserName ? (
-                <li onClick={logout} className={cx('auth-item')}>
-                  Đăng xuất
-                </li>
-              ) : (
-                <>
-                  <NavLink to='/login' className={cx('auth-item')}>
-                    Đăng nhập
-                  </NavLink>
-                  <NavLink to='/register' className={cx('auth-item')}>
-                    Đăng kí
-                  </NavLink>
-                </>
-              )}
-            </ul>
-          )}
+      <div className={cx('navigation_bar')}>
+        <div className={cx('navbar')}>
+          <Navbar isSlider={false} />
         </div>
-        <UserCircleIcon className={cx('profile-icon', 'icon')} />
+
+        <div className={cx('profile')}>
+          <div
+            className={cx('user-name-wrapper')}
+            onClick={() => toggleAuthWrapper()}
+          >
+            <span className={cx('user-name')}>
+              Hi {currentUserName ? currentUserName : 'user'}
+            </span>
+            <ChevronDownIcon
+              className={cx('dropdown-icon', 'icon', {
+                checked: showAuthWrapper,
+              })}
+            />
+            {showAuthWrapper && (
+              <ul className={cx('auth-wrapper')}>
+                {currentUserName ? (
+                  <li onClick={logout} className={cx('auth-item')}>
+                    Đăng xuất
+                  </li>
+                ) : (
+                  <>
+                    <NavLink to='/login' className={cx('auth-item')}>
+                      Đăng nhập
+                    </NavLink>
+                    <NavLink to='/register' className={cx('auth-item')}>
+                      Đăng kí
+                    </NavLink>
+                  </>
+                )}
+              </ul>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
