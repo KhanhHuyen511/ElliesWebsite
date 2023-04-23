@@ -19,13 +19,15 @@ const Checkbox = (props: Props) => {
   };
 
   return (
-    <>
+    <div className={cx('wrapper')}>
+      <label>{props.label}</label>
       <input
         type='checkbox'
         checked={isChecked}
         onChange={onValueChange}
+        className={cx('checkbox')}
       ></input>
-    </>
+    </div>
   );
 };
 

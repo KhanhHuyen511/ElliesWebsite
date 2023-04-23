@@ -11,6 +11,7 @@ import { AppDispatch, RootState } from './redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from './firebase/config';
+import PathDetail from './pages/admin/manage_study/PathDetail';
 
 function App() {
   // const userRole = useSelector((state: RootState) => state.auth.userRole);
@@ -28,7 +29,6 @@ function App() {
     const q = query(collection(db, 'accounts'), where('user_id', '==', userID));
 
     const role = await (await getDocs(q)).docs[0].data().role;
-
     return role;
   };
 
@@ -46,9 +46,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/reset-password' element={<ResetPassword />} />
-            {/* <Route path='/admin' element={<CreateStudy />} /> */}
           </Routes>
-          {/* <Footer /> */}
         </BrowserRouter>
       )}
       {userRole === 'admin' && (
@@ -57,6 +55,7 @@ function App() {
           <Routes>
             <Route path='/' element={<IndexStudy />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/path_detail/:id' element={<PathDetail />} />
           </Routes>
         </BrowserRouter>
       )}

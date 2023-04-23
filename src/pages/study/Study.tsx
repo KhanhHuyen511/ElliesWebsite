@@ -42,10 +42,10 @@ const Study = () => {
 
   console.log(tempdays);
 
-  useEffect(() => {
-    dispatch(getStudyRoutes());
-    dispatch(getCheckedInDays());
-  }, [dispatch, isCheckedIn]);
+  // useEffect(() => {
+  //   dispatch(getStudyRoutes());
+  //   dispatch(getCheckedInDays());
+  // }, [dispatch, isCheckedIn]);
 
   const CheckIn = (item: number) => {
     // check if item is current day

@@ -12,13 +12,14 @@ interface Props {
   haveIcon?: boolean;
   icon?: string;
   isDanger?: boolean;
+  preventDefault?: boolean;
 }
 
 const Button = (props: Props) => {
   return (
     <button
       onClick={(e) => {
-        e.preventDefault();
+        if (props.preventDefault) e.preventDefault();
         props.onClick();
       }}
       className={cx('btn', { primary: props.isPrimary })}

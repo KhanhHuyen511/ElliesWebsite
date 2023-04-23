@@ -5,6 +5,7 @@ import { Button, Input } from '../../../components';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { setStudyPath } from '../../../redux/slice/adminSlice';
+import { StudyRoute } from '../../../types';
 const cx = classNames.bind(styles);
 
 interface Props {
@@ -57,14 +58,20 @@ const CreateStudyForm = (props: Props) => {
         </div>
         <Button
           isPrimary
+          preventDefault
           onClick={() => {
-            console.log(name, topic, level);
             dispatch(setStudyPath({ name, topic, level }));
+            props.onClose();
           }}
         >
           Tạo mới
         </Button>
-        <Button type='button' isPrimary={false} onClick={props.onClose}>
+        <Button
+          type='button'
+          preventDefault
+          isPrimary={false}
+          onClick={props.onClose}
+        >
           Đóng
         </Button>
       </form>

@@ -3,18 +3,18 @@ import classNames from 'classnames/bind';
 import styles from './IndexStudy.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { getStudyPaths } from '../../../redux/slice/adminSlice';
+import { getStudyPath, getStudyPaths } from '../../../redux/slice/adminSlice';
 import { Button, Checkbox, Input } from '../../../components';
 import CreateStudyForm from './CreateStudyForm';
-import EditStudyForm from './EditStudyForm';
+import { StudyPath } from '../../../types';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
-const CreateStudy = () => {
+const IndexStudy = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [isOpenForm, setIsOpenForm] = useState(false);
-  const [isOpenViewForm, setIsOpenViewForm] = useState(false);
-  const [selectedItems, SetSelectedItems] = useState<string | string[]>();
+  const [selectedItems, SetSelectedItems] = useState<string>();
 
   const listStudyPaths = useSelector(
     (state: RootState) => state.admin.listStudyPaths
@@ -22,9 +22,9 @@ const CreateStudy = () => {
 
   useEffect(() => {
     dispatch(getStudyPaths());
-  }, [dispatch]);
+  }, [dispatch, listStudyPaths]);
 
-  console.log(selectedItems);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -37,7 +37,7 @@ const CreateStudy = () => {
             <Button
               isPrimary={false}
               onClick={() => {
-                setIsOpenViewForm(true);
+                navigate('/path_detail/' + selectedItems);
               }}
             >
               Xem chi tiết
@@ -50,19 +50,13 @@ const CreateStudy = () => {
             >
               Tạo mới
             </Button>
-            <Button
-              isPrimary={false}
-              onClick={() => {
-                setIsOpenForm(false);
-              }}
-            >
+            <Button isPrimary={false} onClick={() => {}}>
               Chỉnh sửa
             </Button>
             <Button isPrimary={false} isDanger={true} onClick={() => {}}>
               Xóa
             </Button>
-            <label>Tất cả</label>
-            <input type='checkbox' checked={false}></input>
+            <Checkbox label='Tất cả' onChecked={() => {}}></Checkbox>
           </div>
 
           <table className={cx('table')}>
@@ -104,18 +98,9 @@ const CreateStudy = () => {
         }}
       />
 
-      <EditStudyForm
-        classNames={cx('form', 'edit', { open: isOpenViewForm })}
-        onClose={() => {
-          setIsOpenViewForm(false);
-        }}
-      />
-
-      <div
-        className={cx('modal', { display: isOpenForm || isOpenViewForm })}
-      ></div>
+      <div className={cx('modal', { display: isOpenForm })}></div>
     </>
   );
 };
 
-export default CreateStudy;
+export default IndexStudy;

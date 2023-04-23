@@ -3,28 +3,27 @@ export interface StudyPath {
   name?: string;
   level?: string;
   topic?: string;
+  studyRoutes?: StudyRoute[];
 }
 
 export interface StudyRoute {
-  id: string;
-  name: string;
-  vocabs?: Vocab[];
-  sentences?: Sentence[];
+  id?: string;
+  name?: string;
+  vocabs?: StudyCard[];
+  sentences?: StudyCard[];
 }
 
-export interface Vocab {
-  id: string;
-  display: string;
-  meaning: string;
+export interface StudyCard {
+  id?: string;
+  meaning?: string;
+  display?: string;
   voice?: string;
   image?: string;
   example?: string;
+  type?: StudyCardType;
 }
 
-export interface Sentence {
-  id: string;
-  display: string;
-  meaning: string;
-  voice?: string;
-  image?: string;
+export enum StudyCardType {
+  Vocab,
+  Sentence,
 }
