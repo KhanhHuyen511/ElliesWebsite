@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
 import { Col, Row } from 'react-flexbox-grid';
 import CreateStudyCard from './CreateStudyCard';
 import EditRouteForm from './EditRouteForm';
+import EditCardForm from './EditCardForm';
 const cx = classNames.bind(styles);
 
 const PathDetail = () => {
@@ -49,8 +50,10 @@ const PathDetail = () => {
   const [isOpenRouteForm, setIsOpenRouteForm] = useState<boolean>(false);
   const [isOpenEditRouteForm, setIsOpenEditRouteForm] =
     useState<boolean>(false);
+  const [isOpenEditCardForm, setIsOpenEditCardForm] = useState<boolean>(false);
   const [isOpenCardForm, setIsOpenCardForm] = useState<boolean>(false);
   const [selectRoute, setSelectRoute] = useState<string>();
+  const [curretntStudyCard, setCurrentStudyCard] = useState<StudyCard>();
 
   return (
     <div className={cx('wrapper', 'container')}>
@@ -188,7 +191,13 @@ const PathDetail = () => {
               >
                 Thêm câu
               </Button>
-              <Button isPrimary={false} onClick={() => {}} preventDefault>
+              <Button
+                isPrimary={false}
+                onClick={() => {
+                  setIsOpenEditCardForm(true);
+                }}
+                preventDefault
+              >
                 Chỉnh sửa câu
               </Button>
               <Button isPrimary={false} onClick={() => {}} preventDefault>
@@ -208,7 +217,14 @@ const PathDetail = () => {
               <tbody>
                 {currentStudyRoute?.vocabs?.map((item, index) => (
                   <tr key={index}>
-                    <td></td>
+                    <td>
+                      <Checkbox
+                        onChecked={() => {
+                          setCurrentStudyCard(item);
+                          console.log(currentStudyRoute);
+                        }}
+                      ></Checkbox>
+                    </td>
                     <td>{index + 1}</td>
                     <td>{item.type}</td>
                     <td>{item.display}</td>
@@ -253,9 +269,25 @@ const PathDetail = () => {
         />
       )}
 
+      {id && curretntStudyCard && selectRoute && (
+        <EditCardForm
+          data={curretntStudyCard}
+          pathID={id}
+          routeID={selectRoute}
+          classNames={cx('form', 'card', { open: isOpenEditCardForm })}
+          onClose={() => {
+            setIsOpenEditCardForm(false);
+          }}
+        />
+      )}
+
       <div
         className={cx('modal', {
-          display: isOpenCardForm || isOpenRouteForm || isOpenEditRouteForm,
+          display:
+            isOpenCardForm ||
+            isOpenRouteForm ||
+            isOpenEditRouteForm ||
+            isOpenEditCardForm,
         })}
       ></div>
     </div>

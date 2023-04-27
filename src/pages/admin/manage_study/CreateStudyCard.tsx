@@ -40,7 +40,7 @@ const CreateStudyCard = (props: Props) => {
         placeholder={'abc'}
       ></Input>
       <Button
-        isPrimary={false}
+        isPrimary
         onClick={() => {
           dispatch(
             setStudyCard({
@@ -53,6 +53,7 @@ const CreateStudyCard = (props: Props) => {
         }}
         preventDefault
       ></Button>
+      <Button isPrimary={false} onClick={props.onClose} preventDefault></Button>
     </form>
   );
 };

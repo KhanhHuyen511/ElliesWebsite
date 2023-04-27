@@ -134,10 +134,12 @@ export const setStudyCard = createAsyncThunk(
         'study_paths',
         data.path_id,
         'study_routes',
-        data.route_id
+        data.route_id,
+        'vocabs'
       ),
       {
-        //
+        display: data.card.display,
+        meaning: data.card.meaning,
       }
     );
 
@@ -177,6 +179,28 @@ export const updateStudyRoute = createAsyncThunk(
       );
       await updateDoc(docRef, {
         name: data.route.name,
+      });
+    }
+  }
+);
+
+export const updateStudyCard = createAsyncThunk(
+  'admin/study/updateCard',
+  async (data: { path_id: string; route_id: string; card: StudyCard }) => {
+    console.log('hihi' + data.card.id);
+    if (data.card.id) {
+      const docRef = doc(
+        db,
+        'study_paths',
+        data.path_id,
+        'study_routes',
+        data.route_id,
+        'vocabs',
+        data.card.id
+      );
+      await updateDoc(docRef, {
+        display: data.card.display,
+        meaning: data.card.meaning,
       });
     }
   }

@@ -50,9 +50,6 @@ const IndexStudy = () => {
             >
               Tạo mới
             </Button>
-            <Button isPrimary={false} onClick={() => {}}>
-              Chỉnh sửa
-            </Button>
             <Button isPrimary={false} isDanger={true} onClick={() => {}}>
               Xóa
             </Button>
