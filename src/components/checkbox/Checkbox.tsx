@@ -7,15 +7,14 @@ interface Props {
   label?: string;
   isChecked?: boolean;
   value?: string;
-  onChecked: () => void;
+  onChecked?: () => void;
 }
 
 const Checkbox = (props: Props) => {
-  const [isChecked, setIsChecked] = useState(false);
-
   const onValueChange = () => {
-    setIsChecked(!isChecked);
-    props.onChecked();
+    if (props.onChecked) {
+      props.onChecked();
+    }
   };
 
   return (
@@ -23,7 +22,7 @@ const Checkbox = (props: Props) => {
       <label>{props.label}</label>
       <input
         type='checkbox'
-        checked={isChecked}
+        checked={props.isChecked}
         onChange={onValueChange}
         className={cx('checkbox')}
       ></input>

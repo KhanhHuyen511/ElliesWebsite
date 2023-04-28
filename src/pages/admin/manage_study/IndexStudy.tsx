@@ -15,7 +15,8 @@ const IndexStudy = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [isOpenForm, setIsOpenForm] = useState(false);
-  const [selectedItems, SetSelectedItems] = useState<string>();
+  const [selectedItems, setSelectedItems] = useState<string | string[]>();
+  const [isSelectedAll, setIsSelectedAll] = useState(false);
 
   const listStudyPaths = useSelector(
     (state: RootState) => state.admin.listStudyPaths
@@ -26,6 +27,47 @@ const IndexStudy = () => {
   }, [dispatch, listStudyPaths]);
 
   const navigate = useNavigate();
+
+  const setSelectAllItems = () => {
+    setIsSelectedAll(!isSelectedAll);
+    console.log(isSelectedAll);
+  };
+
+  const setSelectPath = (pathID?: string) => {
+    if (pathID && selectedItems) {
+      // if select multi item
+      // checked = false
+      if (!selectedItems.includes(pathID)) {
+        if (typeof selectedItems !== 'string' && selectedItems.length > 1) {
+          setSelectedItems([...selectedItems, pathID]);
+        } else {
+          const hi: string[] = [];
+          hi.push(selectedItems as string);
+          hi.push(pathID);
+          setSelectedItems(hi);
+        }
+      } else {
+        // checked = true
+        if (selectedItems.length > 1 && typeof selectedItems !== 'string') {
+          const pathIndex = selectedItems.indexOf(pathID);
+          const newItems: string[] = selectedItems as string[];
+          newItems.splice(pathIndex, 1);
+          setSelectedItems(newItems);
+        } else {
+          setSelectedItems(undefined);
+        }
+      }
+      // if select a single item
+    } else setSelectedItems(pathID);
+    console.log(selectedItems);
+  };
+
+  const getCheckedItems = (pathID: string): boolean => {
+    // return value true or false if this pathID is selected
+    if (selectedItems)
+      return selectedItems.length > 0 && selectedItems.includes(pathID);
+    else return false;
+  };
 
   return (
     <>
@@ -54,7 +96,13 @@ const IndexStudy = () => {
             <Button isPrimary={false} isDanger={true} onClick={() => {}}>
               Xóa
             </Button>
-            <Checkbox label='Tất cả' onChecked={() => {}}></Checkbox>
+            <Checkbox
+              isChecked={isSelectedAll}
+              label='Tất cả'
+              onChecked={() => {
+                setSelectAllItems();
+              }}
+            ></Checkbox>
           </div>
 
           <table className={cx('table')}>
@@ -71,12 +119,15 @@ const IndexStudy = () => {
               {listStudyPaths.map((item, i) => (
                 <tr key={i}>
                   <td>
-                    <Checkbox
-                      value={item.id}
-                      onChecked={() => {
-                        SetSelectedItems(item.id);
-                      }}
-                    ></Checkbox>
+                    {item.id && (
+                      <Checkbox
+                        value={item.id}
+                        isChecked={getCheckedItems(item.id)}
+                        onChecked={() => {
+                          setSelectPath(item.id);
+                        }}
+                      ></Checkbox>
+                    )}
                   </td>
                   <td>{item.name}</td>
                   <td>??</td>
