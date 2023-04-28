@@ -90,7 +90,6 @@ const IndexStudy = () => {
       </div>
 
       <CreateStudyForm
-        classNames={cx('form', 'create', { open: isOpenForm })}
         onClose={() => {
           setIsOpenForm(false);
         }}

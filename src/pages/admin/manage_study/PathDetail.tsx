@@ -235,7 +235,6 @@ const PathDetail = () => {
         <CreateRouteForm
           isDisplay={isOpenRouteForm}
           pathID={id}
-          classNames={cx('form', 'route', { open: isOpenRouteForm })}
           onClose={() => {
             setIsOpenRouteForm(false);
           }}
@@ -246,7 +245,6 @@ const PathDetail = () => {
         <EditRouteForm
           pathID={id}
           id={selectRoute}
-          classNames={cx('form', 'route', { open: isOpenEditRouteForm })}
           onClose={() => {
             setIsOpenEditRouteForm(false);
           }}
@@ -258,7 +256,6 @@ const PathDetail = () => {
         <CreateStudyCard
           pathID={id}
           routeID={selectRoute}
-          classNames={cx('form', 'card', { open: isOpenCardForm })}
           onClose={() => {
             setIsOpenCardForm(false);
           }}
@@ -271,23 +268,12 @@ const PathDetail = () => {
           data={curretntStudyCard}
           pathID={id}
           routeID={selectRoute}
-          classNames={cx('form', 'card', { open: isOpenEditCardForm })}
           onClose={() => {
             setIsOpenEditCardForm(false);
           }}
           isDisplay={isOpenEditCardForm}
         />
       )}
-
-      <div
-        className={cx('modal', {
-          display:
-            isOpenCardForm ||
-            isOpenRouteForm ||
-            isOpenEditRouteForm ||
-            isOpenEditCardForm,
-        })}
-      ></div>
     </div>
   );
 };

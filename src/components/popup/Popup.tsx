@@ -6,7 +6,7 @@ import Button from '../button/Button';
 const cx = classNames.bind(styles);
 
 interface Props {
-  classNames: string;
+  classNames?: string;
   title: string;
   children?: any;
   onClose: () => void;
@@ -21,16 +21,6 @@ const Popup = (props: Props) => {
         <p className={cx('title')}>{props.title}</p>
         <div className={cx('form-body')}>
           {props.children}
-          {/* <Button
-            isPrimary
-            preventDefault
-            onClick={() => {
-              dispatch(
-                setStudyRoute({ path_id: props.pathID, route: { name: name } })
-              );
-              props.onClose();
-            }}
-          ></Button> */}
           <Button
             isPrimary
             preventDefault
