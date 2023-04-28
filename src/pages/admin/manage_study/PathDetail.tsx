@@ -10,12 +10,14 @@ import {
   updateStudyPath,
 } from '../../../redux/slice/adminSlice';
 import { StudyCard, StudyPath, StudyRoute } from '../../../types';
-import CreateRouteForm from './CreateRouteForm';
 import { useParams } from 'react-router-dom';
 import { Col, Row } from 'react-flexbox-grid';
-import CreateStudyCard from './CreateStudyCard';
-import EditRouteForm from './EditRouteForm';
-import EditCardForm from './EditCardForm';
+import {
+  CreateRouteForm,
+  EditRouteForm,
+  CreateStudyCard,
+  EditCardForm,
+} from './index';
 const cx = classNames.bind(styles);
 
 const PathDetail = () => {
@@ -96,11 +98,12 @@ const PathDetail = () => {
               onClick={() => {
                 dispatch(updateStudyPath({ id: id, name, level, topic }));
               }}
+              className={cx('submit-btn')}
             >
               Cập nhật
             </Button>
             <div>
-              <div className={cx('handler')}>
+              <div className={cx('handler', 'list')}>
                 <Button
                   isPrimary={false}
                   preventDefault
@@ -175,7 +178,7 @@ const PathDetail = () => {
         <Col md={6}>
           <>
             <p className={cx('form-title')}>Chi tiết chặng</p>
-            <div className={cx('handler')}>
+            <div className={cx('handler', 'list')}>
               <Button
                 isPrimary={false}
                 preventDefault
