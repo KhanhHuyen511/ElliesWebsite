@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import classNames from 'classnames/bind';
-import styles from './CreateStudyForm.module.scss';
 import { Button, Input } from '../../../components';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { setStudyPath } from '../../../redux/slice/adminSlice';
 import { StudyRoute } from '../../../types';
-const cx = classNames.bind(styles);
+import Popup from '../../../components/popup/Popup';
 
 interface Props {
   classNames?: string;
   onClose: () => void;
+  isDisplay: boolean;
 }
 
 const CreateStudyForm = (props: Props) => {
@@ -22,59 +21,38 @@ const CreateStudyForm = (props: Props) => {
 
   return (
     <>
-      <form className={cx('form', props.classNames)}>
-        <p className={cx('form-title')}>Tạo mới Lộ trình học</p>
-        <div className={cx('form-body')}>
-          <div className={cx('input')}>
-            <Input
-              label='Name'
-              type='text'
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              placeholder='abc'
-            />
-          </div>
-          <div className={cx('input')}>
-            <Input
-              label='Topic'
-              type='text'
-              onChange={(e) => {
-                setTopic(e.target.value);
-              }}
-              placeholder='abc'
-            />
-          </div>
-          <div className={cx('input')}>
-            <Input
-              label='Level'
-              type='text'
-              onChange={(e) => {
-                setLevel(e.target.value);
-              }}
-              placeholder='abc'
-            />
-          </div>
-        </div>
-        <Button
-          isPrimary
-          preventDefault
-          onClick={() => {
-            dispatch(setStudyPath({ name, topic, level }));
-            props.onClose();
+      <Popup
+        classNames={''}
+        title={'Tao moi lo trinh hoc'}
+        onClose={props.onClose}
+        onSubmit={() => dispatch(setStudyPath({ name, topic, level }))}
+        isDisplay={props.isDisplay}
+      >
+        <Input
+          label='Name'
+          type='text'
+          onChange={(e) => {
+            setName(e.target.value);
           }}
-        >
-          Tạo mới
-        </Button>
-        <Button
-          type='button'
-          preventDefault
-          isPrimary={false}
-          onClick={props.onClose}
-        >
-          Đóng
-        </Button>
-      </form>
+          placeholder='abc'
+        />
+        <Input
+          label='Topic'
+          type='text'
+          onChange={(e) => {
+            setTopic(e.target.value);
+          }}
+          placeholder='abc'
+        />
+        <Input
+          label='Level'
+          type='text'
+          onChange={(e) => {
+            setLevel(e.target.value);
+          }}
+          placeholder='abc'
+        />
+      </Popup>
     </>
   );
 };

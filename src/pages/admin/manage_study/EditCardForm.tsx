@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import classNames from 'classnames/bind';
-import styles from './EditCardForm.module.scss';
 import { Button, Input } from '../../../components';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { setStudyCard, updateStudyCard } from '../../../redux/slice/adminSlice';
 import { StudyCard } from '../../../types';
-const cx = classNames.bind(styles);
+import Popup from '../../../components/popup/Popup';
 
 interface Props {
   classNames?: string;
@@ -14,6 +12,7 @@ interface Props {
   pathID: string;
   routeID: string;
   data: StudyCard;
+  isDisplay: boolean;
 }
 
 const EditCardForm = (props: Props) => {
@@ -28,8 +27,21 @@ const EditCardForm = (props: Props) => {
 
   return (
     <>
-      <form className={cx(props.classNames)}>
-        Thêm câu
+      <Popup
+        classNames={''}
+        title={'Chỉnh sửa câu'}
+        onClose={props.onClose}
+        onSubmit={() =>
+          dispatch(
+            updateStudyCard({
+              path_id: props.pathID,
+              route_id: props.routeID,
+              card: { id: props.data.id, display, meaning },
+            })
+          )
+        }
+        isDisplay={props.isDisplay}
+      >
         <Input
           type='text'
           value={display}
@@ -48,26 +60,7 @@ const EditCardForm = (props: Props) => {
           label={'Meaning'}
           placeholder={'abc'}
         ></Input>
-        <Button
-          isPrimary
-          onClick={() => {
-            dispatch(
-              updateStudyCard({
-                path_id: props.pathID,
-                route_id: props.routeID,
-                card: { id: props.data.id, display, meaning },
-              })
-            );
-            props.onClose();
-          }}
-          preventDefault
-        ></Button>
-        <Button
-          isPrimary={false}
-          onClick={props.onClose}
-          preventDefault
-        ></Button>
-      </form>
+      </Popup>
     </>
   );
 };

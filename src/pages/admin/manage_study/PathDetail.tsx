@@ -62,39 +62,33 @@ const PathDetail = () => {
           <form>
             <p className={cx('form-title')}>Chi tiết lộ trình học</p>
             <div className={cx('form-body')}>
-              <div className={cx('input')}>
-                <Input
-                  label='Name'
-                  type='text'
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                  placeholder='abc'
-                />
-              </div>
-              <div className={cx('input')}>
-                <Input
-                  label='Topic'
-                  type='text'
-                  value={topic}
-                  onChange={(e) => {
-                    setTopic(e.target.value);
-                  }}
-                  placeholder='abc'
-                />
-              </div>
-              <div className={cx('input')}>
-                <Input
-                  label='Level'
-                  type='text'
-                  value={level}
-                  onChange={(e) => {
-                    setLevel(e.target.value);
-                  }}
-                  placeholder='abc'
-                />
-              </div>
+              <Input
+                label='Name'
+                type='text'
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                placeholder='abc'
+              />
+              <Input
+                label='Topic'
+                type='text'
+                value={topic}
+                onChange={(e) => {
+                  setTopic(e.target.value);
+                }}
+                placeholder='abc'
+              />
+              <Input
+                label='Level'
+                type='text'
+                value={level}
+                onChange={(e) => {
+                  setLevel(e.target.value);
+                }}
+                placeholder='abc'
+              />
             </div>
             <Button
               isPrimary
@@ -169,8 +163,8 @@ const PathDetail = () => {
                       </td>
                       <td>{index + 1}</td>
                       <td>{item.name}</td>
-                      <td>??</td>
-                      <td>??</td>
+                      <td>{item.vocabs?.length}</td>
+                      <td>{item.sentences?.length}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -239,6 +233,7 @@ const PathDetail = () => {
 
       {id && (
         <CreateRouteForm
+          isDisplay={isOpenRouteForm}
           pathID={id}
           classNames={cx('form', 'route', { open: isOpenRouteForm })}
           onClose={() => {
@@ -255,6 +250,7 @@ const PathDetail = () => {
           onClose={() => {
             setIsOpenEditRouteForm(false);
           }}
+          isDisplay={isOpenEditRouteForm}
         />
       )}
 
@@ -266,6 +262,7 @@ const PathDetail = () => {
           onClose={() => {
             setIsOpenCardForm(false);
           }}
+          isDisplay={isOpenCardForm}
         />
       )}
 
@@ -278,6 +275,7 @@ const PathDetail = () => {
           onClose={() => {
             setIsOpenEditCardForm(false);
           }}
+          isDisplay={isOpenEditCardForm}
         />
       )}
 

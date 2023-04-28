@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames/bind';
-import styles from './EditRouteForm.module.scss';
-import { Button, Input } from '../../../components';
+import { useEffect, useState } from 'react';
+import { Input } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getStudyRoute,
-  setStudyRoute,
-  updateStudyRoute,
-} from '../../../redux/slice/adminSlice';
+import { updateStudyRoute } from '../../../redux/slice/adminSlice';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { StudyRoute } from '../../../types';
-const cx = classNames.bind(styles);
+import Popup from '../../../components/popup/Popup';
 
 interface Props {
   classNames?: string;
   onClose: () => void;
   pathID: string;
   id: string;
+  isDisplay: boolean;
 }
 
 const EditRouteForm = (props: Props) => {
@@ -36,7 +31,20 @@ const EditRouteForm = (props: Props) => {
 
   return (
     <>
-      <form className={cx(props.classNames)}>
+      <Popup
+        onSubmit={() =>
+          dispatch(
+            updateStudyRoute({
+              path_id: props.pathID,
+              route: { id: props.id, name: name },
+            })
+          )
+        }
+        onClose={props.onClose}
+        title={'Chỉnh sửa chặng'}
+        classNames=''
+        isDisplay={props.isDisplay}
+      >
         <Input
           label='Name'
           type='text'
@@ -46,26 +54,7 @@ const EditRouteForm = (props: Props) => {
           }}
           placeholder='abc'
         />
-        Cập nhật
-        <Button
-          isPrimary
-          preventDefault
-          onClick={() => {
-            dispatch(
-              updateStudyRoute({
-                path_id: props.pathID,
-                route: { id: props.id, name: name },
-              })
-            );
-            props.onClose();
-          }}
-        ></Button>
-        <Button
-          isPrimary={false}
-          onClick={props.onClose}
-          preventDefault
-        ></Button>
-      </form>
+      </Popup>
     </>
   );
 };

@@ -8,6 +8,7 @@ import { Button, Checkbox, Input } from '../../../components';
 import CreateStudyForm from './CreateStudyForm';
 import { StudyPath } from '../../../types';
 import { useNavigate } from 'react-router-dom';
+import Popup from '../../../components/popup/Popup';
 const cx = classNames.bind(styles);
 
 const IndexStudy = () => {
@@ -93,9 +94,8 @@ const IndexStudy = () => {
         onClose={() => {
           setIsOpenForm(false);
         }}
+        isDisplay={isOpenForm}
       />
-
-      <div className={cx('modal', { display: isOpenForm })}></div>
     </>
   );
 };
