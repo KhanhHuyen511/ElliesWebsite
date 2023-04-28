@@ -18,22 +18,24 @@ const Popup = (props: Props) => {
   return (
     <>
       <form className={cx('form', { open: props.isDisplay }, props.classNames)}>
-        <p className={cx('title')}>{props.title}</p>
+        <p className={cx('form-title')}>{props.title}</p>
         <div className={cx('form-body')}>
           {props.children}
-          <Button
-            isPrimary
-            preventDefault
-            onClick={() => {
-              props.onSubmit();
-              props.onClose();
-            }}
-          >
-            Xác nhận
-          </Button>
-          <Button isPrimary={false} onClick={props.onClose} preventDefault>
-            Đóng
-          </Button>
+          <div className={cx('form-cta')}>
+            <Button
+              isPrimary
+              preventDefault
+              onClick={() => {
+                props.onSubmit();
+                props.onClose();
+              }}
+            >
+              Xác nhận
+            </Button>
+            <Button isPrimary={false} onClick={props.onClose} preventDefault>
+              Đóng
+            </Button>
+          </div>
         </div>
       </form>
 

@@ -13,6 +13,7 @@ interface Props {
   icon?: string;
   isDanger?: boolean;
   preventDefault?: boolean;
+  className?: string;
 }
 
 const Button = (props: Props) => {
@@ -22,7 +23,7 @@ const Button = (props: Props) => {
         if (props.preventDefault) e.preventDefault();
         props.onClick();
       }}
-      className={cx('btn', { primary: props.isPrimary })}
+      className={cx('btn', { primary: props.isPrimary }, props.className)}
     >
       {props.children}
       {props.haveIcon && (
