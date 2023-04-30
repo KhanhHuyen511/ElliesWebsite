@@ -11,6 +11,7 @@ export interface StudyRoute {
   name?: string;
   vocabs?: StudyCard[];
   sentences?: StudyCard[];
+  imageFile?: any;
 }
 
 export interface StudyCard {
@@ -21,6 +22,7 @@ export interface StudyCard {
   image?: string;
   example?: string;
   type?: StudyCardType;
+  imageFile?: any;
 }
 
 export enum StudyCardType {

@@ -14,6 +14,7 @@ interface Props {
 
 const CreateRouteForm = (props: Props) => {
   const [name, setName] = useState('');
+  const [image, setImage] = useState<any>();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -22,7 +23,15 @@ const CreateRouteForm = (props: Props) => {
       <Popup
         classNames={''}
         onSubmit={() =>
-          setStudyRoute({ path_id: props.pathID, route: { name: name } })
+          dispatch(
+            setStudyRoute({
+              path_id: props.pathID,
+              route: {
+                name: name,
+                imageFile: image,
+              },
+            })
+          )
         }
         onClose={props.onClose}
         title='Tạo chặng mới'
@@ -36,6 +45,20 @@ const CreateRouteForm = (props: Props) => {
           }}
           placeholder='abc'
         />
+
+        <Input
+          type='file'
+          label={'Thêm ảnh'}
+          placeholder={''}
+          onChange={(e) => {
+            if (e.target.files) setImage(e.target.files[0]);
+          }}
+        ></Input>
+        {image && (
+          <div>
+            <img src={URL.createObjectURL(image)} alt='' />
+          </div>
+        )}
       </Popup>
     </>
   );

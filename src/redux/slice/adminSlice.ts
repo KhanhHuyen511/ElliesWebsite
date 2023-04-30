@@ -9,8 +9,9 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+import { db, storage } from '../../firebase/config';
 import { StudyCard, StudyPath, StudyRoute } from '../../types';
+import { ref, uploadBytes } from 'firebase/storage';
 
 interface types {
   listStudyPaths: StudyPath[];
@@ -115,8 +116,12 @@ export const setStudyRoute = createAsyncThunk(
       collection(db, 'study_paths', data.path_id, 'study_routes'),
       {
         name: data.route.name,
+        image: data.route.imageFile.name,
       }
     );
+
+    const storageRef = ref(storage, `images/${data.route.imageFile.name}`);
+    uploadBytes(storageRef, data.route.imageFile);
 
     data.route.id = docRef.id;
 
@@ -140,8 +145,12 @@ export const setStudyCard = createAsyncThunk(
       {
         display: data.card.display,
         meaning: data.card.meaning,
+        image: data.card.imageFile.name,
       }
     );
+
+    const storageRef = ref(storage, `images/${data.card.imageFile.name}`);
+    uploadBytes(storageRef, data.card.imageFile);
 
     data.card.id = docRef.id;
 
