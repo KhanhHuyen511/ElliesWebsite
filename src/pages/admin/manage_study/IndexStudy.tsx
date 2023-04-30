@@ -28,23 +28,28 @@ const IndexStudy = () => {
 
   const navigate = useNavigate();
 
-  const setSelectAllItems = () => {
-    setIsSelectedAll(!isSelectedAll);
-    console.log(isSelectedAll);
+  const setSelectAllItems = (isAll: boolean) => {
+    setIsSelectedAll(isAll);
+    setSelectedItems(undefined);
+
+    if (isAll) {
+      const ids: string[] = listStudyPaths.map((e) => (e.id ? e.id : ''));
+      setSelectedItems(ids);
+    }
   };
 
   const setSelectPath = (pathID?: string) => {
-    if (pathID && selectedItems) {
+    if (pathID && selectedItems && selectedItems.length > 0) {
       // if select multi item
       // checked = false
       if (!selectedItems.includes(pathID)) {
         if (typeof selectedItems !== 'string' && selectedItems.length > 1) {
           setSelectedItems([...selectedItems, pathID]);
         } else {
-          const hi: string[] = [];
-          hi.push(selectedItems as string);
-          hi.push(pathID);
-          setSelectedItems(hi);
+          const ids: string[] = [];
+          ids.push(selectedItems as string);
+          ids.push(pathID);
+          setSelectedItems(ids);
         }
       } else {
         // checked = true
@@ -58,8 +63,9 @@ const IndexStudy = () => {
         }
       }
       // if select a single item
-    } else setSelectedItems(pathID);
-    console.log(selectedItems);
+    } else {
+      setSelectedItems(pathID);
+    }
   };
 
   const getCheckedItems = (pathID: string): boolean => {
@@ -99,9 +105,7 @@ const IndexStudy = () => {
             <Checkbox
               isChecked={isSelectedAll}
               label='Tất cả'
-              onChecked={() => {
-                setSelectAllItems();
-              }}
+              onChecked={() => setSelectAllItems(!isSelectedAll)}
             ></Checkbox>
           </div>
 

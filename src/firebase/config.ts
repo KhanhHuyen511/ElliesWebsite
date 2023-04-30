@@ -13,6 +13,16 @@ const firebaseConfig = {
   appId: '1:358387397912:web:c71996272705e026d81a6d',
 };
 
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyC3KboF-8X9APFgDRP77DAB0qxZ9ur3JZc',
+//   authDomain: 'eliie-2c65f.firebaseapp.com',
+//   projectId: 'eliie-2c65f',
+//   storageBucket: 'eliie-2c65f.appspot.com',
+//   messagingSenderId: '831735184482',
+//   appId: '1:831735184482:web:ca4a5db7a46bed4250253b',
+//   measurementId: 'G-BYHNXVFS5W',
+// };
+
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
