@@ -19,6 +19,7 @@ const CreateStudyCard = (props: Props) => {
   const [display, setDisplay] = useState<string>('');
   const [meaning, setMeaning] = useState<string>('');
   const [image, setImage] = useState<any>();
+  const [audio, setAudio] = useState<any>();
 
   return (
     <>
@@ -31,7 +32,7 @@ const CreateStudyCard = (props: Props) => {
             setStudyCard({
               path_id: props.pathID,
               route_id: props.routeID,
-              card: { display, meaning, imageFile: image },
+              card: { display, meaning, imageFile: image, audio },
             })
           )
         }
@@ -54,7 +55,6 @@ const CreateStudyCard = (props: Props) => {
           placeholder={'abc'}
         ></Input>
 
-        {/* <audio controls src={image}></audio> */}
         <Input
           type='file'
           label={'Thêm ảnh'}
@@ -68,6 +68,16 @@ const CreateStudyCard = (props: Props) => {
             <img src={URL.createObjectURL(image)} alt='' />
           </div>
         )}
+
+        <Input
+          type='file'
+          label={'Thêm âm thanh'}
+          placeholder={''}
+          onChange={(e) => {
+            if (e.target.files) setAudio(e.target.files[0]);
+          }}
+        ></Input>
+        {audio && <audio controls src={URL.createObjectURL(audio)}></audio>}
       </Popup>
     </>
   );

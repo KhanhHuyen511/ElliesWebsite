@@ -18,11 +18,10 @@ export interface StudyCard {
   id?: string;
   meaning?: string;
   display?: string;
-  voice?: string;
-  image?: string;
   example?: string;
   type?: StudyCardType;
   imageFile?: any;
+  audio?: any;
 }
 
 export enum StudyCardType {

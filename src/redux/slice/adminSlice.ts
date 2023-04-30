@@ -146,11 +146,14 @@ export const setStudyCard = createAsyncThunk(
         display: data.card.display,
         meaning: data.card.meaning,
         image: data.card.imageFile.name,
+        audio: data.card.audio.name,
       }
     );
 
-    const storageRef = ref(storage, `images/${data.card.imageFile.name}`);
-    uploadBytes(storageRef, data.card.imageFile);
+    const imgRef = ref(storage, `images/${data.card.imageFile.name}`);
+    uploadBytes(imgRef, data.card.imageFile);
+    const audioRef = ref(storage, `audios/${data.card.audio.name}`);
+    uploadBytes(audioRef, data.card.audio);
 
     data.card.id = docRef.id;
 
