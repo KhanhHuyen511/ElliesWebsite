@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection, doc, query, setDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { Collection } from 'typescript';
+import { RootState } from '../store';
+import { stat } from 'fs';
 
 const initialState = {
   isLoggedIn: false,
   email: null,
   userName: null,
   userID: null,
+  userRole: null || '',
 };
 
 const authSlice = createSlice({
@@ -20,22 +22,24 @@ const authSlice = createSlice({
       state.email = email;
       state.userName = userName;
       state.userID = userID;
+      state.userRole = userRole;
     },
     REMOVE_ACTIVE_USER: (state, action) => {
       state.isLoggedIn = false;
       state.email = null;
       state.userName = null;
       state.userID = null;
+      state.userRole = null || '';
     },
   },
 });
 
 export const { SET_ACTIVE_USER, REMOVE_ACTIVE_USER } = authSlice.actions;
 
-export const selectLoggedIn = (state: any) => state.action.isLoggedIn;
-export const selectEmail = (state: any) => state.action.email;
-export const selectUserName = (state: any) => state.action.userName;
-export const selectUserID = (state: any) => state.action.userID;
-export const selectUserRole = (state: any) => state.action.userRole;
+export const selectLoggedIn = (state: RootState) => state.auth.isLoggedIn;
+export const selectEmail = (state: RootState) => state.auth.email;
+export const selectUserName = (state: RootState) => state.auth.userName;
+export const selectUserID = (state: RootState) => state.auth.userID;
+export const selectUserRole = (state: RootState) => state.auth.userRole;
 
 export default authSlice.reducer;

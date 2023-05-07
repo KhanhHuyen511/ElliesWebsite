@@ -6,8 +6,11 @@ import styles from './auth.module.scss';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from '../../firebase/config';
+import { auth, db } from '../../firebase/config';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { addDoc, collection } from 'firebase/firestore';
 const cx = classNames.bind(styles);
 
 const Register = () => {
@@ -29,17 +32,29 @@ const Register = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        toast.success('Regiter successfull!');
-        // log out
-        signOut(auth)
-          .then(() => {
+        // dispatch(setRole(user.uid));
+        try {
+          addDoc(collection(db, 'accounts'), {
+            role: 'student',
+            user_id: user.uid,
+          }).then(() => {
+            toast.success('Regiter successfull!');
+
+            signOut(auth)
+              .then(() => {
+                navigate('/login');
+              })
+              .catch((error) => {
+                const errorMessage = error.message;
+                toast.error(errorMessage);
+              });
             navigate('/login');
-          })
-          .catch((error) => {
-            const errorMessage = error.message;
-            toast.error(errorMessage);
           });
-        navigate('/login');
+        } catch (error) {
+          console.error('error');
+        }
+
+        // log out
       })
       .catch((error) => {
         const errorMessage = error.message;

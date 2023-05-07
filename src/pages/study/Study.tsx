@@ -21,6 +21,7 @@ const Study = () => {
   const storeDays = useSelector(
     (state: RootState) => state.study.checkedInDays
   );
+  const userID = useSelector((state: RootState) => state.auth.userID) || '';
 
   const days = [0, 1, 2, 3, 4, 5, 6]; // 7 days in a week, order from 1 to 7
 
@@ -36,16 +37,14 @@ const Study = () => {
       dd.setDate(d.getDate() - e + 6);
     }
     if (storeDays.indexOf(dd.toLocaleDateString()) >= 0) {
-      tempdays.push(dd.getDay() < 1 ? dd.getDay() + 5 : dd.getDay() - 1);
+      tempdays.push(dd.getDay() < 1 ? dd.getDay() + 6 : dd.getDay() - 1);
     }
   });
 
-  console.log(tempdays);
-
-  // useEffect(() => {
-  //   dispatch(getStudyRoutes());
-  //   dispatch(getCheckedInDays());
-  // }, [dispatch, isCheckedIn]);
+  useEffect(() => {
+    dispatch(getStudyRoutes());
+    dispatch(getCheckedInDays(userID));
+  }, [dispatch, isCheckedIn, userID]);
 
   const CheckIn = (item: number) => {
     // check if item is current day
@@ -53,7 +52,7 @@ const Study = () => {
       !isCheckedIn &&
       item === (d.getDay() < 1 ? d.getDay() + 6 : d.getDay() - 1)
     ) {
-      dispatch(setCheckInToday(d));
+      dispatch(setCheckInToday({ day: d, userID }));
       setIsCheckedIn(true);
     }
   };
@@ -61,7 +60,7 @@ const Study = () => {
   const GetStateCheckIn = (day: number) => {
     return day === (d.getDay() < 1 ? d.getDay() + 6 : d.getDay() - 1)
       ? 'current'
-      : day <= (d.getDay() < 1 ? d.getDay() + 5 : d.getDay() - 1)
+      : day <= (d.getDay() < 1 ? d.getDay() + 6 : d.getDay() - 1)
       ? 'before'
       : 'default';
   };

@@ -10,13 +10,14 @@ import classNames from 'classnames/bind';
 import Navbar from '../navbar/Navbar';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '../../firebase/config';
+import { auth, db } from '../../firebase/config';
 import { useDispatch } from 'react-redux/es/exports';
 import {
   SET_ACTIVE_USER,
   REMOVE_ACTIVE_USER,
 } from '../../redux/slice/authSlice';
 import { toast } from 'react-toastify';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 const cx = classNames.bind(style);
 
 const Header = () => {
@@ -39,7 +40,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         if (user.displayName === null) {
           const index = user.email?.indexOf('@');
@@ -54,12 +55,19 @@ const Header = () => {
           setCurrentUserName(user.displayName);
         }
 
+        const q = query(
+          collection(db, 'accounts'),
+          where('user_id', '==', user.uid)
+        );
+
+        const role = await (await getDocs(q)).docs[0].data().role;
+
         dispatch(
           SET_ACTIVE_USER({
             email: user.email,
             userName: user.displayName ? user.displayName : currentUserName,
             userID: user.uid,
-            userRole: null,
+            userRole: role,
           })
         );
       } else {

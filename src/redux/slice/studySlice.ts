@@ -1,4 +1,3 @@
-import { async } from '@firebase/util';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   addDoc,
@@ -8,29 +7,32 @@ import {
   getDoc,
   getDocs,
   query,
-  setDoc,
   Timestamp,
   updateDoc,
   where,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { getDate, getDateString } from '../../utils';
+import { getDate } from '../../utils';
 import { StudyRoute } from '../../types';
 
 interface types {
   studyRoutes: StudyRoute[];
   checkedInDays: string[];
+  currentRoute: StudyRoute | null;
 }
 
 const initialState: types = {
   studyRoutes: [],
   checkedInDays: [],
+  currentRoute: null,
 };
 
 // Write reducer get studyRoutes
 export const getStudyRoutes = createAsyncThunk('study/getRoutes', async () => {
   var routes: StudyRoute[] = [];
-  const querySnapshot = await getDocs(collection(db, 'study-route'));
+  const querySnapshot = await getDocs(
+    collection(db, 'study_paths', 'j7EL4b607cyt0QV5NlRB', 'study_routes') // static
+  );
   querySnapshot.forEach(async (e) => {
     routes.push(e.data() as StudyRoute);
   });
@@ -38,23 +40,42 @@ export const getStudyRoutes = createAsyncThunk('study/getRoutes', async () => {
   return routes;
 });
 
+// Write reducer get detail studyRoutes
+export const getStudyRoute = createAsyncThunk(
+  'study/getRoute',
+  async (routeID: string) => {
+    const docRef = await getDoc(
+      doc(db, 'study_paths', 'j7EL4b607cyt0QV5NlRB', 'study_routes', routeID) // static
+    );
+
+    console.log(docRef.data);
+    return docRef.data as StudyRoute;
+  }
+);
+
 // Write reducer set check in today
 export const setCheckInToday = createAsyncThunk(
   'study/setCheckIn',
-  async (day: Date) => {
-    // var day: Date;
-    const q = query(
-      collection(db, 'students'),
-      where('id', '==', 'Q4hq6CKSQUXrofY2HWLsl1L7Xhn2')
-    );
-
+  async (data: { day: Date; userID: string }) => {
+    console.log(data);
+    const q = query(collection(db, 'students'), where('id', '==', data.userID));
     const querySnapshot = (await getDocs(q)).docs[0];
 
-    await updateDoc(querySnapshot.ref, {
-      checkinDays: arrayUnion(day),
-    });
+    console.log('userID: ' + data.userID);
+    console.log(querySnapshot);
 
-    return day;
+    if (querySnapshot) {
+      await updateDoc(querySnapshot.ref, {
+        checkinDays: arrayUnion(data.day),
+      });
+    } else {
+      await addDoc(collection(db, 'students'), {
+        id: data.userID,
+        checkinDays: [data.day],
+      });
+    }
+
+    return data.day;
   }
 );
 
@@ -62,22 +83,19 @@ export const setCheckInToday = createAsyncThunk(
 // TODO: Get data of 7 days of current week
 export const getCheckedInDays = createAsyncThunk(
   'study/getCheckedIn',
-  async () => {
+  async (userID: string) => {
     // Get data of current user
-    const q = query(
-      collection(db, 'students'),
-      where('id', '==', 'Q4hq6CKSQUXrofY2HWLsl1L7Xhn2')
-    );
+    const q = query(collection(db, 'students'), where('id', '==', userID));
 
-    var students: string[] = [];
+    var days: string[] = [];
 
     const querySnapshot = await (await getDocs(q)).docs[0].data().checkinDays;
 
     querySnapshot.forEach(async (e: Timestamp) => {
-      students.push(getDate(e.seconds).toLocaleDateString());
+      days.push(getDate(e.seconds).toLocaleDateString());
     });
 
-    return students;
+    return days;
   }
 );
 
@@ -104,6 +122,9 @@ const studySlice = createSlice({
         state.checkedInDays.push(action.payload.toLocaleDateString());
       })
       .addCase(setCheckInToday.rejected, (state, action) => {});
+    builder.addCase(getStudyRoute.fulfilled, (state, action) => {
+      state.currentRoute = action.payload;
+    });
   },
 });
 

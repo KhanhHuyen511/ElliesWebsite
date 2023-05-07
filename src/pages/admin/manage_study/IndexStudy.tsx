@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './IndexStudy.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { getStudyPath, getStudyPaths } from '../../../redux/slice/adminSlice';
-import { Button, Checkbox, Input } from '../../../components';
+import { Button, Checkbox } from '../../../components';
 import CreateStudyForm from './CreateStudyForm';
-import { StudyPath } from '../../../types';
 import { useNavigate } from 'react-router-dom';
-import Popup from '../../../components/popup/Popup';
+import { getStudyPaths } from '../../../redux/slice/adminSlice';
+import { storage } from '../../../firebase/config';
+import { getDownloadURL, ref } from 'firebase/storage';
 const cx = classNames.bind(styles);
 
 const IndexStudy = () => {
