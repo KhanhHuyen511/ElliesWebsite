@@ -23,8 +23,6 @@ const cx = classNames.bind(styles);
 const PathDetail = () => {
   let { id } = useParams();
 
-  console.log(id);
-
   const dispatch = useDispatch<AppDispatch>();
 
   const data: StudyPath = useSelector(

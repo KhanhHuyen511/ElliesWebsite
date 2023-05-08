@@ -10,11 +10,13 @@ import {
   getStudyRoutes,
   setCheckInToday,
 } from '../../redux/slice/studySlice';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 const Study = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   // get checked days in this week from Firebase
   const routes = useSelector((state: RootState) => state.study.studyRoutes); // show 4 routes
@@ -80,11 +82,17 @@ const Study = () => {
     </li>
   ));
 
-  const generateRouteList = routes.map((item, index) => (
-    <li className={cx('route-study-item')}>
-      <StudyRoute label={'Chặng ' + item.name} />
-    </li>
-  ));
+  const generateRouteList = routes.map(
+    (item, index) =>
+      item.id && (
+        <li
+          className={cx('route-study-item')}
+          onClick={() => navigate(`/study_detail/${item.id}`)}
+        >
+          <StudyRoute id={item.id} label={'Chặng ' + item.name} />
+        </li>
+      )
+  );
 
   return (
     <div className='container'>

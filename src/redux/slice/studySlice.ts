@@ -14,17 +14,18 @@ import {
 import { db } from '../../firebase/config';
 import { getDate } from '../../utils';
 import { StudyRoute } from '../../types';
+import { Study } from '../../pages';
 
 interface types {
   studyRoutes: StudyRoute[];
   checkedInDays: string[];
-  currentRoute: StudyRoute | null;
+  currentRoute: StudyRoute;
 }
 
 const initialState: types = {
   studyRoutes: [],
   checkedInDays: [],
-  currentRoute: null,
+  currentRoute: {},
 };
 
 // Write reducer get studyRoutes
@@ -34,7 +35,9 @@ export const getStudyRoutes = createAsyncThunk('study/getRoutes', async () => {
     collection(db, 'study_paths', 'j7EL4b607cyt0QV5NlRB', 'study_routes') // static
   );
   querySnapshot.forEach(async (e) => {
-    routes.push(e.data() as StudyRoute);
+    var route: StudyRoute = e.data() as StudyRoute;
+    route.id = e.id;
+    routes.push(route);
   });
 
   return routes;
@@ -44,12 +47,19 @@ export const getStudyRoutes = createAsyncThunk('study/getRoutes', async () => {
 export const getStudyRoute = createAsyncThunk(
   'study/getRoute',
   async (routeID: string) => {
+    console.log(routeID);
+
+    var route: StudyRoute = {};
+
     const docRef = await getDoc(
       doc(db, 'study_paths', 'j7EL4b607cyt0QV5NlRB', 'study_routes', routeID) // static
     );
 
-    console.log(docRef.data);
-    return docRef.data as StudyRoute;
+    // convert docRef as StudyRoute get error
+    route = docRef.data() as StudyRoute;
+    route.id = docRef.id;
+
+    return route;
   }
 );
 

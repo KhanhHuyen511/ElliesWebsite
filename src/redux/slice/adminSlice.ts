@@ -114,7 +114,7 @@ export const setStudyRoute = createAsyncThunk(
       collection(db, 'study_paths', data.path_id, 'study_routes'),
       {
         name: data.route.name,
-        image: data.route.imageFile.name,
+        imageFile: data.route.imageFile.name,
       }
     );
 
@@ -143,7 +143,7 @@ export const setStudyCard = createAsyncThunk(
       {
         display: data.card.display,
         meaning: data.card.meaning,
-        image: data.card.imageFile.name,
+        imageFile: data.card.imageFile.name,
         audio: data.card.audio.name,
       }
     );

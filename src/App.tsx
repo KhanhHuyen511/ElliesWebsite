@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { Header } from './components';
-import { Study, Document, Exercise, Profile, Forum } from './pages';
+import {
+  Study,
+  Document,
+  Exercise,
+  Profile,
+  Forum,
+  StudyDetail,
+} from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
 import { IndexStudy } from './pages/admin/manage_study';
 // import Admin from './pages/admin';
@@ -46,6 +53,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/reset-password' element={<ResetPassword />} />
+            <Route path='/study_detail/:id' element={<StudyDetail />} />
           </Routes>
         </BrowserRouter>
       )}

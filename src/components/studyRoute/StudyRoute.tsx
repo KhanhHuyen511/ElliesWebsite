@@ -5,6 +5,7 @@ const cx = classNames.bind(style);
 
 interface Props {
   label: string;
+  id: string | undefined;
   state?: "default" | "active" | "future" | undefined;
 }
 
