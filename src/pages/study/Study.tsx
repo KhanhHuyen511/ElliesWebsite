@@ -87,9 +87,14 @@ const Study = () => {
     </li>
   ));
 
-  const CheckRouteState = (route: StudyRoute) => {
-    if (route.id && studiedRouteIDs.indexOf(route.id) >= 0) return 'active';
-    else return 'default';
+  var currentRouteIndex = 0;
+
+  const CheckRouteState = (route: StudyRoute, index: number) => {
+    if (index === currentRouteIndex) return 'active';
+    if (route.id && studiedRouteIDs.indexOf(route.id) >= 0) {
+      currentRouteIndex = index + 1;
+    }
+    return 'default';
   };
 
   const generateRouteList = routes.map(
@@ -98,14 +103,14 @@ const Study = () => {
         <li
           className={cx('route-study-item')}
           onClick={() => {
-            if (CheckRouteState(item) === 'active')
+            if (CheckRouteState(item, index + 1) === 'active')
               navigate(`/study_detail/${item.id}`);
           }}
         >
           <Route
             id={item.id}
             label={'Chặng ' + item.name}
-            state={CheckRouteState(item)}
+            state={CheckRouteState(item, index + 1)}
           />
         </li>
       )
