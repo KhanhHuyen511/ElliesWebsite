@@ -13,8 +13,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { getDate } from '../../utils';
-import { StudyRoute } from '../../types';
-import { Study } from '../../pages';
+import { StudyCard, StudyRoute } from '../../types';
 
 interface types {
   studyRoutes: StudyRoute[];
@@ -47,8 +46,6 @@ export const getStudyRoutes = createAsyncThunk('study/getRoutes', async () => {
 export const getStudyRoute = createAsyncThunk(
   'study/getRoute',
   async (routeID: string) => {
-    console.log(routeID);
-
     var route: StudyRoute = {};
 
     const docRef = await getDoc(
@@ -109,6 +106,33 @@ export const getCheckedInDays = createAsyncThunk(
   }
 );
 
+export const getStudyCards = createAsyncThunk(
+  'study/getStudyCards',
+  async (routeID: string) => {
+    // Get data of current user
+
+    const cards: StudyCard[] = [];
+
+    const querySnapshot = await getDocs(
+      collection(
+        db,
+        'study_paths',
+        'j7EL4b607cyt0QV5NlRB',
+        'study_routes',
+        routeID,
+        'vocabs'
+      ) // static
+    );
+    querySnapshot.forEach(async (e) => {
+      var card: StudyCard = e.data() as StudyCard;
+      card.id = e.id;
+      cards.push(card);
+    });
+
+    return cards;
+  }
+);
+
 const studySlice = createSlice({
   name: 'study',
   initialState,
@@ -135,6 +159,9 @@ const studySlice = createSlice({
     builder.addCase(getStudyRoute.fulfilled, (state, action) => {
       state.currentRoute = action.payload;
     });
+    // builder.addCase(getStudyRoute.fulfilled, (state, action) => {
+    //   state.currentRoute.vocabs?.push(action.payload);
+    // });
   },
 });
 

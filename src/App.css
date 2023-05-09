@@ -2,6 +2,7 @@
 
 .app {
   height: 100vh;
+  color: var(--text-bold-color);
 }
 
 .container {

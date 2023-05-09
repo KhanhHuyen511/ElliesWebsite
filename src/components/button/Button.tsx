@@ -27,7 +27,11 @@ const Button = (props: Props) => {
     >
       {props.children}
       {props.haveIcon && (
-        <ArrowSmallRightIcon className={cx('icon', 'right-icon')} />
+        <ArrowSmallRightIcon
+          width={32}
+          height={32}
+          className={cx('icon', 'right-icon')}
+        />
       )}
     </button>
   );

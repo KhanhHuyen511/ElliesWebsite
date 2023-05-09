@@ -9,6 +9,7 @@ import {
   Profile,
   Forum,
   StudyDetail,
+  StudyCard,
 } from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
 import { IndexStudy } from './pages/admin/manage_study';
