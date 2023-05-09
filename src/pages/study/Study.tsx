@@ -97,7 +97,10 @@ const Study = () => {
       item.id && (
         <li
           className={cx('route-study-item')}
-          onClick={() => navigate(`/study_detail/${item.id}`)}
+          onClick={() => {
+            if (CheckRouteState(item) === 'active')
+              navigate(`/study_detail/${item.id}`);
+          }}
         >
           <Route
             id={item.id}
