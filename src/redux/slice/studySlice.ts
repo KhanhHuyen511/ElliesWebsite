@@ -19,12 +19,14 @@ interface types {
   studyRoutes: StudyRoute[];
   checkedInDays: string[];
   currentRoute: StudyRoute;
+  studiedRouteIDs: string[];
 }
 
 const initialState: types = {
   studyRoutes: [],
   checkedInDays: [],
   currentRoute: {},
+  studiedRouteIDs: [],
 };
 
 // Write reducer get studyRoutes
@@ -41,6 +43,23 @@ export const getStudyRoutes = createAsyncThunk('study/getRoutes', async () => {
 
   return routes;
 });
+
+export const getStudiedRoutes = createAsyncThunk(
+  'study/getStudiedRoutes',
+  async (userID: string) => {
+    // Get data of current user
+    const q = query(collection(db, 'students'), where('id', '==', userID));
+
+    var studied: string[] = [];
+
+    const queryS = await (await getDocs(q)).docs[0].data().routes;
+    queryS.forEach(async (e: string) => {
+      studied.push(e);
+    });
+
+    return studied;
+  }
+);
 
 // Write reducer get detail studyRoutes
 export const getStudyRoute = createAsyncThunk(
@@ -67,9 +86,6 @@ export const setCheckInToday = createAsyncThunk(
     console.log(data);
     const q = query(collection(db, 'students'), where('id', '==', data.userID));
     const querySnapshot = (await getDocs(q)).docs[0];
-
-    console.log('userID: ' + data.userID);
-    console.log(querySnapshot);
 
     if (querySnapshot) {
       await updateDoc(querySnapshot.ref, {
@@ -159,12 +175,10 @@ const studySlice = createSlice({
     builder.addCase(getStudyRoute.fulfilled, (state, action) => {
       state.currentRoute = action.payload;
     });
-    // builder.addCase(getStudyRoute.fulfilled, (state, action) => {
-    //   state.currentRoute.vocabs?.push(action.payload);
-    // });
+    builder.addCase(getStudiedRoutes.fulfilled, (state, action) => {
+      state.studiedRouteIDs = action.payload;
+    });
   },
 });
-
-// export const { GET_STUDY_ROUTES } = studySlice.actions;
 
 export default studySlice.reducer;

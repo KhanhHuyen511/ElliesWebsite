@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import styles from './Study.module.scss';
-import { StudyRoute, CheckinPanel } from '../../components';
+import { Route, CheckinPanel } from '../../components';
 import classNames from 'classnames/bind';
 import { Col } from 'react-flexbox-grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import {
   getCheckedInDays,
+  getStudiedRoutes,
   getStudyRoutes,
   setCheckInToday,
 } from '../../redux/slice/studySlice';
 import { useNavigate } from 'react-router-dom';
+import { StudyRoute } from '../../types';
 const cx = classNames.bind(styles);
 
 const Study = () => {
@@ -24,6 +26,9 @@ const Study = () => {
     (state: RootState) => state.study.checkedInDays
   );
   const userID = useSelector((state: RootState) => state.auth.userID) || '';
+  const studiedRouteIDs = useSelector(
+    (state: RootState) => state.study.studiedRouteIDs
+  );
 
   const days = [0, 1, 2, 3, 4, 5, 6]; // 7 days in a week, order from 1 to 7
 
@@ -45,6 +50,7 @@ const Study = () => {
 
   useEffect(() => {
     dispatch(getStudyRoutes());
+    dispatch(getStudiedRoutes(userID));
     dispatch(getCheckedInDays(userID));
   }, [dispatch, isCheckedIn, userID]);
 
@@ -68,7 +74,6 @@ const Study = () => {
   };
 
   const CheckCheckedDays = (day: number) => {
-    // if (isCheckedIn && day === d.getDay()) return true;
     return tempdays.indexOf(day) >= 0;
   };
 
@@ -82,6 +87,11 @@ const Study = () => {
     </li>
   ));
 
+  const CheckRouteState = (route: StudyRoute) => {
+    if (route.id && studiedRouteIDs.indexOf(route.id) >= 0) return 'active';
+    else return 'default';
+  };
+
   const generateRouteList = routes.map(
     (item, index) =>
       item.id && (
@@ -89,7 +99,11 @@ const Study = () => {
           className={cx('route-study-item')}
           onClick={() => navigate(`/study_detail/${item.id}`)}
         >
-          <StudyRoute id={item.id} label={'Chặng ' + item.name} />
+          <Route
+            id={item.id}
+            label={'Chặng ' + item.name}
+            state={CheckRouteState(item)}
+          />
         </li>
       )
   );

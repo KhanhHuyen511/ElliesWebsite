@@ -24,6 +24,12 @@ export interface StudyCard {
   audio?: any;
 }
 
+export interface Student {
+  id: string;
+  checkinDays: [];
+  routes: [];
+}
+
 export enum StudyCardType {
   Vocab,
   Sentence,
