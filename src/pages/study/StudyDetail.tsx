@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { getStudyCards, getStudyRoute } from '../../redux/slice/studySlice';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '../../firebase/config';
 import style from './StudyDetail.module.scss';
 import classNames from 'classnames/bind';
 import { Button } from '../../components';
 import StudyDesc from './StudyDesc';
 import StudyCardDetail from './StudyCard';
 import { StudyCard } from '../../types';
-import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
+import StudyFinish from './StudyFinish';
+import { HomeIcon } from '@heroicons/react/24/outline';
 const cx = classNames.bind(style);
 
 const StudyDetail = () => {
@@ -19,23 +18,26 @@ const StudyDetail = () => {
 
   const route = useSelector((state: RootState) => state.study.currentRoute);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const [studyCards, setStudyCards] = useState<StudyCard[]>();
   const [currentCard, setCurrentCard] = useState<StudyCard>();
   const [currentCardIndex, setCurrentCardIndex] = useState<number>();
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     if (id) dispatch(getStudyRoute(id));
   }, [dispatch, id]);
 
   const NextCard = () => {
-    if (
-      currentCardIndex &&
-      studyCards &&
-      currentCardIndex <= studyCards.length
-    ) {
-      console.log('hi');
-      setCurrentCardIndex(currentCardIndex + 1);
-      setCurrentCard(studyCards[currentCardIndex]);
+    if (currentCardIndex && studyCards) {
+      const nextIndex = currentCardIndex + 1;
+      if (nextIndex <= studyCards.length) {
+        setCurrentCardIndex(nextIndex);
+        setCurrentCard(studyCards[currentCardIndex]);
+      } else {
+        setCurrentCard(undefined);
+        setIsFinished(true);
+      }
     }
   };
 
@@ -77,9 +79,25 @@ const StudyDetail = () => {
             <Button
               className={cx('next-button')}
               isPrimary={false}
-              onClick={NextCard}
+              onClick={() => NextCard()}
               haveIcon
             ></Button>
+          </>
+        )}
+        {/* {studyCards && <StudyFinish cards={studyCards}></StudyFinish>} */}
+        {isFinished && studyCards && (
+          <>
+            <StudyFinish cards={studyCards}></StudyFinish>
+            <div className={cx('home')}>
+              <HomeIcon
+                width={48}
+                height={48}
+                className={cx('home-icon')}
+                onClick={() => {
+                  navigate('/');
+                }}
+              ></HomeIcon>
+            </div>
           </>
         )}
       </div>

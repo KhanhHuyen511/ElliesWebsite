@@ -1,0 +1,43 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.studied-text {
+  @include typo-body;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.list-card {
+  margin-top: 30px;
+  width: 100%;
+
+  & .card-display {
+    @include typo-heading-3;
+    color: var(--O500);
+  }
+
+  & .card-pronoun {
+    display: flex;
+    column-gap: 8px;
+
+    & .pronoun-text {
+      @include typo-caption;
+    }
+  }
+
+  & .card-meaning {
+    @include typo-body-small;
+  }
+}
+
+.cta {
+  display: flex;
+  column-gap: 20px;
+  margin-top: 52px;
+
+  &-btn {
+    width: 50%;
+  }
+}
+
+

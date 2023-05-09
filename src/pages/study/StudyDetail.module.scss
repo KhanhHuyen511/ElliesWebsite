@@ -21,3 +21,12 @@
   float: right;
   margin-right: 5%;
 }
+.home {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+
+  &-icon {
+    stroke: var(--O500);
+  }
+}
