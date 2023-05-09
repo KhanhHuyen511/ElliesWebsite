@@ -9,7 +9,7 @@
 .page-number {
   @include typo-heading-2;
   text-align: center;
-  margin-top: 70px;
+  margin-top: 30px;
   color: var(--text-medium-color);
 
   & span {
@@ -17,10 +17,13 @@
   }
 }
 
-.next-button {
-  float: right;
-  margin-right: 5%;
+.cta {
+  display: flex;
+  column-gap: 8px;
+  margin: 20px 5% 0 0;
+  justify-content: right;
 }
+
 .home {
   display: flex;
   justify-content: center;

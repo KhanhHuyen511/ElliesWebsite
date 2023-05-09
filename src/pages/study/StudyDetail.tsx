@@ -41,6 +41,16 @@ const StudyDetail = () => {
     }
   };
 
+  const PrevCard = () => {
+    if (currentCardIndex && studyCards) {
+      const prevIndex = currentCardIndex - 1;
+      if (prevIndex > 0) {
+        setCurrentCardIndex(prevIndex);
+        setCurrentCard(studyCards[currentCardIndex]);
+      }
+    }
+  };
+
   return (
     <>
       <div className='container'>
@@ -76,12 +86,18 @@ const StudyDetail = () => {
               <span>{currentCardIndex}/</span>
               {studyCards?.length}
             </p>
-            <Button
-              className={cx('next-button')}
-              isPrimary={false}
-              onClick={() => NextCard()}
-              haveIcon
-            ></Button>
+            <div className={cx('cta')}>
+              <Button
+                isPrimary={false}
+                onClick={() => PrevCard()}
+                icon='prev'
+              ></Button>
+              <Button
+                isPrimary={false}
+                onClick={() => NextCard()}
+                haveIcon
+              ></Button>
+            </div>
           </>
         )}
         {/* {studyCards && <StudyFinish cards={studyCards}></StudyFinish>} */}

@@ -1,4 +1,8 @@
-import { ArrowSmallRightIcon, BoltIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowSmallLeftIcon,
+  ArrowSmallRightIcon,
+  BoltIcon,
+} from '@heroicons/react/24/outline';
 import classNames from 'classnames/bind';
 import React from 'react';
 import style from './Button.module.scss';
@@ -35,6 +39,13 @@ const Button = (props: Props) => {
       )}
       {props.icon === 'boilt' && (
         <BoltIcon width={32} height={32} className={cx('icon', 'right-icon')} />
+      )}
+      {props.icon === 'prev' && (
+        <ArrowSmallLeftIcon
+          width={32}
+          height={32}
+          className={cx('icon', 'right-icon')}
+        />
       )}
     </button>
   );

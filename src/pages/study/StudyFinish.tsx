@@ -6,7 +6,6 @@ import { Button } from '../../components';
 import { StudyCard } from '../../types';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '../../firebase/config';
-import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(style);
 
 const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {
