@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { getStudyCards, getStudyRoute } from '../../redux/slice/studySlice';
+import {
+  getStudyCards,
+  getStudyRoute,
+  setStudyRouteState,
+} from '../../redux/slice/studySlice';
 import style from './StudyDetail.module.scss';
 import classNames from 'classnames/bind';
 import { Button } from '../../components';
@@ -15,6 +19,8 @@ const cx = classNames.bind(style);
 
 const StudyDetail = () => {
   let { id } = useParams();
+
+  const userID = useSelector((state: RootState) => state.auth.userID) || '';
 
   const route = useSelector((state: RootState) => state.study.currentRoute);
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +43,7 @@ const StudyDetail = () => {
       } else {
         setCurrentCard(undefined);
         setIsFinished(true);
+        if (id) dispatch(setStudyRouteState({ routeID: id, userID }));
       }
     }
   };

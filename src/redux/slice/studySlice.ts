@@ -149,6 +149,29 @@ export const getStudyCards = createAsyncThunk(
   }
 );
 
+//
+export const setStudyRouteState = createAsyncThunk(
+  'study/setRouteState',
+  async (data: { routeID: string; userID: string }) => {
+    console.log(data);
+    const q = query(collection(db, 'students'), where('id', '==', data.userID));
+    const querySnapshot = (await getDocs(q)).docs[0];
+
+    if (querySnapshot) {
+      await updateDoc(querySnapshot.ref, {
+        routes: arrayUnion(data.routeID),
+      });
+    } else {
+      await addDoc(collection(db, 'students'), {
+        id: data.userID,
+        routes: [data.routeID],
+      });
+    }
+
+    return data.routeID;
+  }
+);
+
 const studySlice = createSlice({
   name: 'study',
   initialState,
@@ -177,6 +200,9 @@ const studySlice = createSlice({
     });
     builder.addCase(getStudiedRoutes.fulfilled, (state, action) => {
       state.studiedRouteIDs = action.payload;
+    });
+    builder.addCase(setStudyRouteState.fulfilled, (state, action) => {
+      state.studiedRouteIDs.push(action.payload);
     });
   },
 });
