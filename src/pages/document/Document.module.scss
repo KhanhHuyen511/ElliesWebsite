@@ -1,0 +1,26 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.page-title {
+  @include typo-heading-1;
+  margin-top: 26px;
+}
+
+.doc-cate-wrapper {
+  display: flex;
+  column-gap: 18px;
+  margin-top: 26px;
+
+  .cate-item {
+    flex: 1;
+  }
+}
+
+.sub-title {
+  @include typo-heading-2;
+  margin-top: 53px;
+}
+
+.list {
+  margin-top: 26px;
+}
