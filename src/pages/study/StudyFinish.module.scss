@@ -29,13 +29,3 @@
     @include typo-body-small;
   }
 }
-
-.cta {
-  display: flex;
-  column-gap: 20px;
-  margin-top: 52px;
-
-  &-btn {
-    width: 50%;
-  }
-}

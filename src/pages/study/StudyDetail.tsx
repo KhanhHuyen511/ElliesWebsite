@@ -111,6 +111,26 @@ const StudyDetail = () => {
         {isFinished && studyCards && (
           <>
             <StudyFinish cards={studyCards}></StudyFinish>
+            <div className={cx('cta-finish')}>
+              <Button
+                isPrimary={false}
+                onClick={() => {
+                  setStudyCards(undefined);
+                  setIsFinished(false);
+                }}
+                className={cx('cta-finish-btn')}
+              >
+                Xem lại
+              </Button>
+              <Button
+                isPrimary
+                onClick={() => {}}
+                icon='boilt'
+                className={cx('cta-finish-btn')}
+              >
+                Luyện tập
+              </Button>
+            </div>
             <div className={cx('home')}>
               <HomeIcon
                 width={48}

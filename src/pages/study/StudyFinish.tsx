@@ -55,23 +55,6 @@ const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {
             ))}
           </tbody>
         </table>
-        <div className={cx('cta')}>
-          <Button
-            isPrimary={false}
-            onClick={() => {}}
-            className={cx('cta-btn')}
-          >
-            Xem lại
-          </Button>
-          <Button
-            isPrimary
-            onClick={() => {}}
-            icon='boilt'
-            className={cx('cta-btn')}
-          >
-            Luyện tập
-          </Button>
-        </div>
       </div>
     </>
   );
