@@ -179,7 +179,6 @@ export const updateStudyRoute = createAsyncThunk(
   'admin/study/updateRoute',
   async (data: { path_id: string; route: StudyRoute }) => {
     if (data.route.id) {
-      console.log(data.route);
       const docRef = doc(
         db,
         'study_paths',
@@ -197,7 +196,6 @@ export const updateStudyRoute = createAsyncThunk(
 export const updateStudyCard = createAsyncThunk(
   'admin/study/updateCard',
   async (data: { path_id: string; route_id: string; card: StudyCard }) => {
-    console.log('hihi' + data.card.id);
     if (data.card.id) {
       const docRef = doc(
         db,

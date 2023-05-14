@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Input } from '../../../components';
 import { useDispatch } from 'react-redux';
 import { setStudyRoute } from '../../../redux/slice/adminSlice';
 import { AppDispatch } from '../../../redux/store';
 import Popup from '../../../components/popup/Popup';
+import { Input } from '../../../components';
 
 interface Props {
   classNames?: string;

@@ -12,16 +12,16 @@ import {
 import { StudyCard, StudyPath, StudyRoute } from '../../../types';
 import { useParams } from 'react-router-dom';
 import { Col, Row } from 'react-flexbox-grid';
-import {
-  CreateRouteForm,
-  EditRouteForm,
-  CreateStudyCard,
-  EditCardForm,
-} from './index';
+import CreateRouteForm from './CreateRouteForm';
+import EditRouteForm from './EditRouteForm';
+import CreateStudyCard from './CreateStudyCard';
+import EditCardForm from './EditCardForm';
 const cx = classNames.bind(styles);
 
 const PathDetail = () => {
   let { id } = useParams();
+
+  console.log(id);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -33,20 +33,22 @@ const PathDetail = () => {
     (state: RootState) => state.admin.currentStudyRoute
   );
 
-  useEffect(() => {
-    if (id) dispatch(getStudyPath(id));
-    setListStudyRoute(data.studyRoutes);
-    setName(data.name);
-    setTopic(data.topic);
-    setLevel(data.level);
-  }, [dispatch, id, data.name, currentRoute]);
+  useEffect(
+    () => {
+      if (id) dispatch(getStudyPath(id));
+      setListStudyRoute(data.studyRoutes);
+      setName(data.name);
+      setTopic(data.topic);
+      setLevel(data.level);
+    }, // eslint-disable-next-line
+    [dispatch, id, data.name, currentRoute]
+  );
 
   const [name, setName] = useState<string>();
   const [level, setLevel] = useState<string>();
   const [topic, setTopic] = useState<string>();
   const [listStudyRoute, setListStudyRoute] = useState<StudyRoute[]>();
   const [currentStudyRoute, setCurrentStudyRoute] = useState<StudyRoute>();
-  const [listStudyCard, setListStudyCard] = useState<StudyCard[]>();
   const [isOpenRouteForm, setIsOpenRouteForm] = useState<boolean>(false);
   const [isOpenEditRouteForm, setIsOpenEditRouteForm] =
     useState<boolean>(false);
@@ -117,7 +119,6 @@ const PathDetail = () => {
                     if (id && selectRoute) {
                       dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
                       setCurrentStudyRoute(currentRoute);
-                      console.log(currentStudyRoute);
                     }
                   }}
                   preventDefault
@@ -130,7 +131,6 @@ const PathDetail = () => {
                     if (id && selectRoute) {
                       dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
                       setCurrentStudyRoute(currentRoute);
-                      console.log(currentStudyRoute);
                     }
                     setIsOpenEditRouteForm(true);
                   }}
@@ -216,7 +216,6 @@ const PathDetail = () => {
                       <Checkbox
                         onChecked={() => {
                           setCurrentStudyCard(item);
-                          console.log(currentStudyRoute);
                         }}
                       ></Checkbox>
                     </td>

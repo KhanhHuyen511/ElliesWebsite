@@ -83,7 +83,6 @@ export const getStudyRoute = createAsyncThunk(
 export const setCheckInToday = createAsyncThunk(
   'study/setCheckIn',
   async (data: { day: Date; userID: string }) => {
-    console.log(data);
     const q = query(collection(db, 'students'), where('id', '==', data.userID));
     const querySnapshot = (await getDocs(q)).docs[0];
 
@@ -153,7 +152,6 @@ export const getStudyCards = createAsyncThunk(
 export const setStudyRouteState = createAsyncThunk(
   'study/setRouteState',
   async (data: { routeID: string; userID: string }) => {
-    console.log(data);
     const q = query(collection(db, 'students'), where('id', '==', data.userID));
     const querySnapshot = (await getDocs(q)).docs[0];
 

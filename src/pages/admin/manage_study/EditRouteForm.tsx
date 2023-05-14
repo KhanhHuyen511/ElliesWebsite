@@ -21,8 +21,6 @@ const EditRouteForm = (props: Props) => {
     (state: RootState) => state.admin.currentStudyRoute
   );
 
-  console.log(currentRoute);
-
   useEffect(() => {
     setName(currentRoute.name);
   }, [dispatch, currentRoute.name]);

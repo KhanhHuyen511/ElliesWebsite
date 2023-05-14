@@ -90,7 +90,6 @@ const Study = () => {
   var currentRouteIndex = 0;
 
   const CheckRouteState = (route: StudyRoute, index: number) => {
-    console.log(index + ' ' + currentRouteIndex);
     if (index === currentRouteIndex) return 'active';
     if (
       route.id &&
