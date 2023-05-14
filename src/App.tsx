@@ -12,7 +12,7 @@ import {
   StudyCard,
 } from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
-import { IndexStudy } from './pages/admin/manage_study';
+import { IndexStudy, IndexDocument } from './pages/admin';
 // import Admin from './pages/admin';
 // import { selectUserRole } from './redux/slice/authSlice';
 import { RootState } from './redux/store';
@@ -26,19 +26,8 @@ function App() {
   const uRole = useSelector((state: RootState) => state.auth.userRole);
 
   useEffect(() => {
-    if (userID)
-      // getAccount(userID).then((value) => {
-      //   setUserRole(value);
-      // });
-      setUserRole(uRole);
+    if (userID) setUserRole(uRole);
   }, [userID, uRole]);
-
-  // const getAccount = async (userID: string) => {
-  //   const q = query(collection(db, 'accounts'), where('user_id', '==', userID));
-
-  //   const role = await (await getDocs(q)).docs[0].data().role;
-  //   return role;
-  // };
 
   return (
     <div className='app'>
@@ -63,6 +52,7 @@ function App() {
           <Header />
           <Routes>
             <Route path='/' element={<IndexStudy />} />
+            <Route path='/admin/document' element={<IndexDocument />} />
             <Route path='/login' element={<Login />} />
             <Route path='/path_detail/:id' element={<PathDetail />} />
           </Routes>
