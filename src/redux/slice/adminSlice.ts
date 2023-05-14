@@ -215,6 +215,35 @@ export const updateStudyCard = createAsyncThunk(
   }
 );
 
+// DOCUMENT
+export const setVocab = createAsyncThunk(
+  'admin/study/setVocab',
+  async (data: StudyCard) => {
+    const docRef = await addDoc(collection(db, 'vocabs'), {
+      display: data.display,
+      meaning: data.meaning,
+      imageFile: data.imageFile,
+      audio: data.audio,
+    });
+
+    data.id = docRef.id;
+
+    return data;
+  }
+);
+
+export const getVocabs = createAsyncThunk('admin/study/getVocabs', async () => {
+  var list: StudyCard[] = [];
+  const querySnapshot = await getDocs(collection(db, 'vocabs'));
+  querySnapshot.forEach(async (e) => {
+    var item: StudyCard = e.data() as StudyCard;
+    item.id = e.id;
+    list.push(item);
+  });
+
+  return list;
+});
+
 const adminSlice = createSlice({
   name: 'admin_study',
   initialState,
@@ -234,6 +263,12 @@ const adminSlice = createSlice({
     });
     builder.addCase(setStudyRoute.fulfilled, (state, action) => {
       state.currentStudyPath.studyRoutes?.push(action.payload as StudyRoute);
+    });
+    builder.addCase(setVocab.fulfilled, (state, action) => {
+      state.listVocabs?.push(action.payload as StudyCard);
+    });
+    builder.addCase(getVocabs.fulfilled, (state, action) => {
+      state.listVocabs = action.payload as StudyCard[];
     });
   },
 });
