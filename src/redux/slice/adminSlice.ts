@@ -17,6 +17,7 @@ interface types {
   currentStudyRoute: StudyCard;
   // list user
   // list doc
+  listVocabs?: StudyCard[];
   // list ...
 }
 

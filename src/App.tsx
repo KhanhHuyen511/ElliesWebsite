@@ -13,14 +13,11 @@ import {
 } from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
 import { IndexStudy, IndexDocument } from './pages/admin';
-// import Admin from './pages/admin';
-// import { selectUserRole } from './redux/slice/authSlice';
 import { RootState } from './redux/store';
 import { useSelector } from 'react-redux';
 import PathDetail from './pages/admin/manage_study/PathDetail';
 
 function App() {
-  // const userRole = useSelector((state: RootState) => state.auth.userRole);
   const [userRole, setUserRole] = useState('student');
   const userID = useSelector((state: RootState) => state.auth.userID);
   const uRole = useSelector((state: RootState) => state.auth.userRole);
@@ -52,7 +49,7 @@ function App() {
           <Header />
           <Routes>
             <Route path='/' element={<IndexStudy />} />
-            <Route path='/admin/document' element={<IndexDocument />} />
+            <Route path='/document' element={<IndexDocument />} />
             <Route path='/login' element={<Login />} />
             <Route path='/path_detail/:id' element={<PathDetail />} />
           </Routes>
