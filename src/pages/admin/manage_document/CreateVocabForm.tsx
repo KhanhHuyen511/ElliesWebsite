@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Input } from '../../../components';
 import Popup from '../../../components/popup/Popup';
+import { setVocab } from '../../../redux/slice/adminSlice';
+import { AppDispatch } from '../../../redux/store';
 
 interface Props {
   classNames?: string;
@@ -14,6 +17,8 @@ const CreateVocabForm = (props: Props) => {
   const [image, setImage] = useState<any>();
   const [audio, setAudio] = useState<any>();
 
+  const dispatch = useDispatch<AppDispatch>();
+
   return (
     <>
       <Popup
@@ -21,14 +26,14 @@ const CreateVocabForm = (props: Props) => {
         classNames={''}
         onClose={props.onClose}
         onSubmit={() =>
-          // dispatch(
-          //   setStudyCard({
-          //     path_id: props.pathID,
-          //     route_id: props.routeID,
-          //     card: { display, meaning, imageFile: image, audio },
-          //   })
-          // )
-          {}
+          dispatch(
+            setVocab({
+              display,
+              meaning,
+              imageFile: image,
+              audio,
+            })
+          )
         }
         isDisplay={props.isDisplay}
       >
