@@ -16,6 +16,16 @@
   }
 }
 
+.container {
+  padding: 0 16px;
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    padding: 0 120px;
+  }
+}
+
 * {
   font-family: quicksand;
   box-sizing: border-box;
