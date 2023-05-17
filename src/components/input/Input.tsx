@@ -11,6 +11,7 @@ interface Props {
   isDisabled?: boolean;
   haveIcon?: boolean;
   icon?: string;
+  value?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void | undefined;
 }
 
@@ -28,6 +29,7 @@ const Input = (props: Props) => {
         placeholder={inputProps.placeholder}
         className={cx('input')}
         onChange={props.onChange}
+        value={props.value}
       />
       {props.smallText && <p className={cx('small-text')}>{props.smallText}</p>}
     </div>

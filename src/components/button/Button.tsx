@@ -1,7 +1,11 @@
-import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
-import classNames from "classnames/bind";
-import React from "react";
-import style from "./Button.module.scss";
+import {
+  ArrowSmallLeftIcon,
+  ArrowSmallRightIcon,
+  BoltIcon,
+} from '@heroicons/react/24/outline';
+import classNames from 'classnames/bind';
+import React from 'react';
+import style from './Button.module.scss';
 const cx = classNames.bind(style);
 
 interface Props {
@@ -11,17 +15,37 @@ interface Props {
   children?: string;
   haveIcon?: boolean;
   icon?: string;
+  isDanger?: boolean;
+  preventDefault?: boolean;
+  className?: string;
 }
 
 const Button = (props: Props) => {
   return (
     <button
-      onClick={props.onClick}
-      className={cx("btn", { primary: props.isPrimary })}
+      onClick={(e) => {
+        if (props.preventDefault) e.preventDefault();
+        props.onClick();
+      }}
+      className={cx('btn', { primary: props.isPrimary }, props.className)}
     >
       {props.children}
       {props.haveIcon && (
-        <ArrowSmallRightIcon className={cx("icon", "right-icon")} />
+        <ArrowSmallRightIcon
+          width={32}
+          height={32}
+          className={cx('icon', 'right-icon')}
+        />
+      )}
+      {props.icon === 'boilt' && (
+        <BoltIcon width={32} height={32} className={cx('icon', 'right-icon')} />
+      )}
+      {props.icon === 'prev' && (
+        <ArrowSmallLeftIcon
+          width={32}
+          height={32}
+          className={cx('icon', 'right-icon')}
+        />
       )}
     </button>
   );

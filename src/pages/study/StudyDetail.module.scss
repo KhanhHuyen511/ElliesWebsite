@@ -1,0 +1,45 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.title {
+  @include typo-heading-1;
+  margin-top: 26px;
+}
+
+.page-number {
+  @include typo-heading-2;
+  text-align: center;
+  margin-top: 30px;
+  color: var(--text-medium-color);
+
+  & span {
+    color: var(--Y500);
+  }
+}
+
+.cta {
+  display: flex;
+  column-gap: 8px;
+  margin: 20px 5% 0 0;
+  justify-content: right;
+}
+
+.cta-finish {
+  display: flex;
+  column-gap: 20px;
+  margin-top: 52px;
+
+  &-btn {
+    width: 50%;
+  }
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+
+  &-icon {
+    stroke: var(--O500);
+  }
+}

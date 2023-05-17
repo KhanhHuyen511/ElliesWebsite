@@ -9,6 +9,13 @@
   background-color: var(--W);
   position: sticky;
   top: 0;
+  z-index: 1;
+}
+
+.navigation_bar {
+  display: flex;
+  gap: 24px;
+  align-items: center;
 }
 
 .navbar {
@@ -36,6 +43,63 @@
 .profile {
   width: fit-content;
   height: fit-content;
+  display: flex;
+
+  .user-name-wrapper {
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+    position: relative;
+
+    & > .user-name {
+      @include typo-body;
+      cursor: pointer;
+    }
+
+    & > .dropdown-icon {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+
+      &.checked {
+        rotate: 180deg;
+      }
+    }
+
+    & > .auth-wrapper {
+      background-color: #fff;
+      width: 160px;
+      position: absolute;
+      top: 36px;
+      left: 0;
+      border-radius: 8px;
+      border: 1px solid #000;
+      overflow: hidden;
+      box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+      @include typo-body;
+
+      & > .auth-item {
+        color: var(--text-bold-color);
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--G400);
+      }
+
+      & > .auth-item:last-child {
+        border-bottom: none;
+      }
+
+      & > .auth-item:hover {
+        color: #fff;
+        background-color: var(--Y500);
+        border-bottom: 1px solid var(--G900);
+        transition: 0.3s 0.1s linear;
+      }
+    }
+  }
 }
 
 .navbar-icon {
@@ -47,14 +111,6 @@
   @include for-desktop {
     display: none;
   }
-}
-
-.profile-icon {
-  width: 32px;
-  height: 32px;
-  margin-left: 32px;
-
-  @include hover-icon-primary;
 }
 
 .slider-container {

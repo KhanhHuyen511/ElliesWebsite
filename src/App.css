@@ -2,6 +2,18 @@
 
 .app {
   height: 100vh;
+  color: var(--text-bold-color);
+}
+
+.container {
+  padding: 0 16px;
+  justify-content: center;
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    padding: 0 120px;
+  }
 }
 
 .container {
@@ -16,4 +28,5 @@
 
 * {
   font-family: quicksand;
+  box-sizing: border-box;
 }

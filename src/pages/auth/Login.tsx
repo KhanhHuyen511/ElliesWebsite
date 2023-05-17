@@ -11,7 +11,6 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
 } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 
@@ -22,6 +21,22 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  // remove current account
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       signOut(auth);
+  //       // dispatch(REMOVE_ACTIVE_USER({}));
+  //     }
+  //   });
+  // }, [dispatch]);
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     signOut(auth);
+  //     // dispatch(REMOVE_ACTIVE_USER({}));
+  //   }
+  // });
+
   const isValid = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -29,7 +44,6 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
         toast.success('Login successfull!');
         navigate('/');
       })
@@ -56,18 +70,6 @@ const Login = () => {
       .then((result) => {
         toast.success('Login successfull!');
         navigate('/');
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        toast.error(errorMessage);
-      });
-  };
-
-  const logout = () => {
-    signOut(auth)
-      .then(() => {
-        toast.success('Logout successfull!');
-        navigate('/login');
       })
       .catch((error) => {
         const errorMessage = error.message;

@@ -1,0 +1,43 @@
+@import '../../../assets/style/shared.scss';
+@import '../../../assets/theme/shared.css';
+
+.table {
+  width: 100%;
+  border-spacing: 0;
+  border-radius: 8px;
+
+  td,
+  th {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    @include typo-body-small;
+  }
+
+  th {
+    background-color: var(--Y500);
+  }
+
+  tr:hover {
+    background-color: var(--Y200);
+  }
+}
+
+.handler {
+  width: 100%;
+  display: flex;
+
+  &.list {
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+}
+
+.form-title {
+  @include typo-heading-1;
+  margin-bottom: 20px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+}
