@@ -34,3 +34,11 @@ export enum StudyCardType {
   Vocab,
   Sentence,
 }
+
+export interface Doc {
+  id: string;
+  title: string; // topic
+  description: string;
+  listItems?: StudyCard[];
+  createDate?: Date;
+}

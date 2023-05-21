@@ -23,4 +23,7 @@
 
 .list {
   margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
 }
