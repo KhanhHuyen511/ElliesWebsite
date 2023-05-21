@@ -111,6 +111,3 @@ const docSlice = createSlice({
 });
 
 export default docSlice.reducer;
-function then(arg0: () => void): any {
-  throw new Error('Function not implemented.');
-}

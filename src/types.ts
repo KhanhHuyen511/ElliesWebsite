@@ -35,10 +35,42 @@ export enum StudyCardType {
   Sentence,
 }
 
+export enum GameType {
+  TranslateToVN,
+  TranslateToEN,
+}
+
 export interface Doc {
   id: string;
   title: string; // topic
   description: string;
   listItems?: StudyCard[];
   createDate?: Date;
+}
+
+export interface Ex {
+  id: string;
+  title: string; // topic
+  description: string;
+  listItems?: ExDetail[];
+  score?: number; // => later in future
+  level?: string;
+}
+
+export interface ExDetail {
+  id: string;
+  type: GameType;
+  question: string;
+  options: string[];
+  answer: string;
+  exRight?: boolean;
+}
+
+export interface UserEx {
+  id: string;
+  userId: string;
+  ex: Ex;
+  resultList: ExDetail[];
+  rightQn?: number;
+  didDate?: Date;
 }
