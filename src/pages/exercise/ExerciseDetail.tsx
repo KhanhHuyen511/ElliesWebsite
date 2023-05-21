@@ -26,6 +26,21 @@ const ExerciseDetail = () => {
     if (id) dispatch(getAEx(id));
   }, [dispatch, id]);
 
+  const Next = () => {
+    if (currentExDetailIndex && data?.listItems) {
+      const nextIndex = currentExDetailIndex + 1;
+      if (nextIndex <= data?.listItems.length) {
+        setCurrentExDetailIndex(nextIndex);
+        setCurrentExDetail(data.listItems[currentExDetailIndex]);
+      } else {
+        setCurrentExDetail(undefined);
+        setIsFinished(true);
+        // update history of user
+        // if (id) dispatch(setStudyRouteState({ routeID: id, userID }));
+      }
+    }
+  };
+
   return (
     <>
       <div className='container'>
@@ -37,17 +52,6 @@ const ExerciseDetail = () => {
               isPrimary
               onClick={() => {
                 if (id && data.listItems && data.listItems.length > 0) {
-                  // dispatch(getStudyCards(id)).then((data) => {
-                  //   setStudyCards(data.payload as StudyCard[]);
-                  //   if (
-                  //     data.payload &&
-                  //     (data.payload as StudyCard[]).length > 0
-                  //   ) {
-                  //     setCurrentCard((data.payload as StudyCard[])[0]);
-                  //     setCurrentCardIndex(1);
-                  //   }
-                  // }
-                  // );
                   setCurrentExDetail(data.listItems[0]);
                   setCurrentExDetailIndex(1);
                   setIsPrepare(false);
@@ -61,23 +65,11 @@ const ExerciseDetail = () => {
         )}
         {currentExDetail && (
           <>
-            <ExerciseChild data={currentExDetail}></ExerciseChild>
+            <ExerciseChild data={currentExDetail} onNext={Next}></ExerciseChild>
             <p className={cx('page-number')}>
               <span>{currentExDetailIndex}/</span>
               {data?.listItems?.length}
             </p>
-            {/* <div className={cx('cta')}>
-              <Button
-                isPrimary={false}
-                onClick={() => PrevCard()}
-                icon='prev'
-              ></Button>
-              <Button
-                isPrimary={false}
-                onClick={() => NextCard()}
-                haveIcon
-              ></Button>
-            </div> */}
           </>
         )}
         {/* {studyCards && <StudyFinish cards={studyCards}></StudyFinish>} */}

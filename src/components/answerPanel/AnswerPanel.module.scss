@@ -8,7 +8,7 @@
   background: var(--W);
   border-radius: 8px;
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
-  padding: 5px;
+  padding: 18px 12px;
   margin: 2px;
   cursor: pointer;
 
@@ -16,7 +16,7 @@
     padding: 16px;
   }
 
-  &:hover {
+  &:not(.disabled):hover {
     background-color: var(--Y400);
   }
 
@@ -24,6 +24,20 @@
   &.active {
     background-color: var(--Y500);
     color: var(--W);
+    cursor: default;
+  }
+
+  &.true {
+    background-color: var(--O500);
+    color: var(--W);
+  }
+
+  &.false {
+    background-color: var(--Y200);
+    color: var(--G500);
+  }
+
+  &.disabled {
     cursor: default;
   }
 }

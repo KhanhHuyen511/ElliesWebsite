@@ -20,3 +20,10 @@
     color: var(--Y500);
   }
 }
+
+.cta {
+  display: flex;
+  column-gap: 8px;
+  margin: 20px 5% 0 0;
+  justify-content: right;
+}
