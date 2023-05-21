@@ -3,12 +3,18 @@ import styles from './DocCard.module.scss';
 import classNames from 'classnames/bind';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
 import { Doc } from '../../types';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 const DocCard = ({ data }: { data: Doc }) => {
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className={cx('card')}>
+      <div
+        className={cx('card')}
+        onClick={() => navigate(`/doc_detail/${data.id}`)}
+      >
         <p className={cx('card-title')}>{data.title}</p>
         <div className={cx('card-body')}>
           <div className={cx('card-content')}>

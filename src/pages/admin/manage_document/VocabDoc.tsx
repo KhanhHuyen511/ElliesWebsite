@@ -62,7 +62,6 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
                       value={item.id}
                       isChecked={getCheckedItems(item)}
                       onChecked={() => {
-                        console.log(item);
                         setSelectedItem(item);
                       }}
                     ></Checkbox>

@@ -1,0 +1,28 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.section-title {
+  @include typo-heading-3;
+}
+
+.section-title:nth-of-type(1) {
+  margin-top: 26px;
+}
+
+.section-title:nth-of-type(3) {
+  margin-top: 40px;
+}
+
+.desc {
+  @include typo-body-small;
+}
+
+.list-card {
+  display: flex;
+  column-gap: 16px;
+  margin-top: 20px;
+
+  .list-item {
+    width: 50%;
+  }
+}

@@ -264,7 +264,6 @@ export const updateVocab = createAsyncThunk(
   'admin/study/updateVocab',
   async (data: StudyCard) => {
     if (data.id) {
-      console.log('im in');
       const docRef = doc(db, 'vocabs', data.id);
       await updateDoc(docRef, {
         display: data.display,

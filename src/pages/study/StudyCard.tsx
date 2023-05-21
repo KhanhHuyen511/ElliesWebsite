@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 import style from './StudyCard.module.scss';
 import classNames from 'classnames/bind';
-import { Button } from '../../components';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { auth, storage } from '../../firebase/config';
+import { storage } from '../../firebase/config';
 import { StudyCard } from '../../types';
 import { HeartIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 const cx = classNames.bind(style);
