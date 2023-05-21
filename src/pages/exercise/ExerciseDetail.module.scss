@@ -9,3 +9,14 @@
 .submit {
   margin-top: 40px;
 }
+
+.page-number {
+  @include typo-heading-2;
+  text-align: center;
+  margin-top: 30px;
+  color: var(--text-medium-color);
+
+  & span {
+    color: var(--Y500);
+  }
+}

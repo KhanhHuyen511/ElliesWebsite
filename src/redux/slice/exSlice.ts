@@ -93,16 +93,26 @@ export const getAEx = createAsyncThunk('doc/getAEx', async (id: string) => {
 
   const querySnapshot1 = await getDocs(collection(db, 'exs', id, 'listItems'));
 
-  const listItems: ExDetail[] = [];
+  var listItems: ExDetail[] = [];
 
-  querySnapshot1.forEach(async (e) => {
-    var d: ExDetail = e.data() as ExDetail;
-    d.id = e.id;
-    listItems.push(d);
-  });
+  await Promise.all(
+    querySnapshot1.docs.map(async (e) => {
+      var d: ExDetail = e.data() as ExDetail;
+      d.id = e.id;
+
+      if (d.vocab) {
+        const querySnapshot2 = await getDoc(doc(db, 'vocabs', e.data().vocab));
+
+        d.vocab = querySnapshot2.data();
+        if (d.vocab) d.vocab.id = querySnapshot2.id;
+      }
+
+      console.log(d);
+      listItems = [...listItems, d];
+    })
+  );
 
   item.listItems = listItems;
-  console.log(listItems);
 
   return item;
 });

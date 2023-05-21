@@ -64,6 +64,7 @@ export interface ExDetail {
   options: string[];
   answer: string;
   exRight?: boolean;
+  vocab?: StudyCard;
 }
 
 export interface UserEx {

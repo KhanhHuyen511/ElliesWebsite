@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { ExDetail } from '../../types';
 import { Button } from '../../components';
 import ExDesc from './ExDesc';
+import ExerciseChild from './ExerciseChild';
 import { getAEx } from '../../redux/slice/exSlice';
 const cx = classNames.bind(style);
 
@@ -15,33 +16,42 @@ const ExerciseDetail = () => {
 
   const data = useSelector((state: RootState) => state.ex.currentEx);
   const [exDetails, setExDetails] = useState<ExDetail[]>();
+  const [currentExDetail, setCurrentExDetail] = useState<ExDetail>();
+  const [currentExDetailIndex, setCurrentExDetailIndex] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
+  const [isPrepare, setIsPrepare] = useState(true);
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     if (id) dispatch(getAEx(id));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   return (
     <>
       <div className='container'>
-        <p className={cx('title')}>Luyện tập - {data?.title}</p>
-        {!exDetails && data && (
+        {isPrepare && <p className={cx('title')}>Luyện tập - {data?.title}</p>}
+        {isPrepare && !exDetails && data && (
           <>
             <ExDesc data={data}></ExDesc>
             <Button
               isPrimary
               onClick={() => {
-                // if (id)
-                //   dispatch(getStudyCards(id)).then((data) => {
-                //     setStudyCards(data.payload as StudyCard[]);
-                //     if (
-                //       data.payload &&
-                //       (data.payload as StudyCard[]).length > 0
-                //     ) {
-                //       setCurrentCard((data.payload as StudyCard[])[0]);
-                //       setCurrentCardIndex(1);
-                //     }
-                //   });
+                if (id && data.listItems && data.listItems.length > 0) {
+                  // dispatch(getStudyCards(id)).then((data) => {
+                  //   setStudyCards(data.payload as StudyCard[]);
+                  //   if (
+                  //     data.payload &&
+                  //     (data.payload as StudyCard[]).length > 0
+                  //   ) {
+                  //     setCurrentCard((data.payload as StudyCard[])[0]);
+                  //     setCurrentCardIndex(1);
+                  //   }
+                  // }
+                  // );
+                  setCurrentExDetail(data.listItems[0]);
+                  setCurrentExDetailIndex(1);
+                  setIsPrepare(false);
+                }
               }}
               className={cx('submit')}
             >
@@ -49,14 +59,14 @@ const ExerciseDetail = () => {
             </Button>
           </>
         )}
-        {/* {currentCard && (
+        {currentExDetail && (
           <>
-            <StudyCardDetail card={currentCard}></StudyCardDetail>
+            <ExerciseChild data={currentExDetail}></ExerciseChild>
             <p className={cx('page-number')}>
-              <span>{currentCardIndex}/</span>
-              {studyCards?.length}
+              <span>{currentExDetailIndex}/</span>
+              {data?.listItems?.length}
             </p>
-            <div className={cx('cta')}>
+            {/* <div className={cx('cta')}>
               <Button
                 isPrimary={false}
                 onClick={() => PrevCard()}
@@ -67,9 +77,9 @@ const ExerciseDetail = () => {
                 onClick={() => NextCard()}
                 haveIcon
               ></Button>
-            </div>
+            </div> */}
           </>
-        )} */}
+        )}
         {/* {studyCards && <StudyFinish cards={studyCards}></StudyFinish>} */}
         {/* {isFinished && studyCards && (
           <>
