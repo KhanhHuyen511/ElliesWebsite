@@ -21,21 +21,6 @@ const initialState: types = {
   listDocs: [],
 };
 
-// const abc = async (list: []) => {
-//   if (list.length > 0) {
-//     let items: StudyCard[] = [];
-//     list.forEach(async (dataID: string) => {
-//       await getDoc(doc(db, 'vocabs', dataID)).then((d) => {
-//         items = [...items, d.data() as StudyCard];
-//       });
-//     });
-
-//     console.log(items);
-//     return items;
-//   }
-//   return undefined;
-// };
-
 // Write reducer get Docs
 export const getListDocs = createAsyncThunk('doc/getDocs', async () => {
   var docs: Doc[] = [];

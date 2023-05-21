@@ -80,11 +80,32 @@ export const getListUserExs = createAsyncThunk(
         exs = [...exs, temp];
       })
     );
-
-    console.log(exs);
     return exs;
   }
 );
+
+export const getAEx = createAsyncThunk('doc/getAEx', async (id: string) => {
+  const querySnapshot = await getDoc(doc(db, 'exs', id));
+
+  var item: Ex = querySnapshot.data() as Ex;
+  item.id = id;
+  item.listItems = undefined;
+
+  const querySnapshot1 = await getDocs(collection(db, 'exs', id, 'listItems'));
+
+  const listItems: ExDetail[] = [];
+
+  querySnapshot1.forEach(async (e) => {
+    var d: ExDetail = e.data() as ExDetail;
+    d.id = e.id;
+    listItems.push(d);
+  });
+
+  item.listItems = listItems;
+  console.log(listItems);
+
+  return item;
+});
 
 const exSlice = createSlice({
   name: 'ex',
@@ -96,6 +117,9 @@ const exSlice = createSlice({
     });
     builder.addCase(getListUserExs.fulfilled, (state, action) => {
       state.listUserExs = action.payload as UserEx[];
+    });
+    builder.addCase(getAEx.fulfilled, (state, action) => {
+      state.currentEx = action.payload;
     });
   },
 });

@@ -18,8 +18,6 @@ const DocDetail = () => {
     if (id) dispatch(getADoc(id));
   }, [dispatch, id]);
 
-  console.log(item);
-
   return (
     <div className='container'>
       <div className={cx('section-title')}>Mô tả</div>

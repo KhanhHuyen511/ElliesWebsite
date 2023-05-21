@@ -20,12 +20,12 @@
 
 .card-content {
   flex: 1;
+  @include typo-body-small;
 }
 
-.card-desc {
-  @include typo-body-small;
-  margin-top: 6px;
-  margin-right: 6px;
+.card-right,
+.card-archive {
+  margin-top: 8px;
 }
 
 .card-date {

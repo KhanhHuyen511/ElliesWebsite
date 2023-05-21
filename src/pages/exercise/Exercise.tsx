@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Col } from 'react-flexbox-grid';
 import styles from './Exercise.module.scss';
 import classNames from 'classnames/bind';
-import { CategoryPanel, ExCard } from '../../components';
+import { CategoryPanel, ExCard, UserExCard } from '../../components';
 import { AcademicCapIcon, QueueListIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
@@ -10,13 +10,15 @@ import { getListExs, getListUserExs } from '../../redux/slice/exSlice';
 const cx = classNames.bind(styles);
 
 const Exercise = () => {
-  const exs = useSelector((state: RootState) => state.ex.listUserExs);
+  const userExs = useSelector((state: RootState) => state.ex.listUserExs);
+  const exs = useSelector((state: RootState) => state.ex.listExs);
   const dispatch = useDispatch<AppDispatch>();
 
   const userID = useSelector((state: RootState) => state.auth.userID) || '';
 
   useEffect(() => {
     dispatch(getListUserExs(userID));
+    dispatch(getListExs());
   }, [dispatch]);
 
   return (
@@ -40,13 +42,23 @@ const Exercise = () => {
             icon={<QueueListIcon />}
           />
         </ul>
-        <p className={cx('sub-title')}>Đã làm</p>
+        <p className={cx('sub-title')}>Từ vựng</p>
         <ul className={cx('list')}>
           {exs &&
             exs.length > 0 &&
             exs.map((item, index) => (
               <li key={index} className={cx('item')}>
                 <ExCard data={item} />
+              </li>
+            ))}
+        </ul>
+        <p className={cx('sub-title')}>Đã làm</p>
+        <ul className={cx('list')}>
+          {userExs &&
+            userExs.length > 0 &&
+            userExs.map((item, index) => (
+              <li key={index} className={cx('item')}>
+                <UserExCard data={item} />
               </li>
             ))}
         </ul>
