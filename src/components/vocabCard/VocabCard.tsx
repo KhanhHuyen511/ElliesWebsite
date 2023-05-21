@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import style from './StudyCard.module.scss';
+import React, { useState } from 'react';
+import style from './VocabCard.module.scss';
+import { HeartIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames/bind';
+import { StudyCard } from '../../types';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '../../firebase/config';
-import { StudyCard } from '../../types';
-import { HeartIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 const cx = classNames.bind(style);
 
-const StudyCardDetail = ({ card }: { card: StudyCard }) => {
+const VocabCard = ({ card }: { card: StudyCard }) => {
   const [img, setImg] = useState('');
   const [audio, setAudio] = useState('');
 
@@ -27,7 +27,7 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
   };
 
   return (
-    <div>
+    <>
       <div className={cx('body')}>
         <div className={cx('display')}>
           <p className={cx('display-text')}>{card.display}</p>
@@ -43,8 +43,8 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
         <p className={cx('meaning')}>{card.meaning}</p>
         <p className={cx('example')}>{card.example}</p>
       </div>
-    </div>
+    </>
   );
 };
 
-export default StudyCardDetail;
+export default VocabCard;

@@ -7,3 +7,4 @@ export { default as StudyDetail } from './study/StudyDetail';
 export { default as StudyCard } from './study/StudyCard';
 export { default as StudyDesc } from './study/StudyDesc';
 export { default as StudyFinish } from './study/StudyFinish';
+export { default as DocDetail } from './document/DocDetail';

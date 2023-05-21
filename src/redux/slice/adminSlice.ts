@@ -27,6 +27,7 @@ const initialState: types = {
   currentStudyRoute: {},
 };
 
+//#region [STUDY]
 // Write reducer get studyRoutes
 export const getStudyPaths = createAsyncThunk(
   'admin/study/getPaths',
@@ -215,20 +216,35 @@ export const updateStudyCard = createAsyncThunk(
   }
 );
 
-// DOCUMENT
+//#endregion
+
+//#region [DOCUMENT]
 export const setVocab = createAsyncThunk(
   'admin/study/setVocab',
   async (data: StudyCard) => {
     const docRef = await addDoc(collection(db, 'vocabs'), {
       display: data.display,
       meaning: data.meaning,
-      imageFile: data.imageFile,
-      audio: data.audio,
+      imageFile: data.imageFile ? data.imageFile.name : '',
+      audio: data.audio ? data.audio.name : '',
     });
 
+    if (data.imageFile) {
+      const imgRef = ref(storage, `images/${data.imageFile.name}`);
+      uploadBytes(imgRef, data.imageFile);
+    }
+    if (data.audio) {
+      const audioRef = ref(storage, `audios/${data.audio.name}`);
+      uploadBytes(audioRef, data.audio);
+    }
     data.id = docRef.id;
 
-    return data;
+    // create temp object because data object make error (img, audio format) at payload
+    const temp: StudyCard = data;
+    temp.imageFile = data.imageFile ? data.imageFile.name : '';
+    temp.audio = data.audio ? data.audio.name : '';
+
+    return temp;
   }
 );
 
@@ -243,6 +259,26 @@ export const getVocabs = createAsyncThunk('admin/study/getVocabs', async () => {
 
   return list;
 });
+
+export const updateVocab = createAsyncThunk(
+  'admin/study/updateVocab',
+  async (data: StudyCard) => {
+    if (data.id) {
+      const docRef = doc(db, 'vocabs', data.id);
+      await updateDoc(docRef, {
+        display: data.display,
+        meaning: data.meaning,
+      });
+
+      const temp: StudyCard = data;
+      temp.imageFile = data.imageFile ? data.imageFile.name : '';
+      temp.audio = data.audio ? data.audio.name : '';
+      return temp;
+    }
+  }
+);
+
+//#endregion
 
 const adminSlice = createSlice({
   name: 'admin_study',
@@ -269,6 +305,11 @@ const adminSlice = createSlice({
     });
     builder.addCase(getVocabs.fulfilled, (state, action) => {
       state.listVocabs = action.payload as StudyCard[];
+    });
+    builder.addCase(updateVocab.fulfilled, (state, action) => {
+      let i = state.listVocabs?.findIndex((o) => o.id === action.payload?.id);
+      if (i && state.listVocabs)
+        state.listVocabs[i] = action.payload as StudyCard;
     });
   },
 });

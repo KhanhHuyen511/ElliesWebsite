@@ -4,17 +4,24 @@ import classNames from 'classnames/bind';
 import { Button, Checkbox } from '../../../components';
 import { StudyCard } from '../../../types';
 import CreateVocab from './CreateVocabForm';
+import EditVocab from './EditVocabForm';
 const cx = classNames.bind(styles);
 
 const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
+  const [isOpenEditForm, setIsOpenEditForm] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<StudyCard>();
+
+  const getCheckedItems = (item: StudyCard): boolean => {
+    return selectedItem === item;
+  };
   return (
     <>
       <div className={cx('handler')}>
         <Button
           isPrimary={false}
           onClick={() => {
-            // navigate('/path_detail/' + selectedItems);
+            setIsOpenEditForm(true);
           }}
         >
           Xem chi tiết
@@ -53,9 +60,9 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
                   {item.id && (
                     <Checkbox
                       value={item.id}
-                      // isChecked={getCheckedItems(item.id)}
+                      isChecked={getCheckedItems(item)}
                       onChecked={() => {
-                        // setSelectPath(item.id);
+                        setSelectedItem(item);
                       }}
                     ></Checkbox>
                   )}
@@ -71,6 +78,13 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
         onClose={() => setIsOpenForm(false)}
         isDisplay={isOpenForm}
       />
+      {selectedItem && (
+        <EditVocab
+          vocab={selectedItem}
+          onClose={() => setIsOpenEditForm(false)}
+          isDisplay={isOpenEditForm}
+        ></EditVocab>
+      )}
     </>
   );
 };

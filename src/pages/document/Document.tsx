@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col } from 'react-flexbox-grid';
 import styles from './Document.module.scss';
 import classNames from 'classnames/bind';
@@ -6,13 +6,22 @@ import { CategoryPanel, DocCard } from '../../components';
 import {
   AcademicCapIcon,
   BookOpenIcon,
-  FireIcon,
   QueueListIcon,
   SpeakerWaveIcon,
 } from '@heroicons/react/24/outline';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { getListDocs } from '../../redux/slice/docSlice';
 const cx = classNames.bind(styles);
 
 const Document = () => {
+  const docs = useSelector((state: RootState) => state.doc.listDocs);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getListDocs());
+  }, [dispatch]);
+
   return (
     <>
       <div className='container'>
@@ -43,7 +52,13 @@ const Document = () => {
           </ul>
           <p className={cx('sub-title')}>Nổi bật</p>
           <ul className={cx('list')}>
-            <DocCard />
+            {docs &&
+              docs.length > 0 &&
+              docs.map((item) => (
+                <li className={cx('item')}>
+                  <DocCard data={item} />
+                </li>
+              ))}
           </ul>
         </Col>
       </div>
