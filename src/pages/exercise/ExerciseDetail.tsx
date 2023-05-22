@@ -93,15 +93,17 @@ const ExerciseDetail = () => {
           <>
             <ExerciseFinish data={userExs}></ExerciseFinish>
             <div className={cx('cta-finish')}>
-              {/* <Button
+              <Button
                 isPrimary={false}
                 onClick={() => {
                   setIsFinished(false);
+                  setUserExs(undefined);
+                  setIsPrepare(true);
                 }}
                 className={cx('cta-finish-btn')}
               >
-                Xem lại
-              </Button> */}
+                Làm lại
+              </Button>
               {/* <Button
                 isPrimary
                 onClick={() => {}}
