@@ -1,0 +1,34 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.title {
+  @include typo-heading-1;
+  margin-top: 26px;
+}
+
+.submit {
+  margin-top: 40px;
+}
+
+.page-number {
+  @include typo-heading-2;
+  text-align: center;
+  margin-top: 30px;
+  color: var(--text-medium-color);
+
+  & span {
+    color: var(--Y500);
+  }
+}
+
+.cta {
+  display: flex;
+  column-gap: 8px;
+  margin: 20px 5% 0 0;
+  justify-content: right;
+}
+
+.cta-finish-btn {
+  margin-top: 48px;
+  width: 100%;
+}

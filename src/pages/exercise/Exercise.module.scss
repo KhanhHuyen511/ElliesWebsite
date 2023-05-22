@@ -1,0 +1,19 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.title {
+  @include typo-heading-1;
+  margin-bottom: 26px;
+}
+
+.sub-title {
+  @include typo-heading-2;
+  margin-top: 53px;
+}
+
+.list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}

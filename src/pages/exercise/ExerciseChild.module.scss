@@ -1,0 +1,32 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.wrapper {
+  text-align: center;
+}
+
+.question {
+  @include typo-body;
+  margin-top: 30px;
+  margin-bottom: 38px;
+  text-align: center;
+}
+
+.options {
+  margin-top: 50px;
+
+  .item {
+    margin-bottom: 16px;
+  }
+}
+
+.result-icon {
+  stroke-width: 2;
+  stroke: #779af9;
+  width: 48px;
+  height: 48px;
+
+  &.false {
+    stroke: var(--O500);
+  }
+}

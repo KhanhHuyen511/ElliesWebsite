@@ -8,4 +8,6 @@ export { default as CategoryPanel } from './categoryPanel/CategoryPanel';
 export { default as AnswerPanel } from './answerPanel/AnswerPanel';
 export { default as Checkbox } from './checkbox/Checkbox';
 export { default as DocCard } from './docCard/DocCard';
+export { default as UserExCard } from './userExCard/UserExCard';
+export { default as ExCard } from './exCard/ExCard';
 export { default as VocabCard } from './vocabCard/VocabCard';

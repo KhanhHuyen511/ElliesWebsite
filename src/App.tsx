@@ -10,6 +10,7 @@ import {
   Forum,
   StudyDetail,
   DocDetail,
+  ExerciseDetail,
 } from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
 import { IndexStudy, IndexDocument } from './pages/admin';
@@ -42,6 +43,7 @@ function App() {
             <Route path='/reset-password' element={<ResetPassword />} />
             <Route path='/study_detail/:id' element={<StudyDetail />} />
             <Route path='/doc_detail/:id' element={<DocDetail />} />
+            <Route path='/ex_detail/:id' element={<ExerciseDetail />} />
           </Routes>
         </BrowserRouter>
       )}
