@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  addDoc,
   collection,
   doc,
   documentId,
@@ -106,8 +107,6 @@ export const getAEx = createAsyncThunk('doc/getAEx', async (id: string) => {
         d.vocab = querySnapshot2.data();
         if (d.vocab) d.vocab.id = querySnapshot2.id;
       }
-
-      console.log(d);
       listItems = [...listItems, d];
     })
   );
@@ -116,6 +115,22 @@ export const getAEx = createAsyncThunk('doc/getAEx', async (id: string) => {
 
   return item;
 });
+
+export const setCompleteExState = createAsyncThunk(
+  'study/setExerciseState',
+  async (data: { resultList: ExDetail[]; exId: string; userID: string }) => {
+    console.log(data);
+    await addDoc(collection(db, 'userExs'), {
+      userId: data.userID,
+      ex: data.exId,
+      didDate: new Date(),
+    }).then((e) =>
+      data.resultList.map((item) =>
+        addDoc(collection(db, 'userExs', e.id, 'resultList'), { item })
+      )
+    );
+  }
+);
 
 const exSlice = createSlice({
   name: 'ex',
@@ -130,6 +145,9 @@ const exSlice = createSlice({
     });
     builder.addCase(getAEx.fulfilled, (state, action) => {
       state.currentEx = action.payload;
+    });
+    builder.addCase(setCompleteExState.fulfilled, (state, action) => {
+      // state.currentEx = action.payload;
     });
   },
 });

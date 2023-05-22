@@ -9,15 +9,16 @@ import { Button } from '../../components';
 import ExDesc from './ExDesc';
 import ExerciseChild from './ExerciseChild';
 import ExerciseFinish from './ExerciseFinish';
-import { getAEx } from '../../redux/slice/exSlice';
+import { getAEx, setCompleteExState } from '../../redux/slice/exSlice';
 import { HomeIcon } from '@heroicons/react/24/outline';
 const cx = classNames.bind(style);
 
 const ExerciseDetail = () => {
   let { id } = useParams();
 
+  const userID = useSelector((state: RootState) => state.auth.userID) || '';
+
   const data = useSelector((state: RootState) => state.ex.currentEx);
-  const [exDetails, setExDetails] = useState<ExDetail[]>();
   const [currentExDetail, setCurrentExDetail] = useState<ExDetail>();
   const [currentExDetailIndex, setCurrentExDetailIndex] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
@@ -38,8 +39,6 @@ const ExerciseDetail = () => {
       } else {
         setCurrentExDetail(undefined);
         setIsFinished(true);
-        // update history of user
-        // if (id) dispatch(setStudyRouteState({ routeID: id, userID }));
       }
     }
   };
@@ -48,15 +47,29 @@ const ExerciseDetail = () => {
     if (result)
       if (!userExs) setUserExs([result]);
       else setUserExs([...userExs, result]);
-  };
 
-  console.log(userExs);
+    if (
+      data?.listItems?.length &&
+      userExs &&
+      result &&
+      id &&
+      userExs?.length === data?.listItems?.length - 1
+    ) {
+      dispatch(
+        setCompleteExState({
+          resultList: [...userExs, result],
+          exId: id,
+          userID,
+        })
+      );
+    }
+  };
 
   return (
     <>
       <div className='container'>
         {isPrepare && <p className={cx('title')}>Luyện tập - {data?.title}</p>}
-        {isPrepare && !exDetails && data && (
+        {isPrepare && data && (
           <>
             <ExDesc data={data}></ExDesc>
             <Button
@@ -79,8 +92,8 @@ const ExerciseDetail = () => {
             <ExerciseChild
               data={currentExDetail}
               onNext={(result) => {
-                Next();
                 UpdateToResult(result);
+                Next();
               }}
             ></ExerciseChild>
             <p className={cx('page-number')}>
