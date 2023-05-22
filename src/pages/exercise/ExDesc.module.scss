@@ -1,0 +1,12 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.section-title {
+  @include typo-heading-3;
+  margin-top: 26px;
+}
+
+.desc {
+  @include typo-body-small;
+  margin-top: 6px;
+}

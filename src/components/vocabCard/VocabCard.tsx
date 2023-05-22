@@ -7,7 +7,13 @@ import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '../../firebase/config';
 const cx = classNames.bind(style);
 
-const VocabCard = ({ card }: { card: StudyCard }) => {
+const VocabCard = ({
+  card,
+  isQuestion,
+}: {
+  card: StudyCard;
+  isQuestion?: boolean;
+}) => {
   const [img, setImg] = useState('');
   const [audio, setAudio] = useState('');
 
@@ -40,8 +46,12 @@ const VocabCard = ({ card }: { card: StudyCard }) => {
         <div className={cx('image')}>
           <img src={img} alt='' />
         </div>
-        <p className={cx('meaning')}>{card.meaning}</p>
-        <p className={cx('example')}>{card.example}</p>
+        {!isQuestion && (
+          <>
+            <p className={cx('meaning')}>{card.meaning}</p>
+            <p className={cx('example')}>{card.example}</p>
+          </>
+        )}
       </div>
     </>
   );
