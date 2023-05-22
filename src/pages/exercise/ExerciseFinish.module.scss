@@ -1,0 +1,41 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.wrapper {
+  @include typo-body;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.result {
+  @include typo-heading-1;
+  color: var(--G400);
+  margin-top: 20px;
+
+  &-right {
+    color: vaR(--O500);
+  }
+}
+
+.sub-title {
+  @include typo-heading-3;
+}
+
+.result-detail {
+  margin-top: 40px;
+  text-align: left;
+
+  table {
+    width: 100%;
+  }
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  &-icon {
+    stroke: var(--O500);
+  }
+}

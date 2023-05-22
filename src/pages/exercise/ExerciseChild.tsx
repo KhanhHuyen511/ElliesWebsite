@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import style from './ExerciseChild.module.scss';
 import classNames from 'classnames/bind';
 import React from 'react';
@@ -13,10 +13,15 @@ const ExerciseChild = ({
   onNext,
 }: {
   data: ExDetail;
-  onNext: () => void;
+  onNext: (result: ExDetail) => void;
 }) => {
   const [selectedItem, setSelectedItem] = useState<string>();
   const [isDone, setIsDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    setSelectedItem(undefined);
+    setIsDone(false);
+  }, [data]);
 
   const checkAnswer = (selected: string) => {
     if (selected !== selectedItem) {
@@ -58,7 +63,12 @@ const ExerciseChild = ({
             isPrimary={false}
             onClick={() => {
               if (!isDone) setIsDone(true);
-              else onNext();
+              else {
+                onNext({
+                  ...data,
+                  exRight: data.answer === selectedItem,
+                });
+              }
             }}
             haveIcon
           ></Button>
@@ -66,7 +76,9 @@ const ExerciseChild = ({
         {isDone && data.answer === selectedItem ? (
           <CheckIcon className={cx('result-icon')} />
         ) : (
-          <XMarkIcon className={cx('result-icon', 'false')}></XMarkIcon>
+          isDone && (
+            <XMarkIcon className={cx('result-icon', 'false')}></XMarkIcon>
+          )
         )}
       </div>
     </>

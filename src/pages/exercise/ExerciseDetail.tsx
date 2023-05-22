@@ -4,11 +4,13 @@ import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { ExDetail } from '../../types';
+import { ExDetail, UserEx } from '../../types';
 import { Button } from '../../components';
 import ExDesc from './ExDesc';
 import ExerciseChild from './ExerciseChild';
+import ExerciseFinish from './ExerciseFinish';
 import { getAEx } from '../../redux/slice/exSlice';
+import { HomeIcon } from '@heroicons/react/24/outline';
 const cx = classNames.bind(style);
 
 const ExerciseDetail = () => {
@@ -21,6 +23,7 @@ const ExerciseDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isPrepare, setIsPrepare] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
+  const [userExs, setUserExs] = useState<ExDetail[]>();
 
   useEffect(() => {
     if (id) dispatch(getAEx(id));
@@ -40,6 +43,14 @@ const ExerciseDetail = () => {
       }
     }
   };
+
+  const UpdateToResult = (result?: ExDetail) => {
+    if (result)
+      if (!userExs) setUserExs([result]);
+      else setUserExs([...userExs, result]);
+  };
+
+  console.log(userExs);
 
   return (
     <>
@@ -65,49 +76,43 @@ const ExerciseDetail = () => {
         )}
         {currentExDetail && (
           <>
-            <ExerciseChild data={currentExDetail} onNext={Next}></ExerciseChild>
+            <ExerciseChild
+              data={currentExDetail}
+              onNext={(result) => {
+                Next();
+                UpdateToResult(result);
+              }}
+            ></ExerciseChild>
             <p className={cx('page-number')}>
               <span>{currentExDetailIndex}/</span>
               {data?.listItems?.length}
             </p>
           </>
         )}
-        {/* {studyCards && <StudyFinish cards={studyCards}></StudyFinish>} */}
-        {/* {isFinished && studyCards && (
+        {isFinished && userExs && (
           <>
-            <StudyFinish cards={studyCards}></StudyFinish>
+            <ExerciseFinish data={userExs}></ExerciseFinish>
             <div className={cx('cta-finish')}>
-              <Button
+              {/* <Button
                 isPrimary={false}
                 onClick={() => {
-                  setStudyCards(undefined);
                   setIsFinished(false);
                 }}
                 className={cx('cta-finish-btn')}
               >
                 Xem lại
-              </Button>
-              <Button
+              </Button> */}
+              {/* <Button
                 isPrimary
                 onClick={() => {}}
                 icon='boilt'
                 className={cx('cta-finish-btn')}
               >
                 Luyện tập
-              </Button>
-            </div>
-            <div className={cx('home')}>
-              <HomeIcon
-                width={48}
-                height={48}
-                className={cx('home-icon')}
-                onClick={() => {
-                  navigate('/');
-                }}
-              ></HomeIcon>
+              </Button> */}
             </div>
           </>
-        )} */}
+        )}
       </div>
     </>
   );
