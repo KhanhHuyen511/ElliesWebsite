@@ -17,12 +17,20 @@ const StudyDesc = ({ route }: { route: StudyRoute }) => {
   return (
     <>
       <div className={cx('section-title')}>Mô tả</div>
-      <div className={cx('desc')}>??</div>
+      <div className={cx('desc')}>
+        <p>
+          Sau đây là các từ vựng. Hãy đọc kĩ từ tiếng Anh, xem nghĩa tiếng Việt
+          bên dưới, nghe cách phát âm và tự đọc theo.
+        </p>
+        <br></br>
+        <p>Chọn dấu mũi tên sang phải để sang từ tiếp theo.</p>
+        <p>Chọn dấu mũi tên sang trái để quay lại từ trước đó.</p>
+      </div>
       <div className={cx('section-title')}>Đạt được sau lộ trình</div>
       <div className={cx('goal')}>??</div>
-      <div className={cx('image')}>
+      {/* <div className={cx('image')}>
         <img src={img} alt='' />
-      </div>
+      </div> */}
     </>
   );
 };
