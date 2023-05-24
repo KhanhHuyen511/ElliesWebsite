@@ -52,11 +52,15 @@ const EditVocabForm = ({
         onSubmit={() =>
           dispatch(
             updateVocab({
-              id: vocab.id,
-              display,
-              meaning,
-              imageFile: newImage,
-              audio: newAudio,
+              data: {
+                id: vocab.id,
+                display,
+                meaning,
+                imageFile: newImage,
+                audio: newAudio,
+              },
+              oldImage: vocab.imageFile,
+              oldAudio: vocab.audio,
             })
           )
         }
