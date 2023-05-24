@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { setStudyCard } from '../../../redux/slice/adminSlice';
 import Popup from '../../../components/popup/Popup';
+import style from './IndexStudy.module.scss';
 
 interface Props {
   classNames?: string;
@@ -64,7 +65,7 @@ const CreateStudyCard = (props: Props) => {
           }}
         ></Input>
         {image && (
-          <div>
+          <div className={style.image}>
             <img src={URL.createObjectURL(image)} alt='' />
           </div>
         )}

@@ -5,6 +5,9 @@ import { AppDispatch } from '../../../redux/store';
 import { StudyCard } from '../../../types';
 import Popup from '../../../components/popup/Popup';
 import { updateVocab } from '../../../redux/slice/adminSlice';
+import style from './IndexDocument.module.scss';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { storage } from '../../../firebase/config';
 
 const EditVocabForm = ({
   vocab,
@@ -23,6 +26,22 @@ const EditVocabForm = ({
   const [meaning, setMeaning] = useState<string>(
     vocab.meaning ? vocab.meaning : ''
   );
+  const [image, setImage] = useState<any>(
+    vocab.imageFile &&
+      getDownloadURL(ref(storage, `images/${vocab.imageFile}`)).then((url) => {
+        setImage(url);
+      })
+  );
+  const [newImage, setNewImage] = useState<any>();
+
+  const [audio, setAudio] = useState<any>(
+    vocab.audio &&
+      getDownloadURL(ref(storage, `audios/${vocab.audio}`)).then((url) => {
+        setAudio(url);
+      })
+  );
+
+  const [newAudio, setNewAudio] = useState<any>();
 
   return (
     <>
@@ -33,9 +52,15 @@ const EditVocabForm = ({
         onSubmit={() =>
           dispatch(
             updateVocab({
-              id: vocab.id,
-              display,
-              meaning,
+              data: {
+                id: vocab.id,
+                display,
+                meaning,
+                imageFile: newImage,
+                audio: newAudio,
+              },
+              oldImage: vocab.imageFile,
+              oldAudio: vocab.audio,
             })
           )
         }
@@ -59,6 +84,36 @@ const EditVocabForm = ({
           label={'Meaning'}
           placeholder={'abc'}
         ></Input>
+        <Input
+          type='file'
+          label={'Cập nhật ảnh'}
+          placeholder={''}
+          onChange={(e) => {
+            if (e.target.files) setNewImage(e.target.files[0]);
+          }}
+        ></Input>
+        {!newImage && image && (
+          <div className={style.image}>
+            <img src={image} alt='' />
+          </div>
+        )}
+        {newImage && (
+          <div className={style.image}>
+            <img src={URL.createObjectURL(newImage)} alt=''></img>
+          </div>
+        )}
+        <Input
+          type='file'
+          label={'Cập nhật âm thanh'}
+          placeholder={''}
+          onChange={(e) => {
+            if (e.target.files) setNewAudio(e.target.files[0]);
+          }}
+        ></Input>
+        {!newAudio && audio && <audio controls src={audio}></audio>}
+        {newAudio && (
+          <audio controls src={URL.createObjectURL(newAudio)}></audio>
+        )}
       </Popup>
     </>
   );

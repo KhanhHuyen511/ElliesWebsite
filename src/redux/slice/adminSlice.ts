@@ -262,13 +262,32 @@ export const getVocabs = createAsyncThunk('admin/study/getVocabs', async () => {
 
 export const updateVocab = createAsyncThunk(
   'admin/study/updateVocab',
-  async (data: StudyCard) => {
+  async ({
+    data,
+    oldImage,
+    oldAudio,
+  }: {
+    data: StudyCard;
+    oldImage: any;
+    oldAudio: any;
+  }) => {
     if (data.id) {
       const docRef = doc(db, 'vocabs', data.id);
       await updateDoc(docRef, {
         display: data.display,
         meaning: data.meaning,
+        imageFile: data.imageFile ? data.imageFile.name : oldImage,
+        audio: data.audio ? data.audio.name : oldAudio,
       });
+
+      if (data.imageFile) {
+        const imgRef = ref(storage, `images/${data.imageFile.name}`);
+        uploadBytes(imgRef, data.imageFile);
+      }
+      if (data.audio) {
+        const audioRef = ref(storage, `audios/${data.audio.name}`);
+        uploadBytes(audioRef, data.audio);
+      }
 
       const temp: StudyCard = data;
       temp.imageFile = data.imageFile ? data.imageFile.name : '';

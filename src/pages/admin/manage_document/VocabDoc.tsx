@@ -15,6 +15,7 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
   const getCheckedItems = (item: StudyCard): boolean => {
     return selectedItem === item;
   };
+
   return (
     <>
       <div className={cx('handler')}>
@@ -78,7 +79,7 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
         onClose={() => setIsOpenForm(false)}
         isDisplay={isOpenForm}
       />
-      {selectedItem && (
+      {isOpenEditForm && selectedItem && (
         <EditVocab
           vocab={selectedItem}
           onClose={() => setIsOpenEditForm(false)}
