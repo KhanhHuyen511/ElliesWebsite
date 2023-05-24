@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db, storage } from '../../firebase/config';
-import { StudyCard, StudyPath, StudyRoute } from '../../types';
+import { Ex, StudyCard, StudyPath, StudyRoute } from '../../types';
 import { ref, uploadBytes } from 'firebase/storage';
 
 interface types {
@@ -18,6 +18,7 @@ interface types {
   // list user
   // list doc
   listVocabs?: StudyCard[];
+  listEx?: Ex[];
   // list ...
 }
 
@@ -219,6 +220,28 @@ export const updateStudyCard = createAsyncThunk(
 //#endregion
 
 //#region [DOCUMENT]
+
+//#region [EXERCISE]
+
+export const getExercises = createAsyncThunk(
+  'admin/exercise/getExercises',
+  async () => {
+    var items: Ex[] = [];
+
+    const querySnapshot = await getDocs(collection(db, 'exs'));
+
+    querySnapshot.forEach(async (e) => {
+      var item: Ex = e.data() as Ex;
+      item.id = e.id;
+      items.push(item);
+    });
+
+    return items;
+  }
+);
+
+//#endregion
+
 export const setVocab = createAsyncThunk(
   'admin/study/setVocab',
   async (data: StudyCard) => {
@@ -329,6 +352,9 @@ const adminSlice = createSlice({
       let i = state.listVocabs?.findIndex((o) => o.id === action.payload?.id);
       if (i && state.listVocabs)
         state.listVocabs[i] = action.payload as StudyCard;
+    });
+    builder.addCase(getExercises.fulfilled, (state, action) => {
+      state.listEx = action.payload as Ex[];
     });
   },
 });
