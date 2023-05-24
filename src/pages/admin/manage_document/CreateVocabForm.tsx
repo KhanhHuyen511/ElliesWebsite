@@ -4,6 +4,7 @@ import { Input } from '../../../components';
 import Popup from '../../../components/popup/Popup';
 import { setVocab } from '../../../redux/slice/adminSlice';
 import { AppDispatch } from '../../../redux/store';
+import style from './IndexDocument.module.scss';
 
 interface Props {
   classNames?: string;
@@ -63,11 +64,10 @@ const CreateVocabForm = (props: Props) => {
           }}
         ></Input>
         {image && (
-          <div>
+          <div className={style.image}>
             <img src={URL.createObjectURL(image)} alt='' />
           </div>
         )}
-
         <Input
           type='file'
           label={'Thêm âm thanh'}

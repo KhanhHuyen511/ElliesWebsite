@@ -268,7 +268,18 @@ export const updateVocab = createAsyncThunk(
       await updateDoc(docRef, {
         display: data.display,
         meaning: data.meaning,
+        imageFile: data.imageFile ? data.imageFile.name : '',
+        audio: data.audio ? data.audio.name : '',
       });
+
+      if (data.imageFile) {
+        const imgRef = ref(storage, `images/${data.imageFile.name}`);
+        uploadBytes(imgRef, data.imageFile);
+      }
+      if (data.audio) {
+        const audioRef = ref(storage, `audios/${data.audio.name}`);
+        uploadBytes(audioRef, data.audio);
+      }
 
       const temp: StudyCard = data;
       temp.imageFile = data.imageFile ? data.imageFile.name : '';
