@@ -261,7 +261,7 @@ const PathDetail = () => {
         />
       )}
 
-      {id && curretntStudyCard && selectRoute && (
+      {isOpenEditCardForm && id && curretntStudyCard && selectRoute && (
         <EditCardForm
           data={curretntStudyCard}
           pathID={id}
