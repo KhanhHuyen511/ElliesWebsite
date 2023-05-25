@@ -10,9 +10,11 @@ const cx = classNames.bind(style);
 const VocabCard = ({
   card,
   isQuestion,
+  isShowVN,
 }: {
   card: StudyCard;
   isQuestion?: boolean;
+  isShowVN?: boolean;
 }) => {
   const [img, setImg] = useState('');
   const [audio, setAudio] = useState('');
@@ -36,7 +38,9 @@ const VocabCard = ({
     <>
       <div className={cx('body')}>
         <div className={cx('display')}>
-          <p className={cx('display-text')}>{card.display}</p>
+          <p className={cx('display-text')}>
+            {!isShowVN ? card.display : card.meaning}
+          </p>
           <div className={cx('pronoun')}>
             <SpeakerWaveIcon width={24} height={24} onClick={playAudio} />
             <p className={cx('pronoun-text')}>??</p>

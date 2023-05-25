@@ -53,7 +53,7 @@ const StudyDetail = () => {
       const prevIndex = currentCardIndex - 1;
       if (prevIndex > 0) {
         setCurrentCardIndex(prevIndex);
-        setCurrentCard(studyCards[currentCardIndex]);
+        setCurrentCard(studyCards[prevIndex - 1]);
       }
     }
   };
@@ -61,7 +61,7 @@ const StudyDetail = () => {
   return (
     <>
       <div className='container'>
-        <p className={cx('title')}>Chặng {route.name} - ?</p>
+        <p className={cx('title')}>Chặng {route.name}</p>
         {!studyCards && (
           <>
             <StudyDesc route={route}></StudyDesc>
