@@ -125,7 +125,7 @@ export const setCompleteExState = createAsyncThunk(
       didDate: new Date(),
     }).then((e) =>
       data.resultList.map((item) =>
-        addDoc(collection(db, 'userExs', e.id, 'resultList'), { item })
+        addDoc(collection(db, 'userExs', e.id, 'resultList'), { ...item })
       )
     );
   }
