@@ -1,0 +1,144 @@
+import React, { useEffect } from 'react';
+import { Button, Checkbox, Input, TextArea } from '../../../components';
+import style from './DetailExercise.module.scss';
+import classNames from 'classnames/bind';
+import { useParams } from 'react-router-dom';
+import { Col, Row } from 'react-flexbox-grid';
+import { Ex, ExDetail } from '../../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { getAExercise } from '../../../redux/slice/adminSlice';
+const cx = classNames.bind(style);
+
+const DetailExercise = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const data: Ex | undefined = useSelector(
+    (state: RootState) => state.admin.currentEx
+  );
+
+  let { id } = useParams();
+
+  useEffect(() => {
+    if (id) dispatch(getAExercise(id));
+  }, [dispatch, id]);
+
+  return (
+    <>
+      <div className='container'>
+        {data && (
+          <Row>
+            <Col md={6}>
+              <form>
+                <p className={cx('form-title')}>Chi tiết bài luyện tập</p>
+                <div className={cx('form-body')}>
+                  <Input
+                    label='Chủ đề'
+                    type='text'
+                    value={data.title}
+                    onChange={(e) => {
+                      // setName(e.target.value);
+                    }}
+                    placeholder='abc'
+                  />
+                  <TextArea
+                    label='Mô tả'
+                    value={data.description}
+                    onChange={(e) => {
+                      // setTopic(e.target.value);
+                    }}
+                    placeholder='abc'
+                    classNames={cx('textarea')}
+                  />
+                </div>
+                <Button
+                  isPrimary
+                  preventDefault
+                  onClick={() => {
+                    // dispatch(updateStudyPath({ id: id, name, level, topic }));
+                  }}
+                  className={cx('submit-btn')}
+                >
+                  Cập nhật
+                </Button>
+              </form>
+            </Col>
+            <Col md={6}>
+              <form>
+                <div className={cx('handler', 'list')}>
+                  <Button
+                    isPrimary={false}
+                    preventDefault
+                    onClick={() => {
+                      // setIsOpenRouteForm(true);
+                    }}
+                  >
+                    Thêm câu hỏi
+                  </Button>
+                  <Button
+                    isPrimary={false}
+                    onClick={() => {
+                      // if (id && selectRoute) {
+                      //   dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
+                      //   setCurrentStudyRoute(currentRoute);
+                      // }
+                    }}
+                    preventDefault
+                  >
+                    Xem câu hỏi
+                  </Button>
+                  <Button
+                    isPrimary={false}
+                    onClick={() => {
+                      // if (id && selectRoute) {
+                      //   dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
+                      //   setCurrentStudyRoute(currentRoute);
+                      // }
+                      // setIsOpenEditRouteForm(true);
+                    }}
+                    preventDefault
+                  >
+                    Chỉnh sửa câu hỏi
+                  </Button>
+                  <Button isPrimary={false} onClick={() => {}} preventDefault>
+                    Xóa câu hỏi
+                  </Button>
+                </div>
+                <table className={cx('table')}>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>STT</th>
+                      <th>Từ vựng</th>
+                      <th>Loại câu hỏi</th>
+                      <th>Đáp án</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.listItems?.map((item, index) => (
+                      <tr key={index}>
+                        <td>
+                          <Checkbox
+                            onChecked={() => {
+                              // setSelectRoute(item.id);
+                            }}
+                          />
+                        </td>
+                        <td>{index + 1}</td>
+                        <td>{item.vocab?.display}</td>
+                        <td>{item.type}</td>
+                        <td>{item.answer}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </form>
+            </Col>
+          </Row>
+        )}
+      </div>
+    </>
+  );
+};
+
+export default DetailExercise;

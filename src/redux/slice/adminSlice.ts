@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db, storage } from '../../firebase/config';
-import { Ex, StudyCard, StudyPath, StudyRoute } from '../../types';
+import { Ex, ExDetail, StudyCard, StudyPath, StudyRoute } from '../../types';
 import { ref, uploadBytes } from 'firebase/storage';
 
 interface types {
@@ -19,6 +19,7 @@ interface types {
   // list doc
   listVocabs?: StudyCard[];
   listEx?: Ex[];
+  currentEx?: Ex;
   // list ...
 }
 
@@ -221,27 +222,6 @@ export const updateStudyCard = createAsyncThunk(
 
 //#region [DOCUMENT]
 
-//#region [EXERCISE]
-
-export const getExercises = createAsyncThunk(
-  'admin/exercise/getExercises',
-  async () => {
-    var items: Ex[] = [];
-
-    const querySnapshot = await getDocs(collection(db, 'exs'));
-
-    querySnapshot.forEach(async (e) => {
-      var item: Ex = e.data() as Ex;
-      item.id = e.id;
-      items.push(item);
-    });
-
-    return items;
-  }
-);
-
-//#endregion
-
 export const setVocab = createAsyncThunk(
   'admin/study/setVocab',
   async (data: StudyCard) => {
@@ -322,6 +302,65 @@ export const updateVocab = createAsyncThunk(
 
 //#endregion
 
+//#region [EXERCISE]
+
+export const getExercises = createAsyncThunk(
+  'admin/exercise/getExercises',
+  async () => {
+    var items: Ex[] = [];
+
+    const querySnapshot = await getDocs(collection(db, 'exs'));
+
+    querySnapshot.forEach(async (e) => {
+      var item: Ex = e.data() as Ex;
+      item.id = e.id;
+      items.push(item);
+    });
+
+    return items;
+  }
+);
+
+export const getAExercise = createAsyncThunk(
+  'admin/exercise/getAExercise',
+  async (id: string) => {
+    const querySnapshot = await getDoc(doc(db, 'exs', id));
+
+    var item: Ex = querySnapshot.data() as Ex;
+    item.id = id;
+    item.listItems = undefined;
+
+    const querySnapshot1 = await getDocs(
+      collection(db, 'exs', id, 'listItems')
+    );
+
+    var listItems: ExDetail[] = [];
+
+    await Promise.all(
+      querySnapshot1.docs.map(async (e) => {
+        var d: ExDetail = e.data() as ExDetail;
+        d.id = e.id;
+
+        if (d.vocab) {
+          const querySnapshot2 = await getDoc(
+            doc(db, 'vocabs', e.data().vocab)
+          );
+
+          d.vocab = querySnapshot2.data();
+          if (d.vocab) d.vocab.id = querySnapshot2.id;
+        }
+        listItems = [...listItems, d];
+      })
+    );
+
+    item.listItems = listItems;
+
+    return item;
+  }
+);
+
+//#endregion
+
 const adminSlice = createSlice({
   name: 'admin_study',
   initialState,
@@ -355,6 +394,9 @@ const adminSlice = createSlice({
     });
     builder.addCase(getExercises.fulfilled, (state, action) => {
       state.listEx = action.payload as Ex[];
+    });
+    builder.addCase(getAExercise.fulfilled, (state, action) => {
+      state.currentEx = action.payload as Ex;
     });
   },
 });

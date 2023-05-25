@@ -5,7 +5,6 @@
   width: 100%;
   border-spacing: 0;
   border-radius: 8px;
-  position: relative;
 
   td,
   th {
@@ -27,4 +26,22 @@
 .handler {
   width: 100%;
   display: flex;
+
+  &.list {
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+}
+
+.form-title {
+  @include typo-heading-1;
+  margin-bottom: 20px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+}
+
+.textarea {
+  height: 140px;
 }

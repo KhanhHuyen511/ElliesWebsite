@@ -13,10 +13,15 @@ import {
   ExerciseDetail,
 } from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
-import { IndexStudy, IndexDocument, IndexExercise } from './pages/admin';
+import {
+  IndexStudy,
+  IndexDocument,
+  IndexExercise,
+  PathDetail,
+  DetailExercise,
+} from './pages/admin';
 import { RootState } from './redux/store';
 import { useSelector } from 'react-redux';
-import PathDetail from './pages/admin/manage_study/PathDetail';
 
 function App() {
   const [userRole, setUserRole] = useState('student');
@@ -56,6 +61,7 @@ function App() {
             <Route path='/exercise' element={<IndexExercise />} />
             <Route path='/login' element={<Login />} />
             <Route path='/path_detail/:id' element={<PathDetail />} />
+            <Route path='/exercise_detail/:id' element={<DetailExercise />} />
           </Routes>
         </BrowserRouter>
       )}
