@@ -5,11 +5,24 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
+  Timestamp,
   updateDoc,
+  where,
 } from 'firebase/firestore';
 import { db, storage } from '../../firebase/config';
-import { Ex, ExDetail, StudyCard, StudyPath, StudyRoute } from '../../types';
+import {
+  Doc,
+  Ex,
+  ExDetail,
+  GameType,
+  StudyCard,
+  StudyPath,
+  StudyRoute,
+} from '../../types';
 import { ref, uploadBytes } from 'firebase/storage';
+import { getAEx } from './exSlice';
+import { getDate } from '../../utils';
 
 interface types {
   listStudyPaths: StudyPath[];
@@ -263,6 +276,47 @@ export const getVocabs = createAsyncThunk('admin/study/getVocabs', async () => {
   return list;
 });
 
+export const getVocabsByTopic = createAsyncThunk(
+  'admin/study/getVocabsByTopic',
+  async (title: string) => {
+    var list: StudyCard[] = [];
+    const q = query(collection(db, 'docs'), where('title', '==', title));
+    const ref = await (await getDocs(q)).docs[0];
+    const document: Doc = (await ref.data()) as Doc;
+    document.id = ref.id;
+
+    const id = ref.id;
+
+    const data = await getDoc(doc(db, 'docs', id));
+
+    const item: Doc = data.data() as Doc;
+    item.id = id;
+    if (item.createDate)
+      item.createDate = getDate(
+        (data?.data()?.createDate as Timestamp).seconds
+      );
+
+    if (item.listItems) {
+      const vocabs: string[] = item.listItems as string[];
+      let met: StudyCard[] = [];
+
+      await Promise.all(
+        vocabs.map(async (vocab) => {
+          await getDoc(doc(db, 'vocabs', vocab)).then((d) => {
+            const dt = d.data() as StudyCard;
+            dt.id = d.id;
+            met = [...met, dt];
+          });
+        })
+      );
+
+      item.listItems = met;
+
+      return met;
+    }
+  }
+);
+
 export const updateVocab = createAsyncThunk(
   'admin/study/updateVocab',
   async ({
@@ -379,8 +433,33 @@ export const updateAExercise = createAsyncThunk(
 
 export const setAExDetail = createAsyncThunk(
   'admin/exercise/setAExDetai;',
-  async ({ exId, vocab }: { exId: string; vocab: StudyCard }) => {
-    console.log(exId, vocab);
+  async ({
+    exId,
+    vocab,
+    options,
+    answer,
+    type,
+  }: {
+    exId: string;
+    vocab: StudyCard;
+    options: string[];
+    answer: string;
+    type: GameType;
+  }) => {
+    let item: ExDetail = { vocab, options, answer, type, question: '', id: '' };
+    item.question =
+      type === GameType.TranslateToVN
+        ? 'Nghĩa của từ này là gì?'
+        : 'Dịch từ này sang tiếng Anh?';
+    await addDoc(collection(db, 'exs', exId, 'listItems'), {
+      vocab: vocab.id,
+      options: options,
+      answer: answer,
+      type: type,
+      question: item.question,
+    }).then((e) => (item.id = e.id));
+
+    return item;
   }
 );
 
@@ -422,6 +501,12 @@ const adminSlice = createSlice({
     });
     builder.addCase(getAExercise.fulfilled, (state, action) => {
       state.currentEx = action.payload as Ex;
+    });
+    builder.addCase(getVocabsByTopic.fulfilled, (state, action) => {
+      state.listVocabs = action.payload as StudyCard[];
+    });
+    builder.addCase(setAExDetail.fulfilled, (state, action) => {
+      state.currentEx?.listItems?.push(action.payload as ExDetail);
     });
   },
 });

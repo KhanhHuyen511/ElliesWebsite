@@ -23,6 +23,7 @@ const Popup = (props: Props) => {
           {props.children}
           <div className={cx('form-cta')}>
             <Button
+              type='submit'
               isPrimary
               preventDefault
               onClick={() => {
