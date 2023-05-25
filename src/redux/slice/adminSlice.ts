@@ -359,6 +359,31 @@ export const getAExercise = createAsyncThunk(
   }
 );
 
+export const updateAExercise = createAsyncThunk(
+  'admin/exercise/updateAExercise;',
+  async ({
+    id,
+    title,
+    description,
+  }: {
+    id: string;
+    title?: string;
+    description?: string;
+  }) => {
+    await updateDoc(doc(db, 'exs', id), {
+      title: title,
+      description: description,
+    });
+  }
+);
+
+export const setAExDetail = createAsyncThunk(
+  'admin/exercise/setAExDetai;',
+  async ({ exId, vocab }: { exId: string; vocab: StudyCard }) => {
+    console.log(exId, vocab);
+  }
+);
+
 //#endregion
 
 const adminSlice = createSlice({

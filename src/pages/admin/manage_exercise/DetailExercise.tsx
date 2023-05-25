@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Input, TextArea } from '../../../components';
 import style from './DetailExercise.module.scss';
 import classNames from 'classnames/bind';
@@ -7,7 +7,7 @@ import { Col, Row } from 'react-flexbox-grid';
 import { Ex, ExDetail } from '../../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { getAExercise } from '../../../redux/slice/adminSlice';
+import { getAExercise, updateAExercise } from '../../../redux/slice/adminSlice';
 const cx = classNames.bind(style);
 
 const DetailExercise = () => {
@@ -19,9 +19,15 @@ const DetailExercise = () => {
 
   let { id } = useParams();
 
+  const [title, setTitle] = useState<string>();
+
+  const [description, setDescription] = useState<string>();
+
   useEffect(() => {
     if (id) dispatch(getAExercise(id));
-  }, [dispatch, id]);
+    setTitle(data?.title);
+    setDescription(data?.description);
+  }, [dispatch, id, data?.title, data?.description]);
 
   return (
     <>
@@ -35,17 +41,17 @@ const DetailExercise = () => {
                   <Input
                     label='Chủ đề'
                     type='text'
-                    value={data.title}
+                    value={title}
                     onChange={(e) => {
-                      // setName(e.target.value);
+                      setTitle(e.target.value);
                     }}
                     placeholder='abc'
                   />
                   <TextArea
                     label='Mô tả'
-                    value={data.description}
+                    value={description}
                     onChange={(e) => {
-                      // setTopic(e.target.value);
+                      setDescription(e.target.value);
                     }}
                     placeholder='abc'
                     classNames={cx('textarea')}
@@ -55,7 +61,8 @@ const DetailExercise = () => {
                   isPrimary
                   preventDefault
                   onClick={() => {
-                    // dispatch(updateStudyPath({ id: id, name, level, topic }));
+                    if (id)
+                      dispatch(updateAExercise({ id, title, description }));
                   }}
                   className={cx('submit-btn')}
                 >
