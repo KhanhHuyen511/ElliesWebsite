@@ -30,13 +30,13 @@ const CreateExDetail = ({
     (state: RootState) => state.admin.listVocabs
   );
 
-  const [selectedItem, setSelectedItem] = useState<string>();
+  const [selectedItem, setSelectedItem] = useState<StudyCard>();
   const [option1, setOption1] = useState<string>();
   const [option2, setOption2] = useState<string>();
   const [option3, setOption3] = useState<string>();
   const [option4, setOption4] = useState<string>();
   const [answer, setAnswer] = useState<string>();
-  const [type, setType] = useState<GameType>(GameType.TranslateToVN);
+  const [type, setType] = useState<string>(GameType[0]);
 
   useEffect(() => {
     dispatch(getVocabsByTopic(title));
@@ -48,11 +48,11 @@ const CreateExDetail = ({
         title={'Tạo câu hỏi mới'}
         onClose={onClose}
         onSubmit={() => {
-          if (id && answer && type)
+          if (id && answer && type && selectedItem) {
             dispatch(
               setAExDetail({
                 exId: id,
-                vocab: { id: selectedItem },
+                vocab: selectedItem,
                 options: [
                   option1 ? option1 : '',
                   option2 ? option2 : '',
@@ -63,6 +63,7 @@ const CreateExDetail = ({
                 type,
               })
             );
+          }
         }}
         isDisplay={isDisplay}
         classNames={cx('create-form')}
@@ -83,10 +84,9 @@ const CreateExDetail = ({
                   <tr key={index}>
                     <td>
                       <Checkbox
-                        isChecked={item.id === selectedItem}
+                        isChecked={selectedItem && item.id === selectedItem.id}
                         onChecked={() => {
-                          console.log(item.id);
-                          setSelectedItem(item.id);
+                          setSelectedItem(item);
                         }}
                       />
                     </td>
@@ -142,8 +142,9 @@ const CreateExDetail = ({
               isRequired
             ></Input>
             <select
+              value={type}
               onChange={(e) => {
-                setType(e.target.value as unknown as GameType);
+                setType(e.target.value);
               }}
             >
               <option>{GameType[0]}</option>

@@ -444,11 +444,18 @@ export const setAExDetail = createAsyncThunk(
     vocab: StudyCard;
     options: string[];
     answer: string;
-    type: GameType;
+    type: string;
   }) => {
-    let item: ExDetail = { vocab, options, answer, type, question: '', id: '' };
+    let item: ExDetail = {
+      vocab,
+      options,
+      answer,
+      type,
+      question: '',
+      id: '',
+    };
     item.question =
-      type === GameType.TranslateToVN
+      type === GameType[0]
         ? 'Nghĩa của từ này là gì?'
         : 'Dịch từ này sang tiếng Anh?';
     await addDoc(collection(db, 'exs', exId, 'listItems'), {
@@ -458,6 +465,8 @@ export const setAExDetail = createAsyncThunk(
       type: type,
       question: item.question,
     }).then((e) => (item.id = e.id));
+
+    console.log(item);
 
     return item;
   }
