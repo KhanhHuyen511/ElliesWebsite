@@ -119,7 +119,6 @@ export const getAEx = createAsyncThunk('doc/getAEx', async (id: string) => {
 export const setCompleteExState = createAsyncThunk(
   'study/setExerciseState',
   async (data: { resultList: ExDetail[]; exId: string; userID: string }) => {
-    console.log(data);
     await addDoc(collection(db, 'userExs'), {
       userId: data.userID,
       ex: data.exId,

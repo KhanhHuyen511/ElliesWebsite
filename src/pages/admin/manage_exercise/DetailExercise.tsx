@@ -4,11 +4,12 @@ import style from './DetailExercise.module.scss';
 import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
 import { Col, Row } from 'react-flexbox-grid';
-import { Ex, ExDetail } from '../../../types';
+import { Ex, ExDetail, StudyCard } from '../../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { getAExercise, updateAExercise } from '../../../redux/slice/adminSlice';
 import CreateExDetail from './CreateExDetail';
+import EditExDetail from './EditExDetail';
 const cx = classNames.bind(style);
 
 const DetailExercise = () => {
@@ -23,12 +24,14 @@ const DetailExercise = () => {
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [isOpenCreateForm, setIsOpenCreateForm] = useState<boolean>(false);
+  const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<ExDetail>();
 
   useEffect(() => {
     if (id) dispatch(getAExercise(id));
     setTitle(data?.title);
     setDescription(data?.description);
-  }, [dispatch, id, data?.title, data?.description]);
+  }, [dispatch, id, data?.title, data?.description, data?.listItems]);
 
   return (
     <>
@@ -87,27 +90,11 @@ const DetailExercise = () => {
                     <Button
                       isPrimary={false}
                       onClick={() => {
-                        // if (id && selectRoute) {
-                        //   dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
-                        //   setCurrentStudyRoute(currentRoute);
-                        // }
+                        setIsOpenEditForm(true);
                       }}
                       preventDefault
                     >
                       Xem câu hỏi
-                    </Button>
-                    <Button
-                      isPrimary={false}
-                      onClick={() => {
-                        // if (id && selectRoute) {
-                        //   dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
-                        //   setCurrentStudyRoute(currentRoute);
-                        // }
-                        // setIsOpenEditRouteForm(true);
-                      }}
-                      preventDefault
-                    >
-                      Chỉnh sửa câu hỏi
                     </Button>
                     <Button isPrimary={false} onClick={() => {}} preventDefault>
                       Xóa câu hỏi
@@ -128,8 +115,11 @@ const DetailExercise = () => {
                         <tr key={index}>
                           <td>
                             <Checkbox
+                              isChecked={
+                                selectedItem && item.id === selectedItem.id
+                              }
                               onChecked={() => {
-                                // setSelectRoute(item.id);
+                                setSelectedItem(item);
                               }}
                             />
                           </td>
@@ -150,6 +140,15 @@ const DetailExercise = () => {
                 title={data.title}
                 isDisplay={isOpenCreateForm}
                 onClose={() => setIsOpenCreateForm(false)}
+              />
+            )}
+            {id && selectedItem && isOpenEditForm && title && (
+              <EditExDetail
+                exId={id}
+                data={selectedItem}
+                title={data.title}
+                isDisplay={isOpenEditForm}
+                onClose={() => setIsOpenEditForm(false)}
               />
             )}
           </>

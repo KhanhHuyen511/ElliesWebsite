@@ -466,7 +466,42 @@ export const setAExDetail = createAsyncThunk(
       question: item.question,
     }).then((e) => (item.id = e.id));
 
-    console.log(item);
+    return item;
+  }
+);
+
+export const updateAExDetail = createAsyncThunk(
+  'admin/exercise/updateAExDetai;',
+  async ({
+    data,
+    exId,
+    options,
+    answer,
+    type,
+  }: {
+    data: ExDetail;
+    exId: string;
+    options?: string[];
+    answer?: string;
+    type?: string;
+  }) => {
+    const item: ExDetail = {
+      ...data,
+      options: options ? options : data.options,
+      answer: answer ? answer : data.answer,
+      type: type ? type : data.type,
+      question:
+        type !== data.type && type === GameType[0]
+          ? 'Nghĩa của từ này là gì?'
+          : 'Dịch từ này sang tiếng Anh?',
+    };
+
+    await updateDoc(doc(db, 'exs', exId, 'listItems', data.id), {
+      options: item.options,
+      answer: item.answer,
+      type: item.type,
+      question: item.question,
+    });
 
     return item;
   }
@@ -516,6 +551,13 @@ const adminSlice = createSlice({
     });
     builder.addCase(setAExDetail.fulfilled, (state, action) => {
       state.currentEx?.listItems?.push(action.payload as ExDetail);
+    });
+    builder.addCase(updateAExDetail.fulfilled, (state, action) => {
+      let i = state.currentEx?.listItems?.findIndex(
+        (o) => o.id === action.payload?.id
+      );
+      if (i && state.currentEx?.listItems)
+        state.currentEx.listItems[i] = action.payload as ExDetail;
     });
   },
 });
