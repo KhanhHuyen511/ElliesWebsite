@@ -9,6 +9,7 @@ const UserExCard = ({ data }: { data: UserEx }) => {
   const calculateRightQn = () => {
     let rs = 0;
     data.resultList.forEach((item) => {
+      console.log(item.exRight);
       if (item.exRight) rs++;
     });
 

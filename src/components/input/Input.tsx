@@ -13,6 +13,7 @@ interface Props {
   icon?: string;
   value?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void | undefined;
+  isRequired?: boolean;
 }
 
 const Input = (props: Props) => {
@@ -30,6 +31,7 @@ const Input = (props: Props) => {
         className={cx('input')}
         onChange={props.onChange}
         value={props.value}
+        required={props.isRequired}
       />
       {props.smallText && <p className={cx('small-text')}>{props.smallText}</p>}
     </div>

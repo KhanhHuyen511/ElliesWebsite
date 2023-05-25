@@ -59,7 +59,7 @@ export interface Ex {
 
 export interface ExDetail {
   id: string;
-  type: GameType;
+  type: string;
   question: string;
   options: string[];
   answer: string;
