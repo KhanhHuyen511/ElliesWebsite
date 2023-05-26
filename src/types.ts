@@ -28,6 +28,10 @@ export interface Student {
   id: string;
   checkinDays: [];
   routes: [];
+  name?: string;
+  email?: string;
+  gender?: string;
+  birthday?: Date;
 }
 
 export enum StudyCardType {
