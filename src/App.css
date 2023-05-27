@@ -1,8 +1,9 @@
 @import './assets/theme/shared.css';
 
 .app {
-  height: 100vh;
+  /* height: 100vh; */
   color: var(--text-bold-color);
+  position: relative;
 }
 
 .container {
