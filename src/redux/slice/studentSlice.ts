@@ -39,8 +39,6 @@ export const updateCurrentStudent = createAsyncThunk(
     const q = query(collection(db, 'students'), where('id', '==', data.id));
     const querySnapshot = (await getDocs(q)).docs[0];
 
-    console.log(data);
-
     await updateDoc(querySnapshot.ref, {
       name: data.name ? data.name : oldData.name,
       email: data.email ? data.email : oldData.email,
