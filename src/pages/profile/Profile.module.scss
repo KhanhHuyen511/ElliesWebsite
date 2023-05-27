@@ -57,6 +57,20 @@
   }
 }
 
+.info-section {
+  .info-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .edit-icon {
+      stroke-width: 2;
+      fill: var(--primary-color);
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
 .blog-section {
   .blog-button {
     width: 100%;

@@ -1,17 +1,28 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
 import style from './Profile.module.scss';
 import classNames from 'classnames/bind';
-import { FireIcon } from '@heroicons/react/24/outline';
+import { FireIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { Button, Input, TextArea } from '../../components';
+import { Student } from '../../types';
+import { getCurrentStudent } from '../../redux/slice/studentSlice';
 const cx = classNames.bind(style);
 
 const Profile = () => {
   const userID = useSelector((state: RootState) => state.auth.userID) || '';
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const user = useSelector((state: RootState) => state.student.currentUser);
+
+  useEffect(() => {
+    dispatch(getCurrentStudent(userID));
+  });
+
   return (
     <div className='container'>
-      <p className={cx('user-name')}>Ellie Nguyen</p>
+      <p className={cx('user-name')}>{user?.name}</p>
       <div className={cx('section-1')}>
         <div className={cx('avatar-wrapper')}>
           <div className={cx('avatar')}>
@@ -41,19 +52,46 @@ const Profile = () => {
 
       <div className={cx('check-in')}>???</div>
       <div className={cx('info-section', 'section')}>
-        <p className={cx('section-title')}>Thông tin cá nhân</p>
+        <div className={cx('info-title-wrapper')}>
+          <p className={cx('section-title')}>Thông tin cá nhân</p>
+          <PencilIcon className={cx('edit-icon')} />
+        </div>
+
         <div className={cx('info-body')}>
           <Input
             label={'Email'}
+            value={user?.email}
             placeholder={'abc@gm.uit.edu.vn'}
             onChange={() => {}}
+            isDisabled
           />
-          <Input label={'Giới tính'} placeholder={''} onChange={() => {}} />
-          <Input label={'Ngày sinh'} placeholder={''} onChange={() => {}} />
+          <Input
+            label={'Tên'}
+            value={user?.name}
+            placeholder={''}
+            onChange={() => {}}
+            isDisabled
+          />
+          <Input
+            label={'Giới tính'}
+            value={user?.gender}
+            placeholder={''}
+            onChange={() => {}}
+            isDisabled
+          />
+          <Input
+            label={'Ngày sinh'}
+            value={''}
+            placeholder={''}
+            onChange={() => {}}
+            isDisabled
+          />
           <TextArea
             label={'Tiểu sử'}
+            value={user?.bio}
             placeholder={'Nói gì đó về bạn'}
             onChange={() => {}}
+            isDisabled
           />
         </div>
       </div>
