@@ -27,7 +27,8 @@ export const getCurrentStudent = createAsyncThunk(
     const querySnapshot = (await getDocs(q)).docs[0];
     stu = querySnapshot.data() as Student;
 
-    stu.birthday = getDate(querySnapshot.data().birthday.seconds);
+    if (querySnapshot.data().birthday)
+      stu.birthday = getDate(querySnapshot.data().birthday.seconds);
 
     return stu;
   }

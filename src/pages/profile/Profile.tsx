@@ -21,7 +21,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(getCurrentStudent(userID));
-  }, [dispatch, userID]);
+  }, [dispatch, userID, user]);
 
   return (
     <>
