@@ -12,7 +12,10 @@ import {
 } from '../../redux/slice/studentSlice';
 import { formatDate } from '../../utils';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '../../firebase/config';
+import { auth, storage } from '../../firebase/config';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { REMOVE_ACTIVE_USER } from '../../redux/slice/authSlice';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(style);
 
 const Profile = () => {
@@ -25,6 +28,8 @@ const Profile = () => {
   const [isOpenEditForm, setISOpenEditForm] = useState<boolean>(false);
   const [img, setImg] = useState('');
   const [newImg, setNewImg] = useState<File>();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getCurrentStudent(userID));
@@ -177,7 +182,19 @@ const Profile = () => {
           </div>
         </div>
 
-        <Button isPrimary={false} onClick={() => {}} className={cx('log-out')}>
+        <Button
+          isPrimary={false}
+          onClick={() => {
+            onAuthStateChanged(auth, (user) => {
+              if (user) {
+                signOut(auth);
+                dispatch(REMOVE_ACTIVE_USER({}));
+                navigate('/login');
+              }
+            });
+          }}
+          className={cx('log-out')}
+        >
           Đăng xuất
         </Button>
 
