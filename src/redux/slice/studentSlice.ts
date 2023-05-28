@@ -9,8 +9,9 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+import { db, storage } from '../../firebase/config';
 import { getDate } from '../../utils';
+import { ref, uploadBytes } from 'firebase/storage';
 
 interface types {
   currentUser?: Student;
@@ -49,6 +50,23 @@ export const updateCurrentStudent = createAsyncThunk(
     });
 
     return data;
+  }
+);
+
+export const updateAvatar = createAsyncThunk(
+  'student/updateAvatar',
+  async ({ data, newAvatar }: { data: Student; newAvatar: File }) => {
+    const q = query(collection(db, 'students'), where('id', '==', data.id));
+    const querySnapshot = (await getDocs(q)).docs[0];
+
+    await updateDoc(querySnapshot.ref, {
+      avatar: newAvatar.name,
+    });
+
+    const imgRef = ref(storage, `images/${newAvatar.name}`);
+    uploadBytes(imgRef, newAvatar);
+
+    return { ...data, avatar: newAvatar };
   }
 );
 

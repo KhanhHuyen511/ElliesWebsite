@@ -6,8 +6,13 @@ import classNames from 'classnames/bind';
 import { FireIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { Button, Input, TextArea } from '../../components';
 import EditProfile from './EditProfile';
-import { getCurrentStudent } from '../../redux/slice/studentSlice';
+import {
+  getCurrentStudent,
+  updateAvatar,
+} from '../../redux/slice/studentSlice';
 import { formatDate } from '../../utils';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { storage } from '../../firebase/config';
 const cx = classNames.bind(style);
 
 const Profile = () => {
@@ -18,9 +23,15 @@ const Profile = () => {
   const user = useSelector((state: RootState) => state.student.currentUser);
 
   const [isOpenEditForm, setISOpenEditForm] = useState<boolean>(false);
+  const [img, setImg] = useState('');
+  const [newImg, setNewImg] = useState<File>();
 
   useEffect(() => {
     dispatch(getCurrentStudent(userID));
+    if (user?.avatar)
+      getDownloadURL(ref(storage, `images/${user.avatar}`)).then((url) => {
+        setImg(url);
+      });
   }, [dispatch, userID, user]);
 
   return (
@@ -31,11 +42,34 @@ const Profile = () => {
           <div className={cx('avatar-wrapper')}>
             <div className={cx('avatar')}>
               <img
-                src='/images/avatar.png'
+                src={
+                  newImg
+                    ? URL.createObjectURL(newImg)
+                    : img
+                    ? img
+                    : '/images/avatar.png'
+                }
                 className={cx('avatar-img')}
                 alt=''
               />
             </div>
+            <Input
+              type='file'
+              onChange={(e) => {
+                if (e.target.files) setNewImg(e.target.files[0]);
+              }}
+              label={''}
+              placeholder={''}
+            ></Input>
+            <Button
+              isPrimary={false}
+              onClick={() => {
+                if (user && newImg)
+                  dispatch(updateAvatar({ data: user, newAvatar: newImg }));
+              }}
+            >
+              Cập nhật ảnh
+            </Button>
           </div>
 
           <div className={cx('stats')}>

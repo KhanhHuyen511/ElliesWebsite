@@ -33,6 +33,7 @@ export interface Student {
   gender?: string;
   birthday?: Date;
   bio?: string;
+  avatar?: any;
 }
 
 export enum StudyCardType {
