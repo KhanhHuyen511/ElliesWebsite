@@ -34,6 +34,7 @@ export interface Student {
   birthday?: Date;
   bio?: string;
   avatar?: any;
+  likedBlog?: [];
 }
 
 export enum StudyCardType {
@@ -80,4 +81,35 @@ export interface UserEx {
   resultList: ExDetail[];
   rightQn?: number;
   didDate?: Date;
+}
+
+export interface Blog {
+  id: string;
+  userId: string;
+  userName?: string;
+  type: string; // question or blog
+  likes?: BlogLike[];
+  comments?: BlogComment[];
+  content: string;
+  title: string;
+  keyword?: string;
+  createDate: Date;
+}
+
+export interface BlogComment {
+  id: string;
+  userId: string;
+  userName?: string;
+  blogId: string;
+  content: string;
+  liked: string;
+  createDate: Date;
+}
+
+export interface BlogLike {
+  id: string;
+  userId: string;
+  userName?: string;
+  blogId: string;
+  createDate: Date;
 }
