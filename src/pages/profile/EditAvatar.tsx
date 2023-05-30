@@ -67,15 +67,6 @@ const EditAvatar = ({
             label={''}
             placeholder={''}
           ></Input>
-          {/* <Button
-            isPrimary={false}
-            onClick={() => {
-              if (data && newImg)
-                dispatch(updateAvatar({ data, newAvatar: newImg }));
-            }}
-          >
-            Cập nhật ảnh
-          </Button> */}
         </div>
       </Popup>
     </>
