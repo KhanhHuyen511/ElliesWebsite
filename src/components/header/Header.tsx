@@ -118,6 +118,20 @@ const Header = () => {
         </div>
 
         <div className={cx('profile')}>
+          {currentUserName && currentUserName !== 'Admin' && (
+            <>
+              <div
+                className={cx('avatar')}
+                onClick={() => navigate('/profile')}
+              >
+                <img
+                  src='/images/avatar.png'
+                  className={cx('avatar-img')}
+                  alt=''
+                />
+              </div>
+            </>
+          )}
           <div
             className={cx('user-name-wrapper')}
             onClick={() => toggleAuthWrapper()}

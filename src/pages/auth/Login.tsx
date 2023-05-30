@@ -21,22 +21,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  // remove current account
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       signOut(auth);
-  //       // dispatch(REMOVE_ACTIVE_USER({}));
-  //     }
-  //   });
-  // }, [dispatch]);
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     signOut(auth);
-  //     // dispatch(REMOVE_ACTIVE_USER({}));
-  //   }
-  // });
-
   const isValid = (e: React.FormEvent) => {
     e.preventDefault();
 

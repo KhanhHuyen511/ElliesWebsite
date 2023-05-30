@@ -32,6 +32,7 @@ const Input = (props: Props) => {
         onChange={props.onChange}
         value={props.value}
         required={props.isRequired}
+        disabled={props.isDisabled}
       />
       {props.smallText && <p className={cx('small-text')}>{props.smallText}</p>}
     </div>

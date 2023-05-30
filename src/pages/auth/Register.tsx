@@ -38,17 +38,27 @@ const Register = () => {
             role: 'student',
             user_id: user.uid,
           }).then(() => {
-            toast.success('Regiter successfull!');
+            addDoc(collection(db, 'students'), {
+              id: user.uid,
+              email: user.email,
+              name: '',
+              gender: '',
+              bio: '',
+              routes: [],
+              checkinDays: [],
+            }).then(() => {
+              toast.success('Regiter successfull!');
 
-            signOut(auth)
-              .then(() => {
-                navigate('/login');
-              })
-              .catch((error) => {
-                const errorMessage = error.message;
-                toast.error(errorMessage);
-              });
-            navigate('/login');
+              signOut(auth)
+                .then(() => {
+                  navigate('/login');
+                })
+                .catch((error) => {
+                  const errorMessage = error.message;
+                  toast.error(errorMessage);
+                });
+              navigate('/login');
+            });
           });
         } catch (error) {
           console.error('error');
