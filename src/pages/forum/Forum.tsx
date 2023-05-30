@@ -2,15 +2,18 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import style from './Forum.module.scss';
 import { Col } from 'react-flexbox-grid';
-import { BlogCard, CategoryPanel } from '../../components';
+import { BlogCard, Button, CategoryPanel } from '../../components';
 import {
   AcademicCapIcon,
   FireIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(style);
 
 const Forum = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className='container'>
@@ -37,7 +40,18 @@ const Forum = () => {
             icon={<FireIcon />}
           />
         </ul>
-        <p className={cx('sub-title')}>Nổi bật</p>
+        <div className={cx('create-wrapper')}>
+          <p className={cx('sub-title')}>Nổi bật</p>
+          <Button
+            isPrimary={true}
+            onClick={() => {
+              navigate('/forum/create');
+            }}
+          >
+            Tạo mới
+          </Button>
+        </div>
+
         <ul className={cx('list')}>
           <BlogCard />
           {/* {exs &&

@@ -18,7 +18,6 @@
 
 .sub-title {
   @include typo-heading-2;
-  margin-top: 53px;
 }
 
 .list {
@@ -26,4 +25,11 @@
   display: flex;
   flex-direction: column;
   row-gap: 12px;
+}
+
+.create-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 53px;
 }

@@ -11,6 +11,7 @@ import {
   StudyDetail,
   DocDetail,
   ExerciseDetail,
+  CreateBlog,
 } from './pages';
 import { Login, Register, ResetPassword } from './pages/auth';
 import {
@@ -49,6 +50,7 @@ function App() {
             <Route path='/study_detail/:id' element={<StudyDetail />} />
             <Route path='/doc_detail/:id' element={<DocDetail />} />
             <Route path='/ex_detail/:id' element={<ExerciseDetail />} />
+            <Route path='/forum/create' element={<CreateBlog />} />
           </Routes>
         </BrowserRouter>
       )}
