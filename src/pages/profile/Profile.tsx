@@ -3,13 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import style from './Profile.module.scss';
 import classNames from 'classnames/bind';
-import { FireIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { CameraIcon, FireIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { Button, Input, TextArea } from '../../components';
 import EditProfile from './EditProfile';
-import {
-  getCurrentStudent,
-  updateAvatar,
-} from '../../redux/slice/studentSlice';
+import EditAvatar from './EditAvatar';
+import { getCurrentStudent } from '../../redux/slice/studentSlice';
 import { formatDate } from '../../utils';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { auth, storage } from '../../firebase/config';
@@ -26,8 +24,8 @@ const Profile = () => {
   const user = useSelector((state: RootState) => state.student.currentUser);
 
   const [isOpenEditForm, setISOpenEditForm] = useState<boolean>(false);
+  const [isOpenEditAvtForm, setISOpenEditAvtForm] = useState<boolean>(false);
   const [img, setImg] = useState('');
-  const [newImg, setNewImg] = useState<File>();
 
   const navigate = useNavigate();
 
@@ -37,7 +35,8 @@ const Profile = () => {
       getDownloadURL(ref(storage, `images/${user.avatar}`)).then((url) => {
         setImg(url);
       });
-  }, [dispatch, userID, user]);
+    console.log('profile ' + img);
+  }, [dispatch, userID, user?.avatar]);
 
   return (
     <>
@@ -45,36 +44,18 @@ const Profile = () => {
         <p className={cx('user-name')}>{user?.name}</p>
         <div className={cx('section-1')}>
           <div className={cx('avatar-wrapper')}>
-            <div className={cx('avatar')}>
+            <div
+              className={cx('avatar')}
+              onClick={() => setISOpenEditAvtForm(true)}
+            >
               <img
-                src={
-                  newImg
-                    ? URL.createObjectURL(newImg)
-                    : img
-                    ? img
-                    : '/images/avatar.png'
-                }
+                src={img ? img : '/images/avatar.png'}
                 className={cx('avatar-img')}
                 alt=''
               />
+              <div className={cx('overlay')}></div>
+              <CameraIcon className={cx('avatar-icon')} />
             </div>
-            <Input
-              type='file'
-              onChange={(e) => {
-                if (e.target.files) setNewImg(e.target.files[0]);
-              }}
-              label={''}
-              placeholder={''}
-            ></Input>
-            <Button
-              isPrimary={false}
-              onClick={() => {
-                if (user && newImg)
-                  dispatch(updateAvatar({ data: user, newAvatar: newImg }));
-              }}
-            >
-              Cập nhật ảnh
-            </Button>
           </div>
 
           <div className={cx('stats')}>
@@ -204,6 +185,13 @@ const Profile = () => {
             isDisplay={isOpenEditForm}
             onClose={() => setISOpenEditForm(false)}
           ></EditProfile>
+        )}
+        {isOpenEditAvtForm && user && (
+          <EditAvatar
+            data={user}
+            isDisplay={isOpenEditAvtForm}
+            onClose={() => setISOpenEditAvtForm(false)}
+          ></EditAvatar>
         )}
       </div>
     </>

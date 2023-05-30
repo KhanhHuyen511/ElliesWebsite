@@ -66,6 +66,8 @@ export const updateAvatar = createAsyncThunk(
     const imgRef = ref(storage, `images/${newAvatar.name}`);
     uploadBytes(imgRef, newAvatar);
 
+    console.log(newAvatar);
+
     return { ...data, avatar: newAvatar };
   }
 );
@@ -76,6 +78,9 @@ const studentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCurrentStudent.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+    });
+    builder.addCase(updateAvatar.fulfilled, (state, action) => {
       state.currentUser = action.payload;
     });
   },
