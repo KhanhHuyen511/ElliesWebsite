@@ -28,6 +28,7 @@ const TextArea = (props: Props) => {
         className={cx('input', props.classNames)}
         onChange={props.onChange}
         value={props.value}
+        disabled={props.isDisabled}
       />
       {props.smallText && <p className={cx('small-text')}>{props.smallText}</p>}
     </div>

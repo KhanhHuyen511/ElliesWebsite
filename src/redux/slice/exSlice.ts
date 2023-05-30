@@ -3,7 +3,6 @@ import {
   addDoc,
   collection,
   doc,
-  documentId,
   getDoc,
   getDocs,
   query,
@@ -11,7 +10,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { Doc, Ex, ExDetail, StudyCard, UserEx } from '../../types';
+import { Ex, ExDetail, UserEx } from '../../types';
 import { getDate } from '../../utils';
 
 interface types {
