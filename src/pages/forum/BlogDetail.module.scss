@@ -67,3 +67,15 @@
     @include typo-caption;
   }
 }
+
+.comment-section {
+  margin-top: 32px;
+
+  .sub-title {
+    @include typo-heading-2;
+  }
+
+  .comments {
+    margin-top: 16px;
+  }
+}

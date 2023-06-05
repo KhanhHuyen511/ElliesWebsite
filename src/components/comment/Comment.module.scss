@@ -1,0 +1,56 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  .author-wrapper {
+    display: flex;
+    align-items: center;
+    @include typo-body-small;
+  }
+
+  .create-date {
+    @include typo-caption;
+  }
+}
+
+.avatar {
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  border: 2px solid var(--G400);
+  overflow: hidden;
+  margin-right: 8px;
+  cursor: pointer;
+
+  &-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.foot-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.like-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 6px;
+
+  .like-icon {
+    stroke: var(--G800);
+  }
+
+  .like-number {
+    @include typo-body-small;
+    font-weight: bold;
+    color: var(--Y500);
+  }
+}

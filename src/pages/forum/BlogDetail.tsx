@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { getABlog } from '../../redux/slice/forumSlice';
+import { Comment } from '../../components';
 const cx = classNames.bind(style);
 
 const BlogDetail = () => {
@@ -49,6 +50,15 @@ const BlogDetail = () => {
       <p className={cx('keyword-wrapper')}>
         Từ khoá: <span className={cx('keyword')}>#{data?.keyword}</span>
       </p>
+
+      <div className={cx('comment-section')}>
+        <p className={cx('sub-title')}>Bình luận</p>
+        <ul className={cx('comments')}>
+          <li>
+            <Comment></Comment>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
