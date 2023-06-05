@@ -3,14 +3,17 @@ import classNames from 'classnames/bind';
 import style from './BlogCard.module.scss';
 import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 import { Blog } from '../../types';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(style);
 
 const BlogCard = ({ data }: { data: Blog }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div
         className={cx('card')}
-        // onClick={() => navigate(`/doc_detail/${data.id}`)}
+        onClick={() => navigate(`/blog_detail/${data.id}`)}
       >
         <p className={cx('card-title')}>{data.title}</p>
         <div className={cx('card-body')}>

@@ -10,3 +10,4 @@ export { default as StudyFinish } from './study/StudyFinish';
 export { default as DocDetail } from './document/DocDetail';
 export { default as ExerciseDetail } from './exercise/ExerciseDetail';
 export { default as CreateBlog } from './forum/CreateBlog';
+export { default as BlogDetail } from './forum/BlogDetail';
