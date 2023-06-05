@@ -9,6 +9,7 @@ import adminSlice from './slice/adminSlice';
 import docSlice from './slice/docSlice';
 import exSlice from './slice/exSlice';
 import studentSlice from './slice/studentSlice';
+import forumSlice from './slice/forumSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   doc: docSlice,
   ex: exSlice,
   student: studentSlice,
+  forum: forumSlice,
 });
 
 const store = configureStore({

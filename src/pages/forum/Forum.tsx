@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import style from './Forum.module.scss';
 import { Col } from 'react-flexbox-grid';
@@ -9,10 +9,20 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { getListBlogs } from '../../redux/slice/forumSlice';
 const cx = classNames.bind(style);
 
 const Forum = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const list = useSelector((state: RootState) => state.forum.listBlogs);
+
+  useEffect(() => {
+    dispatch(getListBlogs());
+  }, [dispatch]);
 
   return (
     <>
@@ -53,7 +63,14 @@ const Forum = () => {
         </div>
 
         <ul className={cx('list')}>
-          <BlogCard />
+          {list &&
+            list.length > 0 &&
+            list.map((item, index) => (
+              <li key={index} className={cx('item')}>
+                <BlogCard data={item} />
+              </li>
+            ))}
+
           {/* {exs &&
             exs.length > 0 &&
             exs.map((item, index) => (

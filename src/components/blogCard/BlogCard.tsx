@@ -2,33 +2,36 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import style from './BlogCard.module.scss';
 import { HandThumbUpIcon } from '@heroicons/react/24/outline';
+import { Blog } from '../../types';
 const cx = classNames.bind(style);
 
-const BlogCard = () => {
+const BlogCard = ({ data }: { data: Blog }) => {
   return (
     <>
       <div
         className={cx('card')}
         // onClick={() => navigate(`/doc_detail/${data.id}`)}
       >
-        <p className={cx('card-title')}>title</p>
+        <p className={cx('card-title')}>{data.title}</p>
         <div className={cx('card-body')}>
           <div className={cx('card-content')}>
-            <p className={cx('card-desc')}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
+            {data.summary && (
+              <p
+                className={cx('card-desc')}
+                dangerouslySetInnerHTML={{ __html: data.summary }}
+              ></p>
+            )}
+
             <p className={cx('card-date')}>
-              03/03/2023
+              {data.createDate?.toLocaleDateString()}
               <span className={cx('card-keyword-wrapper')}>
-                Từ khoá: <span className={cx('keyword')}>#egg</span>
+                Từ khoá: <span className={cx('keyword')}>#{data.keyword}</span>
               </span>
-              {/* {data.createDate?.toLocaleDateString()} */}
             </p>
           </div>
           <div className={cx('like-wrapper')}>
             <HandThumbUpIcon className='like-icon' width={24} height={24} />
-            <p className={cx('like-number')}>5</p>
+            <p className={cx('like-number')}>{data.likes?.length}</p>
           </div>
         </div>
       </div>

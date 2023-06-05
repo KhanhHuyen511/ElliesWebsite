@@ -90,6 +90,7 @@ export interface Blog {
   type: string; // question or blog
   likes?: BlogLike[];
   comments?: BlogComment[];
+  summary?: string;
   content: string;
   title: string;
   keyword?: string;
