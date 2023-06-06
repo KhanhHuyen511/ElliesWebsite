@@ -1,0 +1,35 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.page-title {
+  @include typo-heading-1;
+  margin-top: 26px;
+}
+
+.forum-cate-wrapper {
+  display: flex;
+  column-gap: 18px;
+  margin-top: 26px;
+
+  .cate-item {
+    flex: 1;
+  }
+}
+
+.sub-title {
+  @include typo-heading-2;
+}
+
+.list {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.create-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 53px;
+}

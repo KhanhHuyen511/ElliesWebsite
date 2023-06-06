@@ -12,4 +12,6 @@ export { default as DocCard } from './docCard/DocCard';
 export { default as UserExCard } from './userExCard/UserExCard';
 export { default as ExCard } from './exCard/ExCard';
 export { default as VocabCard } from './vocabCard/VocabCard';
+export { default as BlogCard } from './blogCard/BlogCard';
 export { default as Popup } from './popup/Popup';
+export { default as Comment } from './comment/Comment';
