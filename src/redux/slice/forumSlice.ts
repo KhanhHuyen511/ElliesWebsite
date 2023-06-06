@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -8,10 +9,11 @@ import {
   query,
   setDoc,
   Timestamp,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { Blog, Student } from '../../types';
+import { Blog, BlogComment, Student } from '../../types';
 import { getDate } from '../../utils';
 
 interface types {
@@ -68,7 +70,36 @@ export const getABlog = createAsyncThunk(
     if (user.name) item.userName = user.name;
     else item.userName = user.email;
 
+    if (item.comments)
+      await Promise.all(
+        item?.comments?.map(async (e) => {
+          const userCmt = query(
+            collection(db, 'students'),
+            where('id', '==', item.userId)
+          );
+
+          e.userName = await (await getDocs(userCmt)).docs[0].data().name;
+        })
+      );
+
     return item;
+  }
+);
+
+export const setAComment = createAsyncThunk(
+  'forum/setAComment',
+  async (data: BlogComment) => {
+    const querySnapshot = await getDoc(doc(db, 'forum', data.blogId));
+
+    console.log('hi' + data.blogId);
+
+    // const blog = querySnapshot.data() as Blog;
+
+    // blog.comments?.push(data);
+
+    await updateDoc(doc(db, 'forum', data.blogId), {
+      comments: arrayUnion(data),
+    });
   }
 );
 

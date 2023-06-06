@@ -103,7 +103,7 @@ export interface BlogComment {
   userName?: string;
   blogId: string;
   content: string;
-  liked: string;
+  liked: number;
   createDate: Date;
 }
 

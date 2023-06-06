@@ -5,7 +5,7 @@ import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { getABlog } from '../../redux/slice/forumSlice';
+import { getABlog, setAComment } from '../../redux/slice/forumSlice';
 import { Comment } from '../../components';
 const cx = classNames.bind(style);
 
@@ -55,8 +55,14 @@ const BlogDetail = () => {
         <p className={cx('sub-title')}>Bình luận</p>
         <ul className={cx('comments')}>
           <li>
-            <Comment></Comment>
+            <Comment blogId={id}></Comment>
           </li>
+          {data?.comments &&
+            data.comments.map((item, index) => (
+              <li key={index}>
+                <Comment data={item}></Comment>
+              </li>
+            ))}
         </ul>
       </div>
     </div>

@@ -17,6 +17,11 @@
   }
 }
 
+.textarea.empty {
+  height: 140px;
+  overflow-y: auto;
+}
+
 .avatar {
   width: 43px;
   height: 43px;
@@ -35,7 +40,7 @@
 
 .foot-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .like-wrapper {
