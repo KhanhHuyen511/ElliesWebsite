@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Input } from '../../../components';
 import Popup from '../../../components/popup/Popup';
-import { setVocab } from '../../../redux/slice/adminSlice';
+import { setSentence, setVocab } from '../../../redux/slice/adminSlice';
 import { AppDispatch } from '../../../redux/store';
+import { StudyCardType } from '../../../types';
 import style from './IndexDocument.module.scss';
 
 interface Props {
   classNames?: string;
   onClose: () => void;
   isDisplay: boolean;
+  type: StudyCardType;
 }
 
 const CreateVocabForm = (props: Props) => {
@@ -26,16 +28,26 @@ const CreateVocabForm = (props: Props) => {
         title={'Tạo từ vựng mới'}
         classNames={''}
         onClose={props.onClose}
-        onSubmit={() =>
-          dispatch(
-            setVocab({
-              display,
-              meaning,
-              imageFile: image,
-              audio,
-            })
-          )
-        }
+        onSubmit={() => {
+          if (props.type === StudyCardType.Vocab)
+            dispatch(
+              setVocab({
+                display,
+                meaning,
+                imageFile: image,
+                audio,
+              })
+            );
+          else if (props.type === StudyCardType.Sentence)
+            dispatch(
+              setSentence({
+                display,
+                meaning,
+                imageFile: image,
+                audio,
+              })
+            );
+        }}
         isDisplay={props.isDisplay}
       >
         <Input

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Input } from '../../../components';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
-import { StudyCard } from '../../../types';
+import { StudyCard, StudyCardType } from '../../../types';
 import Popup from '../../../components/popup/Popup';
-import { updateVocab } from '../../../redux/slice/adminSlice';
+import { updateSentence, updateVocab } from '../../../redux/slice/adminSlice';
 import style from './IndexDocument.module.scss';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '../../../firebase/config';
@@ -13,10 +13,12 @@ const EditVocabForm = ({
   vocab,
   onClose,
   isDisplay,
+  type,
 }: {
   vocab: StudyCard;
   onClose: () => void;
   isDisplay: boolean;
+  type: StudyCardType;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -49,21 +51,42 @@ const EditVocabForm = ({
         classNames={''}
         title={'Chỉnh sửa từ vựng'}
         onClose={onClose}
-        onSubmit={() =>
-          dispatch(
-            updateVocab({
-              data: {
-                id: vocab.id,
-                display,
-                meaning,
-                imageFile: newImage,
-                audio: newAudio,
-              },
-              oldImage: vocab.imageFile,
-              oldAudio: vocab.audio,
-            })
-          )
-        }
+        onSubmit={() => {
+          switch (type) {
+            case StudyCardType.Vocab:
+              dispatch(
+                updateVocab({
+                  data: {
+                    id: vocab.id,
+                    display,
+                    meaning,
+                    imageFile: newImage,
+                    audio: newAudio,
+                  },
+                  oldImage: vocab.imageFile,
+                  oldAudio: vocab.audio,
+                })
+              );
+              break;
+            case StudyCardType.Sentence:
+              dispatch(
+                updateSentence({
+                  data: {
+                    id: vocab.id,
+                    display,
+                    meaning,
+                    imageFile: newImage,
+                    audio: newAudio,
+                  },
+                  oldImage: vocab.imageFile,
+                  oldAudio: vocab.audio,
+                })
+              );
+              break;
+            default:
+              break;
+          }
+        }}
         isDisplay={isDisplay}
       >
         <Input

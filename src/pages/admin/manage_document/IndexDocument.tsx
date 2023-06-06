@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import VocabDoc from './VocabDoc';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { getVocabs } from '../../../redux/slice/adminSlice';
+import { getSentences, getVocabs } from '../../../redux/slice/adminSlice';
 import { CategoryPanel } from '../../../components';
 import {
   AcademicCapIcon,
@@ -12,6 +12,7 @@ import {
   QueueListIcon,
   SpeakerWaveIcon,
 } from '@heroicons/react/24/outline';
+import { StudyCardType } from '../../../types';
 
 const cx = classNames.bind(styles);
 
@@ -19,12 +20,15 @@ const IndexDocument = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const listVocabs = useSelector((state: RootState) => state.admin.listVocabs);
-  const listSentences = [];
+  const listSentences = useSelector(
+    (state: RootState) => state.admin.listSentences
+  );
 
   const [currentType, setCurrentType] = useState('vocabs');
 
   useEffect(() => {
     dispatch(getVocabs());
+    dispatch(getSentences());
   }, [dispatch]);
 
   return (
@@ -66,10 +70,11 @@ const IndexDocument = () => {
           </ul>
 
           {currentType === 'vocabs' ? (
-            <VocabDoc list={listVocabs} />
+            <VocabDoc list={listVocabs} type={StudyCardType.Vocab} />
           ) : currentType === 'sentences' ? (
-            <></>
+            <VocabDoc list={listSentences} type={StudyCardType.Sentence} />
           ) : (
+            // <VocabDoc list={listSentences} />
             <></>
           )}
         </div>

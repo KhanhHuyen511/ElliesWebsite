@@ -31,6 +31,7 @@ interface types {
   // list user
   // list doc
   listVocabs?: StudyCard[];
+  listSentences?: StudyCard[];
   listEx?: Ex[];
   currentEx?: Ex;
   // list ...
@@ -264,6 +265,35 @@ export const setVocab = createAsyncThunk(
   }
 );
 
+export const setSentence = createAsyncThunk(
+  'admin/study/setSentence',
+  async (data: StudyCard) => {
+    const docRef = await addDoc(collection(db, 'sentences'), {
+      display: data.display,
+      meaning: data.meaning,
+      imageFile: data.imageFile ? data.imageFile.name : '',
+      audio: data.audio ? data.audio.name : '',
+    });
+
+    if (data.imageFile) {
+      const imgRef = ref(storage, `images/${data.imageFile.name}`);
+      uploadBytes(imgRef, data.imageFile);
+    }
+    if (data.audio) {
+      const audioRef = ref(storage, `audios/${data.audio.name}`);
+      uploadBytes(audioRef, data.audio);
+    }
+    data.id = docRef.id;
+
+    // create temp object because data object make error (img, audio format) at payload
+    const temp: StudyCard = data;
+    temp.imageFile = data.imageFile ? data.imageFile.name : '';
+    temp.audio = data.audio ? data.audio.name : '';
+
+    return temp;
+  }
+);
+
 export const getVocabs = createAsyncThunk('admin/study/getVocabs', async () => {
   var list: StudyCard[] = [];
   const querySnapshot = await getDocs(collection(db, 'vocabs'));
@@ -275,6 +305,21 @@ export const getVocabs = createAsyncThunk('admin/study/getVocabs', async () => {
 
   return list;
 });
+
+export const getSentences = createAsyncThunk(
+  'admin/study/getSentences',
+  async () => {
+    var list: StudyCard[] = [];
+    const querySnapshot = await getDocs(collection(db, 'sentences'));
+    querySnapshot.forEach(async (e) => {
+      var item: StudyCard = e.data() as StudyCard;
+      item.id = e.id;
+      list.push(item);
+    });
+
+    return list;
+  }
+);
 
 export const getVocabsByTopic = createAsyncThunk(
   'admin/study/getVocabsByTopic',
@@ -330,6 +375,43 @@ export const updateVocab = createAsyncThunk(
   }) => {
     if (data.id) {
       const docRef = doc(db, 'vocabs', data.id);
+      await updateDoc(docRef, {
+        display: data.display,
+        meaning: data.meaning,
+        imageFile: data.imageFile ? data.imageFile.name : oldImage,
+        audio: data.audio ? data.audio.name : oldAudio,
+      });
+
+      if (data.imageFile) {
+        const imgRef = ref(storage, `images/${data.imageFile.name}`);
+        uploadBytes(imgRef, data.imageFile);
+      }
+      if (data.audio) {
+        const audioRef = ref(storage, `audios/${data.audio.name}`);
+        uploadBytes(audioRef, data.audio);
+      }
+
+      const temp: StudyCard = data;
+      temp.imageFile = data.imageFile ? data.imageFile.name : '';
+      temp.audio = data.audio ? data.audio.name : '';
+      return temp;
+    }
+  }
+);
+
+export const updateSentence = createAsyncThunk(
+  'admin/study/updateSentence',
+  async ({
+    data,
+    oldImage,
+    oldAudio,
+  }: {
+    data: StudyCard;
+    oldImage: any;
+    oldAudio: any;
+  }) => {
+    if (data.id) {
+      const docRef = doc(db, 'sentences', data.id);
       await updateDoc(docRef, {
         display: data.display,
         meaning: data.meaning,
@@ -532,13 +614,26 @@ const adminSlice = createSlice({
     builder.addCase(setVocab.fulfilled, (state, action) => {
       state.listVocabs?.push(action.payload as StudyCard);
     });
+    builder.addCase(setSentence.fulfilled, (state, action) => {
+      state.listSentences?.push(action.payload as StudyCard);
+    });
     builder.addCase(getVocabs.fulfilled, (state, action) => {
       state.listVocabs = action.payload as StudyCard[];
+    });
+    builder.addCase(getSentences.fulfilled, (state, action) => {
+      state.listSentences = action.payload as StudyCard[];
     });
     builder.addCase(updateVocab.fulfilled, (state, action) => {
       let i = state.listVocabs?.findIndex((o) => o.id === action.payload?.id);
       if (i && state.listVocabs)
         state.listVocabs[i] = action.payload as StudyCard;
+    });
+    builder.addCase(updateSentence.fulfilled, (state, action) => {
+      let i = state.listSentences?.findIndex(
+        (o) => o.id === action.payload?.id
+      );
+      if (i && state.listSentences)
+        state.listSentences[i] = action.payload as StudyCard;
     });
     builder.addCase(getExercises.fulfilled, (state, action) => {
       state.listEx = action.payload as Ex[];

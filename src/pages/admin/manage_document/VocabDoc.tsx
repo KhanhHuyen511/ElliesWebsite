@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import styles from './IndexDocument.module.scss';
 import classNames from 'classnames/bind';
 import { Button, Checkbox } from '../../../components';
-import { StudyCard } from '../../../types';
+import { StudyCard, StudyCardType } from '../../../types';
 import CreateVocab from './CreateVocabForm';
 import EditVocab from './EditVocabForm';
 const cx = classNames.bind(styles);
 
-const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
+const VocabDoc = ({
+  list,
+  type,
+}: {
+  list?: StudyCard[];
+  type: StudyCardType;
+}) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
   const [isOpenEditForm, setIsOpenEditForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
@@ -48,7 +54,7 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
         <thead>
           <tr>
             <th></th>
-            <th>Từ vựng</th>
+            <th>Tiếng Anh</th>
             <th>Nghĩa</th>
             <th>Audio</th>
           </tr>
@@ -76,6 +82,7 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
         </tbody>
       </table>
       <CreateVocab
+        type={type}
         onClose={() => setIsOpenForm(false)}
         isDisplay={isOpenForm}
       />
@@ -84,6 +91,7 @@ const VocabDoc = ({ list }: { list?: StudyCard[] }) => {
           vocab={selectedItem}
           onClose={() => setIsOpenEditForm(false)}
           isDisplay={isOpenEditForm}
+          type={type}
         ></EditVocab>
       )}
     </>

@@ -40,6 +40,8 @@ export interface Student {
 export enum StudyCardType {
   Vocab,
   Sentence,
+  Paraph,
+  Book,
 }
 
 export enum GameType {
