@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   addDoc,
+  arrayRemove,
   arrayUnion,
   collection,
   doc,
@@ -124,6 +125,23 @@ export const setALike = createAsyncThunk(
   }
 );
 
+export const removeALike = createAsyncThunk(
+  'forum/removeALike',
+  async (data: BlogLike) => {
+    const item = await getDoc(doc(db, 'forum', data.blogId));
+
+    const temp = item.data()?.likes as BlogLike[];
+
+    const temp1 = temp.find((o) => o.userId === data.userId);
+
+    await updateDoc(doc(db, 'forum', data.blogId), {
+      likes: arrayRemove(temp1),
+    });
+
+    return data;
+  }
+);
+
 const forumSlice = createSlice({
   name: 'forum',
   initialState,
@@ -140,6 +158,12 @@ const forumSlice = createSlice({
     });
     builder.addCase(setALike.fulfilled, (state, action) => {
       state.currentBlog?.likes?.unshift(action.payload);
+    });
+    builder.addCase(removeALike.fulfilled, (state, action) => {
+      state.currentBlog?.likes?.splice(
+        state.currentBlog.likes.indexOf(action.payload),
+        1
+      );
     });
   },
 });

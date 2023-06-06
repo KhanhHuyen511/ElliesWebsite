@@ -5,7 +5,12 @@ import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { getABlog, setAComment, setALike } from '../../redux/slice/forumSlice';
+import {
+  getABlog,
+  removeALike,
+  setAComment,
+  setALike,
+} from '../../redux/slice/forumSlice';
 import { Comment } from '../../components';
 import { BlogComment } from '../../types';
 const cx = classNames.bind(style);
@@ -51,6 +56,16 @@ const BlogDetail = () => {
                         createDate: new Date(),
                       })
                     );
+                  else {
+                    dispatch(
+                      removeALike({
+                        userId: userID,
+                        id: '',
+                        blogId: id,
+                        createDate: new Date(),
+                      })
+                    );
+                  }
                 }
               }}
             />
