@@ -47,9 +47,9 @@ const Comment = (prop: Prop) => {
             </p>
           </div>
           <p className={cx('create-date')}>
-            {/* {prop.data
+            {prop.data
               ? prop.data?.createDate.toLocaleDateString()
-              : Date.now().toLocaleString()} */}
+              : Date.now().toLocaleString()}
           </p>
         </div>
         <TextArea
@@ -80,6 +80,7 @@ const Comment = (prop: Prop) => {
                     })
                   ).then(() => setContent(''));
               }}
+              className={cx('send-icon')}
             />
           ) : (
             <div className={cx('like-wrapper')}>

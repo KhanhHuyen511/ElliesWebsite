@@ -70,17 +70,33 @@ export const getABlog = createAsyncThunk(
     if (user.name) item.userName = user.name;
     else item.userName = user.email;
 
-    if (item.comments)
+    if (item.comments) {
       await Promise.all(
         item?.comments?.map(async (e) => {
           const userCmt = query(
             collection(db, 'students'),
-            where('id', '==', item.userId)
+            where('id', '==', e.userId)
           );
 
-          e.userName = await (await getDocs(userCmt)).docs[0].data().name;
+          const snapshot = (await getDocs(userCmt)).docs[0].data();
+
+          e.userName = snapshot.name;
+
+          console.log(e);
+
+          if (e.createDate)
+            e.createDate = getDate(
+              (e.createDate as unknown as Timestamp).seconds
+            );
         })
       );
+
+      const sorted = [...item.comments].sort(
+        (a, b) => b.createDate.getTime() - a.createDate.getTime()
+      );
+
+      item.comments = sorted;
+    }
 
     return item;
   }
@@ -89,17 +105,11 @@ export const getABlog = createAsyncThunk(
 export const setAComment = createAsyncThunk(
   'forum/setAComment',
   async (data: BlogComment) => {
-    const querySnapshot = await getDoc(doc(db, 'forum', data.blogId));
-
-    console.log('hi' + data.blogId);
-
-    // const blog = querySnapshot.data() as Blog;
-
-    // blog.comments?.push(data);
-
     await updateDoc(doc(db, 'forum', data.blogId), {
       comments: arrayUnion(data),
     });
+
+    return data;
   }
 );
 
@@ -113,6 +123,9 @@ const forumSlice = createSlice({
     });
     builder.addCase(getABlog.fulfilled, (state, action) => {
       state.currentBlog = action.payload;
+    });
+    builder.addCase(setAComment.fulfilled, (state, action) => {
+      state.currentBlog?.comments?.unshift(action.payload);
     });
   },
 });

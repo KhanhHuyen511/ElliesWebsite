@@ -59,3 +59,12 @@
     color: var(--Y500);
   }
 }
+
+.send-icon {
+  cursor: pointer;
+
+  &:hover {
+    stroke-width: 2;
+    color: var(--Y500);
+  }
+}

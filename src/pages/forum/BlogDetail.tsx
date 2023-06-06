@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { getABlog, setAComment } from '../../redux/slice/forumSlice';
 import { Comment } from '../../components';
+import { BlogComment } from '../../types';
 const cx = classNames.bind(style);
 
 const BlogDetail = () => {
