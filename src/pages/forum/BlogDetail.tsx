@@ -44,7 +44,7 @@ const BlogDetail = () => {
               width={20}
               height={20}
               onClick={() => {
-                if (userID && id) {
+                if (userID && id && userID !== data?.userId) {
                   if (
                     data?.likes?.find((o) => o.userId === userID) === undefined
                   )
