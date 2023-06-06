@@ -48,6 +48,15 @@
 
   .like-icon {
     stroke: var(--G800);
+
+    &.active {
+      fill: var(--Y500);
+    }
+
+    &:hover {
+      stroke-width: 2;
+      cursor: pointer;
+    }
   }
 
   .like-number {

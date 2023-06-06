@@ -4,10 +4,16 @@ import style from './BlogCard.module.scss';
 import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 import { Blog } from '../../types';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { removeALike, setALike } from '../../redux/slice/forumSlice';
 const cx = classNames.bind(style);
 
 const BlogCard = ({ data }: { data: Blog }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const userID = useSelector((state: RootState) => state.auth.userID);
 
   return (
     <>
@@ -33,7 +39,39 @@ const BlogCard = ({ data }: { data: Blog }) => {
             </p>
           </div>
           <div className={cx('like-wrapper')}>
-            <HandThumbUpIcon className='like-icon' width={24} height={24} />
+            <HandThumbUpIcon
+              className={cx('like-icon', {
+                active: data?.likes?.find((o) => o.userId === userID),
+              })}
+              width={24}
+              height={24}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (userID && data.id && data.userId !== userID) {
+                  if (
+                    data?.likes?.find((o) => o.userId === userID) === undefined
+                  )
+                    dispatch(
+                      setALike({
+                        userId: userID,
+                        id: '',
+                        blogId: data.id,
+                        createDate: new Date(),
+                      })
+                    );
+                  else {
+                    dispatch(
+                      removeALike({
+                        userId: userID,
+                        id: '',
+                        blogId: data.id,
+                        createDate: new Date(),
+                      })
+                    );
+                  }
+                }
+              }}
+            />
             <p className={cx('like-number')}>{data.likes?.length}</p>
           </div>
         </div>

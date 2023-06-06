@@ -22,7 +22,7 @@ const Forum = () => {
 
   useEffect(() => {
     dispatch(getListBlogs());
-  }, [dispatch]);
+  }, [dispatch, list]);
 
   return (
     <>
@@ -70,14 +70,6 @@ const Forum = () => {
                 <BlogCard data={item} />
               </li>
             ))}
-
-          {/* {exs &&
-            exs.length > 0 &&
-            exs.map((item, index) => (
-              <li key={index} className={cx('item')}>
-                <ExCard data={item} />
-              </li>
-            ))} */}
         </ul>
       </div>
     </>
