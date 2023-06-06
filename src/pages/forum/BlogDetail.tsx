@@ -5,7 +5,7 @@ import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { getABlog, setAComment } from '../../redux/slice/forumSlice';
+import { getABlog, setAComment, setALike } from '../../redux/slice/forumSlice';
 import { Comment } from '../../components';
 import { BlogComment } from '../../types';
 const cx = classNames.bind(style);
@@ -15,6 +15,7 @@ const BlogDetail = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const userID = useSelector((state: RootState) => state.auth.userID);
   const data = useSelector((state: RootState) => state.forum.currentBlog);
 
   useEffect(() => {
@@ -32,11 +33,28 @@ const BlogDetail = () => {
           </span>
           <div className={cx('like-wrapper')}>
             <HandThumbUpIcon
-              className={cx('like-icon')}
+              className={cx('like-icon', {
+                active: data?.likes?.find((o) => o.userId === userID),
+              })}
               width={20}
               height={20}
+              onClick={() => {
+                if (userID && id) {
+                  if (
+                    data?.likes?.find((o) => o.userId === userID) === undefined
+                  )
+                    dispatch(
+                      setALike({
+                        userId: userID,
+                        id: '',
+                        blogId: id,
+                        createDate: new Date(),
+                      })
+                    );
+                }
+              }}
             />
-            <p className={cx('like-number')}>5</p>
+            <p className={cx('like-number')}>{data?.likes?.length}</p>
           </div>
         </div>
       </div>

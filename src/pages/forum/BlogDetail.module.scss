@@ -32,12 +32,22 @@
 
       .like-icon {
         stroke: var(--G800);
+
+        &.active {
+          fill: var(--Y500);
+        }
+
+        &:hover {
+          stroke-width: 2;
+          cursor: pointer;
+        }
       }
 
       .like-number {
         @include typo-body-small;
         font-weight: bold;
         color: var(--Y500);
+        user-select: none;
       }
     }
   }

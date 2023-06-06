@@ -13,7 +13,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { Blog, BlogComment, Student } from '../../types';
+import { Blog, BlogComment, BlogLike, Student } from '../../types';
 import { getDate } from '../../utils';
 
 interface types {
@@ -113,6 +113,17 @@ export const setAComment = createAsyncThunk(
   }
 );
 
+export const setALike = createAsyncThunk(
+  'forum/setALike',
+  async (data: BlogLike) => {
+    await updateDoc(doc(db, 'forum', data.blogId), {
+      likes: arrayUnion(data),
+    });
+
+    return data;
+  }
+);
+
 const forumSlice = createSlice({
   name: 'forum',
   initialState,
@@ -126,6 +137,9 @@ const forumSlice = createSlice({
     });
     builder.addCase(setAComment.fulfilled, (state, action) => {
       state.currentBlog?.comments?.unshift(action.payload);
+    });
+    builder.addCase(setALike.fulfilled, (state, action) => {
+      state.currentBlog?.likes?.unshift(action.payload);
     });
   },
 });
