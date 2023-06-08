@@ -10,6 +10,7 @@ export interface StudyRoute {
   id?: string;
   name?: string;
   vocabs?: StudyCard[];
+  cards?: string[];
   sentences?: StudyCard[];
   imageFile?: any;
 }
