@@ -149,7 +149,7 @@ export const setStudyRoute = createAsyncThunk(
 export const setStudyCard = createAsyncThunk(
   "admin/study/setCard",
   async (data: { path_id: string; route_id: string; card_id: string }) => {
-    const docRef = await updateDoc(
+    await updateDoc(
       doc(db, "study_paths", data.path_id, "study_routes", data.route_id),
       {
         cards: arrayUnion(data.card_id),
