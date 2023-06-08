@@ -3,6 +3,7 @@ import { Button, Checkbox, Input } from "../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
+  getSentences,
   getVocabs,
   getVocabsByTopic,
   setStudyCard,
@@ -34,10 +35,14 @@ const CreateStudyCard = (props: Props) => {
   const listVocabs: StudyCard[] | undefined = useSelector(
     (state: RootState) => state.admin.listVocabs
   );
+  const listSentences: StudyCard[] | undefined = useSelector(
+    (state: RootState) => state.admin.listSentences
+  );
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
 
   useEffect(() => {
     dispatch(getVocabs());
+    dispatch(getSentences());
   }, [dispatch]);
 
   return (
@@ -72,6 +77,21 @@ const CreateStudyCard = (props: Props) => {
               </thead>
               <tbody>
                 {listVocabs?.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Checkbox
+                        isChecked={selectedItem && item.id === selectedItem.id}
+                        onChecked={() => {
+                          setSelectedItem(item);
+                        }}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{item?.display}</td>
+                    <td>{item.meaning}</td>
+                  </tr>
+                ))}
+                {listSentences?.map((item, index) => (
                   <tr key={index}>
                     <td>
                       <Checkbox

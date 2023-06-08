@@ -95,6 +95,8 @@ export const getStudyRoute = createAsyncThunk(
       await Promise.all(
         route?.cards?.map(async (item) => {
           let snapshot = await getDoc(doc(db, "vocabs", item));
+          if (snapshot.data() === undefined)
+            snapshot = await getDoc(doc(db, "sentences", item));
           let card = snapshot.data() as StudyCard;
           card.id = snapshot.id;
           if (route.vocabs) route.vocabs = [card, ...route.vocabs];
