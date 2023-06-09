@@ -3,7 +3,11 @@ import { Doc, StudyCard, StudyCardType } from "../../../types";
 import { Button, Checkbox, Input, Popup } from "../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { getADocWithType, setVocab } from "../../../redux/slice/adminSlice";
+import {
+  getADocWithType,
+  setVocab,
+  updateDocument,
+} from "../../../redux/slice/adminSlice";
 import { Col, Row } from "react-flexbox-grid";
 import style from "./IndexDocument.module.scss";
 import classNames from "classnames/bind";
@@ -28,7 +32,7 @@ const EditDocForm = () => {
         if (data.description) setDescription(data.description);
       }
     }
-  }, [dispatch]);
+  }, [dispatch, id, data?.title, data?.description]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -121,6 +125,31 @@ const EditDocForm = () => {
               label={"Mô tả"}
               placeholder={"abc"}
             ></Input>
+            <Button
+              isPrimary={false}
+              onClick={() => {
+                if (data) {
+                  setTitle(data?.title);
+                  if (data.description) setDescription(data?.description);
+                }
+              }}
+            >
+              Huỷ
+            </Button>
+            <Button
+              isPrimary
+              onClick={() => {
+                if (data)
+                  dispatch(
+                    updateDocument({
+                      oldData: data,
+                      data: { ...data, title, description },
+                    })
+                  );
+              }}
+            >
+              Cập nhật
+            </Button>
           </Col>
         </Row>
       </div>

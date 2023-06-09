@@ -437,6 +437,24 @@ export const getVocabsByTopic = createAsyncThunk(
   }
 );
 
+export const updateDocument = createAsyncThunk(
+  "admin/study/updateDocument",
+  async ({ oldData, data }: { oldData: Doc; data: Doc }) => {
+    if (data.id) {
+      const docRef = doc(db, "docs", data.id);
+      await updateDoc(docRef, {
+        title: data.title === oldData.title ? oldData.title : data.title,
+        description:
+          data.description === oldData.description
+            ? oldData.description
+            : data.description,
+      });
+
+      return data;
+    }
+  }
+);
+
 export const updateVocab = createAsyncThunk(
   "admin/study/updateVocab",
   async ({
@@ -707,6 +725,9 @@ const adminSlice = createSlice({
     });
     builder.addCase(getSentences.fulfilled, (state, action) => {
       state.listSentences = action.payload as StudyCard[];
+    });
+    builder.addCase(updateDocument.fulfilled, (state, action) => {
+      state.currentDoc = action.payload as Doc;
     });
     builder.addCase(updateVocab.fulfilled, (state, action) => {
       let i = state.listVocabs?.findIndex((o) => o.id === action.payload?.id);
