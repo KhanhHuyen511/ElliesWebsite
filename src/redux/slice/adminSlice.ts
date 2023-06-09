@@ -19,6 +19,7 @@ import {
   ExDetail,
   GameType,
   StudyCard,
+  StudyCardType,
   StudyPath,
   StudyRoute,
 } from "../../types";
@@ -30,8 +31,9 @@ interface types {
   listStudyPaths: StudyPath[];
   currentStudyPath: StudyPath;
   currentStudyRoute: StudyCard;
+  listDocs?: Doc[];
+  currentDoc?: Doc;
   // list user
-  // list doc
   listVocabs?: StudyCard[];
   listSentences?: StudyCard[];
   listEx?: Ex[];
@@ -216,9 +218,84 @@ export const removeStudyCard = createAsyncThunk(
 
 //#region [DOCUMENT]
 
+export const getAllDocs = createAsyncThunk(
+  "admin/document/getAllDocs",
+  async () => {
+    var docs: Doc[] = [];
+    const querySnapshot = await getDocs(collection(db, "docs"));
+    querySnapshot.forEach(async (e) => {
+      var item: Doc = e.data() as Doc;
+      item.id = e.id;
+      docs.push(item);
+    });
+
+    return docs;
+  }
+);
+
+export const getADocWithType = createAsyncThunk(
+  "admin/document/getADoc",
+  async ({ doc_id, type }: { doc_id: string; type: string }) => {
+    const querySnapshot = await getDoc(doc(db, "docs", doc_id));
+
+    const data = querySnapshot.data() as Doc;
+    data.id = querySnapshot.id;
+
+    if (data.listItemIds)
+      await Promise.all(
+        data?.listItemIds?.map(async (item) => {
+          let snapshot;
+          // console.log(StudyCardType.Vocab.toString());
+          switch (type) {
+            case StudyCardType[0]:
+              snapshot = await getDoc(doc(db, "vocabs", item));
+              break;
+            case StudyCardType[1]:
+              snapshot = await getDoc(doc(db, "sentences", item));
+              break;
+            default:
+              break;
+          }
+          if (snapshot) {
+            console.log(snapshot.data());
+            let card = snapshot.data() as StudyCard;
+            card.id = snapshot.id;
+            if (data.listItems) data.listItems = [card, ...data.listItems];
+            else data.listItems = [card];
+          }
+        })
+      );
+
+    return data;
+  }
+);
+
+export const setDocument = createAsyncThunk(
+  "admin/study/setDocCard",
+  async ({ data }: { data: Doc }) => {
+    await addDoc(collection(db, "docs"), {
+      title: data.title,
+      description: data.description,
+      createDate: new Date(),
+    });
+
+    return data;
+  }
+);
+
 export const setVocab = createAsyncThunk(
   "admin/study/setVocab",
-  async (data: StudyCard) => {
+  async ({
+    data,
+    type,
+    doc_id,
+  }: {
+    data: StudyCard;
+    type: string;
+    doc_id: string;
+  }) => {
+    console.log(doc_id);
+
     const docRef = await addDoc(collection(db, "vocabs"), {
       display: data.display,
       meaning: data.meaning,
@@ -241,13 +318,27 @@ export const setVocab = createAsyncThunk(
     temp.imageFile = data.imageFile ? data.imageFile.name : "";
     temp.audio = data.audio ? data.audio.name : "";
 
+    // add to doc
+
+    await updateDoc(doc(db, "docs", doc_id), {
+      listItemIds: arrayUnion(data.id),
+    });
+
     return temp;
   }
 );
 
 export const setSentence = createAsyncThunk(
   "admin/study/setSentence",
-  async (data: StudyCard) => {
+  async ({
+    data,
+    type,
+    doc_id,
+  }: {
+    data: StudyCard;
+    type: string;
+    doc_id: string;
+  }) => {
     const docRef = await addDoc(collection(db, "sentences"), {
       display: data.display,
       meaning: data.meaning,
@@ -269,6 +360,10 @@ export const setSentence = createAsyncThunk(
     const temp: StudyCard = data;
     temp.imageFile = data.imageFile ? data.imageFile.name : "";
     temp.audio = data.audio ? data.audio.name : "";
+
+    await updateDoc(doc(db, "docs", doc_id), {
+      sentences: arrayUnion(data),
+    });
 
     return temp;
   }
@@ -591,8 +686,18 @@ const adminSlice = createSlice({
     builder.addCase(setStudyRoute.fulfilled, (state, action) => {
       state.currentStudyPath.studyRoutes?.push(action.payload as StudyRoute);
     });
+    builder.addCase(getAllDocs.fulfilled, (state, action) => {
+      state.listDocs = action.payload as Doc[];
+    });
+    builder.addCase(getADocWithType.fulfilled, (state, action) => {
+      state.currentDoc = action.payload as Doc;
+    });
+    builder.addCase(setDocument.fulfilled, (state, action) => {
+      state.listDocs?.push(action.payload as Doc);
+    });
     builder.addCase(setVocab.fulfilled, (state, action) => {
       state.listVocabs?.push(action.payload as StudyCard);
+      state.currentDoc?.listItems?.push(action.payload as StudyCard);
     });
     builder.addCase(setSentence.fulfilled, (state, action) => {
       state.listSentences?.push(action.payload as StudyCard);
@@ -607,6 +712,11 @@ const adminSlice = createSlice({
       let i = state.listVocabs?.findIndex((o) => o.id === action.payload?.id);
       if (i && state.listVocabs)
         state.listVocabs[i] = action.payload as StudyCard;
+      let e = state.currentDoc?.listItems?.findIndex(
+        (o) => o.id === action.payload?.id
+      );
+      if (e && state.currentDoc?.listItems)
+        state.currentDoc.listItems[e] = action.payload as StudyCard;
     });
     builder.addCase(updateSentence.fulfilled, (state, action) => {
       let i = state.listSentences?.findIndex(

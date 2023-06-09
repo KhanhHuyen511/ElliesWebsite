@@ -53,9 +53,11 @@ export enum GameType {
 export interface Doc {
   id: string;
   title: string; // topic
-  description: string;
+  description?: string;
+  listItemIds?: string[];
   listItems?: StudyCard[];
   createDate?: Date;
+  type?: StudyCardType;
 }
 
 export interface Ex {

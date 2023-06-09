@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
-import styles from './IndexDocument.module.scss';
-import classNames from 'classnames/bind';
-import { Button, Checkbox } from '../../../components';
-import { StudyCard, StudyCardType } from '../../../types';
-import CreateVocab from './CreateVocabForm';
-import EditVocab from './EditVocabForm';
+import React, { useState } from "react";
+import styles from "./IndexDocument.module.scss";
+import classNames from "classnames/bind";
+import { Button, Checkbox } from "../../../components";
+import { Doc, StudyCard, StudyCardType } from "../../../types";
+import CreateDocForm from "./CreateDocForm";
+import EditDocForm from "./EditDocForm";
+import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
-const VocabDoc = ({
-  list,
-  type,
-}: {
-  list?: StudyCard[];
-  type: StudyCardType;
-}) => {
+const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
   const [isOpenEditForm, setIsOpenEditForm] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<StudyCard>();
+  const [selectedItem, setSelectedItem] = useState<Doc>();
 
   const getCheckedItems = (item: StudyCard): boolean => {
     return selectedItem === item;
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className={cx('handler')}>
+      <div className={cx("handler")}>
         <Button
           isPrimary={false}
           onClick={() => {
@@ -50,13 +47,16 @@ const VocabDoc = ({
               onChecked={() => setSelectAllItems(!isSelectedAll)}
             ></Checkbox> */}
       </div>
-      <table className={cx('table')}>
+      {/* <Button isPrimary={false} onClick={() => {}}>
+        Tạo bộ sưu tập theo chủ đề
+      </Button> */}
+      <table className={cx("table")}>
         <thead>
           <tr>
             <th></th>
-            <th>Tiếng Anh</th>
-            <th>Nghĩa</th>
-            <th>Audio</th>
+            <th>Chủ đề</th>
+            <th>Số lượng</th>
+            {/* <th>Audio</th> */}
           </tr>
         </thead>
         <tbody>
@@ -74,26 +74,23 @@ const VocabDoc = ({
                     ></Checkbox>
                   )}
                 </td>
-                <td>{item.display}</td>
-                <td>{item.meaning}</td>
-                <td>{item.audio}</td>
+                <td>{item.title}</td>
+                <td>{item.listItemIds?.length}</td>
+                {/* <td>{item.audio}</td> */}
               </tr>
             ))}
         </tbody>
       </table>
-      <CreateVocab
+
+      <CreateDocForm
         type={type}
         onClose={() => setIsOpenForm(false)}
         isDisplay={isOpenForm}
-      />
-      {isOpenEditForm && selectedItem && (
-        <EditVocab
-          vocab={selectedItem}
-          onClose={() => setIsOpenEditForm(false)}
-          isDisplay={isOpenEditForm}
-          type={type}
-        ></EditVocab>
-      )}
+      ></CreateDocForm>
+
+      {isOpenEditForm &&
+        selectedItem &&
+        navigate(`/doc_detail/${selectedItem.id}/${type}`)}
     </>
   );
 };
