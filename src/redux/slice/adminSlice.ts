@@ -260,8 +260,19 @@ export const getADocWithType = createAsyncThunk(
             console.log(snapshot.data());
             let card = snapshot.data() as StudyCard;
             card.id = snapshot.id;
-            if (data.listItems) data.listItems = [card, ...data.listItems];
-            else data.listItems = [card];
+
+            switch (type) {
+              case StudyCardType[0]:
+                if (data.vocabs) data.vocabs = [card, ...data.vocabs];
+                else data.vocabs = [card];
+                break;
+              case StudyCardType[1]:
+                if (data.sentences) data.sentences = [card, ...data.sentences];
+                else data.sentences = [card];
+                break;
+              default:
+                break;
+            }
           }
         })
       );
@@ -416,8 +427,8 @@ export const getVocabsByTopic = createAsyncThunk(
         (data?.data()?.createDate as Timestamp).seconds
       );
 
-    if (item.listItems) {
-      const vocabs: string[] = item.listItems as string[];
+    if (item.vocabs) {
+      const vocabs: string[] = item.vocabs as string[];
       let met: StudyCard[] = [];
 
       await Promise.all(
@@ -430,7 +441,7 @@ export const getVocabsByTopic = createAsyncThunk(
         })
       );
 
-      item.listItems = met;
+      item.vocabs = met;
 
       return met;
     }
@@ -715,7 +726,7 @@ const adminSlice = createSlice({
     });
     builder.addCase(setVocab.fulfilled, (state, action) => {
       state.listVocabs?.push(action.payload as StudyCard);
-      state.currentDoc?.listItems?.push(action.payload as StudyCard);
+      state.currentDoc?.vocabs?.push(action.payload as StudyCard);
     });
     builder.addCase(setSentence.fulfilled, (state, action) => {
       state.listSentences?.push(action.payload as StudyCard);
@@ -733,11 +744,11 @@ const adminSlice = createSlice({
       let i = state.listVocabs?.findIndex((o) => o.id === action.payload?.id);
       if (i && state.listVocabs)
         state.listVocabs[i] = action.payload as StudyCard;
-      let e = state.currentDoc?.listItems?.findIndex(
+      let e = state.currentDoc?.vocabs?.findIndex(
         (o) => o.id === action.payload?.id
       );
-      if (e && state.currentDoc?.listItems)
-        state.currentDoc.listItems[e] = action.payload as StudyCard;
+      if (e && state.currentDoc?.vocabs)
+        state.currentDoc.vocabs[e] = action.payload as StudyCard;
     });
     builder.addCase(updateSentence.fulfilled, (state, action) => {
       let i = state.listSentences?.findIndex(

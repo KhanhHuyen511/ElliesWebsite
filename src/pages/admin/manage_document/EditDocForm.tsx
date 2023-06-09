@@ -85,8 +85,8 @@ const EditDocForm = () => {
                 </tr>
               </thead>
               <tbody>
-                {data?.listItems &&
-                  data?.listItems.map((item, index) => (
+                {data?.vocabs &&
+                  data?.vocabs.map((item, index) => (
                     <tr key={index}>
                       <td>
                         {item.id && (

@@ -54,8 +54,10 @@ export interface Doc {
   id: string;
   title: string; // topic
   description?: string;
+  vocabs?: StudyCard[];
+  sentences?: StudyCard[];
   listItemIds?: string[];
-  listItems?: StudyCard[];
+  // listItems?: StudyCard[];
   createDate?: Date;
   type?: StudyCardType;
 }

@@ -78,8 +78,7 @@ const IndexDocument = () => {
           {currentType === "vocabs" ? (
             <VocabDoc list={listDocVocab} type={StudyCardType.Vocab} />
           ) : currentType === "sentences" ? (
-            // <VocabDoc list={listSentences} type={StudyCardType.Sentence} />
-            <></>
+            <VocabDoc list={listDocVocab} type={StudyCardType.Sentence} />
           ) : (
             // <VocabDoc list={listSentences} />
             <></>
