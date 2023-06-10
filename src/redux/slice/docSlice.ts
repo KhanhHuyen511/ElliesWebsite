@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { Doc, StudyCard } from "../../types";
+import { Doc, StudyCard, StudyCardType } from "../../types";
 import { getDate } from "../../utils";
 
 interface types {
@@ -76,6 +76,58 @@ export const getADoc = createAsyncThunk("doc/getDoc", async (id: string) => {
   return item;
 });
 
+export const getADocWithType = createAsyncThunk(
+  "doc/getDocWithType",
+  async ({ id, type }: { id: string; type: string }) => {
+    const snapshot = await getDoc(doc(db, "docs", id));
+
+    const data: Doc = snapshot.data() as Doc;
+    data.id = id;
+    if (data.createDate)
+      data.createDate = getDate(
+        (snapshot?.data()?.createDate as Timestamp).seconds
+      );
+
+    if (data.listItemIds)
+      await Promise.all(
+        data.listItemIds.map(async (item) => {
+          switch (type) {
+            case StudyCardType.Vocab.toString():
+              await getDoc(doc(db, "vocabs", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.vocabs) data.vocabs = [card, ...data.vocabs];
+                  else data.vocabs = [card];
+                }
+              });
+              break;
+            case StudyCardType.Sentence.toString():
+              await getDoc(doc(db, "sentences", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.sentences)
+                    data.sentences = [card, ...data.sentences];
+                  else data.sentences = [card];
+                }
+              });
+              break;
+            default:
+              break;
+          }
+        })
+      );
+
+    console.log(data);
+    return data;
+  }
+);
+
 export const getListVocabs = createAsyncThunk(
   "doc/getVocabs",
   async (list: StudyCard[]) => {
@@ -99,6 +151,9 @@ const docSlice = createSlice({
       state.listDocs = action.payload as Doc[];
     });
     builder.addCase(getADoc.fulfilled, (state, action) => {
+      state.currentDoc = action.payload;
+    });
+    builder.addCase(getADocWithType.fulfilled, (state, action) => {
       state.currentDoc = action.payload;
     });
     builder.addCase(getListVocabs.fulfilled, (state, action) => {

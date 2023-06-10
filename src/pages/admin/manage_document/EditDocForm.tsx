@@ -42,7 +42,7 @@ const EditDocForm = () => {
         }
       }
     }
-  }, [dispatch, id, type, data?.title]);
+  }, [dispatch, id, type, data?.title, data?.description]);
 
   const [typeCard, setTypeCard] = useState<StudyCardType>();
   const [list, setList] = useState<StudyCard[]>();
