@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Input } from "../../../components";
+import { useEffect, useState } from "react";
+import { Checkbox } from "../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
-  getSentences,
-  getVocabs,
-  getVocabsByTopic,
+  getSentencesWithTopic,
+  getVocabsWithTopic,
   setStudyCard,
 } from "../../../redux/slice/adminSlice";
 import Popup from "../../../components/popup/Popup";
@@ -20,16 +19,12 @@ interface Props {
   onClose: () => void;
   pathID: string;
   routeID: string;
+  topic: string;
   isDisplay: boolean;
 }
 
 const CreateStudyCard = (props: Props) => {
   const dispatch = useDispatch<AppDispatch>();
-
-  // const [display, setDisplay] = useState<string>("");
-  // const [meaning, setMeaning] = useState<string>("");
-  // const [image, setImage] = useState<any>();
-  // const [audio, setAudio] = useState<any>();
 
   // load list vocab in special topic. (ex: Greeting)
   const listVocabs: StudyCard[] | undefined = useSelector(
@@ -39,10 +34,11 @@ const CreateStudyCard = (props: Props) => {
     (state: RootState) => state.admin.listSentences
   );
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
+  console.log(selectedItem);
 
   useEffect(() => {
-    dispatch(getVocabs());
-    dispatch(getSentences());
+    dispatch(getVocabsWithTopic(props.topic));
+    dispatch(getSentencesWithTopic(props.topic));
   }, [dispatch]);
 
   return (
@@ -65,7 +61,7 @@ const CreateStudyCard = (props: Props) => {
         isDisplay={props.isDisplay}
       >
         <Row>
-          <Col md={6}>
+          <Col>
             <table className={cx("table")}>
               <thead>
                 <tr>
@@ -88,7 +84,7 @@ const CreateStudyCard = (props: Props) => {
                     </td>
                     <td>{index + 1}</td>
                     <td>{item?.display}</td>
-                    <td>{item.meaning}</td>
+                    <td>{item?.meaning}</td>
                   </tr>
                 ))}
                 {listSentences?.map((item, index) => (
@@ -103,13 +99,12 @@ const CreateStudyCard = (props: Props) => {
                     </td>
                     <td>{index + 1}</td>
                     <td>{item?.display}</td>
-                    <td>{item.meaning}</td>
+                    <td>{item?.meaning}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </Col>
-          <Col md={6}></Col>
         </Row>
       </Popup>
     </>

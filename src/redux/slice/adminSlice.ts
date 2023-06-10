@@ -389,6 +389,30 @@ export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
   return list;
 });
 
+export const getVocabsWithTopic = createAsyncThunk(
+  "admin/study/getVocabsWithTopic",
+  async (topic: string) => {
+    var list: StudyCard[] = [];
+    const q = query(collection(db, "docs"), where("title", "==", topic));
+    const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
+    const l = aDoc.listItemIds;
+
+    if (l)
+      await Promise.all(
+        l.map(async (item) => {
+          let snapshot = await getDoc(doc(db, "vocabs", item));
+          let card: StudyCard = {
+            ...(snapshot.data() as StudyCard),
+            id: snapshot.id,
+          };
+          if (snapshot.data()) list.push(card as StudyCard);
+        })
+      );
+
+    return list;
+  }
+);
+
 export const getSentences = createAsyncThunk(
   "admin/study/getSentences",
   async () => {
@@ -404,46 +428,69 @@ export const getSentences = createAsyncThunk(
   }
 );
 
-export const getVocabsByTopic = createAsyncThunk(
-  "admin/study/getVocabsByTopic",
-  async (title: string) => {
+export const getSentencesWithTopic = createAsyncThunk(
+  "admin/study/getSentencesWithTopic",
+  async (topic: string) => {
     var list: StudyCard[] = [];
-    const q = query(collection(db, "docs"), where("title", "==", title));
-    const ref = await (await getDocs(q)).docs[0];
-    const document: Doc = (await ref.data()) as Doc;
-    document.id = ref.id;
+    const q = query(collection(db, "docs"), where("title", "==", topic));
+    const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
+    const l = aDoc.listItemIds;
 
-    const id = ref.id;
-
-    const data = await getDoc(doc(db, "docs", id));
-
-    const item: Doc = data.data() as Doc;
-    item.id = id;
-    if (item.createDate)
-      item.createDate = getDate(
-        (data?.data()?.createDate as Timestamp).seconds
-      );
-
-    if (item.vocabs) {
-      const vocabs: string[] = item.vocabs as string[];
-      let met: StudyCard[] = [];
-
+    if (l)
       await Promise.all(
-        vocabs.map(async (vocab) => {
-          await getDoc(doc(db, "vocabs", vocab)).then((d) => {
-            const dt = d.data() as StudyCard;
-            dt.id = d.id;
-            met = [...met, dt];
-          });
+        l.map(async (item) => {
+          let snapshot = await getDoc(doc(db, "sentences", item));
+          let card: StudyCard = {
+            ...(snapshot.data() as StudyCard),
+            id: snapshot.id,
+          };
+          if (snapshot.data()) list.push(card as StudyCard);
         })
       );
 
-      item.vocabs = met;
-
-      return met;
-    }
+    return list;
   }
 );
+
+// export const getVocabsByTopic = createAsyncThunk(
+//   "admin/study/getVocabsByTopic",
+//   async (title: string) => {
+//     const q = query(collection(db, "docs"), where("title", "==", title));
+//     const ref = (await getDocs(q)).docs[0];
+//     const item: Doc = ref.data() as Doc;
+//     // document.id = ref.id;
+
+//     // const id = ref.id;
+
+//     // const data = await getDoc(doc(db, "docs", id));
+
+//     // const item: Doc = data.data() as Doc;
+//     // item.id = id;
+//     // if (item.createDate)
+//     //   item.createDate = getDate(
+//     //     (data?.data()?.createDate as Timestamp).seconds
+//     //   );
+
+//     if (item.listItemIds) {
+//       // const vocabs: string[] = item.listItemIds as string[];
+//       let met: StudyCard[] = [];
+
+//       await Promise.all(
+//         item.listItemIds.map(async (vocab) => {
+//           await getDoc(doc(db, "vocabs", vocab)).then((d) => {
+//             const dt = d.data() as StudyCard;
+//             dt.id = d.id;
+//             met = [...met, dt];
+//           });
+//         })
+//       );
+
+//       // item.vocabs = met;
+
+//       return met;
+//     }
+//   }
+// );
 
 export const updateDocument = createAsyncThunk(
   "admin/study/updateDocument",
@@ -731,7 +778,13 @@ const adminSlice = createSlice({
     builder.addCase(getVocabs.fulfilled, (state, action) => {
       state.listVocabs = action.payload as StudyCard[];
     });
+    builder.addCase(getVocabsWithTopic.fulfilled, (state, action) => {
+      state.listVocabs = action.payload as StudyCard[];
+    });
     builder.addCase(getSentences.fulfilled, (state, action) => {
+      state.listSentences = action.payload as StudyCard[];
+    });
+    builder.addCase(getSentencesWithTopic.fulfilled, (state, action) => {
       state.listSentences = action.payload as StudyCard[];
     });
     builder.addCase(updateDocument.fulfilled, (state, action) => {
@@ -760,9 +813,9 @@ const adminSlice = createSlice({
     builder.addCase(getAExercise.fulfilled, (state, action) => {
       state.currentEx = action.payload as Ex;
     });
-    builder.addCase(getVocabsByTopic.fulfilled, (state, action) => {
-      state.listVocabs = action.payload as StudyCard[];
-    });
+    // builder.addCase(getVocabsByTopic.fulfilled, (state, action) => {
+    //   state.listVocabs = action.payload as StudyCard[];
+    // });
     builder.addCase(setAExDetail.fulfilled, (state, action) => {
       state.currentEx?.listItems?.push(action.payload as ExDetail);
     });

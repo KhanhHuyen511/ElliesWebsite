@@ -254,6 +254,7 @@ const PathDetail = () => {
         <CreateStudyCard
           pathID={id}
           routeID={selectRoute}
+          topic={topic ? topic : ""}
           onClose={() => {
             setIsOpenCardForm(false);
           }}
