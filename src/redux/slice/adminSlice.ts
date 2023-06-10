@@ -304,8 +304,6 @@ export const setVocab = createAsyncThunk(
     type: StudyCardType;
     doc_id: string;
   }) => {
-    console.log(doc_id);
-
     const docRef = await addDoc(collection(db, "vocabs"), {
       display: data.display,
       meaning: data.meaning,

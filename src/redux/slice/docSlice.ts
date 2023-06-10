@@ -123,7 +123,6 @@ export const getADocWithType = createAsyncThunk(
         })
       );
 
-    console.log(data);
     return data;
   }
 );

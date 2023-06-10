@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Student } from '../../types';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Student } from "../../types";
 import {
   collection,
   doc,
@@ -8,10 +8,10 @@ import {
   query,
   updateDoc,
   where,
-} from 'firebase/firestore';
-import { db, storage } from '../../firebase/config';
-import { getDate } from '../../utils';
-import { ref, uploadBytes } from 'firebase/storage';
+} from "firebase/firestore";
+import { db, storage } from "../../firebase/config";
+import { getDate } from "../../utils";
+import { ref, uploadBytes } from "firebase/storage";
 
 interface types {
   currentUser?: Student;
@@ -21,10 +21,10 @@ const initialState: types = {};
 
 // Write reducer get Doc
 export const getCurrentStudent = createAsyncThunk(
-  'student/get',
+  "student/get",
   async (userID: string) => {
     var stu: Student;
-    const q = query(collection(db, 'students'), where('id', '==', userID));
+    const q = query(collection(db, "students"), where("id", "==", userID));
     const querySnapshot = (await getDocs(q)).docs[0];
     stu = querySnapshot.data() as Student;
 
@@ -36,9 +36,9 @@ export const getCurrentStudent = createAsyncThunk(
 );
 
 export const updateCurrentStudent = createAsyncThunk(
-  'student/update',
+  "student/update",
   async ({ data, oldData }: { data: Student; oldData: Student }) => {
-    const q = query(collection(db, 'students'), where('id', '==', data.id));
+    const q = query(collection(db, "students"), where("id", "==", data.id));
     const querySnapshot = (await getDocs(q)).docs[0];
 
     await updateDoc(querySnapshot.ref, {
@@ -54,9 +54,9 @@ export const updateCurrentStudent = createAsyncThunk(
 );
 
 export const updateAvatar = createAsyncThunk(
-  'student/updateAvatar',
+  "student/updateAvatar",
   async ({ data, newAvatar }: { data: Student; newAvatar: File }) => {
-    const q = query(collection(db, 'students'), where('id', '==', data.id));
+    const q = query(collection(db, "students"), where("id", "==", data.id));
     const querySnapshot = (await getDocs(q)).docs[0];
 
     await updateDoc(querySnapshot.ref, {
@@ -66,14 +66,12 @@ export const updateAvatar = createAsyncThunk(
     const imgRef = ref(storage, `images/${newAvatar.name}`);
     uploadBytes(imgRef, newAvatar);
 
-    console.log(newAvatar);
-
     return { ...data, avatar: newAvatar };
   }
 );
 
 const studentSlice = createSlice({
-  name: 'student',
+  name: "student",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
