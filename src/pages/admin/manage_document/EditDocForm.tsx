@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Doc, StudyCard, StudyCardType } from "../../../types";
-import { Button, Checkbox, Input, Popup } from "../../../components";
+import { useEffect, useState } from "react";
+import { StudyCard, StudyCardType } from "../../../types";
+import { Button, Checkbox, Input } from "../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
   getADocWithType,
-  setVocab,
   updateDocument,
 } from "../../../redux/slice/adminSlice";
 import { Col, Row } from "react-flexbox-grid";
 import style from "./IndexDocument.module.scss";
 import classNames from "classnames/bind";
-import { getADoc } from "../../../redux/slice/docSlice";
 import CreateVocab from "./CreateVocabForm";
 import EditVocab from "./EditVocabForm";
 import { useParams } from "react-router-dom";
@@ -25,15 +23,29 @@ const EditDocForm = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (id) {
-      dispatch(getADocWithType({ doc_id: id, type: "Vocab" }));
+    if (id && type) {
+      dispatch(getADocWithType({ doc_id: id, type }));
       if (data) {
         setTitle(data.title);
         if (data.description) setDescription(data.description);
+        switch (type) {
+          case StudyCardType.Vocab.toString():
+            setTypeCard(StudyCardType.Vocab);
+            setList(data.vocabs);
+            break;
+          case StudyCardType.Sentence.toString():
+            setTypeCard(StudyCardType.Sentence);
+            setList(data.sentences);
+            break;
+          default:
+            break;
+        }
       }
     }
-  }, [dispatch, id, data?.title, data?.description]);
+  }, [dispatch, id, type, data?.title]);
 
+  const [typeCard, setTypeCard] = useState<StudyCardType>();
+  const [list, setList] = useState<StudyCard[]>();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isOpenCard, setIsOpenCard] = useState(false);
@@ -85,8 +97,8 @@ const EditDocForm = () => {
                 </tr>
               </thead>
               <tbody>
-                {data?.vocabs &&
-                  data?.vocabs.map((item, index) => (
+                {list &&
+                  list.map((item, index) => (
                     <tr key={index}>
                       <td>
                         {item.id && (
@@ -154,9 +166,9 @@ const EditDocForm = () => {
         </Row>
       </div>
 
-      {id && (
+      {id && typeCard !== undefined && (
         <CreateVocab
-          type={StudyCardType.Vocab}
+          type={typeCard}
           onClose={() => setIsOpenCard(false)}
           isDisplay={isOpenCard}
           doc_id={id}

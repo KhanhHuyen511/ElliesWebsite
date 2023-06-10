@@ -10,7 +10,6 @@ const cx = classNames.bind(styles);
 
 const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
-  const [isOpenEditForm, setIsOpenEditForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Doc>();
 
   const getCheckedItems = (item: StudyCard): boolean => {
@@ -25,7 +24,8 @@ const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
         <Button
           isPrimary={false}
           onClick={() => {
-            setIsOpenEditForm(true);
+            if (selectedItem)
+              navigate(`/doc_detail/${selectedItem.id}/${type}`);
           }}
         >
           Xem chi tiết
@@ -87,10 +87,6 @@ const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
         onClose={() => setIsOpenForm(false)}
         isDisplay={isOpenForm}
       ></CreateDocForm>
-
-      {isOpenEditForm &&
-        selectedItem &&
-        navigate(`/doc_detail/${selectedItem.id}/${type}`)}
     </>
   );
 };

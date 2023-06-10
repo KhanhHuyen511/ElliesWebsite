@@ -243,40 +243,40 @@ export const getADocWithType = createAsyncThunk(
 
     if (data.listItemIds)
       await Promise.all(
-        data?.listItemIds?.map(async (item) => {
-          let snapshot;
-          // console.log(StudyCardType.Vocab.toString());
+        data.listItemIds.map(async (item) => {
           switch (type) {
-            case StudyCardType[0]:
-              snapshot = await getDoc(doc(db, "vocabs", item));
+            case StudyCardType.Vocab.toString():
+              await getDoc(doc(db, "vocabs", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.vocabs) data.vocabs = [card, ...data.vocabs];
+                  else data.vocabs = [card];
+                }
+              });
               break;
-            case StudyCardType[1]:
-              snapshot = await getDoc(doc(db, "sentences", item));
+            case StudyCardType.Sentence.toString():
+              await getDoc(doc(db, "sentences", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.sentences)
+                    data.sentences = [card, ...data.sentences];
+                  else data.sentences = [card];
+                }
+              });
               break;
             default:
               break;
           }
-          if (snapshot) {
-            console.log(snapshot.data());
-            let card = snapshot.data() as StudyCard;
-            card.id = snapshot.id;
-
-            switch (type) {
-              case StudyCardType[0]:
-                if (data.vocabs) data.vocabs = [card, ...data.vocabs];
-                else data.vocabs = [card];
-                break;
-              case StudyCardType[1]:
-                if (data.sentences) data.sentences = [card, ...data.sentences];
-                else data.sentences = [card];
-                break;
-              default:
-                break;
-            }
-          }
         })
       );
 
+    console.log(data);
     return data;
   }
 );
@@ -302,7 +302,7 @@ export const setVocab = createAsyncThunk(
     doc_id,
   }: {
     data: StudyCard;
-    type: string;
+    type: StudyCardType;
     doc_id: string;
   }) => {
     console.log(doc_id);
@@ -347,7 +347,7 @@ export const setSentence = createAsyncThunk(
     doc_id,
   }: {
     data: StudyCard;
-    type: string;
+    type: StudyCardType;
     doc_id: string;
   }) => {
     const docRef = await addDoc(collection(db, "sentences"), {
@@ -373,7 +373,7 @@ export const setSentence = createAsyncThunk(
     temp.audio = data.audio ? data.audio.name : "";
 
     await updateDoc(doc(db, "docs", doc_id), {
-      sentences: arrayUnion(data),
+      listItemIds: arrayUnion(data.id),
     });
 
     return temp;

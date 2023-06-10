@@ -39,19 +39,23 @@ const CreateVocabForm = (props: Props) => {
                   imageFile: image,
                   audio,
                 },
-                type: "Vocab",
+                type: StudyCardType.Vocab,
                 doc_id: props.doc_id,
               })
             );
           } else if (props.type === StudyCardType.Sentence) {
-            // dispatch(
-            //   setSentence({
-            //     display,
-            //     meaning,
-            //     imageFile: image,
-            //     audio,
-            //   })
-            // );
+            dispatch(
+              setSentence({
+                data: {
+                  display,
+                  meaning,
+                  imageFile: image,
+                  audio,
+                },
+                type: StudyCardType.Sentence,
+                doc_id: props.doc_id,
+              })
+            );
           }
         }}
         isDisplay={props.isDisplay}
