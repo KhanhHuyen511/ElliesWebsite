@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addDoc,
   arrayRemove,
@@ -12,10 +12,10 @@ import {
   Timestamp,
   updateDoc,
   where,
-} from 'firebase/firestore';
-import { db } from '../../firebase/config';
-import { Blog, BlogComment, BlogLike, Student } from '../../types';
-import { getDate } from '../../utils';
+} from "firebase/firestore";
+import { db } from "../../firebase/config";
+import { Blog, BlogComment, BlogLike, Student } from "../../types";
+import { getDate } from "../../utils";
 
 interface types {
   listBlogs: Blog[];
@@ -26,10 +26,10 @@ const initialState: types = {
   listBlogs: [],
 };
 
-export const getListBlogs = createAsyncThunk('forum/getListBlogs', async () => {
+export const getListBlogs = createAsyncThunk("forum/getListBlogs", async () => {
   let items: Blog[] = [];
 
-  const querySnapshot = await getDocs(collection(db, 'forum'));
+  const querySnapshot = await getDocs(collection(db, "forum"));
 
   querySnapshot.forEach(async (e) => {
     var item: Blog = e.data() as Blog;
@@ -43,16 +43,16 @@ export const getListBlogs = createAsyncThunk('forum/getListBlogs', async () => {
 });
 
 export const setABlog = createAsyncThunk(
-  'forum/setABlog',
+  "forum/setABlog",
   async (data: Blog) => {
-    await addDoc(collection(db, 'forum'), data);
+    await addDoc(collection(db, "forum"), data);
   }
 );
 
 export const getABlog = createAsyncThunk(
-  'forum/getABlog',
+  "forum/getABlog",
   async (id: string) => {
-    const querySnapshot = await getDoc(doc(db, 'forum', id));
+    const querySnapshot = await getDoc(doc(db, "forum", id));
 
     var item: Blog = querySnapshot.data() as Blog;
     item.id = querySnapshot.id;
@@ -62,8 +62,8 @@ export const getABlog = createAsyncThunk(
       );
 
     const userQ = query(
-      collection(db, 'students'),
-      where('id', '==', item.userId)
+      collection(db, "students"),
+      where("id", "==", item.userId)
     );
 
     const user = (await getDocs(userQ)).docs[0].data() as Student;
@@ -75,15 +75,13 @@ export const getABlog = createAsyncThunk(
       await Promise.all(
         item?.comments?.map(async (e) => {
           const userCmt = query(
-            collection(db, 'students'),
-            where('id', '==', e.userId)
+            collection(db, "students"),
+            where("id", "==", e.userId)
           );
 
           const snapshot = (await getDocs(userCmt)).docs[0].data();
 
           e.userName = snapshot.name;
-
-          console.log(e);
 
           if (e.createDate)
             e.createDate = getDate(
@@ -104,9 +102,9 @@ export const getABlog = createAsyncThunk(
 );
 
 export const setAComment = createAsyncThunk(
-  'forum/setAComment',
+  "forum/setAComment",
   async (data: BlogComment) => {
-    await updateDoc(doc(db, 'forum', data.blogId), {
+    await updateDoc(doc(db, "forum", data.blogId), {
       comments: arrayUnion(data),
     });
 
@@ -115,9 +113,9 @@ export const setAComment = createAsyncThunk(
 );
 
 export const setALike = createAsyncThunk(
-  'forum/setALike',
+  "forum/setALike",
   async (data: BlogLike) => {
-    await updateDoc(doc(db, 'forum', data.blogId), {
+    await updateDoc(doc(db, "forum", data.blogId), {
       likes: arrayUnion(data),
     });
 
@@ -126,15 +124,15 @@ export const setALike = createAsyncThunk(
 );
 
 export const removeALike = createAsyncThunk(
-  'forum/removeALike',
+  "forum/removeALike",
   async (data: BlogLike) => {
-    const item = await getDoc(doc(db, 'forum', data.blogId));
+    const item = await getDoc(doc(db, "forum", data.blogId));
 
     const temp = item.data()?.likes as BlogLike[];
 
     const temp1 = temp.find((o) => o.userId === data.userId);
 
-    await updateDoc(doc(db, 'forum', data.blogId), {
+    await updateDoc(doc(db, "forum", data.blogId), {
       likes: arrayRemove(temp1),
     });
 
@@ -143,7 +141,7 @@ export const removeALike = createAsyncThunk(
 );
 
 const forumSlice = createSlice({
-  name: 'forum',
+  name: "forum",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

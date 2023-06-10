@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, Input, Popup } from '../../../components';
-import {
-  getVocabsByTopic,
-  setAExDetail,
-  updateAExDetail,
-} from '../../../redux/slice/adminSlice';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { ExDetail, GameType, StudyCard } from '../../../types';
-import style from './DetailExercise.module.scss';
-import classNames from 'classnames/bind';
-import { Col, Row } from 'react-flexbox-grid';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Input, Popup } from "../../../components";
+import { updateAExDetail } from "../../../redux/slice/adminSlice";
+import { AppDispatch } from "../../../redux/store";
+import { ExDetail, GameType } from "../../../types";
+import style from "./DetailExercise.module.scss";
+import classNames from "classnames/bind";
+import { Col, Row } from "react-flexbox-grid";
 const cx = classNames.bind(style);
 
 const EditExDetail = ({
@@ -38,7 +34,7 @@ const EditExDetail = ({
   return (
     <>
       <Popup
-        title={'Tạo câu hỏi mới'}
+        title={"Tạo câu hỏi mới"}
         onClose={onClose}
         onSubmit={() => {
           if (data) {
@@ -54,11 +50,11 @@ const EditExDetail = ({
           }
         }}
         isDisplay={isDisplay}
-        classNames={cx('create-form')}
+        classNames={cx("create-form")}
       >
         <Row>
           <Col md={6}>
-            <table className={cx('table')}>
+            <table className={cx("table")}>
               <thead>
                 <tr>
                   <th>Từ vựng</th>
@@ -75,42 +71,42 @@ const EditExDetail = ({
           </Col>
           <Col md={6}>
             <Input
-              label={'Sự lựa chọn 1'}
+              label={"Sự lựa chọn 1"}
               value={option1}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption1(e.target.value);
               }}
               isRequired
             ></Input>
             <Input
-              label={'Sự lựa chọn 2'}
+              label={"Sự lựa chọn 2"}
               value={option2}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption2(e.target.value);
               }}
             ></Input>
             <Input
-              label={'Sự lựa chọn 3'}
+              label={"Sự lựa chọn 3"}
               value={option3}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption3(e.target.value);
               }}
             ></Input>
             <Input
-              label={'Sự lựa chọn 4'}
+              label={"Sự lựa chọn 4"}
               value={option4}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption4(e.target.value);
               }}
             ></Input>
             <Input
-              label={'Đáp án đúng'}
+              label={"Đáp án đúng"}
               value={answer}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setAnswer(e.target.value);
               }}

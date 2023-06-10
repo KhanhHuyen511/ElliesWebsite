@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames/bind';
-import styles from './PathDetail.module.scss';
-import { Button, Checkbox, Input } from '../../../components';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
+import React, { useEffect, useState } from "react";
+import classNames from "classnames/bind";
+import styles from "./PathDetail.module.scss";
+import { Button, Checkbox, Input } from "../../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import {
   getStudyPath,
   getStudyRoute,
   updateStudyPath,
-} from '../../../redux/slice/adminSlice';
-import { StudyCard, StudyPath, StudyRoute } from '../../../types';
-import { useParams } from 'react-router-dom';
-import { Col, Row } from 'react-flexbox-grid';
-import CreateRouteForm from './CreateRouteForm';
-import EditRouteForm from './EditRouteForm';
-import CreateStudyCard from './CreateStudyCard';
-import EditCardForm from './EditCardForm';
+} from "../../../redux/slice/adminSlice";
+import { StudyCard, StudyPath, StudyRoute } from "../../../types";
+import { useParams } from "react-router-dom";
+import { Col, Row } from "react-flexbox-grid";
+import CreateRouteForm from "./CreateRouteForm";
+import EditRouteForm from "./EditRouteForm";
+import CreateStudyCard from "./CreateStudyCard";
+import EditCardForm from "./EditCardForm";
 const cx = classNames.bind(styles);
 
 const PathDetail = () => {
@@ -39,7 +39,7 @@ const PathDetail = () => {
       setTopic(data.topic);
       setLevel(data.level);
     }, // eslint-disable-next-line
-    [dispatch, id, data.name, currentRoute]
+    [dispatch, id, data.name, currentRoute, currentRoute.cards]
   );
 
   const [name, setName] = useState<string>();
@@ -56,38 +56,38 @@ const PathDetail = () => {
   const [curretntStudyCard, setCurrentStudyCard] = useState<StudyCard>();
 
   return (
-    <div className={cx('wrapper', 'container')}>
+    <div className={cx("wrapper", "container")}>
       <Row>
         <Col md={6}>
           <form>
-            <p className={cx('form-title')}>Chi tiết lộ trình học</p>
-            <div className={cx('form-body')}>
+            <p className={cx("form-title")}>Chi tiết lộ trình học</p>
+            <div className={cx("form-body")}>
               <Input
-                label='Name'
-                type='text'
+                label="Name"
+                type="text"
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                placeholder='abc'
+                placeholder="abc"
               />
               <Input
-                label='Topic'
-                type='text'
+                label="Topic"
+                type="text"
                 value={topic}
                 onChange={(e) => {
                   setTopic(e.target.value);
                 }}
-                placeholder='abc'
+                placeholder="abc"
               />
               <Input
-                label='Level'
-                type='text'
+                label="Level"
+                type="text"
                 value={level}
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
-                placeholder='abc'
+                placeholder="abc"
               />
             </div>
             <Button
@@ -96,12 +96,12 @@ const PathDetail = () => {
               onClick={() => {
                 dispatch(updateStudyPath({ id: id, name, level, topic }));
               }}
-              className={cx('submit-btn')}
+              className={cx("submit-btn")}
             >
               Cập nhật
             </Button>
             <div>
-              <div className={cx('handler', 'list')}>
+              <div className={cx("handler", "list")}>
                 <Button
                   isPrimary={false}
                   preventDefault
@@ -140,7 +140,7 @@ const PathDetail = () => {
                   Xóa chặng
                 </Button>
               </div>
-              <table className={cx('table')}>
+              <table className={cx("table")}>
                 <thead>
                   <tr>
                     <th></th>
@@ -173,8 +173,8 @@ const PathDetail = () => {
         </Col>
         <Col md={6}>
           <>
-            <p className={cx('form-title')}>Chi tiết chặng</p>
-            <div className={cx('handler', 'list')}>
+            <p className={cx("form-title")}>Chi tiết chặng</p>
+            <div className={cx("handler", "list")}>
               <Button
                 isPrimary={false}
                 preventDefault
@@ -197,7 +197,7 @@ const PathDetail = () => {
                 Xóa câu
               </Button>
             </div>
-            <table className={cx('table')}>
+            <table className={cx("table")}>
               <thead>
                 <tr>
                   <th></th>
@@ -254,6 +254,7 @@ const PathDetail = () => {
         <CreateStudyCard
           pathID={id}
           routeID={selectRoute}
+          topic={topic ? topic : ""}
           onClose={() => {
             setIsOpenCardForm(false);
           }}

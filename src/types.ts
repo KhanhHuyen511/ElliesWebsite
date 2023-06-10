@@ -10,6 +10,7 @@ export interface StudyRoute {
   id?: string;
   name?: string;
   vocabs?: StudyCard[];
+  cards?: string[];
   sentences?: StudyCard[];
   imageFile?: any;
 }
@@ -40,6 +41,8 @@ export interface Student {
 export enum StudyCardType {
   Vocab,
   Sentence,
+  Paraph,
+  Book,
 }
 
 export enum GameType {
@@ -50,9 +53,13 @@ export enum GameType {
 export interface Doc {
   id: string;
   title: string; // topic
-  description: string;
-  listItems?: StudyCard[];
+  description?: string;
+  vocabs?: StudyCard[];
+  sentences?: StudyCard[];
+  listItemIds?: string[];
+  // listItems?: StudyCard[];
   createDate?: Date;
+  type?: StudyCardType;
 }
 
 export interface Ex {

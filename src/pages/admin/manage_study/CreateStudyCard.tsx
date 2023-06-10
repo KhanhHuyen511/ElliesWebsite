@@ -1,84 +1,111 @@
-import React, { useState } from 'react';
-import { Button, Input } from '../../../components';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux/store';
-import { setStudyCard } from '../../../redux/slice/adminSlice';
-import Popup from '../../../components/popup/Popup';
-import style from './IndexStudy.module.scss';
+import { useEffect, useState } from "react";
+import { Checkbox } from "../../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import {
+  getSentencesWithTopic,
+  getVocabsWithTopic,
+  setStudyCard,
+} from "../../../redux/slice/adminSlice";
+import Popup from "../../../components/popup/Popup";
+import style from "./IndexStudy.module.scss";
+import { StudyCard } from "../../../types";
+import { Col, Row } from "react-flexbox-grid";
+import classNames from "classnames/bind";
+const cx = classNames.bind(style);
 
 interface Props {
   classNames?: string;
   onClose: () => void;
   pathID: string;
   routeID: string;
+  topic: string;
   isDisplay: boolean;
 }
 
 const CreateStudyCard = (props: Props) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [display, setDisplay] = useState<string>('');
-  const [meaning, setMeaning] = useState<string>('');
-  const [image, setImage] = useState<any>();
-  const [audio, setAudio] = useState<any>();
+  // load list vocab in special topic. (ex: Greeting)
+  const listVocabs: StudyCard[] | undefined = useSelector(
+    (state: RootState) => state.admin.listVocabs
+  );
+  const listSentences: StudyCard[] | undefined = useSelector(
+    (state: RootState) => state.admin.listSentences
+  );
+  const [selectedItem, setSelectedItem] = useState<StudyCard>();
+  console.log(selectedItem);
+
+  useEffect(() => {
+    dispatch(getVocabsWithTopic(props.topic));
+    dispatch(getSentencesWithTopic(props.topic));
+  }, [dispatch]);
 
   return (
     <>
       <Popup
-        title={'Tạo câu mới'}
-        classNames={''}
+        title={"Tạo câu mới"}
+        classNames={""}
         onClose={props.onClose}
-        onSubmit={() =>
-          dispatch(
-            setStudyCard({
-              path_id: props.pathID,
-              route_id: props.routeID,
-              card: { display, meaning, imageFile: image, audio },
-            })
-          )
-        }
+        onSubmit={() => {
+          if (selectedItem?.id) {
+            dispatch(
+              setStudyCard({
+                path_id: props.pathID,
+                route_id: props.routeID,
+                card_id: selectedItem.id,
+              })
+            );
+          }
+        }}
         isDisplay={props.isDisplay}
       >
-        <Input
-          type='text'
-          onChange={(e) => {
-            setDisplay(e.target.value);
-          }}
-          label={'Display'}
-          placeholder={'abc'}
-        ></Input>
-        <Input
-          type='text'
-          onChange={(e) => {
-            setMeaning(e.target.value);
-          }}
-          label={'Meaning'}
-          placeholder={'abc'}
-        ></Input>
-
-        <Input
-          type='file'
-          label={'Thêm ảnh'}
-          placeholder={''}
-          onChange={(e) => {
-            if (e.target.files) setImage(e.target.files[0]);
-          }}
-        ></Input>
-        {image && (
-          <div className={style.image}>
-            <img src={URL.createObjectURL(image)} alt='' />
-          </div>
-        )}
-
-        <Input
-          type='file'
-          label={'Thêm âm thanh'}
-          placeholder={''}
-          onChange={(e) => {
-            if (e.target.files) setAudio(e.target.files[0]);
-          }}
-        ></Input>
-        {audio && <audio controls src={URL.createObjectURL(audio)}></audio>}
+        <Row>
+          <Col>
+            <table className={cx("table")}>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>STT</th>
+                  <th>Từ vựng</th>
+                  <th>Nghĩa</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listVocabs?.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Checkbox
+                        isChecked={selectedItem && item.id === selectedItem.id}
+                        onChecked={() => {
+                          setSelectedItem(item);
+                        }}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{item?.display}</td>
+                    <td>{item?.meaning}</td>
+                  </tr>
+                ))}
+                {listSentences?.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Checkbox
+                        isChecked={selectedItem && item.id === selectedItem.id}
+                        onChecked={() => {
+                          setSelectedItem(item);
+                        }}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{item?.display}</td>
+                    <td>{item?.meaning}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Col>
+        </Row>
       </Popup>
     </>
   );

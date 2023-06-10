@@ -39,3 +39,13 @@
     height: 100%;
   }
 }
+
+.doc-cate-wrapper {
+  display: flex;
+  column-gap: 18px;
+  margin-top: 26px;
+
+  .cate-item {
+    flex: 1;
+  }
+}
