@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .wrapper {
   @include typo-body;
@@ -59,4 +59,14 @@
   &-icon {
     stroke: var(--O500);
   }
+}
+
+.right-icon {
+  color: #779af9;
+  stroke-width: 3;
+}
+
+.wrong-icon {
+  color: var(--O500);
+  stroke-width: 3;
 }

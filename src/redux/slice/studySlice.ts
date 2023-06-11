@@ -126,25 +126,34 @@ export const getStudyCards = createAsyncThunk(
   async (routeID: string) => {
     // Get data of current user
 
-    const cards: StudyCard[] = [];
-
-    const querySnapshot = await getDocs(
-      collection(
+    const querySnapshot = await getDoc(
+      doc(
         db,
         'study_paths',
         'j7EL4b607cyt0QV5NlRB',
         'study_routes',
         routeID,
-        'vocabs'
       ) // static
     );
-    querySnapshot.forEach(async (e) => {
-      var card: StudyCard = e.data() as StudyCard;
-      card.id = e.id;
-      cards.push(card);
-    });
 
-    return cards;
+    const route = querySnapshot.data() as StudyRoute;
+    route.id = querySnapshot.id;
+
+    if (route.cards)
+      await Promise.all(
+        route?.cards?.map(async (item) => {
+          let snapshot = await getDoc(doc(db, "vocabs", item));
+          if (snapshot.data() === undefined)
+            snapshot = await getDoc(doc(db, "sentences", item));
+          let card = snapshot.data() as StudyCard;
+          card.id = snapshot.id;
+          if (route.vocabs) route.vocabs = [card, ...route.vocabs];
+          else route.vocabs = [card];
+        })
+      );
+
+
+    return route.vocabs;
   }
 );
 

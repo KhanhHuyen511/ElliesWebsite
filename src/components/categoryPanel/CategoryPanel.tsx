@@ -17,12 +17,14 @@ interface Props {
   label: string;
   classNames?: string;
   icon?: JSX.Element;
+  onClick?: () => void;
 }
 
 const CategoryPanel = (props: Props) => {
   return (
     <div
       className={cx('wrapper', { active: props.isActive }, props.classNames)}
+      onClick={props.onClick}
     >
       <div className={cx('icon')}>{props.icon}</div>
       <p className={cx('label')}>{props.label}</p>

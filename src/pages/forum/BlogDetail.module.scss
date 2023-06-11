@@ -1,0 +1,91 @@
+@import '../../assets/style/shared.scss';
+@import '../../assets/theme/shared.css';
+
+.title {
+  @include typo-heading-1;
+}
+
+.blog-info {
+  display: flex;
+  justify-content: space-between;
+
+  .author {
+    @include typo-body-small;
+    font-weight: bold;
+    color: var(--O500);
+  }
+
+  .other-infos {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    margin-top: 6px;
+
+    .create-date {
+      @include typo-caption;
+    }
+
+    .like-wrapper {
+      display: flex;
+      align-items: center;
+      column-gap: 6px;
+
+      .like-icon {
+        stroke: var(--G800);
+
+        &.active {
+          fill: var(--Y500);
+        }
+
+        &:hover {
+          stroke-width: 2;
+          cursor: pointer;
+        }
+      }
+
+      .like-number {
+        @include typo-body-small;
+        font-weight: bold;
+        color: var(--Y500);
+        user-select: none;
+      }
+    }
+  }
+}
+
+.summary {
+  @include typo-caption;
+  margin-top: 24px;
+  font-style: italic;
+}
+
+.content {
+  margin-top: 24px;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.keyword-wrapper {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+  @include typo-body-small;
+
+  .keyword {
+    color: var(--O500);
+    @include typo-caption;
+  }
+}
+
+.comment-section {
+  margin-top: 32px;
+
+  .sub-title {
+    @include typo-heading-2;
+  }
+
+  .comments {
+    margin-top: 16px;
+  }
+}

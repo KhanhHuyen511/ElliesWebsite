@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, Input, Popup } from '../../../components';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Checkbox, Input, Popup } from "../../../components";
 import {
-  getVocabsByTopic,
+  getVocabsWithTopic,
   setAExDetail,
-} from '../../../redux/slice/adminSlice';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { GameType, StudyCard } from '../../../types';
-import style from './DetailExercise.module.scss';
-import classNames from 'classnames/bind';
-import { Col, Row } from 'react-flexbox-grid';
+} from "../../../redux/slice/adminSlice";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { GameType, StudyCard } from "../../../types";
+import style from "./DetailExercise.module.scss";
+import classNames from "classnames/bind";
+import { Col, Row } from "react-flexbox-grid";
 const cx = classNames.bind(style);
 
 const CreateExDetail = ({
@@ -39,13 +39,13 @@ const CreateExDetail = ({
   const [type, setType] = useState<string>(GameType[0]);
 
   useEffect(() => {
-    dispatch(getVocabsByTopic(title));
+    dispatch(getVocabsWithTopic(title));
   }, [dispatch]);
 
   return (
     <>
       <Popup
-        title={'Tạo câu hỏi mới'}
+        title={"Tạo câu hỏi mới"}
         onClose={onClose}
         onSubmit={() => {
           if (id && answer && type && selectedItem) {
@@ -54,10 +54,10 @@ const CreateExDetail = ({
                 exId: id,
                 vocab: selectedItem,
                 options: [
-                  option1 ? option1 : '',
-                  option2 ? option2 : '',
-                  option3 ? option3 : '',
-                  option4 ? option4 : '',
+                  option1 ? option1 : "",
+                  option2 ? option2 : "",
+                  option3 ? option3 : "",
+                  option4 ? option4 : "",
                 ],
                 answer,
                 type,
@@ -66,11 +66,11 @@ const CreateExDetail = ({
           }
         }}
         isDisplay={isDisplay}
-        classNames={cx('create-form')}
+        classNames={cx("create-form")}
       >
         <Row>
           <Col md={6}>
-            <table className={cx('table')}>
+            <table className={cx("table")}>
               <thead>
                 <tr>
                   <th></th>
@@ -100,42 +100,42 @@ const CreateExDetail = ({
           </Col>
           <Col md={6}>
             <Input
-              label={'Nhập sự lựa chọn 1'}
+              label={"Nhập sự lựa chọn 1"}
               value={option1}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption1(e.target.value);
               }}
               isRequired
             ></Input>
             <Input
-              label={'Nhập sự lựa chọn 2'}
+              label={"Nhập sự lựa chọn 2"}
               value={option2}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption2(e.target.value);
               }}
             ></Input>
             <Input
-              label={'Nhập sự lựa chọn 3'}
+              label={"Nhập sự lựa chọn 3"}
               value={option3}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption3(e.target.value);
               }}
             ></Input>
             <Input
-              label={'Nhập sự lựa chọn 4'}
+              label={"Nhập sự lựa chọn 4"}
               value={option4}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setOption4(e.target.value);
               }}
             ></Input>
             <Input
-              label={'Nhập đáp án đúng'}
+              label={"Nhập đáp án đúng"}
               value={answer}
-              placeholder={'abc'}
+              placeholder={"abc"}
               onChange={(e) => {
                 setAnswer(e.target.value);
               }}

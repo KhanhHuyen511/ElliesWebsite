@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
-import { Button, Input } from '../../../components';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux/store';
-import { StudyCard } from '../../../types';
-import Popup from '../../../components/popup/Popup';
-import { updateVocab } from '../../../redux/slice/adminSlice';
-import style from './IndexDocument.module.scss';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '../../../firebase/config';
+import { useState } from "react";
+import { Input } from "../../../components";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { StudyCard, StudyCardType } from "../../../types";
+import Popup from "../../../components/popup/Popup";
+import { updateDocCard } from "../../../redux/slice/adminSlice";
+import style from "./IndexDocument.module.scss";
+import { getDownloadURL, ref } from "firebase/storage";
+import { storage } from "../../../firebase/config";
 
 const EditVocabForm = ({
   vocab,
   onClose,
   isDisplay,
+  type,
 }: {
   vocab: StudyCard;
   onClose: () => void;
   isDisplay: boolean;
+  type: StudyCardType;
 }) => {
+  console.log("hi");
   const dispatch = useDispatch<AppDispatch>();
 
   const [display, setDisplay] = useState<string>(
-    vocab.display ? vocab.display : ''
+    vocab.display ? vocab.display : ""
   );
   const [meaning, setMeaning] = useState<string>(
-    vocab.meaning ? vocab.meaning : ''
+    vocab.meaning ? vocab.meaning : ""
   );
   const [image, setImage] = useState<any>(
     vocab.imageFile &&
@@ -46,12 +49,12 @@ const EditVocabForm = ({
   return (
     <>
       <Popup
-        classNames={''}
-        title={'Chỉnh sửa từ vựng'}
+        classNames={""}
+        title={"Chỉnh sửa từ vựng"}
         onClose={onClose}
-        onSubmit={() =>
+        onSubmit={() => {
           dispatch(
-            updateVocab({
+            updateDocCard({
               data: {
                 id: vocab.id,
                 display,
@@ -61,51 +64,52 @@ const EditVocabForm = ({
               },
               oldImage: vocab.imageFile,
               oldAudio: vocab.audio,
+              type: type,
             })
-          )
-        }
+          );
+        }}
         isDisplay={isDisplay}
       >
         <Input
-          type='text'
+          type="text"
           value={display}
           onChange={(e) => {
             setDisplay(e.target.value);
           }}
-          label={'Display'}
-          placeholder={'abc'}
+          label={"Display"}
+          placeholder={"abc"}
         ></Input>
         <Input
-          type='text'
+          type="text"
           value={meaning}
           onChange={(e) => {
             setMeaning(e.target.value);
           }}
-          label={'Meaning'}
-          placeholder={'abc'}
+          label={"Meaning"}
+          placeholder={"abc"}
         ></Input>
         <Input
-          type='file'
-          label={'Cập nhật ảnh'}
-          placeholder={''}
+          type="file"
+          label={"Cập nhật ảnh"}
+          placeholder={""}
           onChange={(e) => {
             if (e.target.files) setNewImage(e.target.files[0]);
           }}
         ></Input>
         {!newImage && image && (
           <div className={style.image}>
-            <img src={image} alt='' />
+            <img src={image} alt="" />
           </div>
         )}
         {newImage && (
           <div className={style.image}>
-            <img src={URL.createObjectURL(newImage)} alt=''></img>
+            <img src={URL.createObjectURL(newImage)} alt=""></img>
           </div>
         )}
         <Input
-          type='file'
-          label={'Cập nhật âm thanh'}
-          placeholder={''}
+          type="file"
+          label={"Cập nhật âm thanh"}
+          placeholder={""}
           onChange={(e) => {
             if (e.target.files) setNewAudio(e.target.files[0]);
           }}
