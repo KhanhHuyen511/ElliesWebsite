@@ -25,6 +25,7 @@ const Profile = () => {
 
   const [isOpenEditForm, setISOpenEditForm] = useState<boolean>(false);
   const [isOpenEditAvtForm, setISOpenEditAvtForm] = useState<boolean>(false);
+
   const [img, setImg] = useState("");
 
   const navigate = useNavigate();
@@ -126,6 +127,7 @@ const Profile = () => {
             />
           </div>
         </div>
+
         <div className={cx("blog-section", "section")}>
           <p className={cx("section-title")}>Liên kết mạng xã hội</p>
           <div className={cx("blog-body")}>
@@ -145,6 +147,7 @@ const Profile = () => {
             </Button>
           </div>
         </div>
+
         <div className={cx("social-section", "section")}>
           <p className={cx("section-title")}>Liên kết mạng xã hội</p>
           <div className={cx("social-body")}></div>
@@ -169,6 +172,7 @@ const Profile = () => {
               if (user) {
                 signOut(auth);
                 dispatch(REMOVE_ACTIVE_USER({}));
+
                 navigate("/login");
               }
             });
