@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import style from './IndexExercise.module.scss';
-import classNames from 'classnames/bind';
-import { Button, Checkbox } from '../../../components';
-import { Ex } from '../../../types';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { getExercises } from '../../../redux/slice/adminSlice';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import style from "./IndexExercise.module.scss";
+import classNames from "classnames/bind";
+import { Button, Checkbox } from "../../../components";
+import { Ex } from "../../../types";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { getExercises } from "../../../redux/slice/adminSlice";
+import { useNavigate } from "react-router-dom";
+import CreateExForm from "./CreateExForm";
 const cx = classNames.bind(style);
 
 const IndexExercise = () => {
@@ -15,6 +16,7 @@ const IndexExercise = () => {
   const list = useSelector((state: RootState) => state.admin.listEx);
 
   const [selectedItem, setSelectedItem] = useState<string>();
+  const [isOpenForm, setIsOpenForm] = useState(false);
 
   useEffect(() => {
     dispatch(getExercises());
@@ -26,12 +28,12 @@ const IndexExercise = () => {
 
   return (
     <>
-      <div className={cx('container')}>
-        <div className={cx('wrapper-filter')}></div>
-        <div className={cx('section')}>
+      <div className={cx("container")}>
+        <div className={cx("wrapper-filter")}></div>
+        <div className={cx("section")}>
           <h2>Manage Exercise</h2>
           <>
-            <div className={cx('handler')}>
+            <div className={cx("handler")}>
               <Button
                 isPrimary={false}
                 onClick={() => {
@@ -44,7 +46,7 @@ const IndexExercise = () => {
               <Button
                 isPrimary={false}
                 onClick={() => {
-                  // setIsOpenForm(true);
+                  setIsOpenForm(true);
                 }}
               >
                 Tạo mới
@@ -58,7 +60,7 @@ const IndexExercise = () => {
               onChecked={() => setSelectAllItems(!isSelectedAll)}
             ></Checkbox> */}
             </div>
-            <table className={cx('table')}>
+            <table className={cx("table")}>
               <thead>
                 <tr>
                   <th></th>
@@ -96,6 +98,13 @@ const IndexExercise = () => {
           </>
         </div>
       </div>
+
+      {isOpenForm && (
+        <CreateExForm
+          onClose={() => setIsOpenForm(false)}
+          isDisplay={isOpenForm}
+        />
+      )}
     </>
   );
 };

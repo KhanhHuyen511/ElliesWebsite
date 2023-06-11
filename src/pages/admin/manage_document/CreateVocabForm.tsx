@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Input, TextArea } from "../../../components";
 import Popup from "../../../components/popup/Popup";
@@ -25,12 +25,25 @@ const CreateVocabForm = (props: Props) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const onClear = () => {
+    console.log("clear");
+    setDisplay("");
+    setMeaning("");
+    setAudio(undefined);
+    setImage(undefined);
+  };
+
+  // useEffect(() => onClear, []);
+
   return (
     <>
       <Popup
         title={"Tạo từ vựng mới"}
         classNames={""}
-        onClose={props.onClose}
+        onClose={() => {
+          props.onClose();
+          onClear();
+        }}
         onSubmit={() => {
           dispatch(
             setDocCard({
@@ -44,6 +57,7 @@ const CreateVocabForm = (props: Props) => {
               doc_id: props.doc_id,
             })
           );
+          onClear();
         }}
         isDisplay={props.isDisplay}
       >
@@ -69,11 +83,13 @@ const CreateVocabForm = (props: Props) => {
               onChange={(e) => {
                 setDisplay(e.target.value);
               }}
+              value={display}
               label={"Display"}
               placeholder={"abc"}
             ></Input>
             <Input
               type="text"
+              value={meaning}
               onChange={(e) => {
                 setMeaning(e.target.value);
               }}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StudyCard, StudyCardType } from "../../../types";
-import { Button, Checkbox, Input } from "../../../components";
+import { Button, Checkbox, Input, TextArea } from "../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
@@ -132,15 +132,14 @@ const EditDocForm = () => {
               label={"Chủ đề"}
               placeholder={"abc"}
             ></Input>
-            <Input
-              type="text"
+            <TextArea
               value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
               label={"Mô tả"}
               placeholder={"abc"}
-            ></Input>
+            ></TextArea>
             <Button
               isPrimary={false}
               onClick={() => {
@@ -179,7 +178,7 @@ const EditDocForm = () => {
         />
       )}
 
-      {isOpenEditCardForm && selectedItem && typeCard && (
+      {isOpenEditCardForm && selectedItem && typeCard !== undefined && (
         <EditVocab
           vocab={selectedItem}
           onClose={() => setIsOpenEditCardForm(false)}

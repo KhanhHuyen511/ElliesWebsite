@@ -134,12 +134,14 @@ export const setStudyRoute = createAsyncThunk(
       collection(db, "study_paths", data.path_id, "study_routes"),
       {
         name: data.route.name,
-        imageFile: data.route.imageFile.name,
+        imageFile: data.route.imageFile ? data.route.imageFile.name : "",
       }
     );
 
-    const storageRef = ref(storage, `images/${data.route.imageFile.name}`);
-    uploadBytes(storageRef, data.route.imageFile);
+    if (data.route.imageFile !== null) {
+      const storageRef = ref(storage, `images/${data.route.imageFile.name}`);
+      uploadBytes(storageRef, data.route.imageFile);
+    }
 
     data.route.id = docRef.id;
 
@@ -599,8 +601,7 @@ export const getAExercise = createAsyncThunk(
 
     await Promise.all(
       querySnapshot1.docs.map(async (e) => {
-        var d: ExDetail = e.data() as ExDetail;
-        d.id = e.id;
+        var d: ExDetail = { ...(e.data() as ExDetail), id: e.id };
 
         if (d.vocab) {
           const querySnapshot2 = await getDoc(
@@ -617,6 +618,19 @@ export const getAExercise = createAsyncThunk(
     item.listItems = listItems;
 
     return item;
+  }
+);
+
+export const setExercise = createAsyncThunk(
+  "admin/study/setExercise",
+  async ({ data }: { data: Ex }) => {
+    await addDoc(collection(db, "exs"), {
+      title: data.title,
+      description: data.description,
+      createDate: new Date(),
+    });
+
+    return data;
   }
 );
 
@@ -839,6 +853,9 @@ const adminSlice = createSlice({
     // builder.addCase(getVocabsByTopic.fulfilled, (state, action) => {
     //   state.listVocabs = action.payload as StudyCard[];
     // });
+    builder.addCase(setExercise.fulfilled, (state, action) => {
+      state.listEx?.push(action.payload as Ex);
+    });
     builder.addCase(setAExDetail.fulfilled, (state, action) => {
       state.currentEx?.listItems?.push(action.payload as ExDetail);
     });

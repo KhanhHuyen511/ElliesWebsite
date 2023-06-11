@@ -20,6 +20,7 @@ const EditVocabForm = ({
   isDisplay: boolean;
   type: StudyCardType;
 }) => {
+  console.log("hi");
   const dispatch = useDispatch<AppDispatch>();
 
   const [display, setDisplay] = useState<string>(

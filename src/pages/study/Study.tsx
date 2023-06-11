@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
-import styles from './Study.module.scss';
-import { Route, CheckinPanel } from '../../components';
-import classNames from 'classnames/bind';
-import { Col } from 'react-flexbox-grid';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store';
+import { useEffect, useState } from "react";
+import styles from "./Study.module.scss";
+import { Route, CheckinPanel } from "../../components";
+import classNames from "classnames/bind";
+import { Col } from "react-flexbox-grid";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import {
   getCheckedInDays,
   getStudiedRoutes,
   getStudyRoutes,
   setCheckInToday,
-} from '../../redux/slice/studySlice';
-import { useNavigate } from 'react-router-dom';
-import { StudyRoute } from '../../types';
+} from "../../redux/slice/studySlice";
+import { useNavigate } from "react-router-dom";
+import { StudyRoute } from "../../types";
 const cx = classNames.bind(styles);
 
 const Study = () => {
@@ -25,7 +25,7 @@ const Study = () => {
   const storeDays = useSelector(
     (state: RootState) => state.study.checkedInDays
   );
-  const userID = useSelector((state: RootState) => state.auth.userID) || '';
+  const userID = useSelector((state: RootState) => state.auth.userID) || "";
   const studiedRouteIDs = useSelector(
     (state: RootState) => state.study.studiedRouteIDs
   );
@@ -67,10 +67,10 @@ const Study = () => {
 
   const GetStateCheckIn = (day: number) => {
     return day === (d.getDay() < 1 ? d.getDay() + 6 : d.getDay() - 1)
-      ? 'current'
+      ? "current"
       : day <= (d.getDay() < 1 ? d.getDay() + 6 : d.getDay() - 1)
-      ? 'before'
-      : 'default';
+      ? "before"
+      : "default";
   };
 
   const CheckCheckedDays = (day: number) => {
@@ -78,9 +78,9 @@ const Study = () => {
   };
 
   const generateCheckInList = days.map((item, index) => (
-    <li className={cx('check-in-item')} onClick={() => CheckIn(item)}>
+    <li className={cx("check-in-item")} onClick={() => CheckIn(item)}>
       <CheckinPanel
-        label={'day' + (item + 1)}
+        label={"day" + (item + 1)}
         isChecked={CheckCheckedDays(item)}
         state={GetStateCheckIn(item)}
       />
@@ -90,29 +90,35 @@ const Study = () => {
   var currentRouteIndex = 0;
 
   const CheckRouteState = (route: StudyRoute, index: number) => {
-    if (index === currentRouteIndex) return 'active';
-    if (
+    if (index === currentRouteIndex) return "active";
+
+    if (studiedRouteIDs.length === 0) {
+      if (currentRouteIndex === index - 1) {
+        console.log(index);
+        return "active";
+      }
+    } else if (
       route.id &&
       studiedRouteIDs.indexOf(route.id) === studiedRouteIDs.length - 1
     ) {
       currentRouteIndex = index + 1;
     }
-    return 'default';
+    return "default";
   };
 
   const generateRouteList = routes.map(
     (item, index) =>
       item.id && (
         <li
-          className={cx('route-study-item')}
+          className={cx("route-study-item")}
           onClick={() => {
-            if (CheckRouteState(item, index + 1) === 'active')
+            if (CheckRouteState(item, index + 1) === "active")
               navigate(`/study_detail/${item.id}`);
           }}
         >
           <Route
             id={item.id}
-            label={'Chặng ' + item.name}
+            label={"Chặng " + item.name}
             state={CheckRouteState(item, index + 1)}
           />
         </li>
@@ -120,12 +126,12 @@ const Study = () => {
   );
 
   return (
-    <div className='container'>
+    <div className="container">
       <Col xs={12} md={8} lg={6}>
-        <p className={cx('title')}>Chào Huyền,</p>
-        <ul className={cx('check-in-wrapper')}>{generateCheckInList}</ul>
-        <p className={cx('page-title')}>Lộ trình</p>
-        <ul className={cx('route-study-wrapper')}>{generateRouteList}</ul>
+        <p className={cx("title")}>Chào Huyền,</p>
+        <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
+        <p className={cx("page-title")}>Lộ trình</p>
+        <ul className={cx("route-study-wrapper")}>{generateRouteList}</ul>
       </Col>
     </div>
   );
