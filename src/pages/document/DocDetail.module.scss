@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .section-title {
   @include typo-heading-3;
@@ -21,8 +21,13 @@
   display: flex;
   column-gap: 16px;
   margin-top: 20px;
+  flex-wrap: wrap;
 
   .list-item {
     width: 50%;
+  }
+
+  .list-item-100 {
+    width: 100%;
   }
 }
