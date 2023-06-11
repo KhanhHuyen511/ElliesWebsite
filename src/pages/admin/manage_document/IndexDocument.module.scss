@@ -1,5 +1,5 @@
-@import '../../../assets/style/shared.scss';
-@import '../../../assets/theme/shared.css';
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
 
 .table {
   width: 100%;
@@ -48,4 +48,8 @@
   .cate-item {
     flex: 1;
   }
+}
+
+.paraph-text {
+  height: 200px;
 }

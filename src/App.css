@@ -1,7 +1,7 @@
-@import './assets/theme/shared.css';
+@import "./assets/theme/shared.css";
 
 .app {
-  /* height: 100vh; */
+  min-height: 100vh;
   color: var(--text-bold-color);
   position: relative;
 }

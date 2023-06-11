@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Input } from "../../../components";
+import { Input, TextArea } from "../../../components";
 import Popup from "../../../components/popup/Popup";
 import { setDocCard } from "../../../redux/slice/adminSlice";
 import { AppDispatch } from "../../../redux/store";
 import { StudyCardType } from "../../../types";
 import style from "./IndexDocument.module.scss";
+import classNames from "classnames/bind";
+const cx = classNames.bind(style);
 
 interface Props {
   classNames?: string;
@@ -45,22 +47,41 @@ const CreateVocabForm = (props: Props) => {
         }}
         isDisplay={props.isDisplay}
       >
-        <Input
-          type="text"
-          onChange={(e) => {
-            setDisplay(e.target.value);
-          }}
-          label={"Display"}
-          placeholder={"abc"}
-        ></Input>
-        <Input
-          type="text"
-          onChange={(e) => {
-            setMeaning(e.target.value);
-          }}
-          label={"Meaning"}
-          placeholder={"abc"}
-        ></Input>
+        {props.type === StudyCardType.Paraph ? (
+          <>
+            <TextArea
+              label={"Display"}
+              placeholder={""}
+              onChange={(e) => setDisplay(e.target.value)}
+              classNames={cx("paraph-text")}
+            />
+            <TextArea
+              label={"Meaning"}
+              placeholder={""}
+              onChange={(e) => setMeaning(e.target.value)}
+              classNames={cx("paraph-text")}
+            />
+          </>
+        ) : (
+          <>
+            <Input
+              type="text"
+              onChange={(e) => {
+                setDisplay(e.target.value);
+              }}
+              label={"Display"}
+              placeholder={"abc"}
+            ></Input>
+            <Input
+              type="text"
+              onChange={(e) => {
+                setMeaning(e.target.value);
+              }}
+              label={"Meaning"}
+              placeholder={"abc"}
+            ></Input>
+          </>
+        )}
 
         <Input
           type="file"
