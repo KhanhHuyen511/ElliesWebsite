@@ -2,11 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   collection,
   doc,
-  documentId,
   getDoc,
   getDocs,
   Timestamp,
-  where,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { Doc, StudyCard, StudyCardType } from "../../types";
@@ -114,6 +112,18 @@ export const getADocWithType = createAsyncThunk(
                   if (data.sentences)
                     data.sentences = [card, ...data.sentences];
                   else data.sentences = [card];
+                }
+              });
+              break;
+            case StudyCardType.Paraph.toString():
+              await getDoc(doc(db, "paraphs", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.paraphs) data.paraphs = [card, ...data.paraphs];
+                  else data.paraphs = [card];
                 }
               });
               break;

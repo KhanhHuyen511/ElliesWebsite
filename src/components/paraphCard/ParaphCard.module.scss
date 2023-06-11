@@ -1,0 +1,30 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.body {
+  position: relative;
+}
+
+.audio {
+  width: 100%;
+}
+
+.display-text {
+  @include typo-body;
+  margin-top: 20px;
+}
+
+.meaning-text {
+  @include typo-body;
+  margin-top: 20px;
+}
+
+.image {
+  width: 100%;
+}
+
+// .heart-icon {
+//   position: absolute;
+//   top: 0;
+//   right: 5%;
+// }

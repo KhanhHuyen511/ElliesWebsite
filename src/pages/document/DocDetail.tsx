@@ -5,7 +5,7 @@ import { getADocWithType } from "../../redux/slice/docSlice";
 import { AppDispatch, RootState } from "../../redux/store";
 import style from "./DocDetail.module.scss";
 import classNames from "classnames/bind";
-import { VocabCard } from "../../components";
+import { ParaphCard, VocabCard } from "../../components";
 import { StudyCard, StudyCardType } from "../../types";
 const cx = classNames.bind(style);
 
@@ -26,6 +26,9 @@ const DocDetail = () => {
         case StudyCardType.Sentence.toString():
           setList(data.sentences);
           break;
+        case StudyCardType.Paraph.toString():
+          setList(data.paraphs);
+          break;
         default:
           break;
       }
@@ -40,11 +43,17 @@ const DocDetail = () => {
       <ul className={cx("list-card")}>
         {list &&
           list.length > 0 &&
-          list.map((item) => (
-            <li className={cx("list-item")}>
-              <VocabCard card={item} />
-            </li>
-          ))}
+          (type === StudyCardType.Paraph.toString()
+            ? list.map((item) => (
+                <li className={cx("list-item-100")}>
+                  <ParaphCard card={item} />
+                </li>
+              ))
+            : list.map((item) => (
+                <li className={cx("list-item")}>
+                  <VocabCard card={item} />
+                </li>
+              )))}
       </ul>
     </div>
   );

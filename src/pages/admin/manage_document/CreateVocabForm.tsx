@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Input } from "../../../components";
+import { Input, TextArea } from "../../../components";
 import Popup from "../../../components/popup/Popup";
-import { setSentence, setVocab } from "../../../redux/slice/adminSlice";
+import { setDocCard } from "../../../redux/slice/adminSlice";
 import { AppDispatch } from "../../../redux/store";
 import { StudyCardType } from "../../../types";
 import style from "./IndexDocument.module.scss";
+import classNames from "classnames/bind";
+const cx = classNames.bind(style);
 
 interface Props {
   classNames?: string;
@@ -23,59 +25,79 @@ const CreateVocabForm = (props: Props) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const onClear = () => {
+    console.log("clear");
+    setDisplay("");
+    setMeaning("");
+    setAudio(undefined);
+    setImage(undefined);
+  };
+
+  // useEffect(() => onClear, []);
+
   return (
     <>
       <Popup
         title={"Tạo từ vựng mới"}
         classNames={""}
-        onClose={props.onClose}
+        onClose={() => {
+          props.onClose();
+          onClear();
+        }}
         onSubmit={() => {
-          if (props.type === StudyCardType.Vocab) {
-            dispatch(
-              setVocab({
-                data: {
-                  display,
-                  meaning,
-                  imageFile: image,
-                  audio,
-                },
-                type: StudyCardType.Vocab,
-                doc_id: props.doc_id,
-              })
-            );
-          } else if (props.type === StudyCardType.Sentence) {
-            dispatch(
-              setSentence({
-                data: {
-                  display,
-                  meaning,
-                  imageFile: image,
-                  audio,
-                },
-                type: StudyCardType.Sentence,
-                doc_id: props.doc_id,
-              })
-            );
-          }
+          dispatch(
+            setDocCard({
+              data: {
+                display,
+                meaning,
+                imageFile: image,
+                audio,
+              },
+              type: props.type,
+              doc_id: props.doc_id,
+            })
+          );
+          onClear();
         }}
         isDisplay={props.isDisplay}
       >
-        <Input
-          type="text"
-          onChange={(e) => {
-            setDisplay(e.target.value);
-          }}
-          label={"Display"}
-          placeholder={"abc"}
-        ></Input>
-        <Input
-          type="text"
-          onChange={(e) => {
-            setMeaning(e.target.value);
-          }}
-          label={"Meaning"}
-          placeholder={"abc"}
-        ></Input>
+        {props.type === StudyCardType.Paraph ? (
+          <>
+            <TextArea
+              label={"Display"}
+              placeholder={""}
+              onChange={(e) => setDisplay(e.target.value)}
+              classNames={cx("paraph-text")}
+            />
+            <TextArea
+              label={"Meaning"}
+              placeholder={""}
+              onChange={(e) => setMeaning(e.target.value)}
+              classNames={cx("paraph-text")}
+            />
+          </>
+        ) : (
+          <>
+            <Input
+              type="text"
+              onChange={(e) => {
+                setDisplay(e.target.value);
+              }}
+              value={display}
+              label={"Display"}
+              placeholder={"abc"}
+            ></Input>
+            <Input
+              type="text"
+              value={meaning}
+              onChange={(e) => {
+                setMeaning(e.target.value);
+              }}
+              label={"Meaning"}
+              placeholder={"abc"}
+            ></Input>
+          </>
+        )}
 
         <Input
           type="file"

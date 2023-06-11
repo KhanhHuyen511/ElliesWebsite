@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StudyCard, StudyCardType } from "../../../types";
-import { Button, Checkbox, Input } from "../../../components";
+import { Button, Checkbox, Input, TextArea } from "../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
@@ -36,6 +36,10 @@ const EditDocForm = () => {
           case StudyCardType.Sentence.toString():
             setTypeCard(StudyCardType.Sentence);
             setList(data.sentences);
+            break;
+          case StudyCardType.Paraph.toString():
+            setTypeCard(StudyCardType.Paraph);
+            setList(data.paraphs);
             break;
           default:
             break;
@@ -128,15 +132,14 @@ const EditDocForm = () => {
               label={"Chủ đề"}
               placeholder={"abc"}
             ></Input>
-            <Input
-              type="text"
+            <TextArea
               value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
               label={"Mô tả"}
               placeholder={"abc"}
-            ></Input>
+            ></TextArea>
             <Button
               isPrimary={false}
               onClick={() => {
@@ -175,12 +178,12 @@ const EditDocForm = () => {
         />
       )}
 
-      {isOpenEditCardForm && selectedItem && (
+      {isOpenEditCardForm && selectedItem && typeCard !== undefined && (
         <EditVocab
           vocab={selectedItem}
           onClose={() => setIsOpenEditCardForm(false)}
           isDisplay={isOpenEditCardForm}
-          type={StudyCardType.Vocab}
+          type={typeCard}
         ></EditVocab>
       )}
     </div>
