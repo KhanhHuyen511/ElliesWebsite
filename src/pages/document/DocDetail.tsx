@@ -26,6 +26,9 @@ const DocDetail = () => {
         case StudyCardType.Sentence.toString():
           setList(data.sentences);
           break;
+        case StudyCardType.Paraph.toString():
+          setList(data.paraphs);
+          break;
         default:
           break;
       }

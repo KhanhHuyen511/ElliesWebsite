@@ -47,9 +47,6 @@ const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
               onChecked={() => setSelectAllItems(!isSelectedAll)}
             ></Checkbox> */}
       </div>
-      {/* <Button isPrimary={false} onClick={() => {}}>
-        Tạo bộ sưu tập theo chủ đề
-      </Button> */}
       <table className={cx("table")}>
         <thead>
           <tr>

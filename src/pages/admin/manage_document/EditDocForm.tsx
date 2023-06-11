@@ -37,6 +37,10 @@ const EditDocForm = () => {
             setTypeCard(StudyCardType.Sentence);
             setList(data.sentences);
             break;
+          case StudyCardType.Paraph.toString():
+            setTypeCard(StudyCardType.Paraph);
+            setList(data.paraphs);
+            break;
           default:
             break;
         }
@@ -175,12 +179,12 @@ const EditDocForm = () => {
         />
       )}
 
-      {isOpenEditCardForm && selectedItem && (
+      {isOpenEditCardForm && selectedItem && typeCard && (
         <EditVocab
           vocab={selectedItem}
           onClose={() => setIsOpenEditCardForm(false)}
           isDisplay={isOpenEditCardForm}
-          type={StudyCardType.Vocab}
+          type={typeCard}
         ></EditVocab>
       )}
     </div>

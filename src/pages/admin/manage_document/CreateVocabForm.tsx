@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Input } from "../../../components";
 import Popup from "../../../components/popup/Popup";
-import { setSentence, setVocab } from "../../../redux/slice/adminSlice";
+import { setDocCard } from "../../../redux/slice/adminSlice";
 import { AppDispatch } from "../../../redux/store";
 import { StudyCardType } from "../../../types";
 import style from "./IndexDocument.module.scss";
@@ -30,33 +30,18 @@ const CreateVocabForm = (props: Props) => {
         classNames={""}
         onClose={props.onClose}
         onSubmit={() => {
-          if (props.type === StudyCardType.Vocab) {
-            dispatch(
-              setVocab({
-                data: {
-                  display,
-                  meaning,
-                  imageFile: image,
-                  audio,
-                },
-                type: StudyCardType.Vocab,
-                doc_id: props.doc_id,
-              })
-            );
-          } else if (props.type === StudyCardType.Sentence) {
-            dispatch(
-              setSentence({
-                data: {
-                  display,
-                  meaning,
-                  imageFile: image,
-                  audio,
-                },
-                type: StudyCardType.Sentence,
-                doc_id: props.doc_id,
-              })
-            );
-          }
+          dispatch(
+            setDocCard({
+              data: {
+                display,
+                meaning,
+                imageFile: image,
+                audio,
+              },
+              type: props.type,
+              doc_id: props.doc_id,
+            })
+          );
         }}
         isDisplay={props.isDisplay}
       >

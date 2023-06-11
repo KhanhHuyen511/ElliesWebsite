@@ -60,11 +60,11 @@ const IndexDocument = () => {
               onClick={() => setCurrentType("sentences")}
             />
             <CategoryPanel
-              label={"Audios"}
-              isActive={currentType === "audios"}
+              label={"Paraphs"}
+              isActive={currentType === "paraphs"}
               classNames={cx("cate-item")}
               icon={<SpeakerWaveIcon />}
-              onClick={() => setCurrentType("audios")}
+              onClick={() => setCurrentType("paraphs")}
             />
             <CategoryPanel
               label={"Books"}
@@ -79,8 +79,9 @@ const IndexDocument = () => {
             <VocabDoc list={listDocVocab} type={StudyCardType.Vocab} />
           ) : currentType === "sentences" ? (
             <VocabDoc list={listDocVocab} type={StudyCardType.Sentence} />
+          ) : currentType === "paraphs" ? (
+            <VocabDoc list={listDocVocab} type={StudyCardType.Paraph} />
           ) : (
-            // <VocabDoc list={listSentences} />
             <></>
           )}
         </div>

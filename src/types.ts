@@ -56,6 +56,7 @@ export interface Doc {
   description?: string;
   vocabs?: StudyCard[];
   sentences?: StudyCard[];
+  paraphs?: StudyCard[];
   listItemIds?: string[];
   // listItems?: StudyCard[];
   createDate?: Date;

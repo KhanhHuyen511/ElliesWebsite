@@ -8,7 +8,6 @@ import {
   getDoc,
   getDocs,
   query,
-  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -36,6 +35,7 @@ interface types {
   // list user
   listVocabs?: StudyCard[];
   listSentences?: StudyCard[];
+  listParaphs?: StudyCard[];
   listEx?: Ex[];
   currentEx?: Ex;
   // list ...
@@ -270,6 +270,18 @@ export const getADocWithType = createAsyncThunk(
                 }
               });
               break;
+            case StudyCardType.Paraph.toString():
+              await getDoc(doc(db, "paraphs", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.paraphs) data.paraphs = [card, ...data.paraphs];
+                  else data.paraphs = [card];
+                }
+              });
+              break;
             default:
               break;
           }
@@ -281,7 +293,7 @@ export const getADocWithType = createAsyncThunk(
 );
 
 export const setDocument = createAsyncThunk(
-  "admin/study/setDocCard",
+  "admin/study/setDocument",
   async ({ data }: { data: Doc }) => {
     await addDoc(collection(db, "docs"), {
       title: data.title,
@@ -293,8 +305,8 @@ export const setDocument = createAsyncThunk(
   }
 );
 
-export const setVocab = createAsyncThunk(
-  "admin/study/setVocab",
+export const setDocCard = createAsyncThunk(
+  "admin/study/setDocCard",
   async ({
     data,
     type,
@@ -304,7 +316,27 @@ export const setVocab = createAsyncThunk(
     type: StudyCardType;
     doc_id: string;
   }) => {
-    const docRef = await addDoc(collection(db, "vocabs"), {
+    let typeCard = "";
+
+    // get Type
+    switch (type) {
+      case StudyCardType.Vocab:
+        typeCard = "vocabs";
+        break;
+      case StudyCardType.Sentence:
+        typeCard = "sentences";
+        break;
+      case StudyCardType.Paraph:
+        typeCard = "paraphs";
+        break;
+      case StudyCardType.Book:
+        typeCard = "books";
+        break;
+      default:
+        break;
+    }
+
+    const docRef = await addDoc(collection(db, typeCard), {
       display: data.display,
       meaning: data.meaning,
       imageFile: data.imageFile ? data.imageFile.name : "",
@@ -332,48 +364,7 @@ export const setVocab = createAsyncThunk(
       listItemIds: arrayUnion(data.id),
     });
 
-    return temp;
-  }
-);
-
-export const setSentence = createAsyncThunk(
-  "admin/study/setSentence",
-  async ({
-    data,
-    type,
-    doc_id,
-  }: {
-    data: StudyCard;
-    type: StudyCardType;
-    doc_id: string;
-  }) => {
-    const docRef = await addDoc(collection(db, "sentences"), {
-      display: data.display,
-      meaning: data.meaning,
-      imageFile: data.imageFile ? data.imageFile.name : "",
-      audio: data.audio ? data.audio.name : "",
-    });
-
-    if (data.imageFile) {
-      const imgRef = ref(storage, `images/${data.imageFile.name}`);
-      uploadBytes(imgRef, data.imageFile);
-    }
-    if (data.audio) {
-      const audioRef = ref(storage, `audios/${data.audio.name}`);
-      uploadBytes(audioRef, data.audio);
-    }
-    data.id = docRef.id;
-
-    // create temp object because data object make error (img, audio format) at payload
-    const temp: StudyCard = data;
-    temp.imageFile = data.imageFile ? data.imageFile.name : "";
-    temp.audio = data.audio ? data.audio.name : "";
-
-    await updateDoc(doc(db, "docs", doc_id), {
-      listItemIds: arrayUnion(data.id),
-    });
-
-    return temp;
+    return { data: temp, type };
   }
 );
 
@@ -510,19 +501,41 @@ export const updateDocument = createAsyncThunk(
   }
 );
 
-export const updateVocab = createAsyncThunk(
-  "admin/study/updateVocab",
+export const updateDocCard = createAsyncThunk(
+  "admin/study/updateDocCard",
   async ({
     data,
     oldImage,
     oldAudio,
+    type,
   }: {
     data: StudyCard;
     oldImage: any;
     oldAudio: any;
+    type: StudyCardType;
   }) => {
     if (data.id) {
-      const docRef = doc(db, "vocabs", data.id);
+      let typeCard = "";
+
+      // get Type
+      switch (type) {
+        case StudyCardType.Vocab:
+          typeCard = "vocabs";
+          break;
+        case StudyCardType.Sentence:
+          typeCard = "sentences";
+          break;
+        case StudyCardType.Paraph:
+          typeCard = "paraphs";
+          break;
+        case StudyCardType.Book:
+          typeCard = "books";
+          break;
+        default:
+          break;
+      }
+
+      const docRef = doc(db, typeCard, data.id);
       await updateDoc(docRef, {
         display: data.display,
         meaning: data.meaning,
@@ -542,44 +555,8 @@ export const updateVocab = createAsyncThunk(
       const temp: StudyCard = data;
       temp.imageFile = data.imageFile ? data.imageFile.name : "";
       temp.audio = data.audio ? data.audio.name : "";
-      return temp;
-    }
-  }
-);
 
-export const updateSentence = createAsyncThunk(
-  "admin/study/updateSentence",
-  async ({
-    data,
-    oldImage,
-    oldAudio,
-  }: {
-    data: StudyCard;
-    oldImage: any;
-    oldAudio: any;
-  }) => {
-    if (data.id) {
-      const docRef = doc(db, "sentences", data.id);
-      await updateDoc(docRef, {
-        display: data.display,
-        meaning: data.meaning,
-        imageFile: data.imageFile ? data.imageFile.name : oldImage,
-        audio: data.audio ? data.audio.name : oldAudio,
-      });
-
-      if (data.imageFile) {
-        const imgRef = ref(storage, `images/${data.imageFile.name}`);
-        uploadBytes(imgRef, data.imageFile);
-      }
-      if (data.audio) {
-        const audioRef = ref(storage, `audios/${data.audio.name}`);
-        uploadBytes(audioRef, data.audio);
-      }
-
-      const temp: StudyCard = data;
-      temp.imageFile = data.imageFile ? data.imageFile.name : "";
-      temp.audio = data.audio ? data.audio.name : "";
-      return temp;
+      return { data: temp, type };
     }
   }
 );
@@ -768,12 +745,27 @@ const adminSlice = createSlice({
     builder.addCase(setDocument.fulfilled, (state, action) => {
       state.listDocs?.push(action.payload as Doc);
     });
-    builder.addCase(setVocab.fulfilled, (state, action) => {
-      state.listVocabs?.push(action.payload as StudyCard);
-      state.currentDoc?.vocabs?.push(action.payload as StudyCard);
-    });
-    builder.addCase(setSentence.fulfilled, (state, action) => {
-      state.listSentences?.push(action.payload as StudyCard);
+    builder.addCase(setDocCard.fulfilled, (state, action) => {
+      switch (action.payload.type) {
+        case StudyCardType.Vocab:
+          state.listVocabs?.push(action.payload.data as StudyCard);
+          state.currentDoc?.vocabs?.push(action.payload.data as StudyCard);
+          break;
+        case StudyCardType.Sentence:
+          state.listSentences?.push(action.payload.data as StudyCard);
+          state.currentDoc?.sentences?.push(action.payload.data as StudyCard);
+          break;
+        case StudyCardType.Paraph:
+          state.listParaphs?.push(action.payload.data as StudyCard);
+          state.currentDoc?.paraphs?.push(action.payload.data as StudyCard);
+          break;
+        case StudyCardType.Book:
+          // state.?.push(action.payload as StudyCard);
+          // state.currentDoc?.paraphs?.push(action.payload as StudyCard);
+          break;
+        default:
+          break;
+      }
     });
     builder.addCase(getVocabs.fulfilled, (state, action) => {
       state.listVocabs = action.payload as StudyCard[];
@@ -790,22 +782,53 @@ const adminSlice = createSlice({
     builder.addCase(updateDocument.fulfilled, (state, action) => {
       state.currentDoc = action.payload as Doc;
     });
-    builder.addCase(updateVocab.fulfilled, (state, action) => {
-      let i = state.listVocabs?.findIndex((o) => o.id === action.payload?.id);
-      if (i && state.listVocabs)
-        state.listVocabs[i] = action.payload as StudyCard;
-      let e = state.currentDoc?.vocabs?.findIndex(
-        (o) => o.id === action.payload?.id
-      );
-      if (e && state.currentDoc?.vocabs)
-        state.currentDoc.vocabs[e] = action.payload as StudyCard;
-    });
-    builder.addCase(updateSentence.fulfilled, (state, action) => {
-      let i = state.listSentences?.findIndex(
-        (o) => o.id === action.payload?.id
-      );
-      if (i && state.listSentences)
-        state.listSentences[i] = action.payload as StudyCard;
+    builder.addCase(updateDocCard.fulfilled, (state, action) => {
+      switch (action.payload?.type) {
+        case StudyCardType.Vocab:
+          {
+            let i = state.listVocabs?.findIndex(
+              (o) => o.id === action.payload?.data.id
+            );
+            if (i && state.listVocabs)
+              state.listVocabs[i] = action.payload.data as StudyCard;
+            let e = state.currentDoc?.vocabs?.findIndex(
+              (o) => o.id === action.payload?.data.id
+            );
+            if (e && state.currentDoc?.vocabs)
+              state.currentDoc.vocabs[e] = action.payload.data as StudyCard;
+          }
+          break;
+        case StudyCardType.Sentence:
+          {
+            let i = state.listSentences?.findIndex(
+              (o) => o.id === action.payload?.data.id
+            );
+            if (i && state.listSentences)
+              state.listSentences[i] = action.payload.data as StudyCard;
+            let e = state.currentDoc?.sentences?.findIndex(
+              (o) => o.id === action.payload?.data.id
+            );
+            if (e && state.currentDoc?.sentences)
+              state.currentDoc.sentences[e] = action.payload.data as StudyCard;
+          }
+          break;
+        case StudyCardType.Paraph:
+          {
+            let i = state.listParaphs?.findIndex(
+              (o) => o.id === action.payload?.data.id
+            );
+            if (i && state.listParaphs)
+              state.listParaphs[i] = action.payload.data as StudyCard;
+            let e = state.currentDoc?.paraphs?.findIndex(
+              (o) => o.id === action.payload?.data.id
+            );
+            if (e && state.currentDoc?.paraphs)
+              state.currentDoc.paraphs[e] = action.payload.data as StudyCard;
+          }
+          break;
+        default:
+          break;
+      }
     });
     builder.addCase(getExercises.fulfilled, (state, action) => {
       state.listEx = action.payload as Ex[];
