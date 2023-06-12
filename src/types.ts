@@ -48,6 +48,8 @@ export enum StudyCardType {
 export enum GameType {
   TranslateToVN,
   TranslateToEN,
+  TranslateSentenceToVN,
+  TranslateSentenceToEN,
 }
 
 export interface Doc {
@@ -76,7 +78,7 @@ export interface Ex {
 
 export interface ExDetail {
   id: string;
-  type: string;
+  type: GameType;
   question: string;
   options: string[];
   answer: string;

@@ -4,7 +4,7 @@ import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { useParams } from "react-router-dom";
 import { Col, Row } from "react-flexbox-grid";
-import { Ex, ExDetail, StudyCard } from "../../../types";
+import { Ex, ExDetail, GameType, StudyCard } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getAExercise, updateAExercise } from "../../../redux/slice/adminSlice";
@@ -127,7 +127,7 @@ const DetailExercise = () => {
                           </td>
                           <td>{index + 1}</td>
                           <td>{item.vocab?.display}</td>
-                          <td>{item.type}</td>
+                          <td>{GameType[item.type]}</td>
                           <td>{item.answer}</td>
                         </tr>
                       ))}

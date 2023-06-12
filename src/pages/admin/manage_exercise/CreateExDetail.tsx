@@ -39,7 +39,7 @@ const CreateExDetail = ({
   const [option3, setOption3] = useState<string>();
   const [option4, setOption4] = useState<string>();
   const [answer, setAnswer] = useState<string>();
-  const [type, setType] = useState<string>(GameType[0]);
+  const [type, setType] = useState<GameType>(GameType.TranslateToVN);
 
   useEffect(() => {
     dispatch(getDocCardWithTopic({ topic: title, type: StudyCardType.Vocab }));
@@ -102,11 +102,7 @@ const CreateExDetail = ({
                   </tr>
                 ))}
                 {listSentences?.map((item, index) => (
-                  <tr
-                    key={
-                      listVocabs?.length ? listVocabs.length + index + 1 : index
-                    }
-                  >
+                  <tr key={index}>
                     <td>
                       <Checkbox
                         isChecked={selectedItem && item.id === selectedItem.id}
@@ -169,11 +165,17 @@ const CreateExDetail = ({
             <select
               value={type}
               onChange={(e) => {
-                setType(e.target.value);
+                setType(e.target.value as unknown as GameType);
               }}
             >
-              <option>{GameType[0]}</option>
-              <option>{GameType[1]}</option>
+              <option value={GameType.TranslateToVN}>{GameType[0]}</option>
+              <option value={GameType.TranslateToEN}>{GameType[1]}</option>
+              <option value={GameType.TranslateSentenceToVN}>
+                {GameType[2]}
+              </option>
+              <option value={GameType.TranslateSentenceToEN}>
+                {GameType[3]}
+              </option>
             </select>
           </Col>
         </Row>

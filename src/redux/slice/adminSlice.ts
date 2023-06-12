@@ -600,9 +600,11 @@ export const getAExercise = createAsyncThunk(
         var d: ExDetail = { ...(e.data() as ExDetail), id: e.id };
 
         if (d.vocab) {
-          const querySnapshot2 = await getDoc(
-            doc(db, "vocabs", e.data().vocab)
-          );
+          let querySnapshot2 = await getDoc(doc(db, "vocabs", e.data().vocab));
+
+          if (!querySnapshot2.data()) {
+            querySnapshot2 = await getDoc(doc(db, "sentences", e.data().vocab));
+          }
 
           d.vocab = querySnapshot2.data();
           if (d.vocab) d.vocab.id = querySnapshot2.id;
@@ -661,20 +663,34 @@ export const setAExDetail = createAsyncThunk(
     vocab: StudyCard;
     options: string[];
     answer: string;
-    type: string;
+    type: GameType | string;
   }) => {
+    console.log(typeof type);
+    const getQuestion = () => {
+      switch (type) {
+        case GameType.TranslateToVN.toString():
+          return "Nghĩa của từ này là gì?";
+        case GameType.TranslateToEN.toString():
+          return "Dịch từ này sang tiếng Anh?";
+        case GameType.TranslateSentenceToVN.toString():
+          return "Nghĩa của câu này là gì?";
+        case GameType.TranslateSentenceToEN.toString():
+          return "Dịch câu này sang tiếng Anh?";
+        default:
+          return "";
+      }
+    };
+
     let item: ExDetail = {
       vocab,
       options,
       answer,
-      type,
-      question: "",
+      type: type as GameType,
+      question: getQuestion(),
       id: "",
     };
-    item.question =
-      type === GameType[0]
-        ? "Nghĩa của từ này là gì?"
-        : "Dịch từ này sang tiếng Anh?";
+
+    console.log(item.question);
     await addDoc(collection(db, "exs", exId, "listItems"), {
       vocab: vocab.id,
       options: options,
@@ -700,17 +716,29 @@ export const updateAExDetail = createAsyncThunk(
     exId: string;
     options?: string[];
     answer?: string;
-    type?: string;
+    type?: GameType | string;
   }) => {
+    const getQuestion = () => {
+      switch (type) {
+        case GameType.TranslateToVN.toString():
+          return "Nghĩa của từ này là gì?";
+        case GameType.TranslateToEN.toString():
+          return "Dịch từ này sang tiếng Anh?";
+        case GameType.TranslateSentenceToVN.toString():
+          return "Nghĩa của câu này là gì?";
+        case GameType.TranslateSentenceToEN.toString():
+          return "Dịch câu này sang tiếng Anh?";
+        default:
+          return "";
+      }
+    };
+
     const item: ExDetail = {
       ...data,
       options: options ? options : data.options,
       answer: answer ? answer : data.answer,
-      type: type ? type : data.type,
-      question:
-        type !== data.type && type === GameType[0]
-          ? "Nghĩa của từ này là gì?"
-          : "Dịch từ này sang tiếng Anh?",
+      type: type ? (type as GameType) : (data.type as GameType),
+      question: type !== data.type ? getQuestion() : data.question,
     };
 
     await updateDoc(doc(db, "exs", exId, "listItems", data.id), {

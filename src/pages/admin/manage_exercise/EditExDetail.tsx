@@ -29,7 +29,7 @@ const EditExDetail = ({
   const [option3, setOption3] = useState<string>(data.options[2]);
   const [option4, setOption4] = useState<string>(data.options[3]);
   const [answer, setAnswer] = useState<string>(data.answer);
-  const [type, setType] = useState<string>(data.type);
+  const [type, setType] = useState<GameType>(data.type);
 
   return (
     <>
@@ -115,11 +115,17 @@ const EditExDetail = ({
             <select
               value={type}
               onChange={(e) => {
-                setType(e.target.value);
+                setType(e.target.value as unknown as GameType);
               }}
             >
-              <option>{GameType[0]}</option>
-              <option>{GameType[1]}</option>
+              <option value={GameType.TranslateToVN}>{GameType[0]}</option>
+              <option value={GameType.TranslateToEN}>{GameType[1]}</option>
+              <option value={GameType.TranslateSentenceToVN}>
+                {GameType[2]}
+              </option>
+              <option value={GameType.TranslateSentenceToEN}>
+                {GameType[3]}
+              </option>
             </select>
           </Col>
         </Row>
