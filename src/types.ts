@@ -50,6 +50,8 @@ export enum GameType {
   TranslateToEN,
   TranslateSentenceToVN,
   TranslateSentenceToEN,
+  ///
+  FillInSentence,
 }
 
 export interface Doc {
@@ -84,6 +86,7 @@ export interface ExDetail {
   answer: string;
   exRight?: boolean;
   vocab?: StudyCard;
+  keyWord?: string;
 }
 
 export interface UserEx {

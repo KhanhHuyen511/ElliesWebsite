@@ -29,6 +29,9 @@ const EditExDetail = ({
   const [option3, setOption3] = useState<string>(data.options[2]);
   const [option4, setOption4] = useState<string>(data.options[3]);
   const [answer, setAnswer] = useState<string>(data.answer);
+  const [keyWord, setKeyWord] = useState<string>(
+    data.keyWord ? data.keyWord : ""
+  );
   const [type, setType] = useState<GameType>(data.type);
 
   return (
@@ -45,6 +48,7 @@ const EditExDetail = ({
                 options: [option1, option2, option3, option4],
                 answer: answer !== data.answer ? answer : undefined,
                 type: type !== data.type ? type : undefined,
+                keyWord,
               })
             );
           }
@@ -70,6 +74,17 @@ const EditExDetail = ({
             </table>
           </Col>
           <Col md={6}>
+            {type == GameType.FillInSentence && (
+              <Input
+                label={"Nhập từ khoá"}
+                value={keyWord}
+                placeholder={""}
+                onChange={(e) => {
+                  setKeyWord(e.target.value);
+                }}
+                isRequired
+              ></Input>
+            )}
             <Input
               label={"Sự lựa chọn 1"}
               value={option1}
@@ -126,6 +141,7 @@ const EditExDetail = ({
               <option value={GameType.TranslateSentenceToEN}>
                 {GameType[3]}
               </option>
+              <option value={GameType.FillInSentence}>{GameType[4]}</option>
             </select>
           </Col>
         </Row>

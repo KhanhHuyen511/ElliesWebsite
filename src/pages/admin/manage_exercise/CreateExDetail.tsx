@@ -39,6 +39,7 @@ const CreateExDetail = ({
   const [option3, setOption3] = useState<string>();
   const [option4, setOption4] = useState<string>();
   const [answer, setAnswer] = useState<string>();
+  const [keyWord, setKeyWord] = useState<string>();
   const [type, setType] = useState<GameType>(GameType.TranslateToVN);
 
   useEffect(() => {
@@ -67,6 +68,7 @@ const CreateExDetail = ({
                 ],
                 answer,
                 type,
+                keyWord,
               })
             );
           }
@@ -120,6 +122,17 @@ const CreateExDetail = ({
             </table>
           </Col>
           <Col md={6}>
+            {type == GameType.FillInSentence && (
+              <Input
+                label={"Nhập từ khoá"}
+                value={keyWord}
+                placeholder={""}
+                onChange={(e) => {
+                  setKeyWord(e.target.value);
+                }}
+                isRequired
+              ></Input>
+            )}
             <Input
               label={"Nhập sự lựa chọn 1"}
               value={option1}
@@ -176,6 +189,7 @@ const CreateExDetail = ({
               <option value={GameType.TranslateSentenceToEN}>
                 {GameType[3]}
               </option>
+              <option value={GameType.FillInSentence}>{GameType[4]}</option>
             </select>
           </Col>
         </Row>

@@ -658,14 +658,15 @@ export const setAExDetail = createAsyncThunk(
     options,
     answer,
     type,
+    keyWord,
   }: {
     exId: string;
     vocab: StudyCard;
     options: string[];
     answer: string;
     type: GameType | string;
+    keyWord?: string;
   }) => {
-    console.log(typeof type);
     const getQuestion = () => {
       switch (type) {
         case GameType.TranslateToVN.toString():
@@ -676,6 +677,8 @@ export const setAExDetail = createAsyncThunk(
           return "Nghĩa của câu này là gì?";
         case GameType.TranslateSentenceToEN.toString():
           return "Dịch câu này sang tiếng Anh?";
+        case GameType.FillInSentence.toString():
+          return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
         default:
           return "";
       }
@@ -690,14 +693,27 @@ export const setAExDetail = createAsyncThunk(
       id: "",
     };
 
-    console.log(item.question);
-    await addDoc(collection(db, "exs", exId, "listItems"), {
-      vocab: vocab.id,
-      options: options,
-      answer: answer,
-      type: type,
-      question: item.question,
-    }).then((e) => (item.id = e.id));
+    switch (type) {
+      case GameType.FillInSentence.toString():
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          options: options,
+          answer: answer,
+          type: type,
+          question: item.question,
+          keyWord,
+        }).then((e) => (item.id = e.id));
+        break;
+      default:
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          options: options,
+          answer: answer,
+          type: type,
+          question: item.question,
+        }).then((e) => (item.id = e.id));
+        break;
+    }
 
     return item;
   }
@@ -711,12 +727,14 @@ export const updateAExDetail = createAsyncThunk(
     options,
     answer,
     type,
+    keyWord,
   }: {
     data: ExDetail;
     exId: string;
     options?: string[];
     answer?: string;
     type?: GameType | string;
+    keyWord?: string;
   }) => {
     const getQuestion = () => {
       switch (type) {
@@ -728,25 +746,52 @@ export const updateAExDetail = createAsyncThunk(
           return "Nghĩa của câu này là gì?";
         case GameType.TranslateSentenceToEN.toString():
           return "Dịch câu này sang tiếng Anh?";
+        case GameType.FillInSentence.toString():
+          return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
         default:
           return "";
       }
     };
 
-    const item: ExDetail = {
-      ...data,
-      options: options ? options : data.options,
-      answer: answer ? answer : data.answer,
-      type: type ? (type as GameType) : (data.type as GameType),
-      question: type !== data.type ? getQuestion() : data.question,
-    };
+    let item: ExDetail = data;
 
-    await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
-      options: item.options,
-      answer: item.answer,
-      type: item.type,
-      question: item.question,
-    });
+    switch (type) {
+      case GameType.FillInSentence.toString():
+        item = {
+          ...data,
+          options: options ? options : data.options,
+          answer: answer ? answer : data.answer,
+          type: type ? (type as unknown as GameType) : (data.type as GameType),
+          question:
+            (type as unknown as GameType) !== data.type
+              ? getQuestion()
+              : data.question,
+          keyWord,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          options: item.options,
+          answer: item.answer,
+          type: item.type,
+          question: item.question,
+          keyWord,
+        });
+        break;
+      default:
+        item = {
+          ...data,
+          options: options ? options : data.options,
+          answer: answer ? answer : data.answer,
+          type: type ? (type as GameType) : (data.type as GameType),
+          question: type !== data.type ? getQuestion() : data.question,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          options: item.options,
+          answer: item.answer,
+          type: item.type,
+          question: item.question,
+        });
+        break;
+    }
 
     return item;
   }
