@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addDoc,
   collection,
@@ -8,10 +8,10 @@ import {
   query,
   Timestamp,
   where,
-} from 'firebase/firestore';
-import { db } from '../../firebase/config';
-import { Ex, ExDetail, UserEx } from '../../types';
-import { getDate } from '../../utils';
+} from "firebase/firestore";
+import { db } from "../../firebase/config";
+import { Ex, ExDetail, UserEx } from "../../types";
+import { getDate } from "../../utils";
 
 interface types {
   listExs: Ex[];
@@ -24,9 +24,9 @@ const initialState: types = {
 };
 
 // Write reducer get Docs
-export const getListExs = createAsyncThunk('doc/getExs', async () => {
+export const getListExs = createAsyncThunk("doc/getExs", async () => {
   var exs: Ex[] = [];
-  const querySnapshot = await getDocs(collection(db, 'exs'));
+  const querySnapshot = await getDocs(collection(db, "exs"));
 
   querySnapshot.forEach(async (e) => {
     var item: Ex = e.data() as Ex;
@@ -39,13 +39,13 @@ export const getListExs = createAsyncThunk('doc/getExs', async () => {
 });
 
 export const getListUserExs = createAsyncThunk(
-  'doc/getUserExs',
+  "doc/getUserExs",
   async (userId: string) => {
     var exs: UserEx[] = [];
 
     const q = await query(
-      collection(db, 'userExs'),
-      where('userId', '==', userId)
+      collection(db, "userExs"),
+      where("userId", "==", userId)
     );
     await Promise.all(
       (
@@ -55,7 +55,7 @@ export const getListUserExs = createAsyncThunk(
 
         // get result list of current user
         const querySnapshot = await getDocs(
-          collection(db, 'userExs', item.id, 'resultList')
+          collection(db, "userExs", item.id, "resultList")
         );
 
         const resultList: ExDetail[] = [];
@@ -68,7 +68,7 @@ export const getListUserExs = createAsyncThunk(
 
         // get ex object
         const exID = item.data().ex;
-        const ex = (await (await getDoc(doc(db, 'exs', exID))).data()) as Ex;
+        const ex = (await (await getDoc(doc(db, "exs", exID))).data()) as Ex;
 
         temp.id = item.id;
         temp.ex = ex;
@@ -84,24 +84,27 @@ export const getListUserExs = createAsyncThunk(
   }
 );
 
-export const getAEx = createAsyncThunk('doc/getAEx', async (id: string) => {
-  const querySnapshot = await getDoc(doc(db, 'exs', id));
+export const getAEx = createAsyncThunk("doc/getAEx", async (id: string) => {
+  const querySnapshot = await getDoc(doc(db, "exs", id));
 
   var item: Ex = querySnapshot.data() as Ex;
   item.id = id;
   item.listItems = undefined;
 
-  const querySnapshot1 = await getDocs(collection(db, 'exs', id, 'listItems'));
+  const querySnapshot1 = await getDocs(collection(db, "exs", id, "listItems"));
 
   var listItems: ExDetail[] = [];
 
   await Promise.all(
     querySnapshot1.docs.map(async (e) => {
-      var d: ExDetail = e.data() as ExDetail;
-      d.id = e.id;
+      var d: ExDetail = { ...(e.data() as ExDetail), id: e.id };
 
       if (d.vocab) {
-        const querySnapshot2 = await getDoc(doc(db, 'vocabs', e.data().vocab));
+        let querySnapshot2 = await getDoc(doc(db, "vocabs", e.data().vocab));
+
+        if (!querySnapshot2.data()) {
+          querySnapshot2 = await getDoc(doc(db, "sentences", e.data().vocab));
+        }
 
         d.vocab = querySnapshot2.data();
         if (d.vocab) d.vocab.id = querySnapshot2.id;
@@ -116,22 +119,22 @@ export const getAEx = createAsyncThunk('doc/getAEx', async (id: string) => {
 });
 
 export const setCompleteExState = createAsyncThunk(
-  'study/setExerciseState',
+  "study/setExerciseState",
   async (data: { resultList: ExDetail[]; exId: string; userID: string }) => {
-    await addDoc(collection(db, 'userExs'), {
+    await addDoc(collection(db, "userExs"), {
       userId: data.userID,
       ex: data.exId,
       didDate: new Date(),
     }).then((e) =>
       data.resultList.map((item) =>
-        addDoc(collection(db, 'userExs', e.id, 'resultList'), { ...item })
+        addDoc(collection(db, "userExs", e.id, "resultList"), { ...item })
       )
     );
   }
 );
 
 const exSlice = createSlice({
-  name: 'ex',
+  name: "ex",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

@@ -37,7 +37,10 @@ const ExerciseChild = ({
           <VocabCard
             card={data.vocab}
             isQuestion
-            isShowVN={data.type === GameType.TranslateToEN}
+            isShowVN={
+              data.type == GameType.TranslateToEN ||
+              data.type == GameType.TranslateSentenceToEN
+            }
           ></VocabCard>
         )}
         <Row className={cx("options")}>
@@ -45,7 +48,8 @@ const ExerciseChild = ({
             data.options.length > 0 &&
             data.options.map((item) => (
               <Col
-                xs={6}
+                xs={12}
+                md={6}
                 className={cx("item")}
                 onClick={() => {
                   checkAnswer(item);
