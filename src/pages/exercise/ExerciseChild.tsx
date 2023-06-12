@@ -41,6 +41,8 @@ const ExerciseChild = ({
               data.type == GameType.TranslateToEN ||
               data.type == GameType.TranslateSentenceToEN
             }
+            isExFill={data.type == GameType.FillInSentence}
+            keyWord={data.keyWord}
           ></VocabCard>
         )}
         <Row className={cx("options")}>

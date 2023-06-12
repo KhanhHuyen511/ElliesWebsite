@@ -11,10 +11,14 @@ const VocabCard = ({
   card,
   isQuestion,
   isShowVN,
+  isExFill,
+  keyWord,
 }: {
   card: StudyCard;
   isQuestion?: boolean;
   isShowVN?: boolean;
+  isExFill?: boolean;
+  keyWord?: string;
 }) => {
   const [img, setImg] = useState("");
   const [audio, setAudio] = useState("");
@@ -34,12 +38,22 @@ const VocabCard = ({
     sound.play();
   };
 
+  const emptyKeyWord = () => {
+    if (isQuestion && isExFill && keyWord) {
+      return card.display?.replace(keyWord, "___");
+    }
+  };
+
   return (
     <>
       <div className={cx("body")}>
         <div className={cx("display")}>
           <p className={cx("display-text")}>
-            {!isShowVN ? card.display : card.meaning}
+            {isExFill
+              ? emptyKeyWord()
+              : !isShowVN
+              ? card.display
+              : card.meaning}
           </p>
           <div className={cx("pronoun")}>
             <SpeakerWaveIcon width={24} height={24} onClick={playAudio} />
