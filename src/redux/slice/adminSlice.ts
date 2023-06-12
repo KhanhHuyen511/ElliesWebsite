@@ -679,6 +679,8 @@ export const setAExDetail = createAsyncThunk(
           return "Dịch câu này sang tiếng Anh?";
         case GameType.FillInSentence.toString():
           return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
+        case GameType.SortWords.toString():
+          return "Hãy sắp xếp thứ tự các từ để có một câu đúng.";
         default:
           return "";
       }
@@ -702,6 +704,13 @@ export const setAExDetail = createAsyncThunk(
           type: type,
           question: item.question,
           keyWord,
+        }).then((e) => (item.id = e.id));
+        break;
+      case GameType.SortWords.toString():
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          type: type,
+          question: item.question,
         }).then((e) => (item.id = e.id));
         break;
       default:
@@ -748,6 +757,8 @@ export const updateAExDetail = createAsyncThunk(
           return "Dịch câu này sang tiếng Anh?";
         case GameType.FillInSentence.toString():
           return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
+        case GameType.SortWords.toString():
+          return "Hãy sắp xếp thứ tự các từ để có một câu đúng.";
         default:
           return "";
       }
@@ -774,6 +785,24 @@ export const updateAExDetail = createAsyncThunk(
           type: item.type,
           question: item.question,
           keyWord,
+        });
+        break;
+      case GameType.SortWords.toString():
+        item = {
+          id: data.id,
+          vocab: data.vocab,
+          type: type ? (type as unknown as GameType) : (data.type as GameType),
+          question:
+            (type as unknown as GameType) !== data.type
+              ? getQuestion()
+              : data.question,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          type: item.type,
+          question: item.question,
+          options: [],
+          answer: "",
+          keyWord: "",
         });
         break;
       default:

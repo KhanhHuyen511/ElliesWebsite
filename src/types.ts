@@ -52,6 +52,8 @@ export enum GameType {
   TranslateSentenceToEN,
   ///
   FillInSentence,
+  ///
+  SortWords,
 }
 
 export interface Doc {
@@ -78,12 +80,22 @@ export interface Ex {
   level?: string;
 }
 
+// export interface BaseExDetail {
+//   id: string;
+//   type: GameType;
+//   question: string;
+//   options?: string[];
+//   answer?: string;
+//   exRight?: boolean;
+//   vocab?: StudyCard;
+// }
+
 export interface ExDetail {
   id: string;
   type: GameType;
   question: string;
-  options: string[];
-  answer: string;
+  options?: string[];
+  answer?: string;
   exRight?: boolean;
   vocab?: StudyCard;
   keyWord?: string;

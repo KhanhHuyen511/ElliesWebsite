@@ -34,12 +34,12 @@ const CreateExDetail = ({
   );
 
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
-  const [option1, setOption1] = useState<string>();
-  const [option2, setOption2] = useState<string>();
-  const [option3, setOption3] = useState<string>();
-  const [option4, setOption4] = useState<string>();
-  const [answer, setAnswer] = useState<string>();
-  const [keyWord, setKeyWord] = useState<string>();
+  const [option1, setOption1] = useState<string>("");
+  const [option2, setOption2] = useState<string>("");
+  const [option3, setOption3] = useState<string>("");
+  const [option4, setOption4] = useState<string>("");
+  const [answer, setAnswer] = useState<string>("");
+  const [keyWord, setKeyWord] = useState<string>("");
   const [type, setType] = useState<GameType>(GameType.TranslateToVN);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const CreateExDetail = ({
         title={"Tạo câu hỏi mới"}
         onClose={onClose}
         onSubmit={() => {
-          if (id && answer && type && selectedItem) {
+          if (id && type && selectedItem) {
             dispatch(
               setAExDetail({
                 exId: id,
@@ -133,48 +133,52 @@ const CreateExDetail = ({
                 isRequired
               ></Input>
             )}
-            <Input
-              label={"Nhập sự lựa chọn 1"}
-              value={option1}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption1(e.target.value);
-              }}
-              isRequired
-            ></Input>
-            <Input
-              label={"Nhập sự lựa chọn 2"}
-              value={option2}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption2(e.target.value);
-              }}
-            ></Input>
-            <Input
-              label={"Nhập sự lựa chọn 3"}
-              value={option3}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption3(e.target.value);
-              }}
-            ></Input>
-            <Input
-              label={"Nhập sự lựa chọn 4"}
-              value={option4}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption4(e.target.value);
-              }}
-            ></Input>
-            <Input
-              label={"Nhập đáp án đúng"}
-              value={answer}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setAnswer(e.target.value);
-              }}
-              isRequired
-            ></Input>
+            {type != GameType.SortWords && (
+              <>
+                <Input
+                  label={"Nhập sự lựa chọn 1"}
+                  value={option1}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption1(e.target.value);
+                  }}
+                  isRequired
+                ></Input>
+                <Input
+                  label={"Nhập sự lựa chọn 2"}
+                  value={option2}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption2(e.target.value);
+                  }}
+                ></Input>
+                <Input
+                  label={"Nhập sự lựa chọn 3"}
+                  value={option3}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption3(e.target.value);
+                  }}
+                ></Input>
+                <Input
+                  label={"Nhập sự lựa chọn 4"}
+                  value={option4}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption4(e.target.value);
+                  }}
+                ></Input>
+                <Input
+                  label={"Nhập đáp án đúng"}
+                  value={answer}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setAnswer(e.target.value);
+                  }}
+                  isRequired
+                ></Input>
+              </>
+            )}
             <select
               value={type}
               onChange={(e) => {
@@ -190,6 +194,7 @@ const CreateExDetail = ({
                 {GameType[3]}
               </option>
               <option value={GameType.FillInSentence}>{GameType[4]}</option>
+              <option value={GameType.SortWords}>{GameType[5]}</option>
             </select>
           </Col>
         </Row>

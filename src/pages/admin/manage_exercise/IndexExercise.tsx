@@ -23,7 +23,7 @@ const IndexExercise = () => {
 
   const [selectedItem, setSelectedItem] = useState<string>();
   const [isOpenForm, setIsOpenForm] = useState(false);
-  const [currentType, setCurrentType] = useState("vocabs");
+  // const [currentType, setCurrentType] = useState("vocabs");
 
   useEffect(() => {
     dispatch(getExercises());
@@ -39,7 +39,7 @@ const IndexExercise = () => {
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
           <h2>Manage Exercise</h2>
-          <ul className={cx("doc-cate-wrapper")}>
+          {/* <ul className={cx("doc-cate-wrapper")}>
             <CategoryPanel
               label={"Vocabs"}
               isActive={currentType === "vocabs"}
@@ -61,7 +61,7 @@ const IndexExercise = () => {
               icon={<SpeakerWaveIcon />}
               onClick={() => setCurrentType("paraphs")}
             />
-          </ul>
+          </ul> */}
           <>
             <div className={cx("handler")}>
               <Button
