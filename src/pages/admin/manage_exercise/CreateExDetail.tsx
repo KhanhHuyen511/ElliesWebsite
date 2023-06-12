@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Input, Popup } from "../../../components";
 import {
-  getVocabsWithTopic,
+  getDocCardWithTopic,
   setAExDetail,
 } from "../../../redux/slice/adminSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { GameType, StudyCard } from "../../../types";
+import { GameType, StudyCard, StudyCardType } from "../../../types";
 import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { Col, Row } from "react-flexbox-grid";
@@ -29,6 +29,9 @@ const CreateExDetail = ({
   const listVocabs: StudyCard[] | undefined = useSelector(
     (state: RootState) => state.admin.listVocabs
   );
+  const listSentences: StudyCard[] | undefined = useSelector(
+    (state: RootState) => state.admin.listSentences
+  );
 
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
   const [option1, setOption1] = useState<string>();
@@ -39,7 +42,10 @@ const CreateExDetail = ({
   const [type, setType] = useState<string>(GameType[0]);
 
   useEffect(() => {
-    dispatch(getVocabsWithTopic(title));
+    dispatch(getDocCardWithTopic({ topic: title, type: StudyCardType.Vocab }));
+    dispatch(
+      getDocCardWithTopic({ topic: title, type: StudyCardType.Sentence })
+    );
   }, [dispatch]);
 
   return (
@@ -82,6 +88,25 @@ const CreateExDetail = ({
               <tbody>
                 {listVocabs?.map((item, index) => (
                   <tr key={index}>
+                    <td>
+                      <Checkbox
+                        isChecked={selectedItem && item.id === selectedItem.id}
+                        onChecked={() => {
+                          setSelectedItem(item);
+                        }}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{item?.display}</td>
+                    <td>{item.meaning}</td>
+                  </tr>
+                ))}
+                {listSentences?.map((item, index) => (
+                  <tr
+                    key={
+                      listVocabs?.length ? listVocabs.length + index + 1 : index
+                    }
+                  >
                     <td>
                       <Checkbox
                         isChecked={selectedItem && item.id === selectedItem.id}

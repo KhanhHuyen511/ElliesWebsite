@@ -58,7 +58,6 @@ export interface Doc {
   sentences?: StudyCard[];
   paraphs?: StudyCard[];
   listItemIds?: string[];
-  // listItems?: StudyCard[];
   createDate?: Date;
   type?: StudyCardType;
 }
@@ -68,6 +67,9 @@ export interface Ex {
   title: string; // topic
   description: string;
   listItems?: ExDetail[];
+  vocabs?: StudyCard[];
+  sentences?: StudyCard[];
+  paraphs?: StudyCard[];
   score?: number; // => later in future
   level?: string;
 }

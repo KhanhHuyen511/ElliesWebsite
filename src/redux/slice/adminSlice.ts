@@ -382,9 +382,29 @@ export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
   return list;
 });
 
-export const getVocabsWithTopic = createAsyncThunk(
-  "admin/study/getVocabsWithTopic",
-  async (topic: string) => {
+export const getDocCardWithTopic = createAsyncThunk(
+  "admin/study/getDocCardWithTopic",
+  async ({ topic, type }: { topic: string; type: StudyCardType }) => {
+    let typeCard = "";
+
+    // get Type
+    switch (type) {
+      case StudyCardType.Vocab:
+        typeCard = "vocabs";
+        break;
+      case StudyCardType.Sentence:
+        typeCard = "sentences";
+        break;
+      case StudyCardType.Paraph:
+        typeCard = "paraphs";
+        break;
+      case StudyCardType.Book:
+        typeCard = "books";
+        break;
+      default:
+        break;
+    }
+
     var list: StudyCard[] = [];
     const q = query(collection(db, "docs"), where("title", "==", topic));
     const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
@@ -393,7 +413,7 @@ export const getVocabsWithTopic = createAsyncThunk(
     if (l)
       await Promise.all(
         l.map(async (item) => {
-          let snapshot = await getDoc(doc(db, "vocabs", item));
+          let snapshot = await getDoc(doc(db, typeCard, item));
           let card: StudyCard = {
             ...(snapshot.data() as StudyCard),
             id: snapshot.id,
@@ -402,7 +422,7 @@ export const getVocabsWithTopic = createAsyncThunk(
         })
       );
 
-    return list;
+    return { data: list, type };
   }
 );
 
@@ -416,30 +436,6 @@ export const getSentences = createAsyncThunk(
       item.id = e.id;
       list.push(item);
     });
-
-    return list;
-  }
-);
-
-export const getSentencesWithTopic = createAsyncThunk(
-  "admin/study/getSentencesWithTopic",
-  async (topic: string) => {
-    var list: StudyCard[] = [];
-    const q = query(collection(db, "docs"), where("title", "==", topic));
-    const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
-    const l = aDoc.listItemIds;
-
-    if (l)
-      await Promise.all(
-        l.map(async (item) => {
-          let snapshot = await getDoc(doc(db, "sentences", item));
-          let card: StudyCard = {
-            ...(snapshot.data() as StudyCard),
-            id: snapshot.id,
-          };
-          if (snapshot.data()) list.push(card as StudyCard);
-        })
-      );
 
     return list;
   }
@@ -784,13 +780,22 @@ const adminSlice = createSlice({
     builder.addCase(getVocabs.fulfilled, (state, action) => {
       state.listVocabs = action.payload as StudyCard[];
     });
-    builder.addCase(getVocabsWithTopic.fulfilled, (state, action) => {
-      state.listVocabs = action.payload as StudyCard[];
+    builder.addCase(getDocCardWithTopic.fulfilled, (state, action) => {
+      switch (action.payload.type) {
+        case StudyCardType.Vocab:
+          state.listVocabs = action.payload.data as StudyCard[];
+          break;
+        case StudyCardType.Sentence:
+          state.listSentences = action.payload.data as StudyCard[];
+          break;
+        case StudyCardType.Paraph:
+          state.listParaphs = action.payload.data as StudyCard[];
+          break;
+        default:
+          break;
+      }
     });
     builder.addCase(getSentences.fulfilled, (state, action) => {
-      state.listSentences = action.payload as StudyCard[];
-    });
-    builder.addCase(getSentencesWithTopic.fulfilled, (state, action) => {
       state.listSentences = action.payload as StudyCard[];
     });
     builder.addCase(updateDocument.fulfilled, (state, action) => {

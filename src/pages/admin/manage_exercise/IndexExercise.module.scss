@@ -1,5 +1,5 @@
-@import '../../../assets/style/shared.scss';
-@import '../../../assets/theme/shared.css';
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
 
 .table {
   width: 100%;
@@ -27,4 +27,14 @@
 .handler {
   width: 100%;
   display: flex;
+}
+
+.doc-cate-wrapper {
+  display: flex;
+  column-gap: 18px;
+  margin-top: 26px;
+
+  .cate-item {
+    flex: 1;
+  }
 }

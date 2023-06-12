@@ -3,13 +3,12 @@ import { Checkbox } from "../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
-  getSentencesWithTopic,
-  getVocabsWithTopic,
+  getDocCardWithTopic,
   setStudyCard,
 } from "../../../redux/slice/adminSlice";
 import Popup from "../../../components/popup/Popup";
 import style from "./IndexStudy.module.scss";
-import { StudyCard } from "../../../types";
+import { StudyCard, StudyCardType } from "../../../types";
 import { Col, Row } from "react-flexbox-grid";
 import classNames from "classnames/bind";
 const cx = classNames.bind(style);
@@ -37,8 +36,12 @@ const CreateStudyCard = (props: Props) => {
   console.log(selectedItem);
 
   useEffect(() => {
-    dispatch(getVocabsWithTopic(props.topic));
-    dispatch(getSentencesWithTopic(props.topic));
+    dispatch(
+      getDocCardWithTopic({ topic: props.topic, type: StudyCardType.Vocab })
+    );
+    dispatch(
+      getDocCardWithTopic({ topic: props.topic, type: StudyCardType.Sentence })
+    );
   }, [dispatch]);
 
   return (
