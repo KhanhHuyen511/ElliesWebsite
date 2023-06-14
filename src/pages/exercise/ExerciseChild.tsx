@@ -3,7 +3,12 @@ import style from "./ExerciseChild.module.scss";
 import classNames from "classnames/bind";
 import React from "react";
 import { ExDetail, GameType } from "../../types";
-import { AnswerPanel, Button, VocabCard } from "../../components";
+import {
+  AnswerPanel,
+  Button,
+  ExerciseCard,
+  SortExerciseCard,
+} from "../../components";
 import { Col, Row } from "react-flexbox-grid";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 const cx = classNames.bind(style);
@@ -17,6 +22,7 @@ const ExerciseChild = ({
 }) => {
   const [selectedItem, setSelectedItem] = useState<string>();
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [sortResult, setSortResult] = useState<string>();
 
   useEffect(() => {
     setSelectedItem(undefined);
@@ -33,18 +39,31 @@ const ExerciseChild = ({
     <>
       <div className={cx("wrapper")}>
         <p className={cx("question")}>{data.question}</p>
-        {data.vocab && (
-          <VocabCard
-            card={data.vocab}
-            isQuestion
-            isShowVN={
-              data.type == GameType.TranslateToEN ||
-              data.type == GameType.TranslateSentenceToEN
-            }
-            isExFill={data.type == GameType.FillInSentence}
-            keyWord={data.keyWord}
-          ></VocabCard>
-        )}
+        {data.vocab &&
+          (data.type == GameType.SortWords ? (
+            <SortExerciseCard
+              card={data.vocab}
+              onChange={(e: string) => console.log(e)}
+              // onNext={() => {
+              //   onNext({
+              //     id: data.id,
+              //     type: GameType.SortWords,
+              //     question: data.question,
+              //   });
+              // }}
+            ></SortExerciseCard>
+          ) : (
+            <ExerciseCard
+              card={data.vocab}
+              isQuestion
+              isShowVN={
+                data.type == GameType.TranslateToEN ||
+                data.type == GameType.TranslateSentenceToEN
+              }
+              isExFill={data.type == GameType.FillInSentence}
+              keyWord={data.keyWord}
+            ></ExerciseCard>
+          ))}
         <Row className={cx("options")}>
           {data.options &&
             data.options.length > 0 &&

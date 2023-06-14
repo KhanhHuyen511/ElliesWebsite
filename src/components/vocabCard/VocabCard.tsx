@@ -7,19 +7,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../firebase/config";
 const cx = classNames.bind(style);
 
-const VocabCard = ({
-  card,
-  isQuestion,
-  isShowVN,
-  isExFill,
-  keyWord,
-}: {
-  card: StudyCard;
-  isQuestion?: boolean;
-  isShowVN?: boolean;
-  isExFill?: boolean;
-  keyWord?: string;
-}) => {
+const VocabCard = ({ card }: { card: StudyCard }) => {
   const [img, setImg] = useState("");
   const [audio, setAudio] = useState("");
 
@@ -38,23 +26,11 @@ const VocabCard = ({
     sound.play();
   };
 
-  const emptyKeyWord = () => {
-    if (isQuestion && isExFill && keyWord) {
-      return card.display?.replace(keyWord, "___");
-    }
-  };
-
   return (
     <>
       <div className={cx("body")}>
         <div className={cx("display")}>
-          <p className={cx("display-text")}>
-            {isExFill
-              ? emptyKeyWord()
-              : !isShowVN
-              ? card.display
-              : card.meaning}
-          </p>
+          <p className={cx("display-text")}>{card.display}</p>
           <div className={cx("pronoun")}>
             <SpeakerWaveIcon width={24} height={24} onClick={playAudio} />
             <p className={cx("pronoun-text")}>??</p>
@@ -64,12 +40,9 @@ const VocabCard = ({
         <div className={cx("image")}>
           <img src={img} alt="" />
         </div>
-        {!isQuestion && (
-          <>
-            <p className={cx("meaning")}>{card.meaning}</p>
-            <p className={cx("example")}>{card.example}</p>
-          </>
-        )}
+
+        <p className={cx("meaning")}>{card.meaning}</p>
+        <p className={cx("example")}>{card.example}</p>
       </div>
     </>
   );
