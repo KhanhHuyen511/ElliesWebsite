@@ -20,12 +20,12 @@ const ExerciseChild = ({
   data: ExDetail;
   onNext: (result: ExDetail) => void;
 }) => {
-  const [selectedItem, setSelectedItem] = useState<string>();
+  const [selectedItem, setSelectedItem] = useState<string>("");
   const [isDone, setIsDone] = useState<boolean>(false);
   const [sortResult, setSortResult] = useState<string>();
 
   useEffect(() => {
-    setSelectedItem(undefined);
+    setSelectedItem("");
     setIsDone(false);
   }, [data]);
 
@@ -92,11 +92,13 @@ const ExerciseChild = ({
               else if (data.type == GameType.SortWords) {
                 onNext({
                   ...data,
+                  userAnswer: sortResult,
                   exRight: sortResult === data.vocab?.display,
                 });
               } else {
                 onNext({
                   ...data,
+                  userAnswer: selectedItem,
                   exRight: data.answer === selectedItem,
                 });
               }

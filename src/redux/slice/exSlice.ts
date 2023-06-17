@@ -17,6 +17,8 @@ interface types {
   listExs: Ex[];
   listUserExs?: UserEx[];
   currentEx?: Ex;
+  currentUserEx?: UserEx;
+  completeID?: string;
 }
 
 const initialState: types = {
@@ -24,7 +26,7 @@ const initialState: types = {
 };
 
 // Write reducer get Docs
-export const getListExs = createAsyncThunk("doc/getExs", async () => {
+export const getListExs = createAsyncThunk("exercise/getExs", async () => {
   var exs: Ex[] = [];
   const querySnapshot = await getDocs(collection(db, "exs"));
 
@@ -84,52 +86,89 @@ export const getListUserExs = createAsyncThunk(
   }
 );
 
-export const getAEx = createAsyncThunk("doc/getAEx", async (id: string) => {
-  const querySnapshot = await getDoc(doc(db, "exs", id));
+export const getAEx = createAsyncThunk(
+  "exercise/getAEx",
+  async (id: string) => {
+    const querySnapshot = await getDoc(doc(db, "exs", id));
 
-  var item: Ex = querySnapshot.data() as Ex;
-  item.id = id;
-  item.listItems = undefined;
+    var item: Ex = querySnapshot.data() as Ex;
+    item.id = id;
+    item.listItems = undefined;
 
-  const querySnapshot1 = await getDocs(collection(db, "exs", id, "listItems"));
+    const querySnapshot1 = await getDocs(
+      collection(db, "exs", id, "listItems")
+    );
 
-  var listItems: ExDetail[] = [];
+    var listItems: ExDetail[] = [];
 
-  await Promise.all(
-    querySnapshot1.docs.map(async (e) => {
-      var d: ExDetail = { ...(e.data() as ExDetail), id: e.id };
+    await Promise.all(
+      querySnapshot1.docs.map(async (e) => {
+        var d: ExDetail = { ...(e.data() as ExDetail), id: e.id };
 
-      if (d.vocab) {
-        let querySnapshot2 = await getDoc(doc(db, "vocabs", e.data().vocab));
+        if (d.vocab) {
+          let querySnapshot2 = await getDoc(doc(db, "vocabs", e.data().vocab));
 
-        if (!querySnapshot2.data()) {
-          querySnapshot2 = await getDoc(doc(db, "sentences", e.data().vocab));
+          if (!querySnapshot2.data()) {
+            querySnapshot2 = await getDoc(doc(db, "sentences", e.data().vocab));
+          }
+
+          d.vocab = querySnapshot2.data();
+          if (d.vocab) d.vocab.id = querySnapshot2.id;
         }
+        listItems = [...listItems, d];
+      })
+    );
 
-        d.vocab = querySnapshot2.data();
-        if (d.vocab) d.vocab.id = querySnapshot2.id;
-      }
-      listItems = [...listItems, d];
-    })
-  );
+    item.listItems = listItems;
 
-  item.listItems = listItems;
+    return item;
+  }
+);
 
-  return item;
-});
+export const getAnUserEx = createAsyncThunk(
+  "exercise/getAnUserEx",
+  async (id: string) => {
+    const snapshort = await getDoc(doc(db, "userExs", id));
+
+    var item: UserEx = snapshort.data() as UserEx;
+    item.id = id;
+
+    const querySnapshot = await getDocs(
+      collection(db, "userExs", id, "resultList")
+    );
+
+    const resultList: ExDetail[] = [];
+
+    querySnapshot.forEach(async (e) => {
+      var d: ExDetail = e.data() as ExDetail;
+      d.id = e.id;
+      resultList.push(d);
+    });
+
+    item.resultList = resultList;
+    return item;
+  }
+);
 
 export const setCompleteExState = createAsyncThunk(
-  "study/setExerciseState",
+  "exercise/setExerciseState",
   async (data: { resultList: ExDetail[]; exId: string; userID: string }) => {
-    await addDoc(collection(db, "userExs"), {
+    const snapshot = await addDoc(collection(db, "userExs"), {
       userId: data.userID,
       ex: data.exId,
       didDate: new Date(),
-    }).then((e) =>
-      data.resultList.map((item) =>
-        addDoc(collection(db, "userExs", e.id, "resultList"), { ...item })
+    });
+
+    await Promise.all(
+      data.resultList.map(
+        async (item) =>
+          await addDoc(collection(db, "userExs", snapshot.id, "resultList"), {
+            ...item,
+          })
       )
     );
+
+    return snapshot.id;
   }
 );
 
@@ -147,8 +186,11 @@ const exSlice = createSlice({
     builder.addCase(getAEx.fulfilled, (state, action) => {
       state.currentEx = action.payload;
     });
+    builder.addCase(getAnUserEx.fulfilled, (state, action) => {
+      state.currentUserEx = action.payload;
+    });
     builder.addCase(setCompleteExState.fulfilled, (state, action) => {
-      // state.currentEx = action.payload;
+      state.completeID = action.payload;
     });
   },
 });

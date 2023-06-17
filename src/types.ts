@@ -96,6 +96,7 @@ export interface ExDetail {
   question: string;
   options?: string[];
   answer?: string;
+  userAnswer?: string;
   exRight?: boolean;
   vocab?: StudyCard;
   keyWord?: string;
