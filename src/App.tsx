@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Header } from "./components";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import { Header } from "./components";
 import {
   Study,
   Document,
@@ -13,6 +17,7 @@ import {
   ExerciseDetail,
   CreateBlog,
   BlogDetail,
+  ResultDetail,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -21,6 +26,10 @@ import {
   IndexExercise,
   PathDetail,
   DetailExercise,
+  EditDocForm,
+} from "./pages/admin";
+import { RootState } from "./redux/store";
+import { useSelector } from "react-redux";
   EditDocForm,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
@@ -54,6 +63,10 @@ function App() {
             <Route path="/ex_detail/:id" element={<ExerciseDetail />} />
             <Route path="/forum/create" element={<CreateBlog />} />
             <Route path="/blog_detail/:id" element={<BlogDetail />} />
+            <Route
+              path="/exercise/result_detail/:id"
+              element={<ResultDetail />}
+            />
           </Routes>
         </BrowserRouter>
       )}

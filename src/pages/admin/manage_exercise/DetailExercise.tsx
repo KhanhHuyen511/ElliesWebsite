@@ -4,7 +4,7 @@ import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { useParams } from "react-router-dom";
 import { Col, Row } from "react-flexbox-grid";
-import { Ex, ExDetail, StudyCard } from "../../../types";
+import { Ex, ExDetail, GameType, StudyCard } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getAExercise, updateAExercise } from "../../../redux/slice/adminSlice";
@@ -31,12 +31,23 @@ const DetailExercise = () => {
 
   const [title, setTitle] = useState("hi");
   const [description, setDescription] = useState("");
+  useEffect(() => {
+    if (id) dispatch(getAExercise(id));
+    if (data) {
+      setTitle(data.title);
+      setDescription(data.description);
+    }
+  }, [dispatch, id, data?.title, data?.description]);
+
+  const [title, setTitle] = useState("hi");
+  const [description, setDescription] = useState("");
   const [isOpenCreateForm, setIsOpenCreateForm] = useState<boolean>(false);
   const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<ExDetail>();
 
   return (
     <>
+      <div className="container">
       <div className="container">
         {data && (
           <>
@@ -45,7 +56,11 @@ const DetailExercise = () => {
                 <form>
                   <p className={cx("form-title")}>Chi tiết bài luyện tập</p>
                   <div className={cx("form-body")}>
+                  <p className={cx("form-title")}>Chi tiết bài luyện tập</p>
+                  <div className={cx("form-body")}>
                     <Input
+                      label="Chủ đề"
+                      type="text"
                       label="Chủ đề"
                       type="text"
                       value={title}
@@ -53,13 +68,17 @@ const DetailExercise = () => {
                         setTitle(e.target.value);
                       }}
                       placeholder="abc"
+                      placeholder="abc"
                     />
                     <TextArea
+                      label="Mô tả"
                       label="Mô tả"
                       value={description}
                       onChange={(e) => {
                         setDescription(e.target.value);
                       }}
+                      placeholder="abc"
+                      classNames={cx("textarea")}
                       placeholder="abc"
                       classNames={cx("textarea")}
                     />
@@ -72,6 +91,7 @@ const DetailExercise = () => {
                         dispatch(updateAExercise({ id, title, description }));
                     }}
                     className={cx("submit-btn")}
+                    className={cx("submit-btn")}
                   >
                     Cập nhật
                   </Button>
@@ -79,6 +99,7 @@ const DetailExercise = () => {
               </Col>
               <Col md={6}>
                 <form>
+                  <div className={cx("handler", "list")}>
                   <div className={cx("handler", "list")}>
                     <Button
                       isPrimary={false}
@@ -102,6 +123,7 @@ const DetailExercise = () => {
                       Xóa câu hỏi
                     </Button>
                   </div>
+                  <table className={cx("table")}>
                   <table className={cx("table")}>
                     <thead>
                       <tr>
@@ -127,7 +149,7 @@ const DetailExercise = () => {
                           </td>
                           <td>{index + 1}</td>
                           <td>{item.vocab?.display}</td>
-                          <td>{item.type}</td>
+                          <td>{GameType[item.type]}</td>
                           <td>{item.answer}</td>
                         </tr>
                       ))}

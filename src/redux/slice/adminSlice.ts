@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   arrayRemove,
   arrayUnion,
   collection,
@@ -12,6 +15,8 @@ import {
   where,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase/config";
+} from "firebase/firestore";
+import { db, storage } from "../../firebase/config";
 import {
   Doc,
   Ex,
@@ -19,8 +24,13 @@ import {
   GameType,
   StudyCard,
   StudyCardType,
+  StudyCardType,
   StudyPath,
   StudyRoute,
+} from "../../types";
+import { ref, uploadBytes } from "firebase/storage";
+import { getAEx } from "./exSlice";
+import { getDate } from "../../utils";
 } from "../../types";
 import { ref, uploadBytes } from "firebase/storage";
 import { getAEx } from "./exSlice";
@@ -32,8 +42,12 @@ interface types {
   currentStudyRoute: StudyCard;
   listDocs?: Doc[];
   currentDoc?: Doc;
+  listDocs?: Doc[];
+  currentDoc?: Doc;
   // list user
   listVocabs?: StudyCard[];
+  listSentences?: StudyCard[];
+  listParaphs?: StudyCard[];
   listSentences?: StudyCard[];
   listParaphs?: StudyCard[];
   listEx?: Ex[];
@@ -51,8 +65,10 @@ const initialState: types = {
 // Write reducer get studyRoutes
 export const getStudyPaths = createAsyncThunk(
   "admin/study/getPaths",
+  "admin/study/getPaths",
   async () => {
     var paths: StudyPath[] = [];
+    const querySnapshot = await getDocs(collection(db, "study_paths"));
     const querySnapshot = await getDocs(collection(db, "study_paths"));
     querySnapshot.forEach(async (e) => {
       var item: StudyPath = e.data() as StudyPath;
@@ -67,12 +83,15 @@ export const getStudyPaths = createAsyncThunk(
 // Write reducer get studyRoutes
 export const getStudyPath = createAsyncThunk(
   "admin/study/getPath",
+  "admin/study/getPath",
   async (id: string) => {
     var path: StudyPath;
+    const docRef = await getDoc(doc(db, "study_paths", id));
     const docRef = await getDoc(doc(db, "study_paths", id));
     path = docRef.data() as StudyPath;
 
     const routeRef = await getDocs(
+      collection(db, "study_paths", id, "study_routes")
       collection(db, "study_paths", id, "study_routes")
     );
     path.studyRoutes = routeRef.docs.map(
@@ -85,10 +104,12 @@ export const getStudyPath = createAsyncThunk(
 
 export const getStudyRoute = createAsyncThunk(
   "admin/study/getRoute",
+  "admin/study/getRoute",
   async (data: { path_id: string; id: string }) => {
     var route: StudyRoute;
 
     const docRef = await getDoc(
+      doc(db, "study_paths", data.path_id, "study_routes", data.id)
       doc(db, "study_paths", data.path_id, "study_routes", data.id)
     );
     route = docRef.data() as StudyRoute;
@@ -113,7 +134,9 @@ export const getStudyRoute = createAsyncThunk(
 // Write reducer set studyPath
 export const setStudyPath = createAsyncThunk(
   "admin/study/setPath",
+  "admin/study/setPath",
   async (data: StudyPath) => {
+    const docRef = await addDoc(collection(db, "study_paths"), {
     const docRef = await addDoc(collection(db, "study_paths"), {
       name: data.name,
       topic: data.topic,
@@ -129,15 +152,22 @@ export const setStudyPath = createAsyncThunk(
 // Write reducer set studyRoute
 export const setStudyRoute = createAsyncThunk(
   "admin/study/setRoute",
+  "admin/study/setRoute",
   async (data: { path_id: string; route: StudyRoute }) => {
     const docRef = await addDoc(
+      collection(db, "study_paths", data.path_id, "study_routes"),
       collection(db, "study_paths", data.path_id, "study_routes"),
       {
         name: data.route.name,
         imageFile: data.route.imageFile ? data.route.imageFile.name : "",
+        imageFile: data.route.imageFile ? data.route.imageFile.name : "",
       }
     );
 
+    if (data.route.imageFile !== null) {
+      const storageRef = ref(storage, `images/${data.route.imageFile.name}`);
+      uploadBytes(storageRef, data.route.imageFile);
+    }
     if (data.route.imageFile !== null) {
       const storageRef = ref(storage, `images/${data.route.imageFile.name}`);
       uploadBytes(storageRef, data.route.imageFile);
@@ -155,7 +185,12 @@ export const setStudyCard = createAsyncThunk(
   async (data: { path_id: string; route_id: string; card_id: string }) => {
     await updateDoc(
       doc(db, "study_paths", data.path_id, "study_routes", data.route_id),
+  "admin/study/setCard",
+  async (data: { path_id: string; route_id: string; card_id: string }) => {
+    await updateDoc(
+      doc(db, "study_paths", data.path_id, "study_routes", data.route_id),
       {
+        cards: arrayUnion(data.card_id),
         cards: arrayUnion(data.card_id),
       }
     );
@@ -167,8 +202,10 @@ export const setStudyCard = createAsyncThunk(
 // Write reducer get studyRoutes
 export const updateStudyPath = createAsyncThunk(
   "admin/study/updatePath",
+  "admin/study/updatePath",
   async (data: StudyPath) => {
     if (data.id) {
+      const docRef = doc(db, "study_paths", data.id);
       const docRef = doc(db, "study_paths", data.id);
       await updateDoc(docRef, {
         name: data.name,
@@ -182,12 +219,15 @@ export const updateStudyPath = createAsyncThunk(
 // Write reducer get studyRoutes
 export const updateStudyRoute = createAsyncThunk(
   "admin/study/updateRoute",
+  "admin/study/updateRoute",
   async (data: { path_id: string; route: StudyRoute }) => {
     if (data.route.id) {
       const docRef = doc(
         db,
         "study_paths",
+        "study_paths",
         data.path_id,
+        "study_routes",
         "study_routes",
         data.route.id
       );
@@ -202,14 +242,22 @@ export const removeStudyCard = createAsyncThunk(
   "admin/study/updateCard",
   async (data: { path_id: string; route_id: string; card_id: string }) => {
     if (data.card_id) {
+export const removeStudyCard = createAsyncThunk(
+  "admin/study/updateCard",
+  async (data: { path_id: string; route_id: string; card_id: string }) => {
+    if (data.card_id) {
       const docRef = doc(
         db,
+        "study_paths",
         "study_paths",
         data.path_id,
         "study_routes",
         data.route_id
+        "study_routes",
+        data.route_id
       );
       await updateDoc(docRef, {
+        cards: arrayRemove(data.card_id),
         cards: arrayRemove(data.card_id),
       });
     }
@@ -220,127 +268,14 @@ export const removeStudyCard = createAsyncThunk(
 
 //#region [DOCUMENT]
 
-export const getAllDocs = createAsyncThunk(
-  "admin/document/getAllDocs",
-  async () => {
-    var docs: Doc[] = [];
-    const querySnapshot = await getDocs(collection(db, "docs"));
-    querySnapshot.forEach(async (e) => {
-      var item: Doc = e.data() as Doc;
-      item.id = e.id;
-      docs.push(item);
-    });
-
-    return docs;
-  }
-);
-
-export const getADocWithType = createAsyncThunk(
-  "admin/document/getADoc",
-  async ({ doc_id, type }: { doc_id: string; type: string }) => {
-    const querySnapshot = await getDoc(doc(db, "docs", doc_id));
-
-    const data = querySnapshot.data() as Doc;
-    data.id = querySnapshot.id;
-
-    if (data.listItemIds)
-      await Promise.all(
-        data.listItemIds.map(async (item) => {
-          switch (type) {
-            case StudyCardType.Vocab.toString():
-              await getDoc(doc(db, "vocabs", item)).then((snapshot) => {
-                if (snapshot.data()) {
-                  let card = {
-                    ...(snapshot.data() as StudyCard),
-                    id: snapshot.id,
-                  };
-                  if (data.vocabs) data.vocabs = [card, ...data.vocabs];
-                  else data.vocabs = [card];
-                }
-              });
-              break;
-            case StudyCardType.Sentence.toString():
-              await getDoc(doc(db, "sentences", item)).then((snapshot) => {
-                if (snapshot.data()) {
-                  let card = {
-                    ...(snapshot.data() as StudyCard),
-                    id: snapshot.id,
-                  };
-                  if (data.sentences)
-                    data.sentences = [card, ...data.sentences];
-                  else data.sentences = [card];
-                }
-              });
-              break;
-            case StudyCardType.Paraph.toString():
-              await getDoc(doc(db, "paraphs", item)).then((snapshot) => {
-                if (snapshot.data()) {
-                  let card = {
-                    ...(snapshot.data() as StudyCard),
-                    id: snapshot.id,
-                  };
-                  if (data.paraphs) data.paraphs = [card, ...data.paraphs];
-                  else data.paraphs = [card];
-                }
-              });
-              break;
-            default:
-              break;
-          }
-        })
-      );
-
-    return data;
-  }
-);
-
-export const setDocument = createAsyncThunk(
-  "admin/study/setDocument",
-  async ({ data }: { data: Doc }) => {
-    await addDoc(collection(db, "docs"), {
-      title: data.title,
-      description: data.description,
-      createDate: new Date(),
-    });
-
-    return data;
-  }
-);
-
-export const setDocCard = createAsyncThunk(
-  "admin/study/setDocCard",
-  async ({
-    data,
-    type,
-    doc_id,
-  }: {
-    data: StudyCard;
-    type: StudyCardType;
-    doc_id: string;
-  }) => {
-    let typeCard = "";
-
-    // get Type
-    switch (type) {
-      case StudyCardType.Vocab:
-        typeCard = "vocabs";
-        break;
-      case StudyCardType.Sentence:
-        typeCard = "sentences";
-        break;
-      case StudyCardType.Paraph:
-        typeCard = "paraphs";
-        break;
-      case StudyCardType.Book:
-        typeCard = "books";
-        break;
-      default:
-        break;
-    }
-
-    const docRef = await addDoc(collection(db, typeCard), {
+export const setVocab = createAsyncThunk(
+  'admin/study/setVocab',
+  async (data: StudyCard) => {
+    const docRef = await addDoc(collection(db, 'vocabs'), {
       display: data.display,
       meaning: data.meaning,
+      imageFile: data.imageFile ? data.imageFile.name : "",
+      audio: data.audio ? data.audio.name : "",
       imageFile: data.imageFile ? data.imageFile.name : "",
       audio: data.audio ? data.audio.name : "",
     });
@@ -373,6 +308,7 @@ export const setDocCard = createAsyncThunk(
 export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
   var list: StudyCard[] = [];
   const querySnapshot = await getDocs(collection(db, "vocabs"));
+  const querySnapshot = await getDocs(collection(db, "vocabs"));
   querySnapshot.forEach(async (e) => {
     var item: StudyCard = e.data() as StudyCard;
     item.id = e.id;
@@ -382,9 +318,29 @@ export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
   return list;
 });
 
-export const getVocabsWithTopic = createAsyncThunk(
-  "admin/study/getVocabsWithTopic",
-  async (topic: string) => {
+export const getDocCardWithTopic = createAsyncThunk(
+  "admin/study/getDocCardWithTopic",
+  async ({ topic, type }: { topic: string; type: StudyCardType }) => {
+    let typeCard = "";
+
+    // get Type
+    switch (type) {
+      case StudyCardType.Vocab:
+        typeCard = "vocabs";
+        break;
+      case StudyCardType.Sentence:
+        typeCard = "sentences";
+        break;
+      case StudyCardType.Paraph:
+        typeCard = "paraphs";
+        break;
+      case StudyCardType.Book:
+        typeCard = "books";
+        break;
+      default:
+        break;
+    }
+
     var list: StudyCard[] = [];
     const q = query(collection(db, "docs"), where("title", "==", topic));
     const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
@@ -393,7 +349,7 @@ export const getVocabsWithTopic = createAsyncThunk(
     if (l)
       await Promise.all(
         l.map(async (item) => {
-          let snapshot = await getDoc(doc(db, "vocabs", item));
+          let snapshot = await getDoc(doc(db, typeCard, item));
           let card: StudyCard = {
             ...(snapshot.data() as StudyCard),
             id: snapshot.id,
@@ -402,7 +358,7 @@ export const getVocabsWithTopic = createAsyncThunk(
         })
       );
 
-    return list;
+    return { data: list, type };
   }
 );
 
@@ -416,30 +372,6 @@ export const getSentences = createAsyncThunk(
       item.id = e.id;
       list.push(item);
     });
-
-    return list;
-  }
-);
-
-export const getSentencesWithTopic = createAsyncThunk(
-  "admin/study/getSentencesWithTopic",
-  async (topic: string) => {
-    var list: StudyCard[] = [];
-    const q = query(collection(db, "docs"), where("title", "==", topic));
-    const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
-    const l = aDoc.listItemIds;
-
-    if (l)
-      await Promise.all(
-        l.map(async (item) => {
-          let snapshot = await getDoc(doc(db, "sentences", item));
-          let card: StudyCard = {
-            ...(snapshot.data() as StudyCard),
-            id: snapshot.id,
-          };
-          if (snapshot.data()) list.push(card as StudyCard);
-        })
-      );
 
     return list;
   }
@@ -505,6 +437,8 @@ export const updateDocument = createAsyncThunk(
 
 export const updateDocCard = createAsyncThunk(
   "admin/study/updateDocCard",
+export const updateDocCard = createAsyncThunk(
+  "admin/study/updateDocCard",
   async ({
     data,
     oldImage,
@@ -514,6 +448,7 @@ export const updateDocCard = createAsyncThunk(
     data: StudyCard;
     oldImage: any;
     oldAudio: any;
+    type: StudyCardType;
     type: StudyCardType;
   }) => {
     if (data.id) {
@@ -604,9 +539,11 @@ export const getAExercise = createAsyncThunk(
         var d: ExDetail = { ...(e.data() as ExDetail), id: e.id };
 
         if (d.vocab) {
-          const querySnapshot2 = await getDoc(
-            doc(db, "vocabs", e.data().vocab)
-          );
+          let querySnapshot2 = await getDoc(doc(db, "vocabs", e.data().vocab));
+
+          if (!querySnapshot2.data()) {
+            querySnapshot2 = await getDoc(doc(db, "sentences", e.data().vocab));
+          }
 
           d.vocab = querySnapshot2.data();
           if (d.vocab) d.vocab.id = querySnapshot2.id;
@@ -646,6 +583,7 @@ export const updateAExercise = createAsyncThunk(
     description?: string;
   }) => {
     await updateDoc(doc(db, "exs", id), {
+    await updateDoc(doc(db, "exs", id), {
       title: title,
       description: description,
     });
@@ -654,38 +592,78 @@ export const updateAExercise = createAsyncThunk(
 
 export const setAExDetail = createAsyncThunk(
   "admin/exercise/setAExDetai;",
+  "admin/exercise/setAExDetai;",
   async ({
     exId,
     vocab,
     options,
     answer,
     type,
+    keyWord,
   }: {
     exId: string;
     vocab: StudyCard;
     options: string[];
     answer: string;
-    type: string;
+    type: GameType | string;
+    keyWord?: string;
   }) => {
+    const getQuestion = () => {
+      switch (type) {
+        case GameType.TranslateToVN.toString():
+          return "Nghĩa của từ này là gì?";
+        case GameType.TranslateToEN.toString():
+          return "Dịch từ này sang tiếng Anh?";
+        case GameType.TranslateSentenceToVN.toString():
+          return "Nghĩa của câu này là gì?";
+        case GameType.TranslateSentenceToEN.toString():
+          return "Dịch câu này sang tiếng Anh?";
+        case GameType.FillInSentence.toString():
+          return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
+        case GameType.SortWords.toString():
+          return "Hãy sắp xếp thứ tự các từ để có một câu đúng.";
+        default:
+          return "";
+      }
+    };
+
     let item: ExDetail = {
       vocab,
       options,
       answer,
-      type,
-      question: "",
+      type: type as GameType,
+      question: getQuestion(),
       id: "",
     };
-    item.question =
-      type === GameType[0]
-        ? "Nghĩa của từ này là gì?"
-        : "Dịch từ này sang tiếng Anh?";
-    await addDoc(collection(db, "exs", exId, "listItems"), {
-      vocab: vocab.id,
-      options: options,
-      answer: answer,
-      type: type,
-      question: item.question,
-    }).then((e) => (item.id = e.id));
+
+    switch (type) {
+      case GameType.FillInSentence.toString():
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          options: options,
+          answer: answer,
+          type: type,
+          question: item.question,
+          keyWord,
+        }).then((e) => (item.id = e.id));
+        break;
+      case GameType.SortWords.toString():
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          type: type,
+          question: item.question,
+        }).then((e) => (item.id = e.id));
+        break;
+      default:
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          options: options,
+          answer: answer,
+          type: type,
+          question: item.question,
+        }).then((e) => (item.id = e.id));
+        break;
+    }
 
     return item;
   }
@@ -699,30 +677,91 @@ export const updateAExDetail = createAsyncThunk(
     options,
     answer,
     type,
+    keyWord,
   }: {
     data: ExDetail;
     exId: string;
     options?: string[];
     answer?: string;
-    type?: string;
+    type?: GameType | string;
+    keyWord?: string;
   }) => {
-    const item: ExDetail = {
-      ...data,
-      options: options ? options : data.options,
-      answer: answer ? answer : data.answer,
-      type: type ? type : data.type,
-      question:
-        type !== data.type && type === GameType[0]
-          ? "Nghĩa của từ này là gì?"
-          : "Dịch từ này sang tiếng Anh?",
+    const getQuestion = () => {
+      switch (type) {
+        case GameType.TranslateToVN.toString():
+          return "Nghĩa của từ này là gì?";
+        case GameType.TranslateToEN.toString():
+          return "Dịch từ này sang tiếng Anh?";
+        case GameType.TranslateSentenceToVN.toString():
+          return "Nghĩa của câu này là gì?";
+        case GameType.TranslateSentenceToEN.toString():
+          return "Dịch câu này sang tiếng Anh?";
+        case GameType.FillInSentence.toString():
+          return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
+        case GameType.SortWords.toString():
+          return "Hãy sắp xếp thứ tự các từ để có một câu đúng.";
+        default:
+          return "";
+      }
     };
 
-    await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
-      options: item.options,
-      answer: item.answer,
-      type: item.type,
-      question: item.question,
-    });
+    let item: ExDetail = data;
+
+    switch (type) {
+      case GameType.FillInSentence.toString():
+        item = {
+          ...data,
+          options: options ? options : data.options,
+          answer: answer ? answer : data.answer,
+          type: type ? (type as unknown as GameType) : (data.type as GameType),
+          question:
+            (type as unknown as GameType) !== data.type
+              ? getQuestion()
+              : data.question,
+          keyWord,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          options: item.options,
+          answer: item.answer,
+          type: item.type,
+          question: item.question,
+          keyWord,
+        });
+        break;
+      case GameType.SortWords.toString():
+        item = {
+          id: data.id,
+          vocab: data.vocab,
+          type: type ? (type as unknown as GameType) : (data.type as GameType),
+          question:
+            (type as unknown as GameType) !== data.type
+              ? getQuestion()
+              : data.question,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          type: item.type,
+          question: item.question,
+          options: [],
+          answer: "",
+          keyWord: "",
+        });
+        break;
+      default:
+        item = {
+          ...data,
+          options: options ? options : data.options,
+          answer: answer ? answer : data.answer,
+          type: type ? (type as GameType) : (data.type as GameType),
+          question: type !== data.type ? getQuestion() : data.question,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          options: item.options,
+          answer: item.answer,
+          type: item.type,
+          question: item.question,
+        });
+        break;
+    }
 
     return item;
   }
@@ -731,6 +770,7 @@ export const updateAExDetail = createAsyncThunk(
 //#endregion
 
 const adminSlice = createSlice({
+  name: "admin_study",
   name: "admin_study",
   initialState,
   reducers: {},
@@ -784,13 +824,22 @@ const adminSlice = createSlice({
     builder.addCase(getVocabs.fulfilled, (state, action) => {
       state.listVocabs = action.payload as StudyCard[];
     });
-    builder.addCase(getVocabsWithTopic.fulfilled, (state, action) => {
-      state.listVocabs = action.payload as StudyCard[];
+    builder.addCase(getDocCardWithTopic.fulfilled, (state, action) => {
+      switch (action.payload.type) {
+        case StudyCardType.Vocab:
+          state.listVocabs = action.payload.data as StudyCard[];
+          break;
+        case StudyCardType.Sentence:
+          state.listSentences = action.payload.data as StudyCard[];
+          break;
+        case StudyCardType.Paraph:
+          state.listParaphs = action.payload.data as StudyCard[];
+          break;
+        default:
+          break;
+      }
     });
     builder.addCase(getSentences.fulfilled, (state, action) => {
-      state.listSentences = action.payload as StudyCard[];
-    });
-    builder.addCase(getSentencesWithTopic.fulfilled, (state, action) => {
       state.listSentences = action.payload as StudyCard[];
     });
     builder.addCase(updateDocument.fulfilled, (state, action) => {

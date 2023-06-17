@@ -1,0 +1,48 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.body {
+  text-align: center;
+  position: relative;
+}
+
+.display-text {
+  @include typo-heading-1;
+  margin-top: 20px;
+}
+
+.heart-icon {
+  position: absolute;
+  top: 0;
+  right: 5%;
+}
+
+.pronoun {
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  color: var(--text-medium-color);
+  cursor: pointer;
+
+  & .pronoun-text {
+    @include typo-caption;
+  }
+}
+
+.image {
+  max-width: 40%;
+  margin: 16px auto 0;
+  object-fit: cover;
+
+  & img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.meaning {
+  @include typo-heading-2;
+  margin-top: 31px;
+}
