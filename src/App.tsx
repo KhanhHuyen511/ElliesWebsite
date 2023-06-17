@@ -13,6 +13,7 @@ import {
   ExerciseDetail,
   CreateBlog,
   BlogDetail,
+  ResultDetail,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -54,6 +55,10 @@ function App() {
             <Route path="/ex_detail/:id" element={<ExerciseDetail />} />
             <Route path="/forum/create" element={<CreateBlog />} />
             <Route path="/blog_detail/:id" element={<BlogDetail />} />
+            <Route
+              path="/exercise/result_detail/:id"
+              element={<ResultDetail />}
+            />
           </Routes>
         </BrowserRouter>
       )}

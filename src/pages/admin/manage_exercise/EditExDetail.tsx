@@ -24,17 +24,28 @@ const EditExDetail = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [option1, setOption1] = useState<string>(data.options[0]);
-  const [option2, setOption2] = useState<string>(data.options[1]);
-  const [option3, setOption3] = useState<string>(data.options[2]);
-  const [option4, setOption4] = useState<string>(data.options[3]);
-  const [answer, setAnswer] = useState<string>(data.answer);
-  const [type, setType] = useState<string>(data.type);
+  const [option1, setOption1] = useState<string>(
+    data.options ? data.options[0] : ""
+  );
+  const [option2, setOption2] = useState<string>(
+    data.options ? data.options[1] : ""
+  );
+  const [option3, setOption3] = useState<string>(
+    data.options ? data.options[2] : ""
+  );
+  const [option4, setOption4] = useState<string>(
+    data.options ? data.options[3] : ""
+  );
+  const [answer, setAnswer] = useState<string>(data.answer ? data.answer : "");
+  const [keyWord, setKeyWord] = useState<string>(
+    data.keyWord ? data.keyWord : ""
+  );
+  const [type, setType] = useState<GameType>(data.type);
 
   return (
     <>
       <Popup
-        title={"Tạo câu hỏi mới"}
+        title={"Cập nhật câu hỏi"}
         onClose={onClose}
         onSubmit={() => {
           if (data) {
@@ -45,6 +56,7 @@ const EditExDetail = ({
                 options: [option1, option2, option3, option4],
                 answer: answer !== data.answer ? answer : undefined,
                 type: type !== data.type ? type : undefined,
+                keyWord,
               })
             );
           }
@@ -70,56 +82,80 @@ const EditExDetail = ({
             </table>
           </Col>
           <Col md={6}>
-            <Input
-              label={"Sự lựa chọn 1"}
-              value={option1}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption1(e.target.value);
-              }}
-              isRequired
-            ></Input>
-            <Input
-              label={"Sự lựa chọn 2"}
-              value={option2}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption2(e.target.value);
-              }}
-            ></Input>
-            <Input
-              label={"Sự lựa chọn 3"}
-              value={option3}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption3(e.target.value);
-              }}
-            ></Input>
-            <Input
-              label={"Sự lựa chọn 4"}
-              value={option4}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setOption4(e.target.value);
-              }}
-            ></Input>
-            <Input
-              label={"Đáp án đúng"}
-              value={answer}
-              placeholder={"abc"}
-              onChange={(e) => {
-                setAnswer(e.target.value);
-              }}
-              isRequired
-            ></Input>
+            {type == GameType.FillInSentence && (
+              <Input
+                label={"Nhập từ khoá"}
+                value={keyWord}
+                placeholder={""}
+                onChange={(e) => {
+                  setKeyWord(e.target.value);
+                }}
+                isRequired
+              ></Input>
+            )}
+            {type != GameType.SortWords && (
+              <>
+                {" "}
+                <Input
+                  label={"Sự lựa chọn 1"}
+                  value={option1}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption1(e.target.value);
+                  }}
+                  isRequired
+                ></Input>
+                <Input
+                  label={"Sự lựa chọn 2"}
+                  value={option2}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption2(e.target.value);
+                  }}
+                ></Input>
+                <Input
+                  label={"Sự lựa chọn 3"}
+                  value={option3}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption3(e.target.value);
+                  }}
+                ></Input>
+                <Input
+                  label={"Sự lựa chọn 4"}
+                  value={option4}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setOption4(e.target.value);
+                  }}
+                ></Input>
+                <Input
+                  label={"Đáp án đúng"}
+                  value={answer}
+                  placeholder={"abc"}
+                  onChange={(e) => {
+                    setAnswer(e.target.value);
+                  }}
+                  isRequired
+                ></Input>
+              </>
+            )}
             <select
               value={type}
               onChange={(e) => {
-                setType(e.target.value);
+                setType(e.target.value as unknown as GameType);
               }}
             >
-              <option>{GameType[0]}</option>
-              <option>{GameType[1]}</option>
+              <option value={GameType.TranslateToVN}>{GameType[0]}</option>
+              <option value={GameType.TranslateToEN}>{GameType[1]}</option>
+              <option value={GameType.TranslateSentenceToVN}>
+                {GameType[2]}
+              </option>
+              <option value={GameType.TranslateSentenceToEN}>
+                {GameType[3]}
+              </option>
+              <option value={GameType.FillInSentence}>{GameType[4]}</option>
+              <option value={GameType.SortWords}>{GameType[5]}</option>
             </select>
           </Col>
         </Row>

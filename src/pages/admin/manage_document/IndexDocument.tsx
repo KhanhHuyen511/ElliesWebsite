@@ -23,17 +23,15 @@ const cx = classNames.bind(styles);
 const IndexDocument = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const listVocabs = useSelector((state: RootState) => state.admin.listVocabs);
-  const listSentences = useSelector(
-    (state: RootState) => state.admin.listSentences
-  );
+  // const listVocabs = useSelector((state: RootState) => state.admin.listVocabs);
+  // const listSentences = useSelector(
+  //   (state: RootState) => state.admin.listSentences
+  // );
   const listDocVocab = useSelector((state: RootState) => state.admin.listDocs);
 
   const [currentType, setCurrentType] = useState("vocabs");
 
   useEffect(() => {
-    // dispatch(getVocabs());
-    // dispatch(getSentences());
     dispatch(getAllDocs());
   }, [dispatch]);
 

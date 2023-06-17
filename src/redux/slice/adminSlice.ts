@@ -382,9 +382,29 @@ export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
   return list;
 });
 
-export const getVocabsWithTopic = createAsyncThunk(
-  "admin/study/getVocabsWithTopic",
-  async (topic: string) => {
+export const getDocCardWithTopic = createAsyncThunk(
+  "admin/study/getDocCardWithTopic",
+  async ({ topic, type }: { topic: string; type: StudyCardType }) => {
+    let typeCard = "";
+
+    // get Type
+    switch (type) {
+      case StudyCardType.Vocab:
+        typeCard = "vocabs";
+        break;
+      case StudyCardType.Sentence:
+        typeCard = "sentences";
+        break;
+      case StudyCardType.Paraph:
+        typeCard = "paraphs";
+        break;
+      case StudyCardType.Book:
+        typeCard = "books";
+        break;
+      default:
+        break;
+    }
+
     var list: StudyCard[] = [];
     const q = query(collection(db, "docs"), where("title", "==", topic));
     const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
@@ -393,7 +413,7 @@ export const getVocabsWithTopic = createAsyncThunk(
     if (l)
       await Promise.all(
         l.map(async (item) => {
-          let snapshot = await getDoc(doc(db, "vocabs", item));
+          let snapshot = await getDoc(doc(db, typeCard, item));
           let card: StudyCard = {
             ...(snapshot.data() as StudyCard),
             id: snapshot.id,
@@ -402,7 +422,7 @@ export const getVocabsWithTopic = createAsyncThunk(
         })
       );
 
-    return list;
+    return { data: list, type };
   }
 );
 
@@ -416,30 +436,6 @@ export const getSentences = createAsyncThunk(
       item.id = e.id;
       list.push(item);
     });
-
-    return list;
-  }
-);
-
-export const getSentencesWithTopic = createAsyncThunk(
-  "admin/study/getSentencesWithTopic",
-  async (topic: string) => {
-    var list: StudyCard[] = [];
-    const q = query(collection(db, "docs"), where("title", "==", topic));
-    const aDoc: Doc = (await getDocs(q)).docs[0].data() as Doc;
-    const l = aDoc.listItemIds;
-
-    if (l)
-      await Promise.all(
-        l.map(async (item) => {
-          let snapshot = await getDoc(doc(db, "sentences", item));
-          let card: StudyCard = {
-            ...(snapshot.data() as StudyCard),
-            id: snapshot.id,
-          };
-          if (snapshot.data()) list.push(card as StudyCard);
-        })
-      );
 
     return list;
   }
@@ -604,9 +600,11 @@ export const getAExercise = createAsyncThunk(
         var d: ExDetail = { ...(e.data() as ExDetail), id: e.id };
 
         if (d.vocab) {
-          const querySnapshot2 = await getDoc(
-            doc(db, "vocabs", e.data().vocab)
-          );
+          let querySnapshot2 = await getDoc(doc(db, "vocabs", e.data().vocab));
+
+          if (!querySnapshot2.data()) {
+            querySnapshot2 = await getDoc(doc(db, "sentences", e.data().vocab));
+          }
 
           d.vocab = querySnapshot2.data();
           if (d.vocab) d.vocab.id = querySnapshot2.id;
@@ -660,32 +658,71 @@ export const setAExDetail = createAsyncThunk(
     options,
     answer,
     type,
+    keyWord,
   }: {
     exId: string;
     vocab: StudyCard;
     options: string[];
     answer: string;
-    type: string;
+    type: GameType | string;
+    keyWord?: string;
   }) => {
+    const getQuestion = () => {
+      switch (type) {
+        case GameType.TranslateToVN.toString():
+          return "Nghĩa của từ này là gì?";
+        case GameType.TranslateToEN.toString():
+          return "Dịch từ này sang tiếng Anh?";
+        case GameType.TranslateSentenceToVN.toString():
+          return "Nghĩa của câu này là gì?";
+        case GameType.TranslateSentenceToEN.toString():
+          return "Dịch câu này sang tiếng Anh?";
+        case GameType.FillInSentence.toString():
+          return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
+        case GameType.SortWords.toString():
+          return "Hãy sắp xếp thứ tự các từ để có một câu đúng.";
+        default:
+          return "";
+      }
+    };
+
     let item: ExDetail = {
       vocab,
       options,
       answer,
-      type,
-      question: "",
+      type: type as GameType,
+      question: getQuestion(),
       id: "",
     };
-    item.question =
-      type === GameType[0]
-        ? "Nghĩa của từ này là gì?"
-        : "Dịch từ này sang tiếng Anh?";
-    await addDoc(collection(db, "exs", exId, "listItems"), {
-      vocab: vocab.id,
-      options: options,
-      answer: answer,
-      type: type,
-      question: item.question,
-    }).then((e) => (item.id = e.id));
+
+    switch (type) {
+      case GameType.FillInSentence.toString():
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          options: options,
+          answer: answer,
+          type: type,
+          question: item.question,
+          keyWord,
+        }).then((e) => (item.id = e.id));
+        break;
+      case GameType.SortWords.toString():
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          type: type,
+          question: item.question,
+        }).then((e) => (item.id = e.id));
+        break;
+      default:
+        await addDoc(collection(db, "exs", exId, "listItems"), {
+          vocab: vocab.id,
+          options: options,
+          answer: answer,
+          type: type,
+          question: item.question,
+        }).then((e) => (item.id = e.id));
+        break;
+    }
 
     return item;
   }
@@ -699,30 +736,91 @@ export const updateAExDetail = createAsyncThunk(
     options,
     answer,
     type,
+    keyWord,
   }: {
     data: ExDetail;
     exId: string;
     options?: string[];
     answer?: string;
-    type?: string;
+    type?: GameType | string;
+    keyWord?: string;
   }) => {
-    const item: ExDetail = {
-      ...data,
-      options: options ? options : data.options,
-      answer: answer ? answer : data.answer,
-      type: type ? type : data.type,
-      question:
-        type !== data.type && type === GameType[0]
-          ? "Nghĩa của từ này là gì?"
-          : "Dịch từ này sang tiếng Anh?",
+    const getQuestion = () => {
+      switch (type) {
+        case GameType.TranslateToVN.toString():
+          return "Nghĩa của từ này là gì?";
+        case GameType.TranslateToEN.toString():
+          return "Dịch từ này sang tiếng Anh?";
+        case GameType.TranslateSentenceToVN.toString():
+          return "Nghĩa của câu này là gì?";
+        case GameType.TranslateSentenceToEN.toString():
+          return "Dịch câu này sang tiếng Anh?";
+        case GameType.FillInSentence.toString():
+          return "Chọn từ phù hợp nhất để điền vào chỗ trống.";
+        case GameType.SortWords.toString():
+          return "Hãy sắp xếp thứ tự các từ để có một câu đúng.";
+        default:
+          return "";
+      }
     };
 
-    await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
-      options: item.options,
-      answer: item.answer,
-      type: item.type,
-      question: item.question,
-    });
+    let item: ExDetail = data;
+
+    switch (type) {
+      case GameType.FillInSentence.toString():
+        item = {
+          ...data,
+          options: options ? options : data.options,
+          answer: answer ? answer : data.answer,
+          type: type ? (type as unknown as GameType) : (data.type as GameType),
+          question:
+            (type as unknown as GameType) !== data.type
+              ? getQuestion()
+              : data.question,
+          keyWord,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          options: item.options,
+          answer: item.answer,
+          type: item.type,
+          question: item.question,
+          keyWord,
+        });
+        break;
+      case GameType.SortWords.toString():
+        item = {
+          id: data.id,
+          vocab: data.vocab,
+          type: type ? (type as unknown as GameType) : (data.type as GameType),
+          question:
+            (type as unknown as GameType) !== data.type
+              ? getQuestion()
+              : data.question,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          type: item.type,
+          question: item.question,
+          options: [],
+          answer: "",
+          keyWord: "",
+        });
+        break;
+      default:
+        item = {
+          ...data,
+          options: options ? options : data.options,
+          answer: answer ? answer : data.answer,
+          type: type ? (type as GameType) : (data.type as GameType),
+          question: type !== data.type ? getQuestion() : data.question,
+        };
+        await updateDoc(doc(db, "exs", exId, "listItems", data.id), {
+          options: item.options,
+          answer: item.answer,
+          type: item.type,
+          question: item.question,
+        });
+        break;
+    }
 
     return item;
   }
@@ -784,13 +882,22 @@ const adminSlice = createSlice({
     builder.addCase(getVocabs.fulfilled, (state, action) => {
       state.listVocabs = action.payload as StudyCard[];
     });
-    builder.addCase(getVocabsWithTopic.fulfilled, (state, action) => {
-      state.listVocabs = action.payload as StudyCard[];
+    builder.addCase(getDocCardWithTopic.fulfilled, (state, action) => {
+      switch (action.payload.type) {
+        case StudyCardType.Vocab:
+          state.listVocabs = action.payload.data as StudyCard[];
+          break;
+        case StudyCardType.Sentence:
+          state.listSentences = action.payload.data as StudyCard[];
+          break;
+        case StudyCardType.Paraph:
+          state.listParaphs = action.payload.data as StudyCard[];
+          break;
+        default:
+          break;
+      }
     });
     builder.addCase(getSentences.fulfilled, (state, action) => {
-      state.listSentences = action.payload as StudyCard[];
-    });
-    builder.addCase(getSentencesWithTopic.fulfilled, (state, action) => {
       state.listSentences = action.payload as StudyCard[];
     });
     builder.addCase(updateDocument.fulfilled, (state, action) => {

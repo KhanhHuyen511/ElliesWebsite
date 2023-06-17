@@ -48,6 +48,12 @@ export enum StudyCardType {
 export enum GameType {
   TranslateToVN,
   TranslateToEN,
+  TranslateSentenceToVN,
+  TranslateSentenceToEN,
+  ///
+  FillInSentence,
+  ///
+  SortWords,
 }
 
 export interface Doc {
@@ -58,7 +64,6 @@ export interface Doc {
   sentences?: StudyCard[];
   paraphs?: StudyCard[];
   listItemIds?: string[];
-  // listItems?: StudyCard[];
   createDate?: Date;
   type?: StudyCardType;
 }
@@ -68,18 +73,33 @@ export interface Ex {
   title: string; // topic
   description: string;
   listItems?: ExDetail[];
+  vocabs?: StudyCard[];
+  sentences?: StudyCard[];
+  paraphs?: StudyCard[];
   score?: number; // => later in future
   level?: string;
 }
 
+// export interface BaseExDetail {
+//   id: string;
+//   type: GameType;
+//   question: string;
+//   options?: string[];
+//   answer?: string;
+//   exRight?: boolean;
+//   vocab?: StudyCard;
+// }
+
 export interface ExDetail {
   id: string;
-  type: string;
+  type: GameType;
   question: string;
-  options: string[];
-  answer: string;
+  options?: string[];
+  answer?: string;
+  userAnswer?: string;
   exRight?: boolean;
   vocab?: StudyCard;
+  keyWord?: string;
 }
 
 export interface UserEx {

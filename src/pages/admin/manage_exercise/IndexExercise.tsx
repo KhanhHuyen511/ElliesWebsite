@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import style from "./IndexExercise.module.scss";
 import classNames from "classnames/bind";
-import { Button, Checkbox } from "../../../components";
+import { Button, CategoryPanel, Checkbox } from "../../../components";
 import { Ex } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getExercises } from "../../../redux/slice/adminSlice";
 import { useNavigate } from "react-router-dom";
 import CreateExForm from "./CreateExForm";
+import {
+  AcademicCapIcon,
+  BookOpenIcon,
+  QueueListIcon,
+  SpeakerWaveIcon,
+} from "@heroicons/react/24/outline";
 const cx = classNames.bind(style);
 
 const IndexExercise = () => {
@@ -17,6 +23,7 @@ const IndexExercise = () => {
 
   const [selectedItem, setSelectedItem] = useState<string>();
   const [isOpenForm, setIsOpenForm] = useState(false);
+  // const [currentType, setCurrentType] = useState("vocabs");
 
   useEffect(() => {
     dispatch(getExercises());
@@ -32,13 +39,36 @@ const IndexExercise = () => {
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
           <h2>Manage Exercise</h2>
+          {/* <ul className={cx("doc-cate-wrapper")}>
+            <CategoryPanel
+              label={"Vocabs"}
+              isActive={currentType === "vocabs"}
+              classNames={cx("cate-item")}
+              icon={<AcademicCapIcon />}
+              onClick={() => setCurrentType("vocabs")}
+            />
+            <CategoryPanel
+              label={"Sentences"}
+              isActive={currentType === "sentences"}
+              classNames={cx("cate-item")}
+              icon={<QueueListIcon />}
+              onClick={() => setCurrentType("sentences")}
+            />
+            <CategoryPanel
+              label={"Paraphs"}
+              isActive={currentType === "paraphs"}
+              classNames={cx("cate-item")}
+              icon={<SpeakerWaveIcon />}
+              onClick={() => setCurrentType("paraphs")}
+            />
+          </ul> */}
           <>
             <div className={cx("handler")}>
               <Button
                 isPrimary={false}
                 onClick={() => {
                   if (selectedItem)
-                    navigate(`/exercise_detail/${selectedItem}`);
+                    navigate(`/exercise_detail/${selectedItem}`); // set type
                 }}
               >
                 Xem chi tiết
