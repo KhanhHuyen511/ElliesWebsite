@@ -19,6 +19,7 @@ interface Props {
   pathID: string;
   routeID: string;
   topic: string;
+  topic: string;
   isDisplay: boolean;
 }
 
@@ -49,7 +50,20 @@ const CreateStudyCard = (props: Props) => {
       <Popup
         title={"Tạo câu mới"}
         classNames={""}
+        title={"Tạo câu mới"}
+        classNames={""}
         onClose={props.onClose}
+        onSubmit={() => {
+          if (selectedItem?.id) {
+            dispatch(
+              setStudyCard({
+                path_id: props.pathID,
+                route_id: props.routeID,
+                card_id: selectedItem.id,
+              })
+            );
+          }
+        }}
         onSubmit={() => {
           if (selectedItem?.id) {
             dispatch(
@@ -63,6 +77,52 @@ const CreateStudyCard = (props: Props) => {
         }}
         isDisplay={props.isDisplay}
       >
+        <Row>
+          <Col>
+            <table className={cx("table")}>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>STT</th>
+                  <th>Từ vựng</th>
+                  <th>Nghĩa</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listVocabs?.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Checkbox
+                        isChecked={selectedItem && item.id === selectedItem.id}
+                        onChecked={() => {
+                          setSelectedItem(item);
+                        }}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{item?.display}</td>
+                    <td>{item?.meaning}</td>
+                  </tr>
+                ))}
+                {listSentences?.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Checkbox
+                        isChecked={selectedItem && item.id === selectedItem.id}
+                        onChecked={() => {
+                          setSelectedItem(item);
+                        }}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{item?.display}</td>
+                    <td>{item?.meaning}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Col>
+        </Row>
         <Row>
           <Col>
             <table className={cx("table")}>

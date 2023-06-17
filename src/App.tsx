@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Header } from "./components";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import { Header } from "./components";
 import {
   Study,
   Document,
@@ -22,6 +26,10 @@ import {
   IndexExercise,
   PathDetail,
   DetailExercise,
+  EditDocForm,
+} from "./pages/admin";
+import { RootState } from "./redux/store";
+import { useSelector } from "react-redux";
   EditDocForm,
 } from "./pages/admin";
 import { RootState } from "./redux/store";

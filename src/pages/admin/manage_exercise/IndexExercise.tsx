@@ -38,6 +38,9 @@ const IndexExercise = () => {
       <div className={cx("container")}>
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
+      <div className={cx("container")}>
+        <div className={cx("wrapper-filter")}></div>
+        <div className={cx("section")}>
           <h2>Manage Exercise</h2>
           {/* <ul className={cx("doc-cate-wrapper")}>
             <CategoryPanel
@@ -64,6 +67,7 @@ const IndexExercise = () => {
           </ul> */}
           <>
             <div className={cx("handler")}>
+            <div className={cx("handler")}>
               <Button
                 isPrimary={false}
                 onClick={() => {
@@ -76,6 +80,7 @@ const IndexExercise = () => {
               <Button
                 isPrimary={false}
                 onClick={() => {
+                  setIsOpenForm(true);
                   setIsOpenForm(true);
                 }}
               >
@@ -90,6 +95,7 @@ const IndexExercise = () => {
               onChecked={() => setSelectAllItems(!isSelectedAll)}
             ></Checkbox> */}
             </div>
+            <table className={cx("table")}>
             <table className={cx("table")}>
               <thead>
                 <tr>
@@ -128,6 +134,13 @@ const IndexExercise = () => {
           </>
         </div>
       </div>
+
+      {isOpenForm && (
+        <CreateExForm
+          onClose={() => setIsOpenForm(false)}
+          isDisplay={isOpenForm}
+        />
+      )}
 
       {isOpenForm && (
         <CreateExForm
