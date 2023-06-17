@@ -54,7 +54,8 @@ const SortExerciseCard = ({
 
   useEffect(() => {
     splitIntoWords();
-  }, []);
+    setListAnswer([]);
+  }, [card]);
 
   useEffect(() => {
     onChange(getAnswer());
@@ -72,7 +73,6 @@ const SortExerciseCard = ({
                   onClick={() => {
                     removeOutOfAnswer(index);
                     addToWords(item);
-                    // onChange(getAnswer());
                   }}
                 >
                   {item}
@@ -92,7 +92,6 @@ const SortExerciseCard = ({
                   onClick={() => {
                     addToAnswer(item);
                     removeWord(index);
-                    // onChange(getAnswer());
                   }}
                 >
                   {item}

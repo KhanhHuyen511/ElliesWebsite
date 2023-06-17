@@ -104,13 +104,18 @@ const ExerciseChild = ({
             haveIcon
           ></Button>
         </div>
-        {(isDone && data.answer === selectedItem) ||
+        {(isDone &&
+          data.answer === selectedItem &&
+          data.type != GameType.SortWords) ||
         (isDone && sortResult === data.vocab?.display) ? (
           <CheckIcon className={cx("result-icon")} />
         ) : (
           isDone && (
             <XMarkIcon className={cx("result-icon", "false")}></XMarkIcon>
           )
+        )}
+        {isDone && data.type == GameType.SortWords && (
+          <p>{data.vocab?.display}</p>
         )}
       </div>
     </>
