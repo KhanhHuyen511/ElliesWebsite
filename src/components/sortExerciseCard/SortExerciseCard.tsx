@@ -56,6 +56,10 @@ const SortExerciseCard = ({
     splitIntoWords();
   }, []);
 
+  useEffect(() => {
+    onChange(getAnswer());
+  }, [listAnswer]);
+
   return (
     <>
       <div className={cx("body")}>
@@ -68,7 +72,7 @@ const SortExerciseCard = ({
                   onClick={() => {
                     removeOutOfAnswer(index);
                     addToWords(item);
-                    onChange(getAnswer());
+                    // onChange(getAnswer());
                   }}
                 >
                   {item}
@@ -88,7 +92,7 @@ const SortExerciseCard = ({
                   onClick={() => {
                     addToAnswer(item);
                     removeWord(index);
-                    onChange(getAnswer());
+                    // onChange(getAnswer());
                   }}
                 >
                   {item}

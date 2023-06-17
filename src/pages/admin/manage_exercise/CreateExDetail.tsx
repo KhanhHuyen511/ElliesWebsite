@@ -34,12 +34,12 @@ const CreateExDetail = ({
   );
 
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
-  const [option1, setOption1] = useState<string>("");
-  const [option2, setOption2] = useState<string>("");
-  const [option3, setOption3] = useState<string>("");
-  const [option4, setOption4] = useState<string>("");
-  const [answer, setAnswer] = useState<string>("");
-  const [keyWord, setKeyWord] = useState<string>("");
+  const [option1, setOption1] = useState<string>();
+  const [option2, setOption2] = useState<string>();
+  const [option3, setOption3] = useState<string>();
+  const [option4, setOption4] = useState<string>();
+  const [answer, setAnswer] = useState<string>();
+  const [keyWord, setKeyWord] = useState<string>();
   const [type, setType] = useState<GameType>(GameType.TranslateToVN);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const CreateExDetail = ({
         title={"Tạo câu hỏi mới"}
         onClose={onClose}
         onSubmit={() => {
-          if (id && type && selectedItem) {
+          if (id && selectedItem) {
             dispatch(
               setAExDetail({
                 exId: id,
@@ -66,7 +66,7 @@ const CreateExDetail = ({
                   option3 ? option3 : "",
                   option4 ? option4 : "",
                 ],
-                answer,
+                answer: answer ? answer : "",
                 type,
                 keyWord,
               })

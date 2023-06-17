@@ -43,14 +43,9 @@ const ExerciseChild = ({
           (data.type == GameType.SortWords ? (
             <SortExerciseCard
               card={data.vocab}
-              onChange={(e: string) => console.log(e)}
-              // onNext={() => {
-              //   onNext({
-              //     id: data.id,
-              //     type: GameType.SortWords,
-              //     question: data.question,
-              //   });
-              // }}
+              onChange={(e: string) => {
+                setSortResult(e);
+              }}
             ></SortExerciseCard>
           ) : (
             <ExerciseCard
@@ -94,7 +89,12 @@ const ExerciseChild = ({
             isPrimary={false}
             onClick={() => {
               if (!isDone) setIsDone(true);
-              else {
+              else if (data.type == GameType.SortWords) {
+                onNext({
+                  ...data,
+                  exRight: sortResult === data.vocab?.display,
+                });
+              } else {
                 onNext({
                   ...data,
                   exRight: data.answer === selectedItem,
@@ -104,7 +104,8 @@ const ExerciseChild = ({
             haveIcon
           ></Button>
         </div>
-        {isDone && data.answer === selectedItem ? (
+        {(isDone && data.answer === selectedItem) ||
+        (isDone && sortResult === data.vocab?.display) ? (
           <CheckIcon className={cx("result-icon")} />
         ) : (
           isDone && (
