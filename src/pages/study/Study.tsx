@@ -26,6 +26,8 @@ const Study = () => {
     (state: RootState) => state.study.checkedInDays
   );
   const userID = useSelector((state: RootState) => state.auth.userID) || "";
+  const studyPathIds =
+    useSelector((state: RootState) => state.auth.userID) || "";
   const studiedRouteIDs = useSelector(
     (state: RootState) => state.study.studiedRouteIDs
   );
@@ -49,7 +51,7 @@ const Study = () => {
   });
 
   useEffect(() => {
-    dispatch(getStudyRoutes());
+    dispatch(getStudyRoutes(userID));
     dispatch(getStudiedRoutes(userID));
     dispatch(getCheckedInDays(userID));
   }, [dispatch, isCheckedIn, userID]);
@@ -94,7 +96,6 @@ const Study = () => {
 
     if (studiedRouteIDs.length === 0) {
       if (currentRouteIndex === index - 1) {
-        console.log(index);
         return "active";
       }
     } else if (
