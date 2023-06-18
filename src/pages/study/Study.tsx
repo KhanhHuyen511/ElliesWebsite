@@ -80,7 +80,11 @@ const Study = () => {
   };
 
   const generateCheckInList = days.map((item, index) => (
-    <li className={cx("check-in-item")} onClick={() => CheckIn(item)}>
+    <li
+      className={cx("check-in-item")}
+      key={index}
+      onClick={() => CheckIn(item)}
+    >
       <CheckinPanel
         label={"day" + (item + 1)}
         isChecked={CheckCheckedDays(item)}
@@ -107,24 +111,28 @@ const Study = () => {
     return "default";
   };
 
-  const generateRouteList = routes.map(
-    (item, index) =>
-      item.id && (
-        <li
-          className={cx("route-study-item")}
-          onClick={() => {
-            if (CheckRouteState(item, index + 1) === "active")
-              navigate(`/study_detail/${item.id}`);
-          }}
-        >
-          <Route
-            id={item.id}
-            label={"Chặng " + item.name}
-            state={CheckRouteState(item, index + 1)}
-          />
-        </li>
-      )
-  );
+  const generateRouteList = () => {
+    if (routes)
+      return routes.map(
+        (item, index) =>
+          item.id && (
+            <li
+              key={index}
+              className={cx("route-study-item")}
+              onClick={() => {
+                if (CheckRouteState(item, index + 1) === "active")
+                  navigate(`/study_detail/${item.id}`);
+              }}
+            >
+              <Route
+                id={item.id}
+                label={"Chặng " + item.name}
+                state={CheckRouteState(item, index + 1)}
+              />
+            </li>
+          )
+      );
+  };
 
   return (
     <div className="container">
@@ -132,7 +140,7 @@ const Study = () => {
         <p className={cx("title")}>Chào Huyền,</p>
         <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
         <p className={cx("page-title")}>Lộ trình</p>
-        <ul className={cx("route-study-wrapper")}>{generateRouteList}</ul>
+        <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
       </Col>
     </div>
   );
