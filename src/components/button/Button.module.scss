@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .btn {
   @include typo-button;
@@ -26,6 +26,8 @@
     color: var(--text-bold-color);
     background-color: var(--G100);
   }
+  &:disabled {
+  }
 }
 
 .primary {
@@ -38,6 +40,11 @@
 
   &:active {
     background-color: var(--O500);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
   }
 }
 
