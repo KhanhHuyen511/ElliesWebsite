@@ -11,6 +11,7 @@ export interface StudyRoute {
   name?: string;
   vocabs?: StudyCard[];
   cards?: string[];
+  cards?: string[];
   sentences?: StudyCard[];
   imageFile?: any;
 }
@@ -51,6 +52,8 @@ export enum StudyCardType {
   Sentence,
   Paraph,
   Book,
+  Paraph,
+  Book,
 }
 
 export enum GameType {
@@ -73,6 +76,7 @@ export interface Doc {
   paraphs?: StudyCard[];
   listItemIds?: string[];
   createDate?: Date;
+  type?: StudyCardType;
   type?: StudyCardType;
 }
 
@@ -117,6 +121,38 @@ export interface UserEx {
   resultList: ExDetail[];
   rightQn?: number;
   didDate?: Date;
+}
+
+export interface Blog {
+  id: string;
+  userId: string;
+  userName?: string;
+  type: string; // question or blog
+  likes?: BlogLike[];
+  comments?: BlogComment[];
+  summary?: string;
+  content: string;
+  title: string;
+  keyword?: string;
+  createDate: Date;
+}
+
+export interface BlogComment {
+  id: string;
+  userId: string;
+  userName?: string;
+  blogId: string;
+  content: string;
+  liked: number;
+  createDate: Date;
+}
+
+export interface BlogLike {
+  id: string;
+  userId: string;
+  userName?: string;
+  blogId: string;
+  createDate: Date;
 }
 
 export interface Blog {
