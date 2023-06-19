@@ -11,7 +11,6 @@ export interface StudyRoute {
   name?: string;
   vocabs?: StudyCard[];
   cards?: string[];
-  cards?: string[];
   sentences?: StudyCard[];
   imageFile?: any;
 }
@@ -52,8 +51,6 @@ export enum StudyCardType {
   Sentence,
   Paraph,
   Book,
-  Paraph,
-  Book,
 }
 
 export enum GameType {
@@ -76,7 +73,6 @@ export interface Doc {
   paraphs?: StudyCard[];
   listItemIds?: string[];
   createDate?: Date;
-  type?: StudyCardType;
   type?: StudyCardType;
 }
 
