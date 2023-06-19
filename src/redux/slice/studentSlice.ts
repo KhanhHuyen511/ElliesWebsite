@@ -31,8 +31,6 @@ export const getCurrentStudent = createAsyncThunk(
     if (querySnapshot.data().birthday)
       stu.birthday = getDate(querySnapshot.data().birthday.seconds);
 
-    console.log(stu);
-
     return stu;
   }
 );
@@ -75,11 +73,7 @@ export const updateAvatar = createAsyncThunk(
 const studentSlice = createSlice({
   name: "student",
   initialState,
-  reducers: {
-    REMOVE_ACTIVE_STUDENT: (state, action) => {
-      state.currentUser = undefined;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCurrentStudent.fulfilled, (state, action) => {
       state.currentUser = action.payload;
@@ -89,7 +83,5 @@ const studentSlice = createSlice({
     });
   },
 });
-
-export const { REMOVE_ACTIVE_STUDENT } = studentSlice.actions;
 
 export default studentSlice.reducer;

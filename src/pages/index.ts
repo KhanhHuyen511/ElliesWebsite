@@ -12,4 +12,3 @@ export { default as ExerciseDetail } from "./exercise/ExerciseDetail";
 export { default as CreateBlog } from "./forum/CreateBlog";
 export { default as BlogDetail } from "./forum/BlogDetail";
 export { default as ResultDetail } from "./exercise/ResultDetail";
-export { default as Onboarding } from "./onboarding/Onboarding";
