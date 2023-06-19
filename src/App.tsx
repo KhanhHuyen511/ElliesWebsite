@@ -18,7 +18,6 @@ import {
   CreateBlog,
   BlogDetail,
   ResultDetail,
-  Onboarding,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -52,7 +51,6 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Study />} />
-            <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/document" element={<Document />} />
             <Route path="/exercise" element={<Exercise />} />
             <Route path="/profile" element={<Profile />} />
