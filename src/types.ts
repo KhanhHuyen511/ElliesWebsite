@@ -37,7 +37,14 @@ export interface Student {
   bio?: string;
   avatar?: any;
   likedBlog?: [];
-  likedBlog?: [];
+  currentPathId?: string;
+  level?: LevelType;
+}
+
+export enum LevelType {
+  Beginner, // Sơ cấp
+  Intermediate, // Trung cấp
+  Advanced, // Nâng cao
 }
 
 export enum StudyCardType {
