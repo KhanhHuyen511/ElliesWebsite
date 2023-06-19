@@ -34,6 +34,7 @@ const CreateStudyCard = (props: Props) => {
     (state: RootState) => state.admin.listSentences
   );
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
+  console.log(selectedItem);
 
   useEffect(() => {
     dispatch(
