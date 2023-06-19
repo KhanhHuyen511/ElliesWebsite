@@ -7,15 +7,6 @@ import { ExDetail, GameType } from "../../../types";
 import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { Col, Row } from "react-flexbox-grid";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Input, Popup } from "../../../components";
-import { updateAExDetail } from "../../../redux/slice/adminSlice";
-import { AppDispatch } from "../../../redux/store";
-import { ExDetail, GameType } from "../../../types";
-import style from "./DetailExercise.module.scss";
-import classNames from "classnames/bind";
-import { Col, Row } from "react-flexbox-grid";
 const cx = classNames.bind(style);
 
 const EditExDetail = ({
@@ -72,11 +63,9 @@ const EditExDetail = ({
         }}
         isDisplay={isDisplay}
         classNames={cx("create-form")}
-        classNames={cx("create-form")}
       >
         <Row>
           <Col md={6}>
-            <table className={cx("table")}>
             <table className={cx("table")}>
               <thead>
                 <tr>

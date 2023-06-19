@@ -2,10 +2,6 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Header } from "./components";
-import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
-import { Header } from "./components";
 import {
   Study,
   Document,
@@ -18,6 +14,7 @@ import {
   CreateBlog,
   BlogDetail,
   ResultDetail,
+  Onboarding,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -26,10 +23,6 @@ import {
   IndexExercise,
   PathDetail,
   DetailExercise,
-  EditDocForm,
-} from "./pages/admin";
-import { RootState } from "./redux/store";
-import { useSelector } from "react-redux";
   EditDocForm,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
@@ -51,6 +44,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Study />} />
+            <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/document" element={<Document />} />
             <Route path="/exercise" element={<Exercise />} />
             <Route path="/profile" element={<Profile />} />

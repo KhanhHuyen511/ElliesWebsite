@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Input, Popup } from "../../../components";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Checkbox, Input, Popup } from "../../../components";
 import {
   getDocCardWithTopic,
   setAExDetail,
@@ -56,7 +53,6 @@ const CreateExDetail = ({
     <>
       <Popup
         title={"Tạo câu hỏi mới"}
-        title={"Tạo câu hỏi mới"}
         onClose={onClose}
         onSubmit={() => {
           if (id && selectedItem) {
@@ -65,10 +61,6 @@ const CreateExDetail = ({
                 exId: id,
                 vocab: selectedItem,
                 options: [
-                  option1 ? option1 : "",
-                  option2 ? option2 : "",
-                  option3 ? option3 : "",
-                  option4 ? option4 : "",
                   option1 ? option1 : "",
                   option2 ? option2 : "",
                   option3 ? option3 : "",
@@ -83,11 +75,9 @@ const CreateExDetail = ({
         }}
         isDisplay={isDisplay}
         classNames={cx("create-form")}
-        classNames={cx("create-form")}
       >
         <Row>
           <Col md={6}>
-            <table className={cx("table")}>
             <table className={cx("table")}>
               <thead>
                 <tr>

@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addDoc,
-  arrayRemove,
-  arrayUnion,
   arrayRemove,
   arrayUnion,
   collection,
@@ -15,8 +12,6 @@ import {
   where,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase/config";
-} from "firebase/firestore";
-import { db, storage } from "../../firebase/config";
 import {
   Doc,
   Ex,
@@ -24,13 +19,8 @@ import {
   GameType,
   StudyCard,
   StudyCardType,
-  StudyCardType,
   StudyPath,
   StudyRoute,
-} from "../../types";
-import { ref, uploadBytes } from "firebase/storage";
-import { getAEx } from "./exSlice";
-import { getDate } from "../../utils";
 } from "../../types";
 import { ref, uploadBytes } from "firebase/storage";
 import { getAEx } from "./exSlice";
@@ -42,12 +32,8 @@ interface types {
   currentStudyRoute: StudyCard;
   listDocs?: Doc[];
   currentDoc?: Doc;
-  listDocs?: Doc[];
-  currentDoc?: Doc;
   // list user
   listVocabs?: StudyCard[];
-  listSentences?: StudyCard[];
-  listParaphs?: StudyCard[];
   listSentences?: StudyCard[];
   listParaphs?: StudyCard[];
   listEx?: Ex[];
@@ -65,10 +51,8 @@ const initialState: types = {
 // Write reducer get studyRoutes
 export const getStudyPaths = createAsyncThunk(
   "admin/study/getPaths",
-  "admin/study/getPaths",
   async () => {
     var paths: StudyPath[] = [];
-    const querySnapshot = await getDocs(collection(db, "study_paths"));
     const querySnapshot = await getDocs(collection(db, "study_paths"));
     querySnapshot.forEach(async (e) => {
       var item: StudyPath = e.data() as StudyPath;
@@ -83,15 +67,12 @@ export const getStudyPaths = createAsyncThunk(
 // Write reducer get studyRoutes
 export const getStudyPath = createAsyncThunk(
   "admin/study/getPath",
-  "admin/study/getPath",
   async (id: string) => {
     var path: StudyPath;
-    const docRef = await getDoc(doc(db, "study_paths", id));
     const docRef = await getDoc(doc(db, "study_paths", id));
     path = docRef.data() as StudyPath;
 
     const routeRef = await getDocs(
-      collection(db, "study_paths", id, "study_routes")
       collection(db, "study_paths", id, "study_routes")
     );
     path.studyRoutes = routeRef.docs.map(
@@ -104,12 +85,10 @@ export const getStudyPath = createAsyncThunk(
 
 export const getStudyRoute = createAsyncThunk(
   "admin/study/getRoute",
-  "admin/study/getRoute",
   async (data: { path_id: string; id: string }) => {
     var route: StudyRoute;
 
     const docRef = await getDoc(
-      doc(db, "study_paths", data.path_id, "study_routes", data.id)
       doc(db, "study_paths", data.path_id, "study_routes", data.id)
     );
     route = docRef.data() as StudyRoute;
@@ -134,9 +113,7 @@ export const getStudyRoute = createAsyncThunk(
 // Write reducer set studyPath
 export const setStudyPath = createAsyncThunk(
   "admin/study/setPath",
-  "admin/study/setPath",
   async (data: StudyPath) => {
-    const docRef = await addDoc(collection(db, "study_paths"), {
     const docRef = await addDoc(collection(db, "study_paths"), {
       name: data.name,
       topic: data.topic,
@@ -152,22 +129,15 @@ export const setStudyPath = createAsyncThunk(
 // Write reducer set studyRoute
 export const setStudyRoute = createAsyncThunk(
   "admin/study/setRoute",
-  "admin/study/setRoute",
   async (data: { path_id: string; route: StudyRoute }) => {
     const docRef = await addDoc(
-      collection(db, "study_paths", data.path_id, "study_routes"),
       collection(db, "study_paths", data.path_id, "study_routes"),
       {
         name: data.route.name,
         imageFile: data.route.imageFile ? data.route.imageFile.name : "",
-        imageFile: data.route.imageFile ? data.route.imageFile.name : "",
       }
     );
 
-    if (data.route.imageFile !== null) {
-      const storageRef = ref(storage, `images/${data.route.imageFile.name}`);
-      uploadBytes(storageRef, data.route.imageFile);
-    }
     if (data.route.imageFile !== null) {
       const storageRef = ref(storage, `images/${data.route.imageFile.name}`);
       uploadBytes(storageRef, data.route.imageFile);
@@ -185,12 +155,7 @@ export const setStudyCard = createAsyncThunk(
   async (data: { path_id: string; route_id: string; card_id: string }) => {
     await updateDoc(
       doc(db, "study_paths", data.path_id, "study_routes", data.route_id),
-  "admin/study/setCard",
-  async (data: { path_id: string; route_id: string; card_id: string }) => {
-    await updateDoc(
-      doc(db, "study_paths", data.path_id, "study_routes", data.route_id),
       {
-        cards: arrayUnion(data.card_id),
         cards: arrayUnion(data.card_id),
       }
     );
@@ -202,10 +167,8 @@ export const setStudyCard = createAsyncThunk(
 // Write reducer get studyRoutes
 export const updateStudyPath = createAsyncThunk(
   "admin/study/updatePath",
-  "admin/study/updatePath",
   async (data: StudyPath) => {
     if (data.id) {
-      const docRef = doc(db, "study_paths", data.id);
       const docRef = doc(db, "study_paths", data.id);
       await updateDoc(docRef, {
         name: data.name,
@@ -219,15 +182,12 @@ export const updateStudyPath = createAsyncThunk(
 // Write reducer get studyRoutes
 export const updateStudyRoute = createAsyncThunk(
   "admin/study/updateRoute",
-  "admin/study/updateRoute",
   async (data: { path_id: string; route: StudyRoute }) => {
     if (data.route.id) {
       const docRef = doc(
         db,
         "study_paths",
-        "study_paths",
         data.path_id,
-        "study_routes",
         "study_routes",
         data.route.id
       );
@@ -242,22 +202,14 @@ export const removeStudyCard = createAsyncThunk(
   "admin/study/updateCard",
   async (data: { path_id: string; route_id: string; card_id: string }) => {
     if (data.card_id) {
-export const removeStudyCard = createAsyncThunk(
-  "admin/study/updateCard",
-  async (data: { path_id: string; route_id: string; card_id: string }) => {
-    if (data.card_id) {
       const docRef = doc(
         db,
-        "study_paths",
         "study_paths",
         data.path_id,
         "study_routes",
         data.route_id
-        "study_routes",
-        data.route_id
       );
       await updateDoc(docRef, {
-        cards: arrayRemove(data.card_id),
         cards: arrayRemove(data.card_id),
       });
     }
@@ -268,14 +220,127 @@ export const removeStudyCard = createAsyncThunk(
 
 //#region [DOCUMENT]
 
-export const setVocab = createAsyncThunk(
-  'admin/study/setVocab',
-  async (data: StudyCard) => {
-    const docRef = await addDoc(collection(db, 'vocabs'), {
+export const getAllDocs = createAsyncThunk(
+  "admin/document/getAllDocs",
+  async () => {
+    var docs: Doc[] = [];
+    const querySnapshot = await getDocs(collection(db, "docs"));
+    querySnapshot.forEach(async (e) => {
+      var item: Doc = e.data() as Doc;
+      item.id = e.id;
+      docs.push(item);
+    });
+
+    return docs;
+  }
+);
+
+export const getADocWithType = createAsyncThunk(
+  "admin/document/getADoc",
+  async ({ doc_id, type }: { doc_id: string; type: string }) => {
+    const querySnapshot = await getDoc(doc(db, "docs", doc_id));
+
+    const data = querySnapshot.data() as Doc;
+    data.id = querySnapshot.id;
+
+    if (data.listItemIds)
+      await Promise.all(
+        data.listItemIds.map(async (item) => {
+          switch (type) {
+            case StudyCardType.Vocab.toString():
+              await getDoc(doc(db, "vocabs", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.vocabs) data.vocabs = [card, ...data.vocabs];
+                  else data.vocabs = [card];
+                }
+              });
+              break;
+            case StudyCardType.Sentence.toString():
+              await getDoc(doc(db, "sentences", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.sentences)
+                    data.sentences = [card, ...data.sentences];
+                  else data.sentences = [card];
+                }
+              });
+              break;
+            case StudyCardType.Paraph.toString():
+              await getDoc(doc(db, "paraphs", item)).then((snapshot) => {
+                if (snapshot.data()) {
+                  let card = {
+                    ...(snapshot.data() as StudyCard),
+                    id: snapshot.id,
+                  };
+                  if (data.paraphs) data.paraphs = [card, ...data.paraphs];
+                  else data.paraphs = [card];
+                }
+              });
+              break;
+            default:
+              break;
+          }
+        })
+      );
+
+    return data;
+  }
+);
+
+export const setDocument = createAsyncThunk(
+  "admin/study/setDocument",
+  async ({ data }: { data: Doc }) => {
+    await addDoc(collection(db, "docs"), {
+      title: data.title,
+      description: data.description,
+      createDate: new Date(),
+    });
+
+    return data;
+  }
+);
+
+export const setDocCard = createAsyncThunk(
+  "admin/study/setDocCard",
+  async ({
+    data,
+    type,
+    doc_id,
+  }: {
+    data: StudyCard;
+    type: StudyCardType;
+    doc_id: string;
+  }) => {
+    let typeCard = "";
+
+    // get Type
+    switch (type) {
+      case StudyCardType.Vocab:
+        typeCard = "vocabs";
+        break;
+      case StudyCardType.Sentence:
+        typeCard = "sentences";
+        break;
+      case StudyCardType.Paraph:
+        typeCard = "paraphs";
+        break;
+      case StudyCardType.Book:
+        typeCard = "books";
+        break;
+      default:
+        break;
+    }
+
+    const docRef = await addDoc(collection(db, typeCard), {
       display: data.display,
       meaning: data.meaning,
-      imageFile: data.imageFile ? data.imageFile.name : "",
-      audio: data.audio ? data.audio.name : "",
       imageFile: data.imageFile ? data.imageFile.name : "",
       audio: data.audio ? data.audio.name : "",
     });
@@ -307,7 +372,6 @@ export const setVocab = createAsyncThunk(
 
 export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
   var list: StudyCard[] = [];
-  const querySnapshot = await getDocs(collection(db, "vocabs"));
   const querySnapshot = await getDocs(collection(db, "vocabs"));
   querySnapshot.forEach(async (e) => {
     var item: StudyCard = e.data() as StudyCard;
@@ -437,8 +501,6 @@ export const updateDocument = createAsyncThunk(
 
 export const updateDocCard = createAsyncThunk(
   "admin/study/updateDocCard",
-export const updateDocCard = createAsyncThunk(
-  "admin/study/updateDocCard",
   async ({
     data,
     oldImage,
@@ -448,7 +510,6 @@ export const updateDocCard = createAsyncThunk(
     data: StudyCard;
     oldImage: any;
     oldAudio: any;
-    type: StudyCardType;
     type: StudyCardType;
   }) => {
     if (data.id) {
@@ -583,7 +644,6 @@ export const updateAExercise = createAsyncThunk(
     description?: string;
   }) => {
     await updateDoc(doc(db, "exs", id), {
-    await updateDoc(doc(db, "exs", id), {
       title: title,
       description: description,
     });
@@ -591,7 +651,6 @@ export const updateAExercise = createAsyncThunk(
 );
 
 export const setAExDetail = createAsyncThunk(
-  "admin/exercise/setAExDetai;",
   "admin/exercise/setAExDetai;",
   async ({
     exId,
@@ -770,7 +829,6 @@ export const updateAExDetail = createAsyncThunk(
 //#endregion
 
 const adminSlice = createSlice({
-  name: "admin_study",
   name: "admin_study",
   initialState,
   reducers: {},
