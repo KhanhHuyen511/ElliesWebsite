@@ -43,6 +43,39 @@ export const getStudyRoutes = createAsyncThunk(
     const q = query(collection(db, "students"), where("id", "==", userID));
     const user = (await getDocs(q)).docs[0].data() as Student;
 
+    let levelVN = "";
+
+    switch (user.level) {
+      case LevelType.Beginner:
+        levelVN = "Sơ cấp";
+        break;
+      case LevelType.Intermediate:
+        levelVN = "Trung cấp";
+        break;
+      case LevelType.Advanced:
+        levelVN = "Nâng cao";
+        break;
+      default:
+        break;
+    }
+
+    const q1 = query(
+      collection(db, "study_paths"),
+      where("level", "==", levelVN)
+    );
+
+    const snapshot = await (await getDocs(q1)).docs;
+
+    // snapshot.map((e) => {
+    //   e.
+    // })
+
+    // q1.forEach(async (e) => {
+    //   var route: StudyRoute = e.data() as StudyRoute;
+    //   route.id = e.id;
+    //   routes.push(route);
+    // });
+
     if (user.currentPathId) {
       var routes: StudyRoute[] = [];
       const querySnapshot = await getDocs(
