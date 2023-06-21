@@ -3,17 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import style from "./Profile.module.scss";
 import classNames from "classnames/bind";
-import { CameraIcon, FireIcon, PencilIcon } from "@heroicons/react/24/outline";
+import {
+  BoltIcon,
+  CameraIcon,
+  CheckBadgeIcon,
+  FireIcon,
+  PencilIcon,
+  TrophyIcon,
+} from "@heroicons/react/24/outline";
 import { Button, Input, TextArea } from "../../components";
 import EditProfile from "./EditProfile";
 import EditAvatar from "./EditAvatar";
 import { getCurrentStudent } from "../../redux/slice/studentSlice";
-import { formatDate } from "../../utils";
+import { formatDate, getDate } from "../../utils";
 import { getDownloadURL, ref } from "firebase/storage";
 import { auth, storage } from "../../firebase/config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { REMOVE_ACTIVE_USER } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
+import { LevelType } from "../../types";
+import { Timestamp } from "firebase/firestore";
+import { getListUserExs } from "../../redux/slice/exSlice";
+import { getStudyRoutes } from "../../redux/slice/studySlice";
 const cx = classNames.bind(style);
 
 const Profile = () => {
@@ -22,6 +33,10 @@ const Profile = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const user = useSelector((state: RootState) => state.student.currentUser);
+  const userExs = useSelector((state: RootState) => state.ex.listUserExs);
+  const studyRoutes = useSelector(
+    (state: RootState) => state.study.studyRoutes
+  );
 
   const [isOpenEditForm, setISOpenEditForm] = useState<boolean>(false);
   const [isOpenEditAvtForm, setISOpenEditAvtForm] = useState<boolean>(false);
@@ -32,11 +47,30 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(getCurrentStudent(userID));
+    dispatch(getListUserExs(userID));
+    dispatch(getStudyRoutes(userID));
     if (user?.avatar)
       getDownloadURL(ref(storage, `images/${user.avatar}`)).then((url) => {
         setImg(url);
       });
   }, [dispatch, userID, user?.avatar]);
+
+  // Get Stats Ex: Percent
+  const statsEx = () => {
+    if (userExs) {
+      let total = 1;
+      let right = 0;
+      userExs.map((item) => {
+        total += item.resultList.length;
+        item.resultList.map((i) => {
+          if (i.exRight === true) {
+            right++;
+          }
+        });
+      });
+      return ((right / total) * 100).toFixed();
+    }
+  };
 
   return (
     <>
@@ -58,27 +92,55 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className={cx("stats")}>
-            <div className={cx("stat-item")}>
-              <FireIcon className={cx("stat-item-icon")} />
-              <p className={cx("stat-item-label")}>20/300</p>
+          <div className={cx("stats-wrapper")}>
+            <div className={cx("level")}>
+              <CheckBadgeIcon className={cx("level-icon")} />
+              <p className={cx("stat-item-label")}>
+                {LevelType[user?.level as number]}
+              </p>
             </div>
-            <div className={cx("stat-item")}>
-              <FireIcon className={cx("stat-item-icon")} />
-              <p className={cx("stat-item-label")}>20/300</p>
-            </div>
-            <div className={cx("stat-item")}>
-              <FireIcon className={cx("stat-item-icon")} />
-              <p className={cx("stat-item-label")}>20/300</p>
-            </div>
-            <div className={cx("stat-item")}>
-              <FireIcon className={cx("stat-item-icon")} />
-              <p className={cx("stat-item-label")}>20/300</p>
+
+            <div className={cx("stats")}>
+              <div className={cx("stat-item")}>
+                <FireIcon className={cx("stat-item-icon")} />
+                <p className={cx("stat-item-label")}>
+                  <p>
+                    {user?.checkinDays.length}/
+                    {user?.checkinDays !== undefined &&
+                    user.checkinDays.length > 0
+                      ? (
+                          (new Date().getTime() -
+                            getDate(
+                              (user.checkinDays.at(0) as unknown as Timestamp)
+                                ?.seconds
+                            ).getTime()) /
+                          (3600000 * 24)
+                        ).toFixed()
+                      : 0}{" "}
+                  </p>
+                  ngày học
+                </p>
+              </div>
+              <div className={cx("stat-item")}>
+                <BoltIcon className={cx("stat-item-icon")} />
+                <p className={cx("stat-item-label")}>
+                  <p>
+                    {user?.routes !== undefined ? user?.routes.length : 0}/
+                    {studyRoutes ? studyRoutes.length : 0}
+                  </p>{" "}
+                  bài học
+                </p>
+              </div>
+              <div className={cx("stat-item")}>
+                <TrophyIcon className={cx("stat-item-icon")} />
+                <p className={cx("stat-item-label")}>
+                  <p>{userExs ? statsEx() : 0}%</p> đúng luyện tập
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className={cx("check-in")}>???</div>
         <div className={cx("info-section", "section")}>
           <div className={cx("info-title-wrapper")}>
             <p className={cx("section-title")}>Thông tin cá nhân</p>
