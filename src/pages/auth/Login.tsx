@@ -41,7 +41,7 @@ const Login = () => {
         // check if this login is first time
         // if yes
         await dispatch(getCurrentStudent(user.uid)).then((data) => {
-          if ((data.payload as Student).level === undefined) {
+          if (data.payload && (data.payload as Student).level === undefined) {
             navigate("/onboarding");
           } else {
             // if no

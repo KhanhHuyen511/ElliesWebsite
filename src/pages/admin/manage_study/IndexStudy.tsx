@@ -1,21 +1,25 @@
-import { useEffect, useState } from 'react';
-import classNames from 'classnames/bind';
-import styles from './IndexStudy.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { Button, Checkbox } from '../../../components';
-import CreateStudyForm from './CreateStudyForm';
-import { useNavigate } from 'react-router-dom';
-import { getStudyPaths } from '../../../redux/slice/adminSlice';
-import { storage } from '../../../firebase/config';
-import { getDownloadURL, ref } from 'firebase/storage';
+import { useEffect, useState } from "react";
+import classNames from "classnames/bind";
+import styles from "./IndexStudy.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { Button, Checkbox } from "../../../components";
+import CreateStudyForm from "./CreateStudyForm";
+import { useNavigate } from "react-router-dom";
+import { getStudyPaths } from "../../../redux/slice/adminSlice";
+import { storage } from "../../../firebase/config";
+import { getDownloadURL, ref } from "firebase/storage";
+import RemovePathForm from "./RemovePathForm";
+import { StudyPath } from "../../../types";
 const cx = classNames.bind(styles);
 
 const IndexStudy = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [isOpenForm, setIsOpenForm] = useState(false);
+  const [isOpenRemoveForm, setIsOpenRemoveForm] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string | string[]>();
+  const [selectItem, setSelectItem] = useState<StudyPath>();
   const [isSelectedAll, setIsSelectedAll] = useState(false);
 
   const listStudyPaths = useSelector(
@@ -24,7 +28,7 @@ const IndexStudy = () => {
 
   useEffect(() => {
     dispatch(getStudyPaths());
-  }, [dispatch, listStudyPaths]);
+  }, [dispatch]);
 
   const navigate = useNavigate();
 
@@ -33,7 +37,7 @@ const IndexStudy = () => {
     setSelectedItems(undefined);
 
     if (isAll) {
-      const ids: string[] = listStudyPaths.map((e) => (e.id ? e.id : ''));
+      const ids: string[] = listStudyPaths.map((e) => (e.id ? e.id : ""));
       setSelectedItems(ids);
     }
   };
@@ -43,7 +47,7 @@ const IndexStudy = () => {
       // if select multi item
       // checked = false
       if (!selectedItems.includes(pathID)) {
-        if (typeof selectedItems !== 'string' && selectedItems.length > 1) {
+        if (typeof selectedItems !== "string" && selectedItems.length > 1) {
           setSelectedItems([...selectedItems, pathID]);
         } else {
           const ids: string[] = [];
@@ -53,7 +57,7 @@ const IndexStudy = () => {
         }
       } else {
         // checked = true
-        if (selectedItems.length > 1 && typeof selectedItems !== 'string') {
+        if (selectedItems.length > 1 && typeof selectedItems !== "string") {
           const pathIndex = selectedItems.indexOf(pathID);
           const newItems: string[] = selectedItems as string[];
           newItems.splice(pathIndex, 1);
@@ -77,16 +81,16 @@ const IndexStudy = () => {
 
   return (
     <>
-      <div className={cx('container')}>
-        <div className={cx('wrapper-filter')}></div>
-        <div className={cx('section')}>
-          <h2>Manage Study</h2>
+      <div className={cx("container")}>
+        <div className={cx("wrapper-filter")}></div>
+        <div className={cx("section")}>
+          <h2>Quản lý lộ trình học</h2>
 
-          <div className={cx('handler')}>
+          <div className={cx("handler")}>
             <Button
               isPrimary={false}
               onClick={() => {
-                navigate('/path_detail/' + selectedItems);
+                navigate("/path_detail/" + selectedItems);
               }}
             >
               Xem chi tiết
@@ -99,17 +103,23 @@ const IndexStudy = () => {
             >
               Tạo mới
             </Button>
-            <Button isPrimary={false} isDanger={true} onClick={() => {}}>
+            <Button
+              isPrimary={false}
+              isDanger={true}
+              onClick={() => {
+                setIsOpenRemoveForm(true);
+              }}
+            >
               Xóa
             </Button>
             <Checkbox
               isChecked={isSelectedAll}
-              label='Tất cả'
+              label="Tất cả"
               onChecked={() => setSelectAllItems(!isSelectedAll)}
             ></Checkbox>
           </div>
 
-          <table className={cx('table')}>
+          <table className={cx("table")}>
             <thead>
               <tr>
                 <th></th>
@@ -129,12 +139,15 @@ const IndexStudy = () => {
                         isChecked={getCheckedItems(item.id)}
                         onChecked={() => {
                           setSelectPath(item.id);
+                          setSelectItem(item);
                         }}
                       ></Checkbox>
                     )}
                   </td>
                   <td>{item.name}</td>
-                  <td>??</td>
+                  <td>
+                    {item.studyRoutes?.length ? item.studyRoutes?.length : 0}
+                  </td>
                   <td>{item.topic}</td>
                   <td>{item.level}</td>
                 </tr>
@@ -150,6 +163,17 @@ const IndexStudy = () => {
         }}
         isDisplay={isOpenForm}
       />
+
+      {selectItem && selectItem.id && (
+        <RemovePathForm
+          onClose={() => {
+            setIsOpenRemoveForm(false);
+          }}
+          isDisplay={isOpenRemoveForm}
+          pathID={selectItem.id}
+          data={selectItem}
+        />
+      )}
     </>
   );
 };

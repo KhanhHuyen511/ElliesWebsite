@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -29,7 +30,7 @@ import { getDate } from "../../utils";
 interface types {
   listStudyPaths: StudyPath[];
   currentStudyPath: StudyPath;
-  currentStudyRoute: StudyCard;
+  currentStudyRoute: StudyRoute;
   listDocs?: Doc[];
   currentDoc?: Doc;
   // list user
@@ -52,13 +53,26 @@ const initialState: types = {
 export const getStudyPaths = createAsyncThunk(
   "admin/study/getPaths",
   async () => {
+    console.log("hi");
     var paths: StudyPath[] = [];
-    const querySnapshot = await getDocs(collection(db, "study_paths"));
-    querySnapshot.forEach(async (e) => {
-      var item: StudyPath = e.data() as StudyPath;
-      item.id = e.id;
-      paths.push(item);
-    });
+    const querySnapshot = (await getDocs(collection(db, "study_paths"))).docs;
+
+    await Promise.all(
+      querySnapshot.map(async (e) => {
+        var item: StudyPath = e.data() as StudyPath;
+        item.id = e.id;
+
+        const itemSnapshot = await (
+          await getDocs(collection(db, "study_paths", e.id, "study_routes"))
+        ).docs;
+
+        if (itemSnapshot && itemSnapshot.length > 0) {
+          item.studyRoutes = itemSnapshot.map((i) => i.data());
+        }
+
+        paths = [...paths, item];
+      })
+    );
 
     return paths;
   }
@@ -68,16 +82,44 @@ export const getStudyPaths = createAsyncThunk(
 export const getStudyPath = createAsyncThunk(
   "admin/study/getPath",
   async (id: string) => {
+    console.log("hi");
     var path: StudyPath;
     const docRef = await getDoc(doc(db, "study_paths", id));
     path = docRef.data() as StudyPath;
 
-    const routeRef = await getDocs(
-      collection(db, "study_paths", id, "study_routes")
-    );
-    path.studyRoutes = routeRef.docs.map(
-      (d) => ({ id: d.id, ...d.data() } as StudyRoute)
-    );
+    // const routeRef = await getDocs(
+    //   collection(db, "study_paths", id, "study_routes")
+    // );
+    // path.studyRoutes = routeRef.docs.map(
+    //   (d) => ({ id: d.id, ...d.data() } as StudyRoute)
+    // );
+
+    const itemSnapshot = await (
+      await getDocs(collection(db, "study_paths", id, "study_routes"))
+    ).docs;
+
+    if (itemSnapshot && itemSnapshot.length > 0) {
+      path.studyRoutes = [];
+      await Promise.all(
+        itemSnapshot.map(async (i) => {
+          let item: StudyRoute = {};
+          item.id = i.id;
+          item.name = i.data().name;
+          item.imageFile = i.data().imageFile;
+
+          const docRef = (
+            await getDoc(doc(db, "study_paths", id, "study_routes", i.id))
+          ).data() as StudyRoute;
+
+          item.cards = docRef.cards;
+
+          if (path.studyRoutes) path.studyRoutes = [...path.studyRoutes, item];
+          else path.studyRoutes = [item];
+        })
+      );
+
+      // path.studyRoutes = studyRoutes;
+    }
 
     return path;
   }
@@ -87,6 +129,8 @@ export const getStudyRoute = createAsyncThunk(
   "admin/study/getRoute",
   async (data: { path_id: string; id: string }) => {
     var route: StudyRoute;
+
+    console.log("hi");
 
     const docRef = await getDoc(
       doc(db, "study_paths", data.path_id, "study_routes", data.id)
@@ -106,6 +150,7 @@ export const getStudyRoute = createAsyncThunk(
         })
       );
 
+    console.log(route);
     return route;
   }
 );
@@ -114,6 +159,7 @@ export const getStudyRoute = createAsyncThunk(
 export const setStudyPath = createAsyncThunk(
   "admin/study/setPath",
   async (data: StudyPath) => {
+    console.log("hi");
     const docRef = await addDoc(collection(db, "study_paths"), {
       name: data.name,
       topic: data.topic,
@@ -130,6 +176,7 @@ export const setStudyPath = createAsyncThunk(
 export const setStudyRoute = createAsyncThunk(
   "admin/study/setRoute",
   async (data: { path_id: string; route: StudyRoute }) => {
+    console.log("hi");
     const docRef = await addDoc(
       collection(db, "study_paths", data.path_id, "study_routes"),
       {
@@ -145,22 +192,23 @@ export const setStudyRoute = createAsyncThunk(
 
     data.route.id = docRef.id;
 
-    return data;
+    return data.route;
   }
 );
 
 // Write reducer set studyCard
 export const setStudyCard = createAsyncThunk(
   "admin/study/setCard",
-  async (data: { path_id: string; route_id: string; card_id: string }) => {
+  async (data: { path_id: string; route_id: string; card: StudyCard }) => {
+    console.log("hi");
     await updateDoc(
       doc(db, "study_paths", data.path_id, "study_routes", data.route_id),
       {
-        cards: arrayUnion(data.card_id),
+        cards: arrayUnion(data.card.id),
       }
     );
 
-    return data;
+    return data.card;
   }
 );
 
@@ -168,6 +216,7 @@ export const setStudyCard = createAsyncThunk(
 export const updateStudyPath = createAsyncThunk(
   "admin/study/updatePath",
   async (data: StudyPath) => {
+    console.log("hi");
     if (data.id) {
       const docRef = doc(db, "study_paths", data.id);
       await updateDoc(docRef, {
@@ -183,6 +232,7 @@ export const updateStudyPath = createAsyncThunk(
 export const updateStudyRoute = createAsyncThunk(
   "admin/study/updateRoute",
   async (data: { path_id: string; route: StudyRoute }) => {
+    console.log("hi");
     if (data.route.id) {
       const docRef = doc(
         db,
@@ -195,6 +245,7 @@ export const updateStudyRoute = createAsyncThunk(
         name: data.route.name,
       });
     }
+    return data.route;
   }
 );
 
@@ -213,6 +264,38 @@ export const removeStudyCard = createAsyncThunk(
         cards: arrayRemove(data.card_id),
       });
     }
+
+    return data.card_id;
+  }
+);
+
+export const removeStudyRoute = createAsyncThunk(
+  "admin/study/removeRoute",
+  async (data: { path_id: string; route_id: string }) => {
+    console.log("hi");
+
+    const docRef = doc(
+      db,
+      "study_paths",
+      data.path_id,
+      "study_routes",
+      data.route_id
+    );
+    await deleteDoc(docRef);
+
+    return data.route_id;
+  }
+);
+
+export const removeStudyPath = createAsyncThunk(
+  "admin/study/removePath",
+  async (data: { path_id: string }) => {
+    console.log("hi");
+
+    const docRef = doc(db, "study_paths", data.path_id);
+    await deleteDoc(docRef);
+
+    return data.path_id;
   }
 );
 
@@ -223,6 +306,7 @@ export const removeStudyCard = createAsyncThunk(
 export const getAllDocs = createAsyncThunk(
   "admin/document/getAllDocs",
   async () => {
+    console.log("hi");
     var docs: Doc[] = [];
     const querySnapshot = await getDocs(collection(db, "docs"));
     querySnapshot.forEach(async (e) => {
@@ -297,6 +381,7 @@ export const getADocWithType = createAsyncThunk(
 export const setDocument = createAsyncThunk(
   "admin/study/setDocument",
   async ({ data }: { data: Doc }) => {
+    console.log("hi");
     await addDoc(collection(db, "docs"), {
       title: data.title,
       description: data.description,
@@ -318,6 +403,7 @@ export const setDocCard = createAsyncThunk(
     type: StudyCardType;
     doc_id: string;
   }) => {
+    console.log("hi");
     let typeCard = "";
 
     // get Type
@@ -371,6 +457,7 @@ export const setDocCard = createAsyncThunk(
 );
 
 export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
+  console.log("hi");
   var list: StudyCard[] = [];
   const querySnapshot = await getDocs(collection(db, "vocabs"));
   querySnapshot.forEach(async (e) => {
@@ -385,6 +472,7 @@ export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
 export const getDocCardWithTopic = createAsyncThunk(
   "admin/study/getDocCardWithTopic",
   async ({ topic, type }: { topic: string; type: StudyCardType }) => {
+    console.log("hi");
     let typeCard = "";
 
     // get Type
@@ -429,6 +517,7 @@ export const getDocCardWithTopic = createAsyncThunk(
 export const getSentences = createAsyncThunk(
   "admin/study/getSentences",
   async () => {
+    console.log("hi");
     var list: StudyCard[] = [];
     const querySnapshot = await getDocs(collection(db, "sentences"));
     querySnapshot.forEach(async (e) => {
@@ -484,6 +573,7 @@ export const getSentences = createAsyncThunk(
 export const updateDocument = createAsyncThunk(
   "admin/study/updateDocument",
   async ({ oldData, data }: { oldData: Doc; data: Doc }) => {
+    console.log("hi");
     if (data.id) {
       const docRef = doc(db, "docs", data.id);
       await updateDoc(docRef, {
@@ -513,6 +603,7 @@ export const updateDocCard = createAsyncThunk(
     type: StudyCardType;
   }) => {
     if (data.id) {
+      console.log("hi");
       let typeCard = "";
 
       // get Type
@@ -566,6 +657,7 @@ export const updateDocCard = createAsyncThunk(
 export const getExercises = createAsyncThunk(
   "admin/exercise/getExercises",
   async () => {
+    console.log("hi");
     var items: Ex[] = [];
 
     const querySnapshot = await getDocs(collection(db, "exs"));
@@ -583,6 +675,7 @@ export const getExercises = createAsyncThunk(
 export const getAExercise = createAsyncThunk(
   "admin/exercise/getAExercise",
   async (id: string) => {
+    console.log("hi");
     const querySnapshot = await getDoc(doc(db, "exs", id));
 
     var item: Ex = querySnapshot.data() as Ex;
@@ -622,6 +715,7 @@ export const getAExercise = createAsyncThunk(
 export const setExercise = createAsyncThunk(
   "admin/study/setExercise",
   async ({ data }: { data: Ex }) => {
+    console.log("hi");
     await addDoc(collection(db, "exs"), {
       title: data.title,
       description: data.description,
@@ -643,6 +737,7 @@ export const updateAExercise = createAsyncThunk(
     title?: string;
     description?: string;
   }) => {
+    console.log("hi");
     await updateDoc(doc(db, "exs", id), {
       title: title,
       description: description,
@@ -667,6 +762,7 @@ export const setAExDetail = createAsyncThunk(
     type: GameType | string;
     keyWord?: string;
   }) => {
+    console.log("hi");
     const getQuestion = () => {
       switch (type) {
         case GameType.TranslateToVN.toString():
@@ -745,6 +841,7 @@ export const updateAExDetail = createAsyncThunk(
     type?: GameType | string;
     keyWord?: string;
   }) => {
+    console.log("hi");
     const getQuestion = () => {
       switch (type) {
         case GameType.TranslateToVN.toString():
@@ -846,7 +943,46 @@ const adminSlice = createSlice({
       state.currentStudyRoute = action.payload as StudyRoute;
     });
     builder.addCase(setStudyRoute.fulfilled, (state, action) => {
-      state.currentStudyPath.studyRoutes?.push(action.payload as StudyRoute);
+      // console.log(action.payload);
+      // state.currentStudyPath.studyRoutes?.push(action.payload as StudyRoute);
+      if (state.currentStudyPath.studyRoutes)
+        state.currentStudyPath.studyRoutes = [
+          ...state.currentStudyPath.studyRoutes,
+          action.payload as StudyRoute,
+        ];
+    });
+    builder.addCase(updateStudyRoute.fulfilled, (state, action) => {
+      let i = state.currentStudyPath.studyRoutes?.findIndex(
+        (o) => o.id === action.payload?.id
+      );
+      if (i && state.currentStudyPath.studyRoutes)
+        state.currentStudyPath.studyRoutes[i] = action.payload as StudyRoute;
+    });
+    builder.addCase(removeStudyPath.fulfilled, (state, action) => {
+      let i = state.listStudyPaths.findIndex((o) => o.id === action.payload);
+      if (i && state.listStudyPaths) state.listStudyPaths.splice(i, 1);
+    });
+    builder.addCase(removeStudyRoute.fulfilled, (state, action) => {
+      let i = state.currentStudyPath.studyRoutes?.findIndex(
+        (o) => o.id === action.payload
+      );
+      if (i && state.currentStudyPath.studyRoutes)
+        state.currentStudyPath.studyRoutes.splice(i, 1);
+    });
+    builder.addCase(setStudyCard.fulfilled, (state, action) => {
+      // state.currentStudyRoute.vocabs.push(action.payload as string);
+      if (state.currentStudyRoute.vocabs)
+        state.currentStudyRoute.vocabs = [
+          ...state.currentStudyRoute.vocabs,
+          action.payload as StudyCard,
+        ];
+    });
+    builder.addCase(removeStudyCard.fulfilled, (state, action) => {
+      let i = state.currentStudyRoute.vocabs?.findIndex(
+        (o) => o.id === action.payload
+      );
+      if (i && state.currentStudyRoute.vocabs)
+        state.currentStudyRoute.vocabs.splice(i, 1);
     });
     builder.addCase(getAllDocs.fulfilled, (state, action) => {
       state.listDocs = action.payload as Doc[];
