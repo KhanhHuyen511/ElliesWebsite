@@ -250,7 +250,7 @@ export const updateStudyRoute = createAsyncThunk(
 );
 
 export const removeStudyCard = createAsyncThunk(
-  "admin/study/updateCard",
+  "admin/study/removeCard",
   async (data: { path_id: string; route_id: string; card_id: string }) => {
     if (data.card_id) {
       const docRef = doc(
@@ -379,21 +379,23 @@ export const getADocWithType = createAsyncThunk(
 );
 
 export const setDocument = createAsyncThunk(
-  "admin/study/setDocument",
+  "admin/document/setDocument",
   async ({ data }: { data: Doc }) => {
     console.log("hi");
-    await addDoc(collection(db, "docs"), {
+    const ref = await addDoc(collection(db, "docs"), {
       title: data.title,
       description: data.description,
       createDate: new Date(),
     });
+
+    data.id = ref.id;
 
     return data;
   }
 );
 
 export const setDocCard = createAsyncThunk(
-  "admin/study/setDocCard",
+  "admin/document/setDocCard",
   async ({
     data,
     type,
@@ -470,7 +472,7 @@ export const getVocabs = createAsyncThunk("admin/study/getVocabs", async () => {
 });
 
 export const getDocCardWithTopic = createAsyncThunk(
-  "admin/study/getDocCardWithTopic",
+  "admin/document/getDocCardWithTopic",
   async ({ topic, type }: { topic: string; type: StudyCardType }) => {
     console.log("hi");
     let typeCard = "";
@@ -515,7 +517,7 @@ export const getDocCardWithTopic = createAsyncThunk(
 );
 
 export const getSentences = createAsyncThunk(
-  "admin/study/getSentences",
+  "admin/document/getSentences",
   async () => {
     console.log("hi");
     var list: StudyCard[] = [];
@@ -530,48 +532,8 @@ export const getSentences = createAsyncThunk(
   }
 );
 
-// export const getVocabsByTopic = createAsyncThunk(
-//   "admin/study/getVocabsByTopic",
-//   async (title: string) => {
-//     const q = query(collection(db, "docs"), where("title", "==", title));
-//     const ref = (await getDocs(q)).docs[0];
-//     const item: Doc = ref.data() as Doc;
-//     // document.id = ref.id;
-
-//     // const id = ref.id;
-
-//     // const data = await getDoc(doc(db, "docs", id));
-
-//     // const item: Doc = data.data() as Doc;
-//     // item.id = id;
-//     // if (item.createDate)
-//     //   item.createDate = getDate(
-//     //     (data?.data()?.createDate as Timestamp).seconds
-//     //   );
-
-//     if (item.listItemIds) {
-//       // const vocabs: string[] = item.listItemIds as string[];
-//       let met: StudyCard[] = [];
-
-//       await Promise.all(
-//         item.listItemIds.map(async (vocab) => {
-//           await getDoc(doc(db, "vocabs", vocab)).then((d) => {
-//             const dt = d.data() as StudyCard;
-//             dt.id = d.id;
-//             met = [...met, dt];
-//           });
-//         })
-//       );
-
-//       // item.vocabs = met;
-
-//       return met;
-//     }
-//   }
-// );
-
 export const updateDocument = createAsyncThunk(
-  "admin/study/updateDocument",
+  "admin/document/updateDocument",
   async ({ oldData, data }: { oldData: Doc; data: Doc }) => {
     console.log("hi");
     if (data.id) {
@@ -590,7 +552,7 @@ export const updateDocument = createAsyncThunk(
 );
 
 export const updateDocCard = createAsyncThunk(
-  "admin/study/updateDocCard",
+  "admin/document/updateDocCard",
   async ({
     data,
     oldImage,
@@ -646,6 +608,52 @@ export const updateDocCard = createAsyncThunk(
       temp.audio = data.audio ? data.audio.name : "";
 
       return { data: temp, type };
+    }
+  }
+);
+
+export const removeDocCard = createAsyncThunk(
+  "admin/document/removeDocCard",
+  async ({
+    docId,
+    data,
+    type,
+  }: {
+    docId: string;
+    data: StudyCard;
+    type: StudyCardType;
+  }) => {
+    if (docId && data.id) {
+      console.log("hi");
+      // console.log(type === StudyCardType.Vocab);
+      let typeCard = "";
+
+      // get Type
+      switch (type) {
+        case StudyCardType.Vocab:
+          typeCard = "vocabs";
+          break;
+        case StudyCardType.Sentence:
+          typeCard = "sentences";
+          break;
+        case StudyCardType.Paraph:
+          typeCard = "paraphs";
+          break;
+        case StudyCardType.Book:
+          typeCard = "books";
+          break;
+        default:
+          break;
+      }
+
+      // remove in document
+      await updateDoc(doc(db, "docs", docId), {
+        listItemIds: arrayRemove(data.id),
+      });
+
+      // remove in vocabs/sentences/paraphs
+      console.log(typeCard);
+      await deleteDoc(doc(db, typeCard, data.id));
     }
   }
 );

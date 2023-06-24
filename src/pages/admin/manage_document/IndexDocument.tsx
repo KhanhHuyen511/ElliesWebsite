@@ -23,10 +23,6 @@ const cx = classNames.bind(styles);
 const IndexDocument = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  // const listVocabs = useSelector((state: RootState) => state.admin.listVocabs);
-  // const listSentences = useSelector(
-  //   (state: RootState) => state.admin.listSentences
-  // );
   const listDocVocab = useSelector((state: RootState) => state.admin.listDocs);
 
   const [currentType, setCurrentType] = useState("vocabs");
@@ -40,7 +36,7 @@ const IndexDocument = () => {
       <div className={cx("container")}>
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
-          <h2>Manage Document</h2>
+          <h2>Quản lý tài liệu</h2>
 
           <ul className={cx("doc-cate-wrapper")}>
             <CategoryPanel

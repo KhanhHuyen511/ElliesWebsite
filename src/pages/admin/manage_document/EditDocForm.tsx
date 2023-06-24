@@ -12,6 +12,7 @@ import style from "./IndexDocument.module.scss";
 import classNames from "classnames/bind";
 import CreateVocab from "./CreateVocabForm";
 import EditVocab from "./EditVocabForm";
+import RemoveVocab from "./RemoveVocabForm";
 import { useParams } from "react-router-dom";
 const cx = classNames.bind(style);
 
@@ -46,7 +47,16 @@ const EditDocForm = () => {
         }
       }
     }
-  }, [dispatch, id, type, data?.title, data?.description]);
+  }, [
+    dispatch,
+    id,
+    type,
+    data?.title,
+    data?.description,
+    data?.vocabs,
+    data?.sentences,
+    data?.paraphs,
+  ]);
 
   const [typeCard, setTypeCard] = useState<StudyCardType>();
   const [list, setList] = useState<StudyCard[]>();
@@ -54,10 +64,11 @@ const EditDocForm = () => {
   const [description, setDescription] = useState("");
   const [isOpenCard, setIsOpenCard] = useState(false);
   const [isOpenEditCardForm, setIsOpenEditCardForm] = useState(false);
+  const [isOpenRemoveCardForm, setIsOpenRemoveCardForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
 
   const getCheckedItems = (item: StudyCard): boolean => {
-    return selectedItem === item;
+    return selectedItem ? selectedItem.id === item.id : false;
   };
 
   return (
@@ -81,7 +92,13 @@ const EditDocForm = () => {
           >
             Tạo mới
           </Button>
-          <Button isPrimary={false} isDanger={true} onClick={() => {}}>
+          <Button
+            isPrimary={false}
+            isDanger={true}
+            onClick={() => {
+              setIsOpenRemoveCardForm(true);
+            }}
+          >
             Xóa
           </Button>
           {/* <Checkbox
@@ -185,6 +202,16 @@ const EditDocForm = () => {
           isDisplay={isOpenEditCardForm}
           type={typeCard}
         ></EditVocab>
+      )}
+
+      {id && isOpenRemoveCardForm && selectedItem && typeCard !== undefined && (
+        <RemoveVocab
+          docId={id}
+          vocab={selectedItem}
+          type={typeCard}
+          onClose={() => setIsOpenRemoveCardForm(false)}
+          isDisplay={isOpenRemoveCardForm}
+        ></RemoveVocab>
       )}
     </div>
   );
