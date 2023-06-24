@@ -56,6 +56,7 @@ const EditDocForm = () => {
     data?.vocabs,
     data?.sentences,
     data?.paraphs,
+    data?.listItemIds,
   ]);
 
   const [typeCard, setTypeCard] = useState<StudyCardType>();
