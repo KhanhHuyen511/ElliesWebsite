@@ -1,6 +1,10 @@
 @import "../../../assets/style/shared.scss";
 @import "../../../assets/theme/shared.css";
 
+.title {
+  @include typo-heading-1;
+}
+
 .table {
   width: 100%;
   border-spacing: 0;
@@ -27,6 +31,9 @@
 .handler {
   width: 100%;
   display: flex;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  gap: 4px;
 }
 
 .image {

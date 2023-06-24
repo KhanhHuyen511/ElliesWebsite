@@ -75,7 +75,7 @@ const EditDocForm = () => {
   return (
     <div>
       <div className="container">
-        <p>Cập nhật tài liệu chủ đề: {title}</p>
+        <p className={cx("title")}>Cập nhật tài liệu chủ đề: {title}</p>
         <div className={cx("handler")}>
           <Button
             isPrimary={false}
