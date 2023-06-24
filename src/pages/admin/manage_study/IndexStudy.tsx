@@ -112,11 +112,11 @@ const IndexStudy = () => {
             >
               Xóa
             </Button>
-            <Checkbox
+            {/* <Checkbox
               isChecked={isSelectedAll}
               label="Tất cả"
               onChecked={() => setSelectAllItems(!isSelectedAll)}
-            ></Checkbox>
+            ></Checkbox> */}
           </div>
 
           <table className={cx("table")}>

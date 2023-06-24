@@ -23,7 +23,6 @@ const IndexExercise = () => {
 
   const [selectedItem, setSelectedItem] = useState<string>();
   const [isOpenForm, setIsOpenForm] = useState(false);
-  // const [currentType, setCurrentType] = useState("vocabs");
 
   useEffect(() => {
     dispatch(getExercises());
@@ -81,9 +80,9 @@ const IndexExercise = () => {
               >
                 Tạo mới
               </Button>
-              <Button isPrimary={false} isDanger={true} onClick={() => {}}>
+              {/* <Button isPrimary={false} isDanger={true} onClick={() => {}}>
                 Xóa
-              </Button>
+              </Button> */}
               {/* <Checkbox
               isChecked={isSelectedAll}
               label='Tất cả'
