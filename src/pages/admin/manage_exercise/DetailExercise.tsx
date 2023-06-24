@@ -2,18 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Input, TextArea } from "../../../components";
 import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-flexbox-grid";
 import { Ex, ExDetail, GameType, StudyCard } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { getAExercise, updateAExercise } from "../../../redux/slice/adminSlice";
+import {
+  getAExercise,
+  removeAExercise,
+  updateAExercise,
+} from "../../../redux/slice/adminSlice";
 import CreateExDetail from "./CreateExDetail";
 import EditExDetail from "./EditExDetail";
+import RemoveExDetail from "./RemoveExDetail";
 const cx = classNames.bind(style);
 
 const DetailExercise = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const data: Ex | undefined = useSelector(
     (state: RootState) => state.admin.currentEx
@@ -33,6 +39,7 @@ const DetailExercise = () => {
   const [description, setDescription] = useState("");
   const [isOpenCreateForm, setIsOpenCreateForm] = useState<boolean>(false);
   const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
+  const [isOpenRemoveForm, setIsOpenRemoveForm] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<ExDetail>();
 
   return (
@@ -64,17 +71,32 @@ const DetailExercise = () => {
                       classNames={cx("textarea")}
                     />
                   </div>
-                  <Button
-                    isPrimary
-                    preventDefault
-                    onClick={() => {
-                      if (id)
-                        dispatch(updateAExercise({ id, title, description }));
-                    }}
-                    className={cx("submit-btn")}
-                  >
-                    Cập nhật
-                  </Button>
+                  <div className={cx("handler")}>
+                    <Button
+                      isPrimary
+                      preventDefault
+                      onClick={() => {
+                        if (id)
+                          dispatch(updateAExercise({ id, title, description }));
+                      }}
+                      className={cx("submit-btn")}
+                    >
+                      Cập nhật
+                    </Button>
+                    <Button
+                      isPrimary={false}
+                      preventDefault
+                      onClick={() => {
+                        if (id)
+                          dispatch(removeAExercise({ id })).then(() =>
+                            navigate(-1)
+                          );
+                      }}
+                      className={cx("submit-btn")}
+                    >
+                      Xóa
+                    </Button>
+                  </div>
                 </form>
               </Col>
               <Col md={6}>
@@ -98,7 +120,13 @@ const DetailExercise = () => {
                     >
                       Xem câu hỏi
                     </Button>
-                    <Button isPrimary={false} onClick={() => {}} preventDefault>
+                    <Button
+                      isPrimary={false}
+                      onClick={() => {
+                        setIsOpenRemoveForm(true);
+                      }}
+                      preventDefault
+                    >
                       Xóa câu hỏi
                     </Button>
                   </div>
@@ -151,6 +179,16 @@ const DetailExercise = () => {
                 title={data.title}
                 isDisplay={isOpenEditForm}
                 onClose={() => setIsOpenEditForm(false)}
+              />
+            )}
+
+            {id && selectedItem && isOpenRemoveForm && title && (
+              <RemoveExDetail
+                exId={id}
+                data={selectedItem}
+                title={data.title}
+                isDisplay={isOpenRemoveForm}
+                onClose={() => setIsOpenRemoveForm(false)}
               />
             )}
           </>

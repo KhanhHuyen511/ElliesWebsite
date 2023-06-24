@@ -322,6 +322,7 @@ export const getAllDocs = createAsyncThunk(
 export const getADocWithType = createAsyncThunk(
   "admin/document/getADoc",
   async ({ doc_id, type }: { doc_id: string; type: string }) => {
+    console.log("hi");
     const querySnapshot = await getDoc(doc(db, "docs", doc_id));
 
     const data = querySnapshot.data() as Doc;
@@ -724,11 +725,13 @@ export const setExercise = createAsyncThunk(
   "admin/study/setExercise",
   async ({ data }: { data: Ex }) => {
     console.log("hi");
-    await addDoc(collection(db, "exs"), {
+    const ref = await addDoc(collection(db, "exs"), {
       title: data.title,
       description: data.description,
       createDate: new Date(),
     });
+
+    data.id = ref.id;
 
     return data;
   }
@@ -750,6 +753,14 @@ export const updateAExercise = createAsyncThunk(
       title: title,
       description: description,
     });
+  }
+);
+
+export const removeAExercise = createAsyncThunk(
+  "admin/exercise/removeAExercise;",
+  async ({ id }: { id: string }) => {
+    console.log("hi");
+    await deleteDoc(doc(db, "exs", id));
   }
 );
 
@@ -928,6 +939,16 @@ export const updateAExDetail = createAsyncThunk(
     }
 
     return item;
+  }
+);
+
+export const removeAExDetail = createAsyncThunk(
+  "admin/exercise/removeAExDetail",
+  async ({ exId, id }: { exId: string; id: string }) => {
+    console.log("hi");
+    await deleteDoc(doc(db, "exs", exId, "listItems", id));
+
+    return id;
   }
 );
 
@@ -1116,6 +1137,13 @@ const adminSlice = createSlice({
       );
       if (i && state.currentEx?.listItems)
         state.currentEx.listItems[i] = action.payload as ExDetail;
+    });
+    builder.addCase(removeAExDetail.fulfilled, (state, action) => {
+      let i = state.currentEx?.listItems?.findIndex(
+        (o) => o.id === action.payload
+      );
+      if (i && state.currentEx?.listItems)
+        state.currentEx.listItems.splice(i, 1);
     });
   },
 });
