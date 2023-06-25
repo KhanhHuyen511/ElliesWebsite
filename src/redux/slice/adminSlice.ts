@@ -390,7 +390,6 @@ export const setDocument = createAsyncThunk(
     });
 
     data.id = ref.id;
-
     return data;
   }
 );
