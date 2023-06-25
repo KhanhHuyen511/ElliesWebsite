@@ -105,12 +105,18 @@ const Onboarding = () => {
             <li className={cx("item")} key={index}>
               <p className={cx("question")}>{item.question}</p>
               {item.audio && (
-                <audio src={`/audios/${item.audio}`} controls></audio>
+                <audio
+                  src={`/audios/${item.audio}`}
+                  controls
+                  className={cx("audio")}
+                ></audio>
               )}
               {item.paraph && item.paraph_question && (
                 <>
-                  <p>{item.paraph}</p>
-                  <p>{item.paraph_question}</p>
+                  <p className={cx("paraph")}>{item.paraph}</p>
+                  <p className={cx("paraph", "question")}>
+                    {item.paraph_question}
+                  </p>
                 </>
               )}
               <ul
@@ -172,7 +178,7 @@ const Onboarding = () => {
       <div className="container">
         {isDone === false ? (
           <div>
-            <p>
+            <p className={cx("title")}>
               Hãy làm chút khảo sát để chúng tôi có thêm hiểu biết về bạn nhé!
             </p>
             <ul className={cx("list")}>
@@ -241,7 +247,7 @@ const Onboarding = () => {
               </li>
               <hr></hr>
               <li className={cx("item")}>
-                <p className={cx("question")}>
+                <p className={cx("sub-title")}>
                   Cùng đánh giá sơ qua trình độ hiện tại của bạn bằng cách trả
                   lời những câu hỏi dưới đây!
                 </p>
