@@ -21,6 +21,7 @@ const initialState: types = {
 
 // Write reducer get Docs
 export const getListDocs = createAsyncThunk("doc/getDocs", async () => {
+  console.log("hi");
   var docs: Doc[] = [];
   const querySnapshot = await getDocs(collection(db, "docs"));
 
@@ -34,6 +35,7 @@ export const getListDocs = createAsyncThunk("doc/getDocs", async () => {
     docs.push(item);
   });
 
+  console.log(docs);
   return docs;
 });
 
