@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setStudyRoute } from "../../../redux/slice/adminSlice";
 import { AppDispatch } from "../../../redux/store";
@@ -38,7 +38,7 @@ const CreateRouteForm = (props: Props) => {
         isDisplay={props.isDisplay}
       >
         <Input
-          label="Name"
+          label="Tên"
           type="text"
           onChange={(e) => {
             setName(e.target.value);

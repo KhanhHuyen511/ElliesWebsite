@@ -64,8 +64,8 @@ const Document = () => {
           <ul className={cx("list")}>
             {docs &&
               docs.length > 0 &&
-              docs.map((item) => (
-                <li className={cx("item")}>
+              docs.map((item, index) => (
+                <li className={cx("item")} key={index}>
                   <DocCard data={item} type={typeSelect} />
                 </li>
               ))}

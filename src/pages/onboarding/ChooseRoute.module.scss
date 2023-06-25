@@ -1,0 +1,30 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+* {
+  @include typo-body-small;
+}
+
+.sub-title {
+  @include typo-heading-3;
+
+  .level {
+    color: var(--O500);
+    @include typo-heading-1;
+  }
+}
+
+.rec-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}

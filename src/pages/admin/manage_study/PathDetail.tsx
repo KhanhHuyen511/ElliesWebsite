@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./PathDetail.module.scss";
 import { Button, Checkbox, Input } from "../../../components";
@@ -16,6 +16,7 @@ import CreateRouteForm from "./CreateRouteForm";
 import EditRouteForm from "./EditRouteForm";
 import CreateStudyCard from "./CreateStudyCard";
 import EditCardForm from "./EditCardForm";
+import RemoveRouteForm from "./RemoveRouteForm";
 const cx = classNames.bind(styles);
 
 const PathDetail = () => {
@@ -31,28 +32,28 @@ const PathDetail = () => {
     (state: RootState) => state.admin.currentStudyRoute
   );
 
-  useEffect(
-    () => {
-      if (id) dispatch(getStudyPath(id));
-      setListStudyRoute(data.studyRoutes);
-      setName(data.name);
-      setTopic(data.topic);
-      setLevel(data.level);
-    }, // eslint-disable-next-line
-    [dispatch, id, data.name, currentRoute, currentRoute.cards]
-  );
+  // let { current: listRoutes } = useRef(data.studyRoutes);
+  // const hihi = useRef(listRoutes);
+
+  useEffect(() => {
+    if (id) dispatch(getStudyPath(id));
+    setName(data.name);
+    setTopic(data.topic);
+    setLevel(data.level);
+  }, [dispatch, id, data.name, data.topic, data.level]);
 
   const [name, setName] = useState<string>();
   const [level, setLevel] = useState<string>();
   const [topic, setTopic] = useState<string>();
-  const [listStudyRoute, setListStudyRoute] = useState<StudyRoute[]>();
-  const [currentStudyRoute, setCurrentStudyRoute] = useState<StudyRoute>();
+  // const [currentStudyRoute, setCurrentStudyRoute] = useState<StudyRoute>();
   const [isOpenRouteForm, setIsOpenRouteForm] = useState<boolean>(false);
   const [isOpenEditRouteForm, setIsOpenEditRouteForm] =
     useState<boolean>(false);
+  const [isOpenRemoveRouteForm, setIsOpenRemoveRouteForm] =
+    useState<boolean>(false);
   const [isOpenEditCardForm, setIsOpenEditCardForm] = useState<boolean>(false);
   const [isOpenCardForm, setIsOpenCardForm] = useState<boolean>(false);
-  const [selectRoute, setSelectRoute] = useState<string>();
+  const [selectRoute, setSelectRoute] = useState<StudyRoute>();
   const [curretntStudyCard, setCurrentStudyCard] = useState<StudyCard>();
 
   return (
@@ -63,7 +64,7 @@ const PathDetail = () => {
             <p className={cx("form-title")}>Chi tiết lộ trình học</p>
             <div className={cx("form-body")}>
               <Input
-                label="Name"
+                label="Tên"
                 type="text"
                 value={name}
                 onChange={(e) => {
@@ -72,7 +73,7 @@ const PathDetail = () => {
                 placeholder="abc"
               />
               <Input
-                label="Topic"
+                label="Chủ đề"
                 type="text"
                 value={topic}
                 onChange={(e) => {
@@ -81,7 +82,7 @@ const PathDetail = () => {
                 placeholder="abc"
               />
               <Input
-                label="Level"
+                label="Cấp độ"
                 type="text"
                 value={level}
                 onChange={(e) => {
@@ -114,9 +115,10 @@ const PathDetail = () => {
                 <Button
                   isPrimary={false}
                   onClick={() => {
-                    if (id && selectRoute) {
-                      dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
-                      setCurrentStudyRoute(currentRoute);
+                    if (id && selectRoute?.id) {
+                      dispatch(
+                        getStudyRoute({ path_id: id, id: selectRoute.id })
+                      );
                     }
                   }}
                   preventDefault
@@ -127,8 +129,8 @@ const PathDetail = () => {
                   isPrimary={false}
                   onClick={() => {
                     if (id && selectRoute) {
-                      dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
-                      setCurrentStudyRoute(currentRoute);
+                      // dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
+                      // setCurrentStudyRoute(currentRoute);
                     }
                     setIsOpenEditRouteForm(true);
                   }}
@@ -136,7 +138,13 @@ const PathDetail = () => {
                 >
                   Chỉnh sửa chặng
                 </Button>
-                <Button isPrimary={false} onClick={() => {}} preventDefault>
+                <Button
+                  isPrimary={false}
+                  onClick={() => {
+                    setIsOpenRemoveRouteForm(true);
+                  }}
+                  preventDefault
+                >
                   Xóa chặng
                 </Button>
               </div>
@@ -146,24 +154,24 @@ const PathDetail = () => {
                     <th></th>
                     <th>STT</th>
                     <th>Tên</th>
-                    <th>Số từ</th>
-                    <th>Số câu</th>
+                    <th>Số từ/câu</th>
+                    {/* <th>Số câu</th> */}
                   </tr>
                 </thead>
                 <tbody>
-                  {listStudyRoute?.map((item, index) => (
+                  {data.studyRoutes?.map((item, index) => (
                     <tr key={index}>
                       <td>
                         <Checkbox
                           onChecked={() => {
-                            setSelectRoute(item.id);
+                            setSelectRoute(item);
                           }}
                         />
                       </td>
                       <td>{index + 1}</td>
                       <td>{item.name}</td>
-                      <td>{item.vocabs?.length}</td>
-                      <td>{item.sentences?.length}</td>
+                      <td>{item.cards?.length}</td>
+                      {/* <td>{item.sentences?.length}</td> */}
                     </tr>
                   ))}
                 </tbody>
@@ -191,9 +199,6 @@ const PathDetail = () => {
                 }}
                 preventDefault
               >
-                Chỉnh sửa câu
-              </Button>
-              <Button isPrimary={false} onClick={() => {}} preventDefault>
                 Xóa câu
               </Button>
             </div>
@@ -202,13 +207,12 @@ const PathDetail = () => {
                 <tr>
                   <th></th>
                   <th>STT</th>
-                  <th>Loại</th>
                   <th>Tên</th>
                   <th>Nghĩa</th>
                 </tr>
               </thead>
               <tbody>
-                {currentStudyRoute?.vocabs?.map((item, index) => (
+                {currentRoute?.vocabs?.map((item, index) => (
                   <tr key={index}>
                     <td>
                       <Checkbox
@@ -218,7 +222,6 @@ const PathDetail = () => {
                       ></Checkbox>
                     </td>
                     <td>{index + 1}</td>
-                    <td>{item.type}</td>
                     <td>{item.display}</td>
                     <td>{item.meaning}</td>
                   </tr>
@@ -239,10 +242,10 @@ const PathDetail = () => {
         />
       )}
 
-      {id && selectRoute && (
+      {id && selectRoute?.id && (
         <EditRouteForm
           pathID={id}
-          id={selectRoute}
+          id={selectRoute.id}
           onClose={() => {
             setIsOpenEditRouteForm(false);
           }}
@@ -250,10 +253,10 @@ const PathDetail = () => {
         />
       )}
 
-      {id && selectRoute && (
+      {id && selectRoute?.id && (
         <CreateStudyCard
           pathID={id}
-          routeID={selectRoute}
+          routeID={selectRoute.id}
           topic={topic ? topic : ""}
           onClose={() => {
             setIsOpenCardForm(false);
@@ -262,15 +265,27 @@ const PathDetail = () => {
         />
       )}
 
-      {isOpenEditCardForm && id && curretntStudyCard && selectRoute && (
+      {isOpenEditCardForm && id && curretntStudyCard && selectRoute?.id && (
         <EditCardForm
           data={curretntStudyCard}
           pathID={id}
-          routeID={selectRoute}
+          routeID={selectRoute.id}
           onClose={() => {
             setIsOpenEditCardForm(false);
           }}
           isDisplay={isOpenEditCardForm}
+        />
+      )}
+
+      {isOpenRemoveRouteForm && id && selectRoute && selectRoute.id && (
+        <RemoveRouteForm
+          data={selectRoute}
+          pathID={id}
+          routeID={selectRoute.id}
+          onClose={() => {
+            setIsOpenRemoveRouteForm(false);
+          }}
+          isDisplay={isOpenRemoveRouteForm}
         />
       )}
     </div>

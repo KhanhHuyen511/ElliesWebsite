@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./IndexDocument.module.scss";
 import classNames from "classnames/bind";
 import { Button, Checkbox } from "../../../components";
 import { Doc, StudyCard, StudyCardType } from "../../../types";
 import CreateDocForm from "./CreateDocForm";
-import EditDocForm from "./EditDocForm";
 import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
@@ -38,9 +37,9 @@ const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
         >
           Tạo mới
         </Button>
-        <Button isPrimary={false} isDanger={true} onClick={() => {}}>
+        {/* <Button isPrimary={false} isDanger={true} onClick={() => {}}>
           Xóa
-        </Button>
+        </Button> */}
         {/* <Checkbox
               isChecked={isSelectedAll}
               label='Tất cả'

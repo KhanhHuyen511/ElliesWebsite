@@ -1,0 +1,46 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.title {
+  @include typo-heading-1;
+}
+
+.sub-title {
+  @include typo-heading-2;
+  margin-top: 24px;
+  margin-bottom: 20px;
+}
+
+.list {
+  margin-top: 24px;
+}
+
+.item {
+  margin-bottom: 12px;
+
+  .question {
+    @include typo-heading-3;
+  }
+
+  .sub-list {
+    margin-top: 8px;
+    li {
+      margin-bottom: 8px;
+    }
+  }
+
+  .paraph {
+    @include typo-body-small;
+    line-height: 160%;
+    margin-top: 12px;
+
+    &.question {
+      font-weight: bold;
+    }
+  }
+
+  .audio {
+    height: 60px;
+    width: 60%;
+  }
+}
