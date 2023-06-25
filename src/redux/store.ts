@@ -2,14 +2,14 @@ import {
   configureStore,
   combineReducers,
   getDefaultMiddleware,
-} from '@reduxjs/toolkit';
-import authReducer from './slice/authSlice';
-import studySlice from './slice/studySlice';
-import adminSlice from './slice/adminSlice';
-import docSlice from './slice/docSlice';
-import exSlice from './slice/exSlice';
-import studentSlice from './slice/studentSlice';
-import forumSlice from './slice/forumSlice';
+} from "@reduxjs/toolkit";
+import authReducer from "./slice/authSlice";
+import studySlice from "./slice/studySlice";
+import adminSlice from "./slice/adminSlice";
+import docSlice from "./slice/docSlice";
+import exSlice from "./slice/exSlice";
+import studentSlice from "./slice/studentSlice";
+import forumSlice from "./slice/forumSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,

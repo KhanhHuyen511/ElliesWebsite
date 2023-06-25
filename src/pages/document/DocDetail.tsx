@@ -6,7 +6,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import style from "./DocDetail.module.scss";
 import classNames from "classnames/bind";
 import { ParaphCard, VocabCard } from "../../components";
-import { StudyCard, StudyCardType } from "../../types";
+import { Doc, StudyCard, StudyCardType } from "../../types";
 const cx = classNames.bind(style);
 
 const DocDetail = () => {
@@ -17,21 +17,26 @@ const DocDetail = () => {
   const [list, setList] = useState<StudyCard[]>();
 
   useEffect(() => {
-    if (id && type) dispatch(getADocWithType({ id, type }));
-    if (data) {
-      switch (type) {
-        case StudyCardType.Vocab.toString():
-          setList(data.vocabs);
-          break;
-        case StudyCardType.Sentence.toString():
-          setList(data.sentences);
-          break;
-        case StudyCardType.Paraph.toString():
-          setList(data.paraphs);
-          break;
-        default:
-          break;
-      }
+    if (id && type) {
+      dispatch(getADocWithType({ id, type })).then((e) => {
+        if (e.payload) {
+          const data = e.payload as Doc;
+          switch (type) {
+            case StudyCardType.Vocab.toString():
+              console.log("im in");
+              setList(data.vocabs);
+              break;
+            case StudyCardType.Sentence.toString():
+              setList(data.sentences);
+              break;
+            case StudyCardType.Paraph.toString():
+              setList(data.paraphs);
+              break;
+            default:
+              break;
+          }
+        }
+      });
     }
   }, [dispatch, id, type]);
 

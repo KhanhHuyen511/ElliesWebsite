@@ -55,7 +55,7 @@ const CreateStudyCard = (props: Props) => {
               setStudyCard({
                 path_id: props.pathID,
                 route_id: props.routeID,
-                card_id: selectedItem.id,
+                card: selectedItem,
               })
             );
           }

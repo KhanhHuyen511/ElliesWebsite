@@ -1,5 +1,5 @@
-@import '../../../assets/style/shared.scss';
-@import '../../../assets/theme/shared.css';
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
 
 .table {
   width: 100%;
@@ -26,6 +26,8 @@
 .handler {
   width: 100%;
   display: flex;
+  margin-bottom: 8px;
+  gap: 4px;
 
   &.list {
     margin-top: 20px;
