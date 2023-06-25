@@ -26,37 +26,44 @@ const ResultDetail = () => {
 
   return (
     <>
-      <p className={cx("title")}>Chi tiết kết quả</p>
-      <ul>
-        {data?.resultList.map((item, index) => (
-          <li key={index}>
-            {item.exRight ? (
-              <CheckIcon
-                width={24}
-                height={24}
-                className={cx("right-icon")}
-              ></CheckIcon>
-            ) : (
-              <XMarkIcon
-                width={24}
-                height={24}
-                className={cx("wrong-icon")}
-              ></XMarkIcon>
-            )}
-            <p>{item.question}</p>
-            <p>
-              {item.type == GameType.TranslateToVN
-                ? item.vocab?.display
-                : item.vocab?.meaning}
-            </p>
-            <p>Câu trả lời của bạn: {item.userAnswer}</p>
-            <p>
-              Đáp án đúng: {item.answer ? item.answer : item.vocab?.display}
-            </p>
-            <hr></hr>
-          </li>
-        ))}
-      </ul>
+      <div className="container">
+        <p className={cx("title")}>Chi tiết kết quả</p>
+        <ul>
+          {data?.resultList.map((item, index) => (
+            <li key={index}>
+              {item.exRight ? (
+                <CheckIcon
+                  width={24}
+                  height={24}
+                  className={cx("right-icon")}
+                ></CheckIcon>
+              ) : (
+                <XMarkIcon
+                  width={24}
+                  height={24}
+                  className={cx("wrong-icon")}
+                ></XMarkIcon>
+              )}
+              <p className={cx("question")}>{item.question}</p>
+              <p className={cx("vocab")}>
+                "
+                {item.type == GameType.TranslateToVN
+                  ? item.vocab?.display
+                  : item.vocab?.meaning}
+                "
+              </p>
+              <p>Câu trả lời của bạn: {item.userAnswer}</p>
+              <p>
+                Đáp án đúng:{" "}
+                <span className={cx("answer")}>
+                  {item.answer ? item.answer : item.vocab?.display}
+                </span>
+              </p>
+              <hr></hr>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 };

@@ -25,6 +25,7 @@ import { LevelType } from "../../types";
 import { Timestamp } from "firebase/firestore";
 import { getListUserExs } from "../../redux/slice/exSlice";
 import { getStudyRoutes } from "../../redux/slice/studySlice";
+import { Col, Row } from "react-flexbox-grid";
 const cx = classNames.bind(style);
 
 const Profile = () => {
@@ -141,91 +142,106 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className={cx("info-section", "section")}>
-          <div className={cx("info-title-wrapper")}>
-            <p className={cx("section-title")}>Thông tin cá nhân</p>
-            <PencilIcon
-              className={cx("edit-icon")}
-              onClick={() => setISOpenEditForm(true)}
-            />
-          </div>
+        <Row>
+          <Col
+            xs={12}
+            md={6}
+            mdOffset={6}
+            className={cx("info-section", "section")}
+          >
+            <>
+              <div className={cx("info-title-wrapper")}>
+                <p className={cx("section-title")}>Thông tin cá nhân</p>
+                <PencilIcon
+                  className={cx("edit-icon")}
+                  onClick={() => setISOpenEditForm(true)}
+                />
+              </div>
 
-          <div className={cx("info-body")}>
-            <Input
-              label={"Email"}
-              value={user?.email}
-              placeholder={"abc@gm.uit.edu.vn"}
-              onChange={() => {}}
-              isDisabled
-            />
-            <Input
-              label={"Tên"}
-              value={user?.name}
-              placeholder={""}
-              onChange={() => {}}
-              isDisabled
-            />
-            <Input
-              label={"Giới tính"}
-              value={user?.gender}
-              placeholder={""}
-              onChange={() => {}}
-              isDisabled
-            />
-            <Input
-              label={"Ngày sinh"}
-              type="date"
-              value={user?.birthday ? formatDate(user?.birthday) : undefined}
-              placeholder={""}
-              onChange={(e) => {}}
-              isDisabled
-            />
-            <TextArea
-              label={"Tiểu sử"}
-              value={user?.bio}
-              placeholder={"Nói gì đó về bạn"}
-              onChange={() => {}}
-              isDisabled
-            />
-          </div>
-        </div>
+              <div className={cx("info-body")}>
+                <Input
+                  label={"Email"}
+                  value={user?.email}
+                  placeholder={"abc@gm.uit.edu.vn"}
+                  onChange={() => {}}
+                  isDisabled
+                />
+                <Input
+                  label={"Tên"}
+                  value={user?.name}
+                  placeholder={""}
+                  onChange={() => {}}
+                  isDisabled
+                />
+                <Input
+                  label={"Giới tính"}
+                  value={user?.gender}
+                  placeholder={""}
+                  onChange={() => {}}
+                  isDisabled
+                />
+                <Input
+                  label={"Ngày sinh"}
+                  type="date"
+                  value={
+                    user?.birthday ? formatDate(user?.birthday) : undefined
+                  }
+                  placeholder={""}
+                  onChange={(e) => {}}
+                  isDisabled
+                />
+                <TextArea
+                  label={"Tiểu sử"}
+                  value={user?.bio}
+                  placeholder={"Nói gì đó về bạn"}
+                  onChange={() => {}}
+                  isDisabled
+                />
+              </div>
+            </>
+          </Col>
 
-        <div className={cx("blog-section", "section")}>
-          <p className={cx("section-title")}>Liên kết mạng xã hội</p>
-          <div className={cx("blog-body")}>
-            <Button
-              isPrimary={false}
-              onClick={() => {}}
-              className={cx("blog-button")}
-            >
-              Bài viết của tôi
-            </Button>
-            <Button
+          <Col xs={12} md={4} mdOffset={6}>
+            <div className={cx("blog-section", "section")}>
+              <p className={cx("section-title")}>Bài viết</p>
+              <div className={cx("blog-body")}>
+                <Button
+                  isPrimary={false}
+                  onClick={() => {
+                    navigate("/forum");
+                  }}
+                  className={cx("blog-button")}
+                >
+                  Bài viết của tôi
+                </Button>
+                {/* <Button
               isPrimary={false}
               onClick={() => {}}
               className={cx("blog-button")}
             >
               Câu hỏi của tôi
-            </Button>
-          </div>
-        </div>
+            </Button> */}
+              </div>
+            </div>
 
-        <div className={cx("social-section", "section")}>
-          <p className={cx("section-title")}>Liên kết mạng xã hội</p>
-          <div className={cx("social-body")}></div>
-        </div>
-        <div className={cx("account-section", "section")}>
-          <p className={cx("section-title")}>Tài khoản</p>
-          <div className={cx("account-body")}>
-            <Button
-              isPrimary={false}
-              onClick={() => {}}
-              className={cx("account-button")}
-            >
-              Khóa tài khoản
-            </Button>
-          </div>
-        </div>
+            <div className={cx("social-section", "section")}>
+              <p className={cx("section-title")}>Liên kết mạng xã hội</p>
+              <div className={cx("social-body")}></div>
+            </div>
+            <div className={cx("account-section", "section")}>
+              <p className={cx("section-title")}>Tài khoản</p>
+              <div className={cx("account-body")}>
+                <Button
+                  isPrimary={false}
+                  onClick={() => {}}
+                  className={cx("account-button")}
+                >
+                  Khóa tài khoản
+                </Button>
+              </div>
+            </div>
+          </Col>
+        </Row>
 
         <Button
           isPrimary={false}

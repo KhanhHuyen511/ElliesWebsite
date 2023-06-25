@@ -1,5 +1,10 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
 
 .title {
   @include typo-heading-1;
@@ -13,6 +18,7 @@
   color: var(--text-medium-color);
 
   & span {
+    @include typo-heading-2;
     color: var(--Y500);
   }
 }

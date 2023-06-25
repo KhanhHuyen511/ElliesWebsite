@@ -1,14 +1,14 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
-.page-title {
+.title {
   @include typo-heading-1;
   margin-top: 26px;
 }
 
 .forum-cate-wrapper {
   display: flex;
-  column-gap: 18px;
+  column-gap: 8px;
   margin-top: 26px;
 
   .cate-item {

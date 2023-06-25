@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "./DocCard.module.scss";
 import classNames from "classnames/bind";
-import { BookOpenIcon } from "@heroicons/react/24/outline";
+import {
+  AcademicCapIcon,
+  BookOpenIcon,
+  QueueListIcon,
+} from "@heroicons/react/24/outline";
 import { Doc, StudyCardType } from "../../types";
 import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
@@ -24,7 +28,13 @@ const DocCard = ({ data, type }: { data: Doc; type: StudyCardType }) => {
               {data.createDate?.toLocaleDateString()}
             </p>
           </div>
-          <BookOpenIcon className="icon" width={52} height={52} />
+          {type === StudyCardType.Vocab ? (
+            <AcademicCapIcon className="icon" width={52} height={52} />
+          ) : type === StudyCardType.Book ? (
+            <BookOpenIcon className="icon" width={52} height={52} />
+          ) : (
+            <QueueListIcon className="icon" width={52} height={52} />
+          )}
         </div>
       </div>
     </>

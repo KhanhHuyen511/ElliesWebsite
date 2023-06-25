@@ -32,28 +32,28 @@ const Document = () => {
           <p className={cx("page-title")}>Tài liệu</p>
           <ul className={cx("doc-cate-wrapper")}>
             <CategoryPanel
-              label={"Vocabs"}
+              label={"Từ vựng"}
               isActive={typeSelect === StudyCardType.Vocab}
               classNames={cx("cate-item")}
               icon={<AcademicCapIcon />}
               onClick={() => setTypeSelect(StudyCardType.Vocab)}
             />
             <CategoryPanel
-              label={"Sentences"}
+              label={"Câu"}
               isActive={typeSelect === StudyCardType.Sentence}
               classNames={cx("cate-item")}
               icon={<QueueListIcon />}
               onClick={() => setTypeSelect(StudyCardType.Sentence)}
             />
             <CategoryPanel
-              label={"Paraphs"}
+              label={"Đoạn"}
               isActive={typeSelect === StudyCardType.Paraph}
               classNames={cx("cate-item")}
-              icon={<SpeakerWaveIcon />}
+              icon={<QueueListIcon />}
               onClick={() => setTypeSelect(StudyCardType.Paraph)}
             />
             <CategoryPanel
-              label={"Books"}
+              label={"Sách"}
               isActive={typeSelect === StudyCardType.Book}
               classNames={cx("cate-item")}
               icon={<BookOpenIcon />}

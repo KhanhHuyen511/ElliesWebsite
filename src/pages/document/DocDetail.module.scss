@@ -24,8 +24,12 @@
   flex-wrap: wrap;
 
   .list-item {
-    width: 48%;
+    width: 100%;
     margin-bottom: 40px;
+
+    @include for-desktop {
+      width: 48%;
+    }
   }
 
   .list-item-100 {

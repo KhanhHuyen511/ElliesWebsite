@@ -29,45 +29,31 @@ const Exercise = () => {
         <Col xs={12} md={8} lg={6}>
           <p className={cx("title")}>Luyện tập</p>
           <ul className={cx("")}>{}</ul>
+          <p className={cx("sub-title")}>Từ vựng</p>
+          <ul className={cx("list")}>
+            {exs &&
+              exs.length > 0 &&
+              exs.map((item, index) => (
+                <li key={index} className={cx("item")}>
+                  <ExCard data={item} />
+                </li>
+              ))}
+          </ul>
+          <p className={cx("sub-title")}>Đã làm</p>
+          <ul className={cx("list")}>
+            {userExs &&
+              userExs.length > 0 &&
+              userExs.map((item, index) => (
+                <li
+                  key={index}
+                  className={cx("item")}
+                  onClick={() => navigate(`/exercise/result_detail/${item.id}`)}
+                >
+                  <UserExCard data={item} />
+                </li>
+              ))}
+          </ul>
         </Col>
-
-        <ul className={cx("doc-cate-wrapper")}>
-          <CategoryPanel
-            label={"Vocabs"}
-            isActive
-            classNames={cx("cate-item")}
-            icon={<AcademicCapIcon />}
-          />
-          <CategoryPanel
-            label={"Sentences"}
-            classNames={cx("cate-item")}
-            icon={<QueueListIcon />}
-          />
-        </ul>
-        <p className={cx("sub-title")}>Từ vựng</p>
-        <ul className={cx("list")}>
-          {exs &&
-            exs.length > 0 &&
-            exs.map((item, index) => (
-              <li key={index} className={cx("item")}>
-                <ExCard data={item} />
-              </li>
-            ))}
-        </ul>
-        <p className={cx("sub-title")}>Đã làm</p>
-        <ul className={cx("list")}>
-          {userExs &&
-            userExs.length > 0 &&
-            userExs.map((item, index) => (
-              <li
-                key={index}
-                className={cx("item")}
-                onClick={() => navigate(`/exercise/result_detail/${item.id}`)}
-              >
-                <UserExCard data={item} />
-              </li>
-            ))}
-        </ul>
       </div>
     </>
   );
