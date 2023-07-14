@@ -33,7 +33,7 @@ const VocabCard = ({ card }: { card: StudyCard }) => {
           <p className={cx("display-text")}>{card.display}</p>
           <div className={cx("pronoun")}>
             <SpeakerWaveIcon width={24} height={24} onClick={playAudio} />
-            <p className={cx("pronoun-text")}>??</p>
+            {/* <p className={cx("pronoun-text")}>??</p> */}
             {/* <HeartIcon width={32} height={32} className={cx('heart-icon')} /> */}
           </div>
         </div>

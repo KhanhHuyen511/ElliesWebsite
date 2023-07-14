@@ -36,7 +36,7 @@ const IndexDocument = () => {
       <div className={cx("container")}>
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
-          <h2>Quản lý tài liệu</h2>
+          <h2 className={cx("title")}>Quản lý tài liệu</h2>
 
           <ul className={cx("doc-cate-wrapper")}>
             <CategoryPanel
