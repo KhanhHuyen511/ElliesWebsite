@@ -84,8 +84,8 @@ const IndexStudy = () => {
       <div className={cx("container")}>
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
-          <h2 className={cx("title")}>Quản lý lộ trình học</h2>
 
+          <h2 className={cx("title")}>Quản lý lộ trình học</h2>
           <div className={cx("handler")}>
             <Button
               isPrimary={false}

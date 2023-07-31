@@ -33,6 +33,7 @@
 }
 
 /* RADIO */
+
 label:has(input[type="radio"]) {
   display: flex;
   align-items: center;
@@ -46,6 +47,7 @@ input[type="radio"] {
   height: 0;
 }
 
+
 label:has(input[type="radio"]):before {
   content: "";
   display: inline-block;
@@ -56,6 +58,7 @@ label:has(input[type="radio"]):before {
   margin-right: 10px;
   transition: all 0.1s ease-in 0.05s;
 }
+
 
 label:has(input[type="radio"])::after {
   content: "";

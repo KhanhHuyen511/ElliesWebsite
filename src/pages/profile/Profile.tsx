@@ -26,6 +26,7 @@ import { Timestamp } from "firebase/firestore";
 import { getListUserExs } from "../../redux/slice/exSlice";
 import { getStudyRoutes } from "../../redux/slice/studySlice";
 import { Col, Row } from "react-flexbox-grid";
+
 const cx = classNames.bind(style);
 
 const Profile = () => {
