@@ -1,8 +1,9 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .wrapper {
   text-align: center;
+  margin: auto;
 }
 
 .question {
@@ -10,6 +11,7 @@
   margin-top: 30px;
   margin-bottom: 38px;
   text-align: center;
+  width: 100%;
 }
 
 .options {
@@ -29,4 +31,11 @@
   &.false {
     stroke: var(--O500);
   }
+}
+
+.cta {
+  display: flex;
+  column-gap: 8px;
+  margin: 20px 5% 0 0;
+  justify-content: right;
 }

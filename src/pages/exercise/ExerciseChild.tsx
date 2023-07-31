@@ -37,7 +37,7 @@ const ExerciseChild = ({
 
   return (
     <>
-      <div className={cx("wrapper")}>
+      <Col xs={12} md={5} className={cx("wrapper")}>
         <p className={cx("question")}>{data.question}</p>
         {data.vocab &&
           (data.type == GameType.SortWords ? (
@@ -119,7 +119,7 @@ const ExerciseChild = ({
         {isDone && data.type == GameType.SortWords && (
           <p>{data.vocab?.display}</p>
         )}
-      </div>
+      </Col>
     </>
   );
 };

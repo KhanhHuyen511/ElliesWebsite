@@ -13,6 +13,7 @@
   margin-top: 20px;
 
   &-right {
+    @include typo-heading-1;
     color: vaR(--O500);
   }
 }
@@ -24,7 +25,6 @@
 
 .result-detail {
   margin-top: 40px;
-  // text-align: left;
 
   table {
     width: 100%;

@@ -121,7 +121,7 @@ const ExerciseDetail = () => {
                 Làm lại
               </Button>
               <Button
-                isPrimary={false}
+                isPrimary
                 onClick={() => {
                   navigate(`/exercise/result_detail/${completeID}`);
                 }}

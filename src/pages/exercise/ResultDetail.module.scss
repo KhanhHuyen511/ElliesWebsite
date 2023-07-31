@@ -14,3 +14,17 @@
   color: var(--O500);
   stroke-width: 3;
 }
+
+.question {
+  color: var(--G800);
+  @include typo-heading-3;
+  font-weight: 600;
+}
+
+.vocab {
+  @include typo-heading-3;
+}
+
+.answer {
+  @include typo-heading-3;
+}

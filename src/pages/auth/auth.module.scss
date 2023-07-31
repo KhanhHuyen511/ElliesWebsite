@@ -1,4 +1,4 @@
-@import '../../assets/style/shared.scss';
+@import "../../assets/style/shared.scss";
 
 .wrapper {
   .logo {
@@ -28,10 +28,9 @@
   }
 
   .button-wrapper {
-    display: grid;
+    display: flex;
     margin-top: 50px;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 20px;
+    justify-content: space-between;
     align-items: end;
   }
 

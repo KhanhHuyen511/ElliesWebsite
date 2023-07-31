@@ -10,22 +10,37 @@ import classNames from "classnames/bind";
 import Navbar from "../navbar/Navbar";
 import { NavLink, useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth, db } from "../../firebase/config";
-import { useDispatch } from "react-redux/es/exports";
+import { auth, db, storage } from "../../firebase/config";
+import { useDispatch, useSelector } from "react-redux/es/exports";
 import {
   SET_ACTIVE_USER,
   REMOVE_ACTIVE_USER,
 } from "../../redux/slice/authSlice";
 import { toast } from "react-toastify";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { REMOVE_ACTIVE_STUDENT } from "../../redux/slice/studentSlice";
+import {
+  REMOVE_ACTIVE_STUDENT,
+  getCurrentStudent,
+} from "../../redux/slice/studentSlice";
+import { getDownloadURL, ref } from "firebase/storage";
+import { AppDispatch, RootState } from "../../redux/store";
 const cx = classNames.bind(style);
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [currentUserName, setCurrentUserName] = useState("");
   const [showAuthWrapper, setShowAuthWrapper] = useState(false);
+  const [avatar, setAvatar] = useState<any>();
   const navigate = useNavigate();
+
+  let currentUser = useSelector(
+    (state: RootState) => state.student.currentUser
+  );
+
+  if (currentUser && currentUser.avatar)
+    getDownloadURL(ref(storage, `images/${currentUser.avatar}`)).then((url) => {
+      setAvatar(url);
+    });
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -38,12 +53,18 @@ const Header = () => {
     setShowAuthWrapper(!showAuthWrapper);
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        if (user.displayName === null) {
+        if (
+          currentUser &&
+          currentUser.name !== undefined &&
+          currentUser.name !== ""
+        ) {
+          setCurrentUserName(currentUser.name);
+        } else {
           const index = user.email?.indexOf("@");
           const tempName = user.email?.substring(0, index);
 
@@ -52,8 +73,6 @@ const Header = () => {
               tempName?.charAt(0).toUpperCase() + tempName?.slice(1)
             );
           }
-        } else {
-          setCurrentUserName(user.displayName);
         }
 
         const q = query(
@@ -63,10 +82,17 @@ const Header = () => {
 
         const role = await (await getDocs(q)).docs[0].data().role;
 
+        if (role === "student") {
+          dispatch(getCurrentStudent(user.uid));
+        }
+
         dispatch(
           SET_ACTIVE_USER({
             email: user.email,
-            userName: user.displayName ? user.displayName : currentUserName,
+            userName:
+              currentUser && currentUser.name
+                ? currentUser.name
+                : currentUserName,
             userID: user.uid,
             userRole: role,
           })
@@ -76,15 +102,16 @@ const Header = () => {
         REMOVE_ACTIVE_USER({});
       }
     });
-  }, [dispatch, currentUserName]);
+  }, [dispatch, currentUserName, currentUser?.name]);
 
   const logout = () => {
     signOut(auth)
       .then(() => {
-        toast.success("Logout successfull!");
+        toast.success("Đăng xuất thành công!");
 
         // update current Student
         dispatch(REMOVE_ACTIVE_STUDENT({}));
+        currentUser = undefined;
         navigate("/login");
       })
       .catch((error) => {
@@ -100,7 +127,9 @@ const Header = () => {
         onClick={toggleMenu}
       ></Bars3CenterLeftIcon>
 
-      <div className={cx("logo-text")}>Ellies</div>
+      <div className={cx("logo-text")} onClick={() => navigate("/")}>
+        Ellies
+      </div>
 
       {showMenu && (
         <div className={cx("slider-container")}>
@@ -129,7 +158,7 @@ const Header = () => {
                 onClick={() => navigate("/profile")}
               >
                 <img
-                  src="/images/avatar.png"
+                  src={avatar ? avatar : "/images/avatar.png"}
                   className={cx("avatar-img")}
                   alt=""
                 />
@@ -141,7 +170,7 @@ const Header = () => {
             onClick={() => toggleAuthWrapper()}
           >
             <span className={cx("user-name")}>
-              Hi {currentUserName ? currentUserName : "user"}
+              Hi {currentUserName ? currentUserName : "friend"}
             </span>
             <ChevronDownIcon
               className={cx("dropdown-icon", "icon", {

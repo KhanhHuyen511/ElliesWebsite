@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Student } from "../../types";
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -30,8 +28,6 @@ export const getCurrentStudent = createAsyncThunk(
 
     if (querySnapshot.data().birthday)
       stu.birthday = getDate(querySnapshot.data().birthday.seconds);
-
-    console.log(stu);
 
     return stu;
   }

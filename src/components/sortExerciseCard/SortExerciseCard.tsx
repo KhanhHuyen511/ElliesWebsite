@@ -27,7 +27,21 @@ const SortExerciseCard = ({
     });
 
   const splitIntoWords = () => {
-    if (card.display) setListWords(card.display.split(" "));
+    if (card.display) {
+      let words = card.display.split(" ");
+
+      // blend words
+      const mixedWords = [];
+
+      while (words.length > 0) {
+        const randomIndex = Math.floor(Math.random() * words.length);
+        mixedWords.push(words[randomIndex]);
+        words[randomIndex] = words[words.length - 1];
+        words.pop();
+      }
+
+      setListWords(mixedWords);
+    }
   };
 
   const addToAnswer = (item: string) => {
