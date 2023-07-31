@@ -33,7 +33,7 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        toast.success("Login successfull!");
+        toast.success("Đăng nhập thành công!");
 
         return user;
       })
@@ -58,7 +58,7 @@ const Login = () => {
   const loginByFacebook = () => {
     signInWithPopup(auth, new FacebookAuthProvider())
       .then((result) => {
-        toast.success("Login successfull!");
+        toast.success("Đăng nhập thành công!");
         navigate("/");
       })
       .catch((error) => {
@@ -70,7 +70,7 @@ const Login = () => {
   const loginByGoogle = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
-        toast.success("Login successfull!");
+        toast.success("Đăng nhập thành công!");
         navigate("/");
       })
       .catch((error) => {
@@ -113,16 +113,15 @@ const Login = () => {
             alt="facebook icon"
             className={cx("login-facebook")}
           ></img>
-          <div className={cx("submit-button")}>
-            <Button
-              type="submit"
-              isPrimary={true}
-              haveIcon={true}
-              onClick={() => {}}
-            >
-              OK baby
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            isPrimary={true}
+            haveIcon={true}
+            onClick={() => {}}
+            className={cx("submit-button")}
+          >
+            Đăng nhập
+          </Button>
         </div>
       </form>
     </Col>

@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .header {
   display: flex;
@@ -32,6 +32,7 @@
 
 .logo-text {
   display: none;
+  cursor: pointer;
 
   @include for-desktop {
     display: block;
@@ -71,7 +72,7 @@
       width: 160px;
       position: absolute;
       top: 36px;
-      left: 0;
+      left: -60px;
       border-radius: 8px;
       border: 1px solid #000;
       overflow: hidden;

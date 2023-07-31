@@ -22,7 +22,7 @@ const Register = () => {
 
     // check if password is equal to confirm password
     if (password !== confirmPassword) {
-      toast("Confirm Password is not equal to Password!");
+      toast("Xác nhận mật khẩu không khớp!");
       return;
     }
 
@@ -44,7 +44,7 @@ const Register = () => {
               routes: [],
               checkinDays: [],
             }).then(() => {
-              toast.success("Regiter successfull!");
+              toast.success("Đăng kí thành công!");
 
               signOut(auth)
                 .then(() => {
@@ -107,16 +107,15 @@ const Register = () => {
         {/* <p className={cx('forgot-pass-text')}>Quên mật khẩu</p> */}
         <div className={cx("button-wrapper")}>
           <embed src="images/facebook-icon.svg"></embed>
-          <div className={cx("submit-button")}>
-            <Button
-              type="submit"
-              isPrimary={true}
-              haveIcon={true}
-              onClick={() => {}}
-            >
-              Đăng kí
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            isPrimary={true}
+            haveIcon={true}
+            onClick={() => {}}
+            className={cx("submit-button")}
+          >
+            Đăng kí
+          </Button>
         </div>
       </form>
     </Col>

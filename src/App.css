@@ -33,7 +33,8 @@
 }
 
 /* RADIO */
-label {
+
+label:has(input[type="radio"]) {
   display: flex;
   align-items: center;
   position: relative;
@@ -46,7 +47,8 @@ input[type="radio"] {
   height: 0;
 }
 
-label::before {
+
+label:has(input[type="radio"]):before {
   content: "";
   display: inline-block;
   width: 16px;
@@ -57,7 +59,8 @@ label::before {
   transition: all 0.1s ease-in 0.05s;
 }
 
-label::after {
+
+label:has(input[type="radio"])::after {
   content: "";
   width: 12.5px;
   height: 12.5px;

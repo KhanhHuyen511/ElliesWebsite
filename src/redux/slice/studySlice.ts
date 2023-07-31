@@ -189,10 +189,9 @@ export const setStudyPathForStudent = createAsyncThunk(
         where("level", "==", levelVN)
       );
       const querySnapshots = (await getDocs(q1)).docs[0];
-
       await updateDoc(querySnapshot.ref, {
         level: data.level,
-        currentPathId: querySnapshots.id,
+        currentPathId: querySnapshots ? querySnapshots.id : "",
       });
     }
   }

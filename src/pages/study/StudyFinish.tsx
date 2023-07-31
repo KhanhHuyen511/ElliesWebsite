@@ -1,11 +1,11 @@
-import React from 'react';
-import style from './StudyFinish.module.scss';
-import classNames from 'classnames/bind';
-import { HeartIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
-import { Button } from '../../components';
-import { StudyCard } from '../../types';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '../../firebase/config';
+import React from "react";
+import style from "./StudyFinish.module.scss";
+import classNames from "classnames/bind";
+import { HeartIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline";
+import { Button } from "../../components";
+import { StudyCard } from "../../types";
+import { getDownloadURL, ref } from "firebase/storage";
+import { storage } from "../../firebase/config";
 const cx = classNames.bind(style);
 
 const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {
@@ -19,8 +19,8 @@ const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {
   return (
     <>
       <div>
-        <p className={cx('studied-text')}>Bạn đã học được</p>
-        <table className={cx('list-card')}>
+        <p className={cx("studied-text")}>Bạn đã học được</p>
+        <table className={cx("list-card")}>
           <thead>
             <th></th>
             <th></th>
@@ -31,10 +31,10 @@ const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {
             {cards.map((item) => (
               <tr>
                 <td>
-                  <span className={cx('card-display')}>{item.display}</span>
+                  <span className={cx("card-display")}>{item.display}</span>
                 </td>
                 <td>
-                  <div className={cx('card-pronoun')}>
+                  <div className={cx("card-pronoun")}>
                     <SpeakerWaveIcon
                       width={24}
                       height={24}
@@ -42,11 +42,11 @@ const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {
                         playAudio(item.audio);
                       }}
                     />
-                    <p className={cx('pronoun-text')}>??</p>
+                    {/* <p className={cx('pronoun-text')}>??</p> */}
                   </div>
                 </td>
                 <td>
-                  <p className={cx('card-meaning')}>{item.meaning}</p>
+                  <p className={cx("card-meaning")}>{item.meaning}</p>
                 </td>
                 <td>
                   <HeartIcon width={24} height={24}></HeartIcon>
