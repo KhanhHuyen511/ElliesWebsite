@@ -5,6 +5,9 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../firebase/config";
 import { StudyCard } from "../../types";
 import { HeartIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { addToSaved, removeFromSaved } from "../../redux/slice/savedSlice";
 const cx = classNames.bind(style);
 
 const StudyCardDetail = ({ card }: { card: StudyCard }) => {
@@ -26,6 +29,33 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
     sound.play();
   };
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const userID = useSelector((state: RootState) => state.auth.userID);
+
+  const userSaved = useSelector((state: RootState) => state.saved.savedList);
+
+  const checkSaved = () => {
+    if (userID && card.id)
+      return userSaved.find((o) => o.id === card.id) !== undefined;
+  };
+
+  const [isSaved, setIsSaved] = useState(checkSaved);
+
+  const addToSavedSection = () => {
+    if (userID) {
+      dispatch(addToSaved({ userId: userID, card }));
+      setIsSaved(true);
+    }
+  };
+
+  const removeFromSavedSection = () => {
+    if (userID && card.id) {
+      dispatch(removeFromSaved({ userId: userID, cardId: card.id }));
+      setIsSaved(false);
+    }
+  };
+
   return (
     <div>
       <div className={cx("body")}>
@@ -34,7 +64,15 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
           <div className={cx("pronoun")}>
             <SpeakerWaveIcon width={24} height={24} onClick={playAudio} />
             {/* <p className={cx('pronoun-text')}>??</p> */}
-            <HeartIcon width={32} height={32} className={cx("heart-icon")} />
+            <HeartIcon
+              width={32}
+              height={32}
+              className={cx("heart-icon", { "is-saved": isSaved })}
+              onClick={() => {
+                if (!isSaved) addToSavedSection();
+                else removeFromSavedSection();
+              }}
+            />
           </div>
         </div>
         <div className={cx("image")}>

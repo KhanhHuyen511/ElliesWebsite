@@ -38,6 +38,7 @@ export interface Student {
   likedBlog?: [];
   currentPathId?: string;
   level?: LevelType;
+  savedList: [];
 }
 
 export enum LevelType {
