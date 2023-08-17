@@ -13,3 +13,4 @@ export { default as CreateBlog } from "./forum/CreateBlog";
 export { default as BlogDetail } from "./forum/BlogDetail";
 export { default as ResultDetail } from "./exercise/ResultDetail";
 export { default as Onboarding } from "./onboarding/Onboarding";
+export { default as SavedPage } from "./saved/SavedPage";

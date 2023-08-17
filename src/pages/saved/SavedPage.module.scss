@@ -1,0 +1,61 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.wrapper {
+  min-height: calc(100vh - 72px);
+  background-color: #fafafa;
+  padding-top: 24px;
+}
+
+.page-title {
+  @include typo-heading-1;
+
+  margin-bottom: 20px;
+}
+
+.search-list {
+  display: flex;
+  gap: 8px;
+
+  .item {
+    padding: 12px 18px;
+    background-color: rgba(84, 147, 255, 0.15);
+    border-radius: 4px;
+
+    &.is-active {
+      background-color: rgba(84, 147, 255, 1);
+      color: #fff;
+      font-weight: 700;
+    }
+  }
+}
+
+.saved-list {
+  display: flex;
+  margin-top: 24px;
+
+  .item {
+    width: 50%;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 16px;
+
+    .display {
+      @include typo-heading-3;
+    }
+
+    .icon-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    .image {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1.5px rgba(84, 147, 255, 0.15) solid;
+    }
+  }
+}
