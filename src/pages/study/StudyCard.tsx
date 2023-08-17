@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./StudyCard.module.scss";
 import classNames from "classnames/bind";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -36,11 +36,19 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
   const userSaved = useSelector((state: RootState) => state.saved.savedList);
 
   const checkSaved = () => {
-    if (userID && card.id)
+    if (userID && card.id) {
+      console.log(userSaved);
       return userSaved.find((o) => o.id === card.id) !== undefined;
+    } else return false;
   };
 
   const [isSaved, setIsSaved] = useState(checkSaved);
+
+  useEffect(() => {
+    console.log(card);
+    if (card.id) setIsSaved(checkSaved);
+  }, [card.id]);
+  // console.log(card.id);
 
   const addToSavedSection = () => {
     if (userID) {
