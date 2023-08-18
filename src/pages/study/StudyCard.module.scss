@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .body {
   text-align: center;
@@ -15,6 +15,11 @@
   position: absolute;
   top: 0;
   right: 5%;
+
+  &.is-saved {
+    fill: var(--O500);
+    color: var(--O200);
+  }
 }
 
 .pronoun {

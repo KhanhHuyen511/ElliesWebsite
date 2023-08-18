@@ -16,6 +16,7 @@ import { StudyCard } from "../../types";
 import StudyFinish from "./StudyFinish";
 import { HomeIcon } from "@heroicons/react/24/outline";
 import { Col } from "react-flexbox-grid";
+import { getAllSaved } from "../../redux/slice/savedSlice";
 const cx = classNames.bind(style);
 
 const StudyDetail = () => {
@@ -32,7 +33,10 @@ const StudyDetail = () => {
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
-    if (id) dispatch(getStudyRoute({ routeID: id, userID }));
+    if (id) {
+      dispatch(getStudyRoute({ routeID: id, userID }));
+      dispatch(getAllSaved(userID));
+    }
   }, [dispatch, id]);
 
   const NextCard = () => {

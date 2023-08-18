@@ -15,6 +15,7 @@ import {
   BlogDetail,
   ResultDetail,
   Onboarding,
+  SavedPage,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -48,6 +49,7 @@ function App() {
             <Route path="/document" element={<Document />} />
             <Route path="/exercise" element={<Exercise />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/saved" element={<SavedPage />} />
             <Route path="/forum" element={<Forum />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
