@@ -25,6 +25,21 @@
   margin-bottom: 20px;
 }
 
+.search-wrapper {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+
+  .input {
+    flex-grow: 1;
+  }
+
+  .button {
+    height: 54px;
+    margin-bottom: 12px;
+  }
+}
+
 .search-list {
   display: flex;
   gap: 8px;
