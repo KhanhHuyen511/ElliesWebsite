@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import styles from './Comment.module.scss';
-import classNames from 'classnames/bind';
-import TextArea from '../textarea/TextArea';
+import React, { useState } from "react";
+import styles from "./Comment.module.scss";
+import classNames from "classnames/bind";
+import TextArea from "../textarea/TextArea";
 import {
+  EyeSlashIcon,
   HandThumbUpIcon,
   PaperAirplaneIcon,
-} from '@heroicons/react/24/outline';
-import { BlogComment } from '../../types';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store';
-import { setAComment } from '../../redux/slice/forumSlice';
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { BlogComment } from "../../types";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { removeAComment, setAComment } from "../../redux/slice/forumSlice";
 const cx = classNames.bind(styles);
 
 interface Prop {
@@ -25,71 +27,86 @@ const Comment = (prop: Prop) => {
 
   const userID = useSelector((state: RootState) => state.auth.userID);
   const userName = useSelector((state: RootState) => state.auth.userName);
-  const [content, setContent] = useState('');
+  const userRole = useSelector((state: RootState) => state.auth.userRole);
+  const [content, setContent] = useState("");
+
+  const DeleteComment = () => {
+    if (prop.data) dispatch(removeAComment(prop.data));
+  };
 
   return (
     <>
-      <div className={cx('wrapper')}>
-        <div className={cx('info')}>
-          <div className={cx('author-wrapper')}>
+      <div className={cx("wrapper")}>
+        <div className={cx("info")}>
+          <div className={cx("author-wrapper")}>
             <div
-              className={cx('avatar')}
+              className={cx("avatar")}
               // onClick={() => navigate('/profile')}
             >
               <img
-                src='/images/avatar.png'
-                className={cx('avatar-img')}
-                alt=''
+                src="/images/avatar.png"
+                className={cx("avatar-img")}
+                alt=""
               />
             </div>
-            <p className={cx('author')}>
+            <p className={cx("author")}>
               {prop.data === undefined ? userName : prop.data.userName}
             </p>
           </div>
-          <p className={cx('create-date')}>
+          <p className={cx("create-date")}>
             {prop.data
               ? prop.data?.createDate.toLocaleDateString()
               : Date.now().toLocaleString()}
           </p>
         </div>
         <TextArea
-          label=''
+          label=""
           value={prop.data ? prop.data.content : content}
           onChange={(e) => {
             setContent(e.target.value);
           }}
-          placeholder='Nhập bình luận'
+          placeholder="Nhập bình luận"
           isDisabled={prop.data !== undefined}
-          classNames={cx('textarea', { empty: prop.data === undefined })}
+          classNames={cx("textarea", { empty: prop.data === undefined })}
         />
-        <div className={cx('foot-section')}>
+        <div className={cx("foot-section")}>
           {prop.data === undefined ? (
             <PaperAirplaneIcon
               width={24}
               height={24}
               onClick={() => {
-                if (prop.blogId && userID && content !== '')
+                if (prop.blogId && userID && content !== "")
                   dispatch(
                     setAComment({
-                      id: '',
+                      id: "",
                       userId: userID,
                       blogId: prop.blogId,
                       content: content,
                       liked: 0,
                       createDate: new Date(),
                     })
-                  ).then(() => setContent(''));
+                  ).then(() => setContent(""));
               }}
-              className={cx('send-icon')}
+              className={cx("send-icon")}
             />
           ) : (
-            <div className={cx('like-wrapper')}>
-              <HandThumbUpIcon
-                className={cx('like-icon')}
-                width={20}
-                height={20}
-              />
-              <p className={cx('like-number')}>{prop.data.liked}</p>
+            <div className={cx("action-wrapper")}>
+              {userRole === "admin" && (
+                <XMarkIcon
+                  className={cx("delete-icon")}
+                  width={20}
+                  height={20}
+                  onClick={DeleteComment}
+                />
+              )}
+              <div className={cx("like-wrapper")}>
+                <HandThumbUpIcon
+                  className={cx("like-icon")}
+                  width={20}
+                  height={20}
+                />
+                <p className={cx("like-number")}>{prop.data.liked}</p>
+              </div>
             </div>
           )}
         </div>

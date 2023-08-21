@@ -80,6 +80,7 @@ function App() {
             <Route path="/exercise_detail/:id" element={<DetailExercise />} />
             <Route path="/doc_detail/:id/:type" element={<EditDocForm />} />
             <Route path="/forum" element={<IndexForum />} />
+            <Route path="/blog_detail/:id" element={<BlogDetail />} />
             <Route
               path="/pending_blog_detail/:id"
               element={<DetailPendingBlog />}

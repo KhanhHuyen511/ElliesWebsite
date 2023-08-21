@@ -209,6 +209,23 @@ export const removeALike = createAsyncThunk(
   }
 );
 
+export const removeAComment = createAsyncThunk(
+  "forum/removeAComment",
+  async (data: BlogComment) => {
+    const item = await getDoc(doc(db, "forum", data.blogId));
+
+    const temp = item.data()?.comments as BlogComment[];
+
+    const temp1 = temp.find((o) => o.userId === data.userId);
+
+    await updateDoc(doc(db, "forum", data.blogId), {
+      comments: arrayRemove(temp1),
+    });
+
+    return data;
+  }
+);
+
 const forumSlice = createSlice({
   name: "forum",
   initialState,
@@ -238,6 +255,12 @@ const forumSlice = createSlice({
     builder.addCase(removeALike.fulfilled, (state, action) => {
       state.currentBlog?.likes?.splice(
         state.currentBlog.likes.indexOf(action.payload),
+        1
+      );
+    });
+    builder.addCase(removeAComment.fulfilled, (state, action) => {
+      state.currentBlog?.comments?.splice(
+        state.currentBlog.comments.indexOf(action.payload),
         1
       );
     });
