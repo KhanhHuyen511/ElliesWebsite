@@ -25,6 +25,8 @@ import {
   PathDetail,
   DetailExercise,
   EditDocForm,
+  IndexForum,
+  DetailPendingBlog,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
@@ -77,6 +79,11 @@ function App() {
             <Route path="/path_detail/:id" element={<PathDetail />} />
             <Route path="/exercise_detail/:id" element={<DetailExercise />} />
             <Route path="/doc_detail/:id/:type" element={<EditDocForm />} />
+            <Route path="/forum" element={<IndexForum />} />
+            <Route
+              path="/pending_blog_detail/:id"
+              element={<DetailPendingBlog />}
+            />
           </Routes>
         </BrowserRouter>
       )}

@@ -1,0 +1,20 @@
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
+
+.title,
+.sub-title {
+  @include typo-heading-1;
+  margin-top: 26px;
+}
+
+.list {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.sub-title {
+  @include typo-heading-1;
+  text-align: right;
+}

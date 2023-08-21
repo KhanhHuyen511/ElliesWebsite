@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { setABlog } from "../../redux/slice/forumSlice";
 import { useNavigate } from "react-router-dom";
+import { BlogState } from "../../types";
 const cx = classNames.bind(style);
 
 const CreateBlog = () => {
@@ -93,6 +94,7 @@ const CreateBlog = () => {
                     title: title,
                     keyword: keyword,
                     createDate: new Date(),
+                    state: BlogState.Pending,
                   })
                 ).then(() => navigate(-1));
             }}

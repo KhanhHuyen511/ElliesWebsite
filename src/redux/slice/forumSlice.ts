@@ -14,11 +14,12 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { Blog, BlogComment, BlogLike, Student } from "../../types";
+import { Blog, BlogComment, BlogLike, BlogState, Student } from "../../types";
 import { getDate } from "../../utils";
 
 interface types {
   listBlogs: Blog[];
+  listPendingBlogs?: Blog[];
   currentBlog?: Blog;
 }
 
@@ -33,14 +34,37 @@ export const getListBlogs = createAsyncThunk("forum/getListBlogs", async () => {
 
   querySnapshot.forEach(async (e) => {
     var item: Blog = e.data() as Blog;
-    item.id = e.id;
-    if (item.createDate)
-      item.createDate = getDate((e.data().createDate as Timestamp).seconds);
-    items.push(item);
+    if (item.state === BlogState.Posted) {
+      item.id = e.id;
+      if (item.createDate)
+        item.createDate = getDate((e.data().createDate as Timestamp).seconds);
+      items.push(item);
+    }
   });
 
   return items;
 });
+
+export const getListPendingBlogs = createAsyncThunk(
+  "forum/pending-blogs",
+  async () => {
+    let items: Blog[] = [];
+
+    const querySnapshot = await getDocs(collection(db, "forum"));
+
+    querySnapshot.forEach(async (e) => {
+      var item: Blog = e.data() as Blog;
+      if (item.state === BlogState.Pending) {
+        item.id = e.id;
+        if (item.createDate)
+          item.createDate = getDate((e.data().createDate as Timestamp).seconds);
+        items.push(item);
+      }
+    });
+
+    return items;
+  }
+);
 
 export const setABlog = createAsyncThunk(
   "forum/setABlog",
@@ -147,6 +171,9 @@ const forumSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getListBlogs.fulfilled, (state, action) => {
       state.listBlogs = action.payload;
+    });
+    builder.addCase(getListPendingBlogs.fulfilled, (state, action) => {
+      state.listPendingBlogs = action.payload;
     });
     builder.addCase(getABlog.fulfilled, (state, action) => {
       state.currentBlog = action.payload;
