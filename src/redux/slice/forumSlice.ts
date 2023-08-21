@@ -20,6 +20,7 @@ import { getDate } from "../../utils";
 interface types {
   listBlogs: Blog[];
   listPendingBlogs?: Blog[];
+  listUserBlogs?: Blog[];
   currentBlog?: Blog;
 }
 
@@ -91,6 +92,29 @@ export const updateBlogState = createAsyncThunk(
     });
 
     return blogId;
+  }
+);
+
+export const getListBlogsByUserId = createAsyncThunk(
+  "forum/list_blogs_by_user_id/get",
+  async (userId: string) => {
+    let items: Blog[] = [];
+
+    const blogsRef = collection(db, "forum");
+
+    const q = query(blogsRef, where("userId", "==", userId));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (e) => {
+      var item: Blog = e.data() as Blog;
+      item.id = e.id;
+      if (item.createDate)
+        item.createDate = getDate((e.data().createDate as Timestamp).seconds);
+      items.push(item);
+    });
+
+    return items;
   }
 );
 
@@ -195,6 +219,9 @@ const forumSlice = createSlice({
     });
     builder.addCase(getListPendingBlogs.fulfilled, (state, action) => {
       state.listPendingBlogs = action.payload;
+    });
+    builder.addCase(getListBlogsByUserId.fulfilled, (state, action) => {
+      state.listUserBlogs = action.payload;
     });
     builder.addCase(getABlog.fulfilled, (state, action) => {
       state.currentBlog = action.payload;

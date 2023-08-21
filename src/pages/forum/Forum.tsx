@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import style from "./Forum.module.scss";
 import { Col } from "react-flexbox-grid";
@@ -12,17 +12,24 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getListBlogs } from "../../redux/slice/forumSlice";
+import PersonalBlogManage from "./PersonalBlogManage";
 const cx = classNames.bind(style);
+
+enum TabType {
+  Blogs,
+  Yours,
+}
 
 const Forum = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const list = useSelector((state: RootState) => state.forum.listBlogs);
+  const [tabType, setTabType] = useState(TabType.Blogs);
 
   useEffect(() => {
     dispatch(getListBlogs());
-  }, [dispatch, list]);
+  }, [dispatch]);
 
   return (
     <>
@@ -34,43 +41,48 @@ const Forum = () => {
 
         <ul className={cx("forum-cate-wrapper")}>
           <CategoryPanel
-            label={"Bài viết"}
-            isActive
+            label={"Blogs"}
+            isActive={tabType === TabType.Blogs}
             classNames={cx("cate-item")}
             icon={<AcademicCapIcon />}
+            onClick={() => setTabType(TabType.Blogs)}
           />
           <CategoryPanel
-            label={"Câu hỏi"}
-            classNames={cx("cate-item")}
-            icon={<QuestionMarkCircleIcon />}
-          />
-          <CategoryPanel
-            label={"Của bạn"}
+            label={"Yours"}
+            isActive={tabType === TabType.Yours}
             classNames={cx("cate-item")}
             icon={<FireIcon />}
+            onClick={() => setTabType(TabType.Yours)}
           />
         </ul>
-        <div className={cx("create-wrapper")}>
-          <p className={cx("sub-title")}>Nổi bật</p>
-          <Button
-            isPrimary={true}
-            onClick={() => {
-              navigate("/forum/create");
-            }}
-          >
-            Tạo mới
-          </Button>
-        </div>
 
-        <ul className={cx("list")}>
-          {list &&
-            list.length > 0 &&
-            list.map((item, index) => (
-              <li key={index} className={cx("item")}>
-                <BlogCard data={item} />
-              </li>
-            ))}
-        </ul>
+        {tabType === TabType.Blogs ? (
+          <>
+            <div className={cx("create-wrapper")}>
+              <p className={cx("sub-title")}>Nổi bật</p>
+              <Button
+                isPrimary={true}
+                onClick={() => {
+                  navigate("/forum/create");
+                }}
+              >
+                Tạo mới
+              </Button>
+            </div>
+
+            <ul className={cx("list")}>
+              {list &&
+                list.length > 0 &&
+                list.map((item, index) => (
+                  <li key={index} className={cx("item")}>
+                    <BlogCard data={item} />
+                  </li>
+                ))}
+            </ul>
+          </>
+        ) : (
+          <PersonalBlogManage></PersonalBlogManage>
+        )}
       </div>
     </>
   );

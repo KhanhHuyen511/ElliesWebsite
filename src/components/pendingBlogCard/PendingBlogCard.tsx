@@ -14,8 +14,6 @@ const PendingBlogCard = ({ data }: { data: Blog }) => {
 
   const [userName, setUserName] = useState("");
 
-  // const userID = useSelector((state: RootState) => state.auth.userID);
-
   useEffect(() => {
     dispatch(getStudentName(data.userId)).then((action) => {
       setUserName(action.payload as string);
