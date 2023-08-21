@@ -120,6 +120,12 @@ export interface UserEx {
   didDate?: Date;
 }
 
+export enum BlogState {
+  Pending,
+  Posted,
+  Canceled,
+}
+
 export interface Blog {
   id: string;
   userId: string;
@@ -132,6 +138,7 @@ export interface Blog {
   title: string;
   keyword?: string;
   createDate: Date;
+  state: BlogState;
 }
 
 export interface BlogComment {
