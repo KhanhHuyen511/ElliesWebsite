@@ -73,6 +73,27 @@ export const setABlog = createAsyncThunk(
   }
 );
 
+export const updateBlogState = createAsyncThunk(
+  "forum/update-blog-state",
+  async ({
+    blogId,
+    newState,
+    note,
+  }: {
+    blogId: string;
+    newState: BlogState;
+    note?: string;
+  }) => {
+    const docRef = doc(db, "forum", blogId);
+    await updateDoc(docRef, {
+      state: newState,
+      cancelNote: note ? note : "",
+    });
+
+    return blogId;
+  }
+);
+
 export const getABlog = createAsyncThunk(
   "forum/getABlog",
   async (id: string) => {
@@ -177,6 +198,9 @@ const forumSlice = createSlice({
     });
     builder.addCase(getABlog.fulfilled, (state, action) => {
       state.currentBlog = action.payload;
+    });
+    builder.addCase(updateBlogState.fulfilled, (state, action) => {
+      state.listPendingBlogs?.filter((o) => o.id !== action.payload);
     });
     builder.addCase(setAComment.fulfilled, (state, action) => {
       state.currentBlog?.comments?.unshift(action.payload);

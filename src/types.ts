@@ -139,6 +139,7 @@ export interface Blog {
   keyword?: string;
   createDate: Date;
   state: BlogState;
+  cancelNote?: string;
 }
 
 export interface BlogComment {
