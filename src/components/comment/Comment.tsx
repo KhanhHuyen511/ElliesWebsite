@@ -3,6 +3,7 @@ import styles from "./Comment.module.scss";
 import classNames from "classnames/bind";
 import TextArea from "../textarea/TextArea";
 import {
+  CursorArrowRippleIcon,
   EyeSlashIcon,
   HandThumbUpIcon,
   PaperAirplaneIcon,
@@ -11,7 +12,11 @@ import {
 import { BlogComment } from "../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { removeAComment, setAComment } from "../../redux/slice/forumSlice";
+import {
+  pinAComment,
+  removeAComment,
+  setAComment,
+} from "../../redux/slice/forumSlice";
 const cx = classNames.bind(styles);
 
 interface Prop {
@@ -32,6 +37,10 @@ const Comment = (prop: Prop) => {
 
   const DeleteComment = () => {
     if (prop.data) dispatch(removeAComment(prop.data));
+  };
+
+  const PinComment = () => {
+    if (prop.data) dispatch(pinAComment(prop.data));
   };
 
   return (
@@ -90,24 +99,35 @@ const Comment = (prop: Prop) => {
               className={cx("send-icon")}
             />
           ) : (
-            <div className={cx("action-wrapper")}>
-              {userRole === "admin" && (
-                <XMarkIcon
-                  className={cx("delete-icon")}
-                  width={20}
-                  height={20}
-                  onClick={DeleteComment}
-                />
-              )}
-              <div className={cx("like-wrapper")}>
-                <HandThumbUpIcon
-                  className={cx("like-icon")}
-                  width={20}
-                  height={20}
-                />
-                <p className={cx("like-number")}>{prop.data.liked}</p>
+            <>
+              {prop.data.isPinned && <p className={cx("pinned")}>pinned</p>}
+              <div className={cx("action-wrapper")}>
+                {userRole === "admin" && (
+                  <div className={cx("icon-wrapper")}>
+                    <XMarkIcon
+                      className={cx("delete-icon")}
+                      width={20}
+                      height={20}
+                      onClick={DeleteComment}
+                    />
+                    <CursorArrowRippleIcon
+                      className={cx("pin-icon")}
+                      width={20}
+                      height={20}
+                      onClick={PinComment}
+                    />
+                  </div>
+                )}
+                <div className={cx("like-wrapper")}>
+                  <HandThumbUpIcon
+                    className={cx("like-icon")}
+                    width={20}
+                    height={20}
+                  />
+                  <p className={cx("like-number")}>{prop.data.liked}</p>
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>

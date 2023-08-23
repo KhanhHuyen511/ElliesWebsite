@@ -150,6 +150,7 @@ export interface BlogComment {
   content: string;
   liked: number;
   createDate: Date;
+  isPinned?: boolean;
 }
 
 export interface BlogLike {

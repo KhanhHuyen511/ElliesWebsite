@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -140,31 +141,23 @@ export const getABlog = createAsyncThunk(
     if (user.name) item.userName = user.name;
     else item.userName = user.email;
 
-    if (item.comments) {
-      await Promise.all(
-        item?.comments?.map(async (e) => {
-          const userCmt = query(
-            collection(db, "students"),
-            where("id", "==", e.userId)
-          );
+    const querySnapshot1 = await getDocs(
+      collection(db, "forum", id, "comments")
+    );
 
-          const snapshot = (await getDocs(userCmt)).docs[0].data();
+    let comments: BlogComment[] = [];
 
-          e.userName = snapshot.name;
+    querySnapshot1.forEach(async (i) => {
+      let item = i.data() as BlogComment;
+      if (item.createDate)
+        item.createDate = getDate(
+          (item.createDate as unknown as Timestamp).seconds
+        );
+      if (comments) comments = [...comments, item];
+      else comments = [item];
+    });
 
-          if (e.createDate)
-            e.createDate = getDate(
-              (e.createDate as unknown as Timestamp).seconds
-            );
-        })
-      );
-
-      const sorted = [...item.comments].sort(
-        (a, b) => b.createDate.getTime() - a.createDate.getTime()
-      );
-
-      item.comments = sorted;
-    }
+    item.comments = comments.sort((a, b) => b.liked - a.liked);
 
     return item;
   }
@@ -173,9 +166,12 @@ export const getABlog = createAsyncThunk(
 export const setAComment = createAsyncThunk(
   "forum/setAComment",
   async (data: BlogComment) => {
-    await updateDoc(doc(db, "forum", data.blogId), {
-      comments: arrayUnion(data),
-    });
+    await addDoc(collection(db, "forum", data.blogId, "comments"), data).then(
+      async (d) =>
+        await updateDoc(doc(db, "forum", data.blogId, "comments", d.id), {
+          id: d.id,
+        })
+    );
 
     return data;
   }
@@ -212,14 +208,17 @@ export const removeALike = createAsyncThunk(
 export const removeAComment = createAsyncThunk(
   "forum/removeAComment",
   async (data: BlogComment) => {
-    const item = await getDoc(doc(db, "forum", data.blogId));
+    await deleteDoc(doc(db, "forum", data.blogId, "comments", data.id));
 
-    const temp = item.data()?.comments as BlogComment[];
+    return data;
+  }
+);
 
-    const temp1 = temp.find((o) => o.userId === data.userId);
-
-    await updateDoc(doc(db, "forum", data.blogId), {
-      comments: arrayRemove(temp1),
+export const pinAComment = createAsyncThunk(
+  "forum/pinAComment",
+  async (data: BlogComment) => {
+    await updateDoc(doc(db, "forum", data.blogId, "comments", data.id), {
+      isPinned: true,
     });
 
     return data;
