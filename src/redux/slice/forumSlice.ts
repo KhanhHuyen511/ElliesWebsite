@@ -157,7 +157,10 @@ export const getABlog = createAsyncThunk(
       else comments = [item];
     });
 
-    item.comments = comments.sort((a, b) => b.liked - a.liked);
+    item.comments = comments.sort(function (a, b) {
+      if (a.isPinned) return -1;
+      return 0;
+    });
 
     return item;
   }
@@ -215,10 +218,21 @@ export const removeAComment = createAsyncThunk(
 );
 
 export const pinAComment = createAsyncThunk(
-  "forum/pinAComment",
+  "forum/pin_a_comment",
   async (data: BlogComment) => {
     await updateDoc(doc(db, "forum", data.blogId, "comments", data.id), {
       isPinned: true,
+    });
+
+    return data;
+  }
+);
+
+export const unPinAComment = createAsyncThunk(
+  "forum/un_pin_a_comment",
+  async (data: BlogComment) => {
+    await updateDoc(doc(db, "forum", data.blogId, "comments", data.id), {
+      isPinned: false,
     });
 
     return data;

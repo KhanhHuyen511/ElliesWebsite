@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./Comment.module.scss";
 import classNames from "classnames/bind";
 import TextArea from "../textarea/TextArea";
 import {
   CursorArrowRippleIcon,
-  EyeSlashIcon,
   HandThumbUpIcon,
   PaperAirplaneIcon,
   XMarkIcon,
@@ -16,11 +15,11 @@ import {
   pinAComment,
   removeAComment,
   setAComment,
+  unPinAComment,
 } from "../../redux/slice/forumSlice";
 const cx = classNames.bind(styles);
 
 interface Prop {
-  // onSubmit?: () => void;
   data?: BlogComment;
   blogId?: string;
 }
@@ -35,12 +34,18 @@ const Comment = (prop: Prop) => {
   const userRole = useSelector((state: RootState) => state.auth.userRole);
   const [content, setContent] = useState("");
 
+  const [isPinned, setIsPinned] = useState(prop.data?.isPinned);
+
   const DeleteComment = () => {
     if (prop.data) dispatch(removeAComment(prop.data));
   };
 
-  const PinComment = () => {
-    if (prop.data) dispatch(pinAComment(prop.data));
+  const PinComment = async () => {
+    if (prop.data) {
+      if (!isPinned)
+        dispatch(pinAComment(prop.data)).then(() => setIsPinned(true));
+      else dispatch(unPinAComment(prop.data)).then(() => setIsPinned(false));
+    }
   };
 
   return (
@@ -100,7 +105,7 @@ const Comment = (prop: Prop) => {
             />
           ) : (
             <>
-              {prop.data.isPinned && <p className={cx("pinned")}>pinned</p>}
+              {isPinned && <p className={cx("pinned")}>pinned</p>}
               <div className={cx("action-wrapper")}>
                 {userRole === "admin" && (
                   <div className={cx("icon-wrapper")}>

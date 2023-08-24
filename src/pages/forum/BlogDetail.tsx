@@ -31,7 +31,7 @@ const BlogDetail = ({
 
   useEffect(() => {
     if (id) dispatch(getABlog(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, data?.comments?.length]);
 
   return (
     <div className="container">
