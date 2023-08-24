@@ -32,19 +32,32 @@
 
 .primary {
   background-color: var(--primary-color);
-  color: var(--text-bold-color);
+  border-color: var(--O500);
+  color: var(--W);
 
   &:hover {
     background-color: var(--Y400);
+    border-color: var(--O500);
   }
 
   &:active {
     background-color: var(--O500);
+    color: var(--W);
   }
 
   &:disabled {
     pointer-events: none;
     opacity: 0.5;
+  }
+}
+
+.danger {
+  color: var(--R);
+  border-color: var(--R300);
+
+  &:hover {
+    border-color: inherit;
+    opacity: 0.8;
   }
 }
 

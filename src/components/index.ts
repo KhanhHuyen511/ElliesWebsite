@@ -16,5 +16,6 @@ export { default as VocabCard } from "./vocabCard/VocabCard";
 export { default as ExerciseCard } from "./exerciseCard/ExerciseCard";
 export { default as SortExerciseCard } from "./sortExerciseCard/SortExerciseCard";
 export { default as BlogCard } from "./blogCard/BlogCard";
+export { default as PendingBlogCard } from "./pendingBlogCard/PendingBlogCard";
 export { default as Popup } from "./popup/Popup";
 export { default as Comment } from "./comment/Comment";

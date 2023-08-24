@@ -29,7 +29,12 @@ const Button = (props: Props) => {
         if (props.preventDefault) e.preventDefault();
         props.onClick();
       }}
-      className={cx("btn", { primary: props.isPrimary }, props.className)}
+      className={cx(
+        "btn",
+        { primary: props.isPrimary },
+        { danger: props.isDanger },
+        props.className
+      )}
     >
       {props.children}
       {props.haveIcon && (

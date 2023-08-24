@@ -33,6 +33,19 @@ export const getCurrentStudent = createAsyncThunk(
   }
 );
 
+export const getStudentName = createAsyncThunk(
+  "student/name",
+  async (userID: string) => {
+    var stu: Student;
+    const q = query(collection(db, "students"), where("id", "==", userID));
+    const querySnapshot = (await getDocs(q)).docs[0];
+    stu = querySnapshot.data() as Student;
+
+    if (stu.name) return stu.name;
+    return "";
+  }
+);
+
 export const updateCurrentStudent = createAsyncThunk(
   "student/update",
   async ({ data, oldData }: { data: Student; oldData: Student }) => {

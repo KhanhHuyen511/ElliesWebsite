@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -14,11 +15,13 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { Blog, BlogComment, BlogLike, Student } from "../../types";
+import { Blog, BlogComment, BlogLike, BlogState, Student } from "../../types";
 import { getDate } from "../../utils";
 
 interface types {
   listBlogs: Blog[];
+  listPendingBlogs?: Blog[];
+  listUserBlogs?: Blog[];
   currentBlog?: Blog;
 }
 
@@ -33,19 +36,86 @@ export const getListBlogs = createAsyncThunk("forum/getListBlogs", async () => {
 
   querySnapshot.forEach(async (e) => {
     var item: Blog = e.data() as Blog;
-    item.id = e.id;
-    if (item.createDate)
-      item.createDate = getDate((e.data().createDate as Timestamp).seconds);
-    items.push(item);
+    if (item.state === BlogState.Posted) {
+      item.id = e.id;
+      if (item.createDate)
+        item.createDate = getDate((e.data().createDate as Timestamp).seconds);
+      items.push(item);
+    }
   });
 
   return items;
 });
 
+export const getListPendingBlogs = createAsyncThunk(
+  "forum/pending-blogs",
+  async () => {
+    let items: Blog[] = [];
+
+    const querySnapshot = await getDocs(collection(db, "forum"));
+
+    querySnapshot.forEach(async (e) => {
+      var item: Blog = e.data() as Blog;
+      if (item.state === BlogState.Pending) {
+        item.id = e.id;
+        if (item.createDate)
+          item.createDate = getDate((e.data().createDate as Timestamp).seconds);
+        items.push(item);
+      }
+    });
+
+    return items;
+  }
+);
+
 export const setABlog = createAsyncThunk(
   "forum/setABlog",
   async (data: Blog) => {
     await addDoc(collection(db, "forum"), data);
+  }
+);
+
+export const updateBlogState = createAsyncThunk(
+  "forum/update-blog-state",
+  async ({
+    blogId,
+    newState,
+    note,
+  }: {
+    blogId: string;
+    newState: BlogState;
+    note?: string;
+  }) => {
+    const docRef = doc(db, "forum", blogId);
+    await updateDoc(docRef, {
+      state: newState,
+      cancelNote: note ? note : "",
+    });
+
+    return blogId;
+  }
+);
+
+export const getListBlogsByUserId = createAsyncThunk(
+  "forum/list_blogs_by_user_id/get",
+  async (userId: string) => {
+    let items: Blog[] = [];
+
+    const blogsRef = collection(db, "forum");
+
+    const q = query(blogsRef, where("userId", "==", userId));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (e) => {
+      var item: Blog = e.data() as Blog;
+      item.id = e.id;
+      if (item.createDate)
+        item.createDate = getDate((e.data().createDate as Timestamp).seconds);
+      items.push(item);
+    });
+
+    return items;
   }
 );
 
@@ -71,31 +141,26 @@ export const getABlog = createAsyncThunk(
     if (user.name) item.userName = user.name;
     else item.userName = user.email;
 
-    if (item.comments) {
-      await Promise.all(
-        item?.comments?.map(async (e) => {
-          const userCmt = query(
-            collection(db, "students"),
-            where("id", "==", e.userId)
-          );
+    const querySnapshot1 = await getDocs(
+      collection(db, "forum", id, "comments")
+    );
 
-          const snapshot = (await getDocs(userCmt)).docs[0].data();
+    let comments: BlogComment[] = [];
 
-          e.userName = snapshot.name;
+    querySnapshot1.forEach(async (i) => {
+      let item = i.data() as BlogComment;
+      if (item.createDate)
+        item.createDate = getDate(
+          (item.createDate as unknown as Timestamp).seconds
+        );
+      if (comments) comments = [...comments, item];
+      else comments = [item];
+    });
 
-          if (e.createDate)
-            e.createDate = getDate(
-              (e.createDate as unknown as Timestamp).seconds
-            );
-        })
-      );
-
-      const sorted = [...item.comments].sort(
-        (a, b) => b.createDate.getTime() - a.createDate.getTime()
-      );
-
-      item.comments = sorted;
-    }
+    item.comments = comments.sort(function (a, b) {
+      if (a.isPinned) return -1;
+      return 0;
+    });
 
     return item;
   }
@@ -104,9 +169,12 @@ export const getABlog = createAsyncThunk(
 export const setAComment = createAsyncThunk(
   "forum/setAComment",
   async (data: BlogComment) => {
-    await updateDoc(doc(db, "forum", data.blogId), {
-      comments: arrayUnion(data),
-    });
+    await addDoc(collection(db, "forum", data.blogId, "comments"), data).then(
+      async (d) =>
+        await updateDoc(doc(db, "forum", data.blogId, "comments", d.id), {
+          id: d.id,
+        })
+    );
 
     return data;
   }
@@ -140,6 +208,37 @@ export const removeALike = createAsyncThunk(
   }
 );
 
+export const removeAComment = createAsyncThunk(
+  "forum/removeAComment",
+  async (data: BlogComment) => {
+    await deleteDoc(doc(db, "forum", data.blogId, "comments", data.id));
+
+    return data;
+  }
+);
+
+export const pinAComment = createAsyncThunk(
+  "forum/pin_a_comment",
+  async (data: BlogComment) => {
+    await updateDoc(doc(db, "forum", data.blogId, "comments", data.id), {
+      isPinned: true,
+    });
+
+    return data;
+  }
+);
+
+export const unPinAComment = createAsyncThunk(
+  "forum/un_pin_a_comment",
+  async (data: BlogComment) => {
+    await updateDoc(doc(db, "forum", data.blogId, "comments", data.id), {
+      isPinned: false,
+    });
+
+    return data;
+  }
+);
+
 const forumSlice = createSlice({
   name: "forum",
   initialState,
@@ -148,8 +247,17 @@ const forumSlice = createSlice({
     builder.addCase(getListBlogs.fulfilled, (state, action) => {
       state.listBlogs = action.payload;
     });
+    builder.addCase(getListPendingBlogs.fulfilled, (state, action) => {
+      state.listPendingBlogs = action.payload;
+    });
+    builder.addCase(getListBlogsByUserId.fulfilled, (state, action) => {
+      state.listUserBlogs = action.payload;
+    });
     builder.addCase(getABlog.fulfilled, (state, action) => {
       state.currentBlog = action.payload;
+    });
+    builder.addCase(updateBlogState.fulfilled, (state, action) => {
+      state.listPendingBlogs?.filter((o) => o.id !== action.payload);
     });
     builder.addCase(setAComment.fulfilled, (state, action) => {
       state.currentBlog?.comments?.unshift(action.payload);
@@ -160,6 +268,12 @@ const forumSlice = createSlice({
     builder.addCase(removeALike.fulfilled, (state, action) => {
       state.currentBlog?.likes?.splice(
         state.currentBlog.likes.indexOf(action.payload),
+        1
+      );
+    });
+    builder.addCase(removeAComment.fulfilled, (state, action) => {
+      state.currentBlog?.comments?.splice(
+        state.currentBlog.comments.indexOf(action.payload),
         1
       );
     });

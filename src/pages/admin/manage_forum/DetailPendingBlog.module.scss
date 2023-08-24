@@ -1,0 +1,20 @@
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
+
+.wrapper {
+  margin: 0;
+}
+
+.sub-title {
+  @include typo-heading-3;
+  text-align: right;
+  margin-top: 36px;
+  margin-bottom: 24px;
+}
+
+.cta-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-top: 42px;
+  justify-content: right;
+}
