@@ -6,6 +6,7 @@ import "chart.js/auto";
 import StudentChart from "./StudentChart";
 import LevelChart from "./LevelChart";
 import TopicChart from "./TopicChart";
+import FilterDashboard from "./FilterDashboard";
 const cx = classNames.bind(style);
 
 const Dashboard = () => {
@@ -14,31 +15,7 @@ const Dashboard = () => {
       <div className="container">
         <p className={cx("page-title")}>Dashboard</p>
         <p className={cx("greeting")}>Hi, have a good day~</p>
-        <div className={cx("filter-wrapper")}>
-          <select
-            id="filter-type"
-            defaultValue="yearly"
-            className={cx("filter-type")}
-          >
-            <option value="yearly">Yearly</option>
-            <option value="daily">Daily</option>
-            <option value="monthly">Monthly</option>
-          </select>
-
-          <div className={cx("filter-date")}>
-            <Input
-              type="date"
-              label={"Date"}
-              placeholder={""}
-              onChange={() => {}}
-              rowDirection
-              noMargin
-            />
-          </div>
-          <Button isPrimary onClick={() => {}}>
-            View
-          </Button>
-        </div>
+        <FilterDashboard />
         <Row>
           <Col lg={9} className={cx("bar-chart-wrapper")}>
             <p className={cx("sub-title")}>Students</p>
