@@ -76,6 +76,16 @@
     }
   }
 
+  &.row-direction {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+  }
+
+  &.no-margin {
+    margin: 0;
+  }
+
   & > .small-text {
     @include typo-caption;
     margin-top: 4px;

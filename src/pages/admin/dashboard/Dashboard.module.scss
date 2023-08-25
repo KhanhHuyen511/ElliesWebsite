@@ -1,0 +1,46 @@
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
+
+.page-title {
+  @include typo-heading-1;
+}
+
+.greeting {
+  @include typo-body;
+  margin-top: 6px;
+}
+
+.filter-wrapper {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+
+  .filter {
+    &-type {
+      border: 2px solid var(--G400);
+      border-radius: 6px;
+      padding: 12px 16px;
+      -moz-appearance: none; /* Firefox */
+      -webkit-appearance: none; /* Safari and Chrome */
+      appearance: none !important;
+      background-image: url("data:image/svg+xml,<svg width='24' height='24' xmlns='http://www.w3.org/2000/svg'><path d='m0,6l12,12l12,-12l-24,0z'/><path fill='none' d='m0,0l24,0l0,24l-24,0l0,-24z'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: 92%;
+      background-position-y: 18px;
+      background-size: 14px;
+      width: 130px;
+    }
+
+    &-date {
+      width: 282px;
+    }
+  }
+}
+
+.bar-chart-wrapper {
+  margin-top: 20px;
+}
+
+.sub-title {
+  @include typo-heading-3;
+}

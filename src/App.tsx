@@ -27,6 +27,7 @@ import {
   EditDocForm,
   IndexForum,
   DetailPendingBlog,
+  Dashboard,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
@@ -85,6 +86,7 @@ function App() {
               path="/pending_blog_detail/:id"
               element={<DetailPendingBlog />}
             />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>
       )}
