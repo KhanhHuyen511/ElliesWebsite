@@ -47,7 +47,7 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path="/" element={<Study />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/document" element={<Document />} />
             <Route path="/exercise" element={<Exercise />} />
@@ -73,10 +73,12 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path="/" element={<IndexStudy />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/study" element={<IndexStudy />} />
             <Route path="/document" element={<IndexDocument />} />
             <Route path="/exercise" element={<IndexExercise />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/path_detail/:id" element={<PathDetail />} />
             <Route path="/exercise_detail/:id" element={<DetailExercise />} />
             <Route path="/doc_detail/:id/:type" element={<EditDocForm />} />

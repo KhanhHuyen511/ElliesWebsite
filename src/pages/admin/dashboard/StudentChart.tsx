@@ -9,8 +9,6 @@ import { getDaily, getDaysStringOfMonth, getYearly } from "../../../utils";
 const StudentChart = ({ filter }: { filter: FilterProps | undefined }) => {
   const [labels, setLabels] = useState<string[]>();
 
-  console.log("hihi");
-
   useEffect(() => {
     switch (filter?.type.toString()) {
       case FilterType.Daily.toString():
