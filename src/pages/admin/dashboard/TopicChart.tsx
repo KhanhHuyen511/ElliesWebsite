@@ -9,6 +9,7 @@ const TopicChart = () => {
     plugins: {
       legend: {
         position: "bottom" as const,
+        align: "start" as const,
       },
     },
   };

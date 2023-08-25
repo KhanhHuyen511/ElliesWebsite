@@ -9,6 +9,7 @@ const LevelChart = () => {
     plugins: {
       legend: {
         position: "bottom" as const,
+        align: "start" as const,
       },
     },
   };
