@@ -5,15 +5,20 @@ import classNames from "classnames/bind";
 import { Button, Input } from "../../../components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FilterProps } from "./Dashboard";
 const cx = classNames.bind(style);
 
-enum FilterType {
+export enum FilterType {
   Daily,
   Monthly,
   Yearly,
 }
 
-const FilterDashboard = () => {
+const FilterDashboard = ({
+  onClick,
+}: {
+  onClick: (filter: FilterProps) => void;
+}) => {
   const [filterType, setFilterType] = useState<FilterType>(FilterType.Daily);
   const [selectedDate, setSelectedDate] = useState<any>(new Date());
 
@@ -45,7 +50,10 @@ const FilterDashboard = () => {
           showMonthYearPicker={filterType == FilterType.Monthly}
         />
       </div>
-      <Button isPrimary onClick={() => {}}>
+      <Button
+        isPrimary
+        onClick={() => onClick({ type: filterType, data: selectedDate })}
+      >
         View
       </Button>
     </div>

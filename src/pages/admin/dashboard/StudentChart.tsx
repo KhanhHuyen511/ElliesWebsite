@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "chart.js/auto";
 import { Bar } from "react-chartjs-2";
 import { ChartData } from "chart.js/auto";
+import { FilterProps } from "./Dashboard";
+import { FilterType } from "./FilterDashboard";
+import { getDaily, getDaysStringOfMonth, getYearly } from "../../../utils";
 
-const StudentChart = () => {
+const StudentChart = ({ filter }: { filter: FilterProps | undefined }) => {
+  const [labels, setLabels] = useState<string[]>();
+
+  console.log("hihi");
+
+  useEffect(() => {
+    switch (filter?.type.toString()) {
+      case FilterType.Daily.toString():
+        setLabels(getDaily);
+        break;
+      case FilterType.Monthly.toString():
+        setLabels(getDaysStringOfMonth(filter.data));
+        break;
+      case FilterType.Yearly.toString():
+        setLabels(getYearly);
+        break;
+      default:
+        break;
+    }
+  }, [filter?.data, filter?.type]);
+
   const options = {
     responsive: true,
     plugins: {
@@ -12,16 +35,6 @@ const StudentChart = () => {
       },
     },
   };
-
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
 
   const data = {
     labels,
