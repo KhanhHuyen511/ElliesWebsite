@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./StudyFinish.module.scss";
 import classNames from "classnames/bind";
 import { HeartIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline";
@@ -6,6 +6,8 @@ import { Button } from "../../components";
 import { StudyCard } from "../../types";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../firebase/config";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 const cx = classNames.bind(style);
 
 const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {

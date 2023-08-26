@@ -47,7 +47,8 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Study />} />
+            <Route path="/study" element={<Study />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/document" element={<Document />} />
             <Route path="/exercise" element={<Exercise />} />

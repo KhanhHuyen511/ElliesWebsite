@@ -9,7 +9,7 @@ import { FilterProps } from "./Dashboard";
 const cx = classNames.bind(style);
 
 export enum FilterType {
-  Daily,
+  // Daily,
   Monthly,
   Yearly,
 }
@@ -19,7 +19,7 @@ const FilterDashboard = ({
 }: {
   onClick: (filter: FilterProps) => void;
 }) => {
-  const [filterType, setFilterType] = useState<FilterType>(FilterType.Daily);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.Monthly);
   const [selectedDate, setSelectedDate] = useState<any>(new Date());
 
   return (
@@ -31,9 +31,9 @@ const FilterDashboard = ({
           setFilterType(e.target.value as unknown as FilterType);
         }}
       >
-        <option value={FilterType.Daily}>{FilterType[0]}</option>
-        <option value={FilterType.Monthly}>{FilterType[1]}</option>
-        <option value={FilterType.Yearly}>{FilterType[2]}</option>
+        {/* <option value={FilterType.Daily}>{FilterType[0]}</option> */}
+        <option value={FilterType.Monthly}>{FilterType[0]}</option>
+        <option value={FilterType.Yearly}>{FilterType[1]}</option>
       </select>
 
       <div className={cx("filter-date")}>

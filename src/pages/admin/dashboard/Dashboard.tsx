@@ -17,7 +17,7 @@ export interface FilterProps {
 
 const Dashboard = () => {
   const [filterOptions, setFilterOptions] = useState<FilterProps>({
-    type: FilterType.Daily,
+    type: FilterType.Monthly,
     data: undefined,
   });
 

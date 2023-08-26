@@ -13,6 +13,7 @@ export interface StudyRoute {
   cards?: string[];
   sentences?: StudyCard[];
   imageFile?: any;
+  isLast?: boolean;
 }
 
 export interface StudyCard {
@@ -29,6 +30,7 @@ export interface Student {
   id: string;
   checkinDays: [];
   routes: [];
+  paths: [];
   name?: string;
   email?: string;
   gender?: string;
@@ -159,4 +161,9 @@ export interface BlogLike {
   userName?: string;
   blogId: string;
   createDate: Date;
+}
+
+export interface UpdateStudyPath {
+  pathID: string;
+  updateDate: any;
 }

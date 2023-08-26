@@ -20,7 +20,9 @@ export const formatDate = (date: Date) => {
   return [year, month, day].join("-");
 };
 
-export const getDaysStringOfMonth = (date: Date) => {
+export const getDaysStringOfMonth = (date?: Date) => {
+  if (!date) date = new Date();
+
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
   const dayNumbers = new Date(year, month, 0).getDate();

@@ -66,16 +66,6 @@ export const getStudyRoutes = createAsyncThunk(
 
     const snapshot = await (await getDocs(q1)).docs;
 
-    // snapshot.map((e) => {
-    //   e.
-    // })
-
-    // q1.forEach(async (e) => {
-    //   var route: StudyRoute = e.data() as StudyRoute;
-    //   route.id = e.id;
-    //   routes.push(route);
-    // });
-
     if (user.currentPathId) {
       var routes: StudyRoute[] = [];
       const querySnapshot = await getDocs(
@@ -318,6 +308,30 @@ export const setStudyRouteState = createAsyncThunk(
     }
 
     return data.routeID;
+  }
+);
+
+export const setStudyPathState = createAsyncThunk(
+  "study/setPathState",
+  async (userID: string) => {
+    const q = query(collection(db, "students"), where("id", "==", userID));
+    const querySnapshot = (await getDocs(q)).docs[0];
+    const user = querySnapshot.data();
+
+    const data = { pathId: user.currentPathId, updateDate: new Date() };
+
+    if (querySnapshot) {
+      await updateDoc(querySnapshot.ref, {
+        paths: arrayUnion(data),
+      });
+    } else {
+      await addDoc(collection(db, "students"), {
+        id: userID,
+        paths: [data],
+      });
+    }
+
+    return data;
   }
 );
 
