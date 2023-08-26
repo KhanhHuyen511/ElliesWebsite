@@ -5,9 +5,16 @@ import { Col, Row } from "react-flexbox-grid";
 import "chart.js/auto";
 import StudentChart from "./StudentChart";
 import LevelChart from "./LevelChart";
-import TopicChart from "./TopicChart";
 import FilterDashboard, { FilterType } from "./FilterDashboard";
-import { useState } from "react";
+import CommonFigure from "./CommonFigure";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import {
+  getDataAccount,
+  getDataBlog,
+  getDataStudent,
+} from "../../../redux/slice/dashboardSlice";
 const cx = classNames.bind(style);
 
 export interface FilterProps {
@@ -20,6 +27,14 @@ const Dashboard = () => {
     type: FilterType.Monthly,
     data: undefined,
   });
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getDataStudent());
+    dispatch(getDataBlog());
+    dispatch(getDataAccount());
+  }, []);
 
   return (
     <>
@@ -43,10 +58,9 @@ const Dashboard = () => {
               <LevelChart />
               {/* <div className={cx("detail")}>detail</div> */}
             </div>
-            <div className={cx("pie-chart-wrapper")}>
-              <p className={cx("sub-title")}>Topics</p>
-              <TopicChart />
-              {/* <div className={cx("detail")}>detail</div> */}
+            <div className={cx("figure-wrapper")}>
+              <p className={cx("sub-title")}>Common</p>
+              <CommonFigure />
             </div>
           </Col>
         </Row>

@@ -29,18 +29,12 @@ const StudentChart = ({ filter }: { filter: FilterProps | undefined }) => {
     }
   }, [filter?.data, filter?.type]);
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const checkedIn = useSelector(
     (state: RootState) => state.dashboard.checkedInNumber
   );
   const completeRoute = useSelector(
     (state: RootState) => state.dashboard.completedRoutes
   );
-
-  useEffect(() => {
-    dispatch(getDataStudent());
-  }, []);
 
   const getCheckinData = () => {
     // checked in number

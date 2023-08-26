@@ -58,10 +58,52 @@
   margin-top: 20px;
 }
 
-.pie-chart-wrapper {
-  margin-bottom: 24px;
-}
+// .pie-chart-wrapper {
+//   margin-bottom: 24px;
+// }
 
 .sub-title {
   @include typo-heading-3;
+}
+
+.figure-wrapper {
+  margin-top: 24px;
+}
+
+.figure-list {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  .item {
+    background-color: var(--O500);
+    color: var(--W);
+    border-radius: 8px;
+    padding: 12px;
+
+    .figure-title {
+      @include typo-button;
+    }
+
+    .figure-value {
+      @include typo-heading-2;
+    }
+
+    &:nth-child(n) {
+      background-color: var(--BL400);
+    }
+
+    &:nth-child(2n) {
+      background-color: var(--O500);
+    }
+
+    &:nth-child(3n) {
+      background-color: var(--BL200);
+    }
+
+    &:nth-child(4n) {
+      background-color: var(--Y500);
+    }
+  }
 }

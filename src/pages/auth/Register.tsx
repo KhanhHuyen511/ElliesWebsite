@@ -34,6 +34,7 @@ const Register = () => {
           addDoc(collection(db, "accounts"), {
             role: "student",
             user_id: user.uid,
+            create_date: new Date(),
           }).then(() => {
             addDoc(collection(db, "students"), {
               id: user.uid,

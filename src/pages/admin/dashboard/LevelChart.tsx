@@ -2,8 +2,12 @@ import React from "react";
 import "chart.js/auto";
 import { Pie } from "react-chartjs-2";
 import { ChartData } from "chart.js/auto";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const LevelChart = () => {
+  const levels = useSelector((state: RootState) => state.dashboard.levelRate);
+
   const options = {
     responsive: true,
     plugins: {
@@ -20,8 +24,8 @@ const LevelChart = () => {
     labels,
     datasets: [
       {
-        label: "# of Votes",
-        data: [60, 19, 11],
+        label: "# item",
+        data: levels,
         backgroundColor: ["#b4cfff", "rgba(79, 126, 255, 1)", "#113077"],
         borderWidth: 0,
       },

@@ -20,7 +20,7 @@ const TopicChart = () => {
     labels,
     datasets: [
       {
-        label: "# of Votes",
+        label: "# item",
         data: [60, 19, 11],
         backgroundColor: ["#fbcf67", "#fbb825", "#da291c"],
         borderWidth: 0,
