@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "chart.js/auto";
 import { Bar } from "react-chartjs-2";
 import { ChartData } from "chart.js/auto";
 import { FilterProps } from "./Dashboard";
 import { FilterType } from "./FilterDashboard";
-import {
-  getDaily,
-  getDate,
-  getDaysStringOfMonth,
-  getYearly,
-} from "../../../utils";
+import { getDaysStringOfMonth, getYearly } from "../../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getDataStudent } from "../../../redux/slice/dashboardSlice";
+import { UpdateStudyPath } from "../../../types";
 
 const StudentChart = ({ filter }: { filter: FilterProps | undefined }) => {
   const [labels, setLabels] = useState<string[]>();
@@ -48,23 +44,48 @@ const StudentChart = ({ filter }: { filter: FilterProps | undefined }) => {
 
   const getCheckinData = () => {
     // checked in number
-    let monthCheckedIn = checkedIn.filter(
-      (i) =>
-        i.getMonth() ===
-        (filter?.data ? filter.data.getMonth() : new Date().getMonth())
-    );
+    let checkedInData: Date[];
 
-    if (monthCheckedIn && labels) {
-      let array: number[] = [];
-
-      labels.map(
-        (i, index) =>
-          (array[index] = monthCheckedIn.filter(
-            (i) => i.getDate() === index + 1
-          ).length)
+    if (filter?.type === FilterType.Monthly) {
+      checkedInData = checkedIn.filter(
+        (i) =>
+          i.getMonth() ===
+            (filter?.data ? filter.data.getMonth() : new Date().getMonth()) &&
+          i.getFullYear() ===
+            (filter?.data
+              ? filter.data.getFullYear()
+              : new Date().getFullYear())
       );
+      if (checkedInData && labels) {
+        let array: number[] = [];
 
-      return array;
+        labels.map(
+          (i, index) =>
+            (array[index] = checkedInData.filter(
+              (i) => i.getDate() === index + 1
+            ).length)
+        );
+
+        return array;
+      }
+    } else {
+      checkedInData = checkedIn.filter(
+        (i) =>
+          i.getFullYear() ===
+          (filter?.data ? filter.data.getFullYear() : new Date().getFullYear())
+      );
+      if (checkedInData && labels) {
+        let array: number[] = [];
+
+        labels.map(
+          (i, index) =>
+            (array[index] = checkedInData.filter(
+              (i) => i.getMonth() === index + 1
+            ).length)
+        );
+
+        return array;
+      }
     }
 
     return [];
@@ -72,23 +93,49 @@ const StudentChart = ({ filter }: { filter: FilterProps | undefined }) => {
 
   const getCompletedRouteData = () => {
     // completed in Route number
-    let monthComplete = completeRoute.filter(
-      (i) =>
-        i.updateDate.getMonth() ===
-        (filter?.data ? filter.data.getMonth() : new Date().getMonth())
-    );
-
-    if (monthComplete && labels) {
-      let array: number[] = [];
-
-      labels.map(
-        (i, index) =>
-          (array[index] = monthComplete.filter(
-            (i) => i.updateDate.getDate() === index + 1
-          ).length)
+    let completeData: UpdateStudyPath[] = [];
+    if (filter?.type === FilterType.Monthly) {
+      completeData = completeRoute.filter(
+        (i) =>
+          i.updateDate.getMonth() ===
+            (filter?.data ? filter.data.getMonth() : new Date().getMonth()) &&
+          i.updateDate.getFullYear() ===
+            (filter?.data
+              ? filter.data.getFullYear()
+              : new Date().getFullYear())
       );
 
-      return array;
+      if (completeData && labels) {
+        let array: number[] = [];
+
+        labels.map(
+          (i, index) =>
+            (array[index] = completeData.filter(
+              (i) => i.updateDate.getDate() === index + 1
+            ).length)
+        );
+
+        return array;
+      }
+    } else {
+      completeData = completeRoute.filter(
+        (i) =>
+          i.updateDate.getFullYear() ===
+          (filter?.data ? filter.data.getFullYear() : new Date().getFullYear())
+      );
+
+      if (completeData && labels) {
+        let array: number[] = [];
+
+        labels.map(
+          (i, index) =>
+            (array[index] = completeData.filter(
+              (i) => i.updateDate.getMonth() === index + 1
+            ).length)
+        );
+
+        return array;
+      }
     }
 
     return [];
