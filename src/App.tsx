@@ -16,6 +16,7 @@ import {
   ResultDetail,
   Onboarding,
   SavedPage,
+  StudentDashboard,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -67,6 +68,7 @@ function App() {
               path="/exercise/result_detail/:id"
               element={<ResultDetail />}
             />
+            <Route path="/dashboard" element={<StudentDashboard />} />
           </Routes>
         </BrowserRouter>
       )}
