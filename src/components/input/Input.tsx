@@ -15,6 +15,8 @@ interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void | undefined;
   isRequired?: boolean;
   className?: string;
+  rowDirection?: boolean;
+  noMargin?: boolean;
 }
 
 const Input = (props: Props) => {
@@ -24,7 +26,16 @@ const Input = (props: Props) => {
   };
 
   return (
-    <div className={cx("input-wrapper", props.className)}>
+    <div
+      className={cx(
+        "input-wrapper",
+        props.className,
+        {
+          "row-direction": props.rowDirection,
+        },
+        { "no-margin": props.noMargin }
+      )}
+    >
       <p className={cx("label")}>{props.label}</p>
       <input
         type={inputProps.type}

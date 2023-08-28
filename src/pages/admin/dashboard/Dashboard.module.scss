@@ -1,0 +1,109 @@
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
+
+.page-title {
+  @include typo-heading-1;
+}
+
+.greeting {
+  @include typo-body;
+  margin-top: 6px;
+}
+
+.filter-wrapper {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+
+  .filter {
+    &-type {
+      border: 2px solid var(--G400);
+      border-radius: 6px;
+      padding: 12px 16px;
+      -moz-appearance: none; /* Firefox */
+      -webkit-appearance: none; /* Safari and Chrome */
+      appearance: none !important;
+      background-image: url("data:image/svg+xml,<svg width='24' height='24' xmlns='http://www.w3.org/2000/svg'><path d='m0,6l12,12l12,-12l-24,0z'/><path fill='none' d='m0,0l24,0l0,24l-24,0l0,-24z'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: 92%;
+      background-position-y: 18px;
+      background-size: 14px;
+      width: 130px;
+    }
+
+    &-date {
+      width: 282px;
+
+      & > div.date-picker {
+        width: 100%;
+        height: 100%;
+
+        & > div {
+          height: 100%;
+
+          & > input.date-input {
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--G400);
+            border-radius: 6px;
+            padding-left: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.bar-chart-wrapper {
+  margin-top: 20px;
+}
+
+// .pie-chart-wrapper {
+//   margin-bottom: 24px;
+// }
+
+.sub-title {
+  @include typo-heading-3;
+}
+
+.figure-wrapper {
+  margin-top: 24px;
+}
+
+.figure-list {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  .item {
+    background-color: var(--O500);
+    color: var(--W);
+    border-radius: 8px;
+    padding: 12px;
+
+    .figure-title {
+      @include typo-button;
+    }
+
+    .figure-value {
+      @include typo-heading-2;
+    }
+
+    &:nth-child(n) {
+      background-color: var(--BL400);
+    }
+
+    &:nth-child(2n) {
+      background-color: var(--O500);
+    }
+
+    &:nth-child(3n) {
+      background-color: var(--BL200);
+    }
+
+    &:nth-child(4n) {
+      background-color: var(--Y500);
+    }
+  }
+}

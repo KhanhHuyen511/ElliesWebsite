@@ -36,8 +36,7 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
   const userSaved = useSelector((state: RootState) => state.saved.savedList);
 
   const checkSaved = () => {
-    if (userID && card.id) {
-      console.log(userSaved);
+    if (userID && card.id && userSaved) {
       return userSaved.find((o) => o.id === card.id) !== undefined;
     } else return false;
   };
@@ -45,10 +44,8 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
   const [isSaved, setIsSaved] = useState(checkSaved);
 
   useEffect(() => {
-    console.log(card);
     if (card.id) setIsSaved(checkSaved);
   }, [card.id]);
-  // console.log(card.id);
 
   const addToSavedSection = () => {
     if (userID) {

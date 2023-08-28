@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import {
   getStudyCards,
   getStudyRoute,
+  setStudyPathState,
   setStudyRouteState,
 } from "../../redux/slice/studySlice";
 import style from "./StudyDetail.module.scss";
@@ -49,6 +50,7 @@ const StudyDetail = () => {
         setCurrentCard(undefined);
         setIsFinished(true);
         if (id) dispatch(setStudyRouteState({ routeID: id, userID }));
+        if (route.isLast) dispatch(setStudyPathState(userID));
       }
     }
   };
