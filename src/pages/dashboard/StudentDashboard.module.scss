@@ -1,0 +1,40 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.wrapper {
+  min-height: calc(100vh - 72px);
+  width: 100%;
+  background-color: var(--G050);
+  padding-top: 26px;
+  margin: 0;
+
+  @include for-tablet {
+    padding-left: calc((100% - 752px) / 2);
+    padding-right: calc((100% - 752px) / 2);
+  }
+
+  @include for-desktop {
+    padding-left: calc((100% - 976px) / 2);
+    padding-right: calc((100% - 976px) / 2);
+  }
+
+  .page-title {
+    @include typo-heading-1;
+  }
+
+  .list-wrapper {
+    display: flex;
+    gap: 16px;
+
+    .dashboard-list {
+      margin-top: 26px;
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      gap: 12px;
+
+      .dashboard-item {
+      }
+    }
+  }
+}

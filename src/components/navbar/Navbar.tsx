@@ -8,7 +8,7 @@ const cx = classNames.bind(style);
 
 const links = [
   {
-    to: "/",
+    to: "/dashboard",
     title: "Dashboard",
   },
   {

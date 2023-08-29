@@ -26,6 +26,12 @@ export interface StudyCard {
   audio?: any;
 }
 
+export interface Account {
+  user_id: string;
+  role: string;
+  create_date: Date;
+}
+
 export interface Student {
   id: string;
   checkinDays: [];

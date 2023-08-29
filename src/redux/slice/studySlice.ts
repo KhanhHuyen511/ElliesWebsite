@@ -27,6 +27,7 @@ interface types {
   currentPathId?: string;
   currentRoute: StudyRoute;
   studiedRouteIDs: string[];
+  routesDashboard?: number;
 }
 
 const initialState: types = {
@@ -78,6 +79,24 @@ export const getStudyRoutes = createAsyncThunk(
       });
 
       return routes;
+    }
+  }
+);
+
+// Write reducer get studyRoutes
+export const getStudyRoutesDashboard = createAsyncThunk(
+  "study/get_routes_number",
+  async (userID: string) => {
+    const q = query(collection(db, "students"), where("id", "==", userID));
+    const user = (await getDocs(q)).docs[0].data() as Student;
+
+    if (user.currentPathId) {
+      const pathQuery = getDocs(
+        collection(db, "study_paths", user.currentPathId, "study_routes")
+      );
+      const pathLength = (await pathQuery).size;
+
+      return (user.routes.length / pathLength) * 100;
     }
   }
 );
@@ -366,6 +385,9 @@ const studySlice = createSlice({
     });
     builder.addCase(setStudyRouteState.fulfilled, (state, action) => {
       state.studiedRouteIDs.push(action.payload);
+    });
+    builder.addCase(getStudyRoutesDashboard.fulfilled, (state, action) => {
+      state.routesDashboard = action.payload;
     });
   },
 });

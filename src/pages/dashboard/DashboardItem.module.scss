@@ -1,0 +1,77 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.wrapper {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 16px 16px 26px 20px;
+}
+
+.top-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .icon-wrapper {
+    background-color: var(--color);
+    width: 31px;
+    height: 31px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+    .icon {
+      color: var(--W);
+      stroke-width: 2px;
+      width: 20px;
+    }
+  }
+}
+
+.progress-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, white 79%, transparent 80% 100%),
+    conic-gradient(var(--color) var(--i), var(--BL050) 0);
+  position: relative;
+  margin: auto;
+  margin-top: 20px;
+
+  .progress-text {
+    position: absolute;
+    top: 28px;
+    width: 100%;
+    text-align: center;
+
+    span {
+      display: block;
+    }
+
+    & > span:nth-child(1) {
+      @include typo-heading-3;
+    }
+
+    & > span:nth-child(2) {
+      @include typo-caption;
+    }
+  }
+}
+
+.figure-wrapper {
+  margin-top: 24px;
+  margin-bottom: -8px;
+
+  span {
+    display: block;
+  }
+
+  & > span:nth-child(1) {
+    @include typo-button;
+  }
+
+  & > span:nth-child(2) {
+    @include typo-caption;
+  }
+}
