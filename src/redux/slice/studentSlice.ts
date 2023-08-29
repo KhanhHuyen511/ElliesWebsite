@@ -13,6 +13,7 @@ import { ref, uploadBytes } from "firebase/storage";
 
 interface types {
   currentUser?: Student;
+  currentAccount?: {};
 }
 
 const initialState: types = {};
@@ -30,6 +31,21 @@ export const getCurrentStudent = createAsyncThunk(
       stu.birthday = getDate(querySnapshot.data().birthday.seconds);
 
     return stu;
+  }
+);
+
+// Write reducer get Doc
+export const getCurrentAccount = createAsyncThunk(
+  "student/get_account",
+  async (userID: string) => {
+    const q = query(collection(db, "accounts"), where("user_id", "==", userID));
+    const querySnapshot = (await getDocs(q)).docs[0];
+    var account = querySnapshot.data();
+
+    if (querySnapshot.data().create_date)
+      account.create_date = getDate(querySnapshot.data().create_date.seconds);
+
+    return account;
   }
 );
 
@@ -92,6 +108,9 @@ const studentSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCurrentStudent.fulfilled, (state, action) => {
       state.currentUser = action.payload;
+    });
+    builder.addCase(getCurrentAccount.fulfilled, (state, action) => {
+      state.currentAccount = action.payload;
     });
     builder.addCase(updateAvatar.fulfilled, (state, action) => {
       state.currentUser = action.payload;
