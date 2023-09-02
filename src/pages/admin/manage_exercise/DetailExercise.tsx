@@ -168,6 +168,7 @@ const DetailExercise = () => {
               <CreateExDetail
                 id={id}
                 title={data.title}
+                level={data.level}
                 isDisplay={isOpenCreateForm}
                 onClose={() => setIsOpenCreateForm(false)}
               />

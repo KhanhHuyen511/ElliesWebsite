@@ -94,18 +94,8 @@ export interface Ex {
   sentences?: StudyCard[];
   paraphs?: StudyCard[];
   score?: number; // => later in future
-  level?: string;
+  level: LevelType;
 }
-
-// export interface BaseExDetail {
-//   id: string;
-//   type: GameType;
-//   question: string;
-//   options?: string[];
-//   answer?: string;
-//   exRight?: boolean;
-//   vocab?: StudyCard;
-// }
 
 export interface ExDetail {
   id: string;
