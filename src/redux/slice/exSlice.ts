@@ -10,7 +10,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { Ex, ExDetail, UserEx } from "../../types";
+import { Ex, ExDetail, Student, UserEx } from "../../types";
 import { getDate } from "../../utils";
 
 interface types {
@@ -39,6 +39,34 @@ export const getListExs = createAsyncThunk("exercise/getExs", async () => {
 
   return exs;
 });
+
+export const getListExsByLevel = createAsyncThunk(
+  "exercise/getExs_by_level",
+  async (userID: string) => {
+    console.log("hi");
+
+    var exs: Ex[] = [];
+    const userQ = await query(
+      collection(db, "students"),
+      where("id", "==", userID)
+    );
+
+    const user = (await getDocs(userQ)).docs[0].data() as Student;
+
+    const q = query(collection(db, "exs"), where("level", "==", user.level));
+
+    const querySnapshot = (await getDocs(q)).docs;
+
+    querySnapshot.forEach(async (e) => {
+      var item: Ex = e.data() as Ex;
+      item.id = e.id;
+      item.listItems = undefined;
+      exs.push(item);
+    });
+
+    return exs;
+  }
+);
 
 export const getListUserExs = createAsyncThunk(
   "doc/getUserExs",
@@ -178,6 +206,9 @@ const exSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getListExs.fulfilled, (state, action) => {
+      state.listExs = action.payload as Ex[];
+    });
+    builder.addCase(getListExsByLevel.fulfilled, (state, action) => {
       state.listExs = action.payload as Ex[];
     });
     builder.addCase(getListUserExs.fulfilled, (state, action) => {

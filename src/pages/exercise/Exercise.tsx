@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Col } from "react-flexbox-grid";
 import styles from "./Exercise.module.scss";
 import classNames from "classnames/bind";
-import { CategoryPanel, ExCard, UserExCard } from "../../components";
-import { AcademicCapIcon, QueueListIcon } from "@heroicons/react/24/outline";
+import { ExCard, UserExCard } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { getListExs, getListUserExs } from "../../redux/slice/exSlice";
+import { getListExsByLevel, getListUserExs } from "../../redux/slice/exSlice";
 import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
@@ -20,8 +19,8 @@ const Exercise = () => {
 
   useEffect(() => {
     dispatch(getListUserExs(userID));
-    dispatch(getListExs());
-  }, [dispatch]);
+    dispatch(getListExsByLevel(userID));
+  }, [dispatch, userID]);
 
   return (
     <>
