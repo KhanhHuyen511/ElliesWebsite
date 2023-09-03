@@ -61,7 +61,10 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/study_detail/:id" element={<StudyDetail />} />
             <Route path="/doc_detail/:id/:type" element={<DocDetail />} />
-            <Route path="/ex_detail/:id" element={<ExerciseDetail />} />
+            <Route
+              path="/ex_detail/:id/:is_again"
+              element={<ExerciseDetail />}
+            />
             <Route path="/forum/create" element={<CreateBlog />} />
             <Route path="/blog_detail/:id" element={<BlogDetail />} />
             <Route

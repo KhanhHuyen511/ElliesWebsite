@@ -5,13 +5,19 @@ import classNames from "classnames/bind";
 import { ExCard, UserExCard } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { getListExsByLevel, getListUserExs } from "../../redux/slice/exSlice";
+import {
+  getExAgain,
+  getListExsByLevel,
+  getListUserExs,
+} from "../../redux/slice/exSlice";
 import { useNavigate } from "react-router-dom";
+import { Ex, ExState, UserEx } from "../../types";
 const cx = classNames.bind(styles);
 
 const Exercise = () => {
   const userExs = useSelector((state: RootState) => state.ex.listUserExs);
   const exs = useSelector((state: RootState) => state.ex.listExs);
+  const exAgain = useSelector((state: RootState) => state.ex.currentExAgain);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -20,7 +26,23 @@ const Exercise = () => {
   useEffect(() => {
     dispatch(getListUserExs(userID));
     dispatch(getListExsByLevel(userID));
+    dispatch(getExAgain(userID));
   }, [dispatch, userID]);
+
+  const checkUserExs = (item: Ex) => {
+    let itemUserExs = userExs?.filter((i: UserEx) => i.ex.id === item.id);
+
+    if (itemUserExs && itemUserExs[itemUserExs.length - 1]) {
+      const lastItem = itemUserExs[itemUserExs.length - 1];
+      const itemState = lastItem.state;
+
+      if (itemState !== undefined) {
+        return itemState === ExState.Doing;
+      }
+    }
+
+    return false;
+  };
 
   return (
     <>
@@ -28,16 +50,29 @@ const Exercise = () => {
         <Col xs={12} md={8} lg={6}>
           <p className={cx("title")}>Luyện tập</p>
           <ul className={cx("")}>{}</ul>
-          <p className={cx("sub-title")}>Từ vựng</p>
+          <p className={cx("sub-title")}>Topics</p>
           <ul className={cx("list")}>
             {exs &&
               exs.length > 0 &&
               exs.map((item, index) => (
                 <li key={index} className={cx("item")}>
-                  <ExCard data={item} />
+                  <ExCard
+                    data={item}
+                    isDisabled={checkUserExs(item)}
+                    isAgain={false}
+                  />
                 </li>
               ))}
           </ul>
+          <p className={cx("sub-title")}>Làm lại câu sai</p>
+          <ul className={cx("list")}>
+            {exAgain !== undefined && (
+              <li className={cx("item")}>
+                <ExCard data={exAgain} isAgain />
+              </li>
+            )}
+          </ul>
+
           <p className={cx("sub-title")}>Đã làm</p>
           <ul className={cx("list")}>
             {userExs &&

@@ -85,6 +85,11 @@ export interface Doc {
   type?: StudyCardType;
 }
 
+export enum ExState {
+  Doing,
+  Completed,
+}
+
 export interface Ex {
   id: string;
   title: string; // topic
@@ -94,7 +99,8 @@ export interface Ex {
   sentences?: StudyCard[];
   paraphs?: StudyCard[];
   score?: number; // => later in future
-  level: LevelType;
+  level?: LevelType;
+  state?: ExState;
 }
 
 export interface ExDetail {
@@ -115,6 +121,17 @@ export interface UserEx {
   ex: Ex;
   resultList: ExDetail[];
   rightQn?: number;
+  didDate?: Date;
+  state?: ExState;
+}
+
+export interface ExAgain {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  exId: string;
+  listItems: ExDetail[];
   didDate?: Date;
 }
 

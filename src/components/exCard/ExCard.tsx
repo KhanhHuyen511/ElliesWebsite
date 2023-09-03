@@ -1,18 +1,28 @@
-import { Ex } from "../../types";
+import { Ex, ExAgain } from "../../types";
 import { BookOpenIcon } from "@heroicons/react/24/outline";
 import style from "./ExCard.module.scss";
 import classNames from "classnames/bind";
 import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(style);
 
-const ExCard = ({ data }: { data: Ex }) => {
+const ExCard = ({
+  data,
+  isDisabled,
+  isAgain,
+}: {
+  data: Ex | ExAgain;
+  isDisabled?: boolean;
+  isAgain: boolean;
+}) => {
   const navigate = useNavigate();
 
   return (
     <>
       <div
         className={cx("card")}
-        onClick={() => navigate(`/ex_detail/${data.id}`)}
+        onClick={() =>
+          !isDisabled && navigate(`/ex_detail/${data.id}/${isAgain}`)
+        }
       >
         <p className={cx("card-title")}>{data.title}</p>
         <div className={cx("card-body")}>
