@@ -3,6 +3,7 @@ import {
   BookOpenIcon,
   CheckCircleIcon,
   CursorArrowRaysIcon,
+  EllipsisHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import style from "./ExCard.module.scss";
 import classNames from "classnames/bind";
@@ -35,6 +36,12 @@ const ExCard = ({ data, state }: { data: Ex | ExAgain; state: ExState }) => {
           ) : state === ExState.DoAgain ? (
             <CursorArrowRaysIcon
               className={cx("is-do-again-icon")}
+              width={52}
+              height={52}
+            />
+          ) : state === ExState.Doing ? (
+            <EllipsisHorizontalIcon
+              className={cx("is-doing-icon")}
               width={52}
               height={52}
             />
