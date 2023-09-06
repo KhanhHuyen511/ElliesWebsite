@@ -89,8 +89,6 @@ const ExerciseDetail = () => {
       );
     }
 
-    console.log(data1?.id ? data1?.id : "");
-
     if (data?.listItems?.length === 1 && result && id) {
       dispatch(
         setCompleteExState({

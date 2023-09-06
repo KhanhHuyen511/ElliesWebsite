@@ -12,6 +12,7 @@ import {
 } from "../../redux/slice/exSlice";
 import { useNavigate } from "react-router-dom";
 import { Ex, ExState, UserEx } from "../../types";
+import { getTimes } from "../../utils";
 const cx = classNames.bind(styles);
 
 const Exercise = () => {
@@ -32,16 +33,21 @@ const Exercise = () => {
   const checkUserExs = (item: Ex) => {
     let itemUserExs = userExs?.filter((i: UserEx) => i.ex.id === item.id);
 
+    itemUserExs = itemUserExs?.sort(
+      (a, b) => getTimes(a.didDate) - getTimes(b.didDate)
+    );
+
     if (itemUserExs && itemUserExs[itemUserExs.length - 1]) {
       const lastItem = itemUserExs[itemUserExs.length - 1];
       const itemState = lastItem.state;
 
       if (itemState !== undefined) {
-        return itemState === ExState.Doing;
+        console.log(itemState);
+        return itemState;
       }
     }
 
-    return false;
+    return ExState.Normal;
   };
 
   return (
@@ -56,24 +62,19 @@ const Exercise = () => {
               exs.length > 0 &&
               exs.map((item, index) => (
                 <li key={index} className={cx("item")}>
-                  <ExCard
-                    data={item}
-                    isDisabled={checkUserExs(item)}
-                    isAgain={false}
-                  />
+                  <ExCard data={item} state={checkUserExs(item)} />
                 </li>
               ))}
           </ul>
-          <p className={cx("sub-title")}>Làm lại câu sai</p>
+          <p className={cx("sub-title")}>Do wrong sentences</p>
           <ul className={cx("list")}>
             {exAgain !== undefined && (
               <li className={cx("item")}>
-                <ExCard data={exAgain} isAgain />
+                <ExCard data={exAgain} state={ExState.DoAgain} />
               </li>
             )}
           </ul>
-
-          <p className={cx("sub-title")}>Đã làm</p>
+          <p className={cx("sub-title")}>History</p>
           <ul className={cx("list")}>
             {userExs &&
               userExs.length > 0 &&

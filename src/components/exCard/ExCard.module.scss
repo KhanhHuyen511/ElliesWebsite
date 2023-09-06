@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .card {
   background: #fff;
@@ -31,4 +31,12 @@
 .card-date {
   @include typo-caption;
   margin-top: 26px;
+}
+
+.is-completed-icon {
+  color: var(--GR400);
+}
+
+.is-do-again-icon {
+  color: var(--R);
 }

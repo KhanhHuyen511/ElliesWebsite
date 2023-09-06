@@ -86,8 +86,10 @@ export interface Doc {
 }
 
 export enum ExState {
+  Normal,
   Doing,
   Completed,
+  DoAgain,
 }
 
 export interface Ex {
