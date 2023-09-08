@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Input, Popup } from "../../../components";
 import {
   getDocCardWithTopic,
+  getDocCardWithTopicLevel,
   setAExDetail,
 } from "../../../redux/slice/adminSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { GameType, StudyCard, StudyCardType } from "../../../types";
+import { GameType, LevelType, StudyCard, StudyCardType } from "../../../types";
 import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { Col, Row } from "react-flexbox-grid";
@@ -15,22 +16,21 @@ const cx = classNames.bind(style);
 const CreateExDetail = ({
   id,
   title,
+  level,
   isDisplay,
   onClose,
 }: {
   id: string;
   title: string;
+  level: LevelType;
   isDisplay: boolean;
   onClose: () => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   // load list vocab in special topic. (ex: Greeting)
-  const listVocabs: StudyCard[] | undefined = useSelector(
+  const listCards: StudyCard[] | undefined = useSelector(
     (state: RootState) => state.admin.listVocabs
-  );
-  const listSentences: StudyCard[] | undefined = useSelector(
-    (state: RootState) => state.admin.listSentences
   );
 
   const [selectedItem, setSelectedItem] = useState<StudyCard>();
@@ -43,10 +43,7 @@ const CreateExDetail = ({
   const [type, setType] = useState<GameType>(GameType.TranslateToVN);
 
   useEffect(() => {
-    dispatch(getDocCardWithTopic({ topic: title, type: StudyCardType.Vocab }));
-    dispatch(
-      getDocCardWithTopic({ topic: title, type: StudyCardType.Sentence })
-    );
+    dispatch(getDocCardWithTopicLevel({ topic: title, level }));
   }, [dispatch]);
 
   return (
@@ -88,22 +85,7 @@ const CreateExDetail = ({
                 </tr>
               </thead>
               <tbody>
-                {listVocabs?.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <Checkbox
-                        isChecked={selectedItem && item.id === selectedItem.id}
-                        onChecked={() => {
-                          setSelectedItem(item);
-                        }}
-                      />
-                    </td>
-                    <td>{index + 1}</td>
-                    <td>{item?.display}</td>
-                    <td>{item.meaning}</td>
-                  </tr>
-                ))}
-                {listSentences?.map((item, index) => (
+                {listCards?.map((item, index) => (
                   <tr key={index}>
                     <td>
                       <Checkbox

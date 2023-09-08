@@ -18,6 +18,7 @@ import {
   Ex,
   ExDetail,
   GameType,
+  LevelType,
   StudyCard,
   StudyCardType,
   StudyPath,
@@ -516,6 +517,51 @@ export const getDocCardWithTopic = createAsyncThunk(
   }
 );
 
+export const getDocCardWithTopicLevel = createAsyncThunk(
+  "admin/document/getDocCardWithTopicLevel",
+  async ({ topic, level }: { topic: string; level: LevelType }) => {
+    console.log("hi");
+
+    var list: StudyCard[] = [];
+
+    const q = query(
+      collection(db, "study_paths"),
+      where("topic", "==", topic),
+      where("level", "==", level)
+    );
+
+    const pathId = (await getDocs(q)).docs[0].id;
+
+    const studyRouteQ = query(
+      collection(db, "study_paths", pathId, "study_routes")
+    );
+
+    const routesDocs = (await getDocs(studyRouteQ)).docs;
+
+    let cards: StudyCard[] = [];
+
+    await Promise.all(
+      routesDocs.map(async (i) => {
+        let cardIds: string[] = i.data().cards;
+        await Promise.all(
+          cardIds.map(async (e) => {
+            let snapshot = await getDoc(doc(db, "vocabs", e));
+            if (snapshot.data() === undefined) {
+              snapshot = await getDoc(doc(db, "sentences", e));
+            }
+            if (snapshot.data() !== undefined) {
+              let item = snapshot.data() as StudyCard;
+              cards = [...cards, { ...item, id: snapshot.id }];
+            }
+          })
+        );
+      })
+    );
+
+    return cards;
+  }
+);
+
 export const getSentences = createAsyncThunk(
   "admin/document/getSentences",
   async () => {
@@ -728,6 +774,7 @@ export const setExercise = createAsyncThunk(
       title: data.title,
       description: data.description,
       createDate: new Date(),
+      level: data.level,
     });
 
     data.id = ref.id;
@@ -1060,6 +1107,9 @@ const adminSlice = createSlice({
         default:
           break;
       }
+    });
+    builder.addCase(getDocCardWithTopicLevel.fulfilled, (state, action) => {
+      state.listVocabs = action.payload as StudyCard[];
     });
     builder.addCase(getSentences.fulfilled, (state, action) => {
       state.listSentences = action.payload as StudyCard[];

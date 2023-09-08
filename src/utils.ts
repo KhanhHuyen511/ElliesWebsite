@@ -60,3 +60,7 @@ export const getYearly = () => [
   "November",
   "December",
 ];
+
+export const getTimes = (date?: Date) => {
+  return date != null ? date.getTime() : 0;
+};

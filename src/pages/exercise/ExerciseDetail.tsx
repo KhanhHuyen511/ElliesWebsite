@@ -4,32 +4,47 @@ import classNames from "classnames/bind";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { ExDetail } from "../../types";
+import { Ex, ExAgain, ExDetail } from "../../types";
 import { Button } from "../../components";
 import ExDesc from "./ExDesc";
 import ExerciseChild from "./ExerciseChild";
 import ExerciseFinish from "./ExerciseFinish";
-import { getAEx, setCompleteExState } from "../../redux/slice/exSlice";
+import {
+  getAEx,
+  getExAgain,
+  setCompleteExState,
+} from "../../redux/slice/exSlice";
 const cx = classNames.bind(style);
 
 const ExerciseDetail = () => {
-  let { id } = useParams();
+  let { id, is_again } = useParams();
 
   const userID = useSelector((state: RootState) => state.auth.userID) || "";
   const completeID = useSelector((state: RootState) => state.ex.completeID);
 
-  const data = useSelector((state: RootState) => state.ex.currentEx);
+  const data1 = useSelector((state: RootState) => state.ex.currentEx);
+  const data2 = useSelector((state: RootState) => state.ex.currentExAgain);
+
   const [currentExDetail, setCurrentExDetail] = useState<ExDetail>();
   const [currentExDetailIndex, setCurrentExDetailIndex] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
   const [isPrepare, setIsPrepare] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
   const [userExs, setUserExs] = useState<ExDetail[]>();
+  const [data, setData] = useState<Ex | ExAgain>();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (id) dispatch(getAEx(id));
+    if (id && is_again !== undefined) {
+      if (is_again === "false") {
+        dispatch(getAEx(id));
+        setData(data1);
+      } else {
+        dispatch(getExAgain(id));
+        setData(data2);
+      }
+    }
   }, [dispatch, id]);
 
   const Next = () => {
@@ -61,8 +76,32 @@ const ExerciseDetail = () => {
       dispatch(
         setCompleteExState({
           resultList: [...userExs, result],
-          exId: id,
+          exId:
+            is_again === "false"
+              ? data.id
+              : (data as ExAgain).exId
+              ? (data as ExAgain).exId
+              : "",
           userID,
+          title: data.title,
+          id: data.id,
+        })
+      );
+    }
+
+    if (data?.listItems?.length === 1 && result && id) {
+      dispatch(
+        setCompleteExState({
+          resultList: [result],
+          exId:
+            is_again === "false"
+              ? data.id
+              : (data as ExAgain).exId
+              ? (data as ExAgain).exId
+              : "",
+          userID,
+          title: data.title,
+          id: data.id,
         })
       );
     }
@@ -72,13 +111,13 @@ const ExerciseDetail = () => {
     <>
       <div className="container">
         {isPrepare && <p className={cx("title")}>Luyện tập - {data?.title}</p>}
-        {isPrepare && data && (
+        {isPrepare && data !== undefined && (
           <>
             <ExDesc data={data}></ExDesc>
             <Button
               isPrimary
               onClick={() => {
-                if (id && data.listItems && data.listItems.length > 0) {
+                if (id && data && data.listItems && data.listItems.length > 0) {
                   setCurrentExDetail(data.listItems[0]);
                   setCurrentExDetailIndex(1);
                   setIsPrepare(false);

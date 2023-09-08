@@ -4,7 +4,7 @@ import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-flexbox-grid";
-import { Ex, ExDetail, GameType, StudyCard } from "../../../types";
+import { Ex, ExDetail, GameType, LevelType, StudyCard } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
@@ -168,6 +168,7 @@ const DetailExercise = () => {
               <CreateExDetail
                 id={id}
                 title={data.title}
+                level={data.level ? data.level : LevelType.Beginner}
                 isDisplay={isOpenCreateForm}
                 onClose={() => setIsOpenCreateForm(false)}
               />
