@@ -21,6 +21,7 @@ interface types {
   currentUserEx?: UserEx;
   currentExAgain?: ExAgain;
   completeID?: string;
+  exDashboard?: number;
 }
 
 const initialState: types = {
@@ -179,9 +180,9 @@ export const getAEx = createAsyncThunk(
 export const getAnUserEx = createAsyncThunk(
   "exercise/getAnUserEx",
   async (id: string) => {
-    const snapshort = await getDoc(doc(db, "userExs", id));
+    const snapshot = await getDoc(doc(db, "userExs", id));
 
-    var item: UserEx = snapshort.data() as UserEx;
+    var item: UserEx = snapshot.data() as UserEx;
     item.id = id;
 
     const querySnapshot = await getDocs(
@@ -248,6 +249,41 @@ export const setCompleteExState = createAsyncThunk(
   }
 );
 
+export const getExePercent = createAsyncThunk(
+  "exercise/get_ex_percent",
+  async (userID: string) => {
+    const q = query(collection(db, "userExs"), where("userId", "==", userID));
+
+    const userExIds = (await getDocs(q)).docs;
+
+    if (userExIds.length === 0) {
+      return 0;
+    }
+
+    let total = 0;
+    let quantity = 0;
+
+    await Promise.all(
+      userExIds.map(async (i) => {
+        const list = await getDocs(
+          collection(db, "userExs", i.id, "resultList")
+        );
+        const docs = list.docs;
+
+        const data = docs.map((e) => e.data() as ExDetail);
+
+        const result =
+          data.filter((i) => i.exRight === true).length / data.length;
+
+        total += result;
+        quantity++;
+      })
+    );
+
+    return (total / quantity) * 100;
+  }
+);
+
 const exSlice = createSlice({
   name: "ex",
   initialState,
@@ -271,11 +307,11 @@ const exSlice = createSlice({
     builder.addCase(getExAgain.fulfilled, (state, action) => {
       state.currentExAgain = action.payload;
     });
-    // builder.addCase(getAExAgain.fulfilled, (state, action) => {
-    //   state.currentEx = action.payload;
-    // });
     builder.addCase(setCompleteExState.fulfilled, (state, action) => {
       state.completeID = action.payload;
+    });
+    builder.addCase(getExePercent.fulfilled, (state, action) => {
+      state.exDashboard = action.payload;
     });
   },
 });

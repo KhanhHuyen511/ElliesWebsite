@@ -11,6 +11,7 @@ import {
   getCurrentStudent,
 } from "../../redux/slice/studentSlice";
 import { getStudyRoutesDashboard } from "../../redux/slice/studySlice";
+import { getExePercent } from "../../redux/slice/exSlice";
 const cx = classNames.bind(style);
 
 const StudentDashboard = () => {
@@ -30,12 +31,15 @@ const StudentDashboard = () => {
 
   const routes = useSelector((state: RootState) => state.study.routesDashboard);
 
+  const exPercent = useSelector((state: RootState) => state.ex.exDashboard);
+
   useEffect(() => {
     if (userID) {
       dispatch(getCurrentStudent(userID));
       dispatch(getListBlogsByUserId(userID));
       dispatch(getCurrentAccount(userID));
       dispatch(getStudyRoutesDashboard(userID));
+      dispatch(getExePercent(userID));
     }
   }, [userID, dispatch]);
 
@@ -48,6 +52,10 @@ const StudentDashboard = () => {
       Math.abs(new Date().getTime() - account?.create_date.getTime()) /
         (1000 * 24 * 60 * 60)
     )}`;
+  };
+
+  const getExPercent = () => {
+    return exPercent !== undefined ? exPercent : 0;
   };
 
   const getLevel = () => {
@@ -135,8 +143,8 @@ const StudentDashboard = () => {
           <li className={cx("dashboard-item")}>
             <DashboardItem
               data={{
-                value: 83,
-                label: "83",
+                value: getExPercent(),
+                label: `${getExPercent()}`,
                 unit: "%",
                 name: "Good Exercise",
                 color: "BL400",
