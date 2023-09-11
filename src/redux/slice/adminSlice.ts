@@ -12,20 +12,21 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { db, storage } from "../../firebase/config";
+import { auth, db, storage } from "../../firebase/config";
 import {
   Doc,
   Ex,
   ExDetail,
   GameType,
+  Gender,
   LevelType,
+  Student,
   StudyCard,
   StudyCardType,
   StudyPath,
   StudyRoute,
 } from "../../types";
 import { ref, uploadBytes } from "firebase/storage";
-import { getAEx } from "./exSlice";
 import { getDate } from "../../utils";
 
 interface types {
@@ -34,13 +35,12 @@ interface types {
   currentStudyRoute: StudyRoute;
   listDocs?: Doc[];
   currentDoc?: Doc;
-  // list user
   listVocabs?: StudyCard[];
   listSentences?: StudyCard[];
   listParaphs?: StudyCard[];
   listEx?: Ex[];
   currentEx?: Ex;
-  // list ...
+  listUsers?: Student[];
 }
 
 const initialState: types = {
@@ -1000,6 +1000,78 @@ export const removeAExDetail = createAsyncThunk(
 
 //#endregion
 
+//#region [USER]
+export const getAllStudents = createAsyncThunk(
+  "admin/users/get_all_users",
+  async () => {
+    console.log("hi");
+    var items: Student[] = [];
+
+    const querySnapshot = await getDocs(collection(db, "students"));
+
+    querySnapshot.forEach(async (e) => {
+      var item: Student = e.data() as Student;
+      if (e.data().birthday) item.birthday = getDate(e.data().birthday.seconds);
+      items.push(item);
+    });
+
+    return items;
+  }
+);
+
+export const updateAStudent = createAsyncThunk(
+  "admin/users/update_a_user",
+  async ({ data, oldData }: { data: Student; oldData: Student }) => {
+    console.log("hi");
+
+    if (data.id) {
+      const q = query(collection(db, "students"), where("id", "==", data.id));
+      const user = (await getDocs(q)).docs[0];
+
+      console.log(data);
+
+      await updateDoc(user.ref, {
+        name:
+          data.name !== undefined && data.name !== oldData.name
+            ? data.name
+            : oldData.name,
+        gender:
+          data.gender !== null && data.gender !== oldData.gender?.toString()
+            ? (data.gender as Gender)
+            : (oldData.gender as Gender),
+        birthday:
+          data.birthday !== null && data.birthday !== oldData.birthday
+            ? data.birthday
+            : oldData.birthday,
+        bio: data.bio !== oldData.bio ? data.bio : oldData.bio,
+      });
+    }
+  }
+);
+
+export const removeAStudent = createAsyncThunk(
+  "admin/users/remove_a_user",
+  async (id: string) => {
+    console.log("hi");
+
+    const q = query(collection(db, "students"), where("id", "==", id));
+    const user = (await getDocs(q)).docs[0];
+
+    if (id) {
+      await deleteDoc(user.ref);
+    }
+
+    const q1 = query(collection(db, "accounts"), where("user_id", "==", id));
+    const user1 = (await getDocs(q1)).docs[0];
+
+    if (id) {
+      await deleteDoc(user1.ref);
+    }
+  }
+);
+
+//#endregion
+
 const adminSlice = createSlice({
   name: "admin_study",
   initialState,
@@ -1193,6 +1265,9 @@ const adminSlice = createSlice({
       );
       if (i && state.currentEx?.listItems)
         state.currentEx.listItems.splice(i, 1);
+    });
+    builder.addCase(getAllStudents.fulfilled, (state, action) => {
+      state.listUsers = action.payload;
     });
   },
 });

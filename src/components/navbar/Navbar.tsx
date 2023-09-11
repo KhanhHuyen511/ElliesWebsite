@@ -27,10 +27,42 @@ const links = [
     to: "/forum",
     title: "Forum",
   },
+  {
+    to: "/saved",
+    title: "Saved",
+  },
 ];
 
-const getLinks = () =>
-  links.map((link) => (
+const adminLinks = [
+  {
+    to: "/dashboard",
+    title: "Dashboard",
+  },
+  {
+    to: "/study",
+    title: "Study",
+  },
+  {
+    to: "/document",
+    title: "Document",
+  },
+  {
+    to: "/exercise",
+    title: "Exercise",
+  },
+  {
+    to: "/forum",
+    title: "Forum",
+  },
+  {
+    to: "/manage_users",
+    title: "Users",
+  },
+];
+
+const getLinks = (role: string) => {
+  const array = role === "admin" ? adminLinks : links;
+  return array.map((link) => (
     <li>
       <NavLink
         to={link.to}
@@ -40,9 +72,11 @@ const getLinks = () =>
       </NavLink>
     </li>
   ));
+};
 
-const getLinksSlide = () =>
-  links.map((link) => (
+const getLinksSlide = (role: string) => {
+  const array = role === "admin" ? adminLinks : links;
+  return array.map((link) => (
     <li className={cx("nav-item")}>
       <NavLink
         to={link.to}
@@ -52,18 +86,21 @@ const getLinksSlide = () =>
       </NavLink>
     </li>
   ));
+};
 
 const Navbar = ({ isSlider }: { isSlider: boolean }) => {
   const uRole = useSelector((state: RootState) => state.auth.userRole);
 
-  // console.log(uRole);
-
   return (
     <nav>
-      {!isSlider ? (
-        <ul className={cx("navbar-container")}>{getLinks()}</ul>
+      {uRole === "" ? (
+        <></>
+      ) : !isSlider ? (
+        <ul className={cx("navbar-container")}>{getLinks(uRole)}</ul>
       ) : (
-        <ul className={cx("navbar-container", "slider")}>{getLinksSlide()}</ul>
+        <ul className={cx("navbar-container", "slider")}>
+          {getLinksSlide(uRole)}
+        </ul>
       )}
     </nav>
   );

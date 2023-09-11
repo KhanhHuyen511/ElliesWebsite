@@ -29,6 +29,7 @@ import {
   IndexForum,
   DetailPendingBlog,
   Dashboard,
+  ManageUser,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
@@ -95,6 +96,7 @@ function App() {
               element={<DetailPendingBlog />}
             />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/manage_users" element={<ManageUser />} />
           </Routes>
         </BrowserRouter>
       )}

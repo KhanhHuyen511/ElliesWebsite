@@ -21,7 +21,7 @@ import { auth, storage } from "../../firebase/config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { REMOVE_ACTIVE_USER } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
-import { LevelType } from "../../types";
+import { Gender, LevelType } from "../../types";
 import { Timestamp } from "firebase/firestore";
 import { getListUserExs } from "../../redux/slice/exSlice";
 import { getStudyRoutes } from "../../redux/slice/studySlice";
@@ -176,7 +176,7 @@ const Profile = () => {
                 />
                 <Input
                   label={"Giới tính"}
-                  value={user?.gender}
+                  value={user?.gender ? Gender[user.gender] : undefined}
                   placeholder={""}
                   onChange={() => {}}
                   isDisabled

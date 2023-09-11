@@ -32,6 +32,12 @@ export interface Account {
   create_date: Date;
 }
 
+export enum Gender {
+  Male,
+  Female,
+  Others,
+}
+
 export interface Student {
   id: string;
   checkinDays: [];
@@ -39,7 +45,7 @@ export interface Student {
   paths: [];
   name?: string;
   email?: string;
-  gender?: string;
+  gender?: Gender;
   birthday?: Date;
   bio?: string;
   avatar?: any;
