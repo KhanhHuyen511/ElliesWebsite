@@ -11,12 +11,17 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { getCurrentStudent } from "../../redux/slice/studentSlice";
-import { Student } from "../../types";
+import {
+  REMOVE_ACTIVE_STUDENT,
+  getCurrentAccount,
+  getCurrentStudent,
+} from "../../redux/slice/studentSlice";
+import { Account, Student } from "../../types";
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +30,23 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        toast.error(
+          "Your account is LOCKED! Please contact to Admin to unlock!"
+        );
+
+        // update current Student
+        dispatch(REMOVE_ACTIVE_STUDENT({}));
+        navigate("/login");
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
+  };
 
   const isValid = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,14 +60,28 @@ const Login = () => {
         return user;
       })
       .then(async (user) => {
-        // check if this login is first time
-        // if yes
-        await dispatch(getCurrentStudent(user.uid)).then((data) => {
-          if (data.payload && (data.payload as Student).level === undefined) {
-            navigate("/onboarding");
+        // check if account is locked, then log out.
+        await dispatch(getCurrentAccount(user.uid)).then(async (data) => {
+          if (
+            (data.payload as Account).role === "student" &&
+            (data.payload as Account).isLocked &&
+            (data.payload as Account).isLocked === true
+          ) {
+            logout();
           } else {
-            // if no
-            navigate("/");
+            // check if this login is first time
+            // if yes
+            await dispatch(getCurrentStudent(user.uid)).then((data) => {
+              if (
+                data.payload &&
+                (data.payload as Student).level === undefined
+              ) {
+                navigate("/onboarding");
+              } else {
+                // if no
+                navigate("/");
+              }
+            });
           }
         });
       })

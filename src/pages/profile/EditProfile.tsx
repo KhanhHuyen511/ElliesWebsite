@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Input, Popup, TextArea } from '../../components';
-import { Student } from '../../types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux/store';
-import { updateCurrentStudent } from '../../redux/slice/studentSlice';
-import { join } from 'path';
-import { formatDate } from '../../utils';
+import React, { useState } from "react";
+import { Input, Popup, TextArea } from "../../components";
+import { Gender, Student } from "../../types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { updateCurrentStudent } from "../../redux/slice/studentSlice";
+import { formatDate } from "../../utils";
+import style from "./Profile.module.scss";
+import classNames from "classnames/bind";
+const cx = classNames.bind(style);
 
 const EditProfile = ({
   data,
@@ -29,7 +31,7 @@ const EditProfile = ({
   return (
     <>
       <Popup
-        title={'Chỉnh sửa thông tin cá nhân'}
+        title={"Chỉnh sửa thông tin cá nhân"}
         onClose={onClose}
         onSubmit={() => {
           dispatch(
@@ -49,42 +51,53 @@ const EditProfile = ({
         isDisplay={isDisplay}
       >
         <Input
-          label={'Email'}
+          label={"Email"}
           value={email}
-          placeholder={'abc@gm.uit.edu.vn'}
+          placeholder={"abc@gm.uit.edu.vn"}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
         />
         <Input
-          label={'Tên'}
+          label={"Tên"}
           value={name}
-          placeholder={''}
+          placeholder={""}
           onChange={(e) => {
             setName(e.target.value);
           }}
         />
-        <Input
-          label={'Giới tính'}
+        {/* <Input
+          label={"Giới tính"}
           value={gender}
-          placeholder={''}
+          placeholder={""}
           onChange={(e) => {
             setGender(e.target.value);
           }}
-        />
+        /> */}
+        <select
+          defaultValue={gender}
+          className={cx("gender")}
+          onChange={(e) => {
+            setGender(e.target.value as unknown as Gender);
+          }}
+        >
+          <option value={Gender.Male}>{Gender[0]}</option>
+          <option value={Gender.Female}>{Gender[1]}</option>
+          <option value={Gender.Others}>{Gender[2]}</option>
+        </select>
         <Input
-          label={'Ngày sinh'}
-          type='date'
+          label={"Ngày sinh"}
+          type="date"
           value={birth ? formatDate(birth) : undefined}
-          placeholder={''}
+          placeholder={""}
           onChange={(e) => {
             setBirth(e.target.valueAsDate);
           }}
         />
         <TextArea
-          label={'Tiểu sử'}
+          label={"Tiểu sử"}
           value={bio}
-          placeholder={'Nói gì đó về bạn'}
+          placeholder={"Nói gì đó về bạn"}
           onChange={(e) => {
             setBio(e.target.value);
           }}

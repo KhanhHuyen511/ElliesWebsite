@@ -1,0 +1,52 @@
+@import "../../../assets/style/shared.scss";
+@import "../../../assets/theme/shared.css";
+
+.title {
+  @include typo-heading-1;
+}
+
+.table {
+  width: 100%;
+  border-spacing: 0;
+  border-radius: 8px;
+  position: relative;
+
+  td,
+  th {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    @include typo-body-small;
+  }
+
+  th {
+    background-color: var(--Y500);
+  }
+
+  tr:hover {
+    background-color: var(--Y200);
+  }
+}
+
+.handler {
+  width: 100%;
+  display: flex;
+  margin-bottom: 8px;
+  gap: 4px;
+}
+
+.gender {
+  border: 2px solid var(--G400);
+  border-radius: 6px;
+  padding: 16px 16px;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none !important;
+  background-image: url("data:image/svg+xml,<svg width='24' height='24' xmlns='http://www.w3.org/2000/svg'><path d='m0,6l12,12l12,-12l-24,0z'/><path fill='none' d='m0,0l24,0l0,24l-24,0l0,-24z'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 97%;
+  background-position-y: 23px;
+  background-size: 14px;
+  width: 100%;
+  margin-bottom: 12px;
+}

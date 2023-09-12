@@ -30,6 +30,13 @@ export interface Account {
   user_id: string;
   role: string;
   create_date: Date;
+  isLocked?: boolean;
+}
+
+export enum Gender {
+  Male,
+  Female,
+  Others,
 }
 
 export interface Student {
@@ -39,7 +46,7 @@ export interface Student {
   paths: [];
   name?: string;
   email?: string;
-  gender?: string;
+  gender?: Gender;
   birthday?: Date;
   bio?: string;
   avatar?: any;
