@@ -1070,6 +1070,22 @@ export const removeAStudent = createAsyncThunk(
   }
 );
 
+export const lockAStudent = createAsyncThunk(
+  "admin/users/lock_a_user",
+  async (id: string) => {
+    console.log("hi");
+
+    const q = query(collection(db, "accounts"), where("user_id", "==", id));
+    const user = (await getDocs(q)).docs[0];
+
+    if (id) {
+      await updateDoc(user.ref, {
+        isLocked: true,
+      });
+    }
+  }
+);
+
 //#endregion
 
 const adminSlice = createSlice({

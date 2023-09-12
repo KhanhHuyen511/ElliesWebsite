@@ -5,7 +5,7 @@ import { Button, Checkbox } from "../../../components";
 import { Student } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { getAllStudents } from "../../../redux/slice/adminSlice";
+import { getAllStudents, lockAStudent } from "../../../redux/slice/adminSlice";
 import EditStudent from "./EditStudent";
 const cx = classNames.bind(style);
 
@@ -15,7 +15,6 @@ const IndexManageUser = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isOpenForm, setIsOpenForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Student>();
-  const [isOpenRemoveForm, setIsOpenRemoveForm] = useState(false);
 
   useEffect(() => {
     dispatch(getAllStudents());
@@ -35,7 +34,6 @@ const IndexManageUser = () => {
             isPrimary={false}
             onClick={() => {
               setIsOpenForm(true);
-              // navigate("/path_detail/" + selectedItems);
             }}
           >
             Cập nhật
@@ -44,10 +42,11 @@ const IndexManageUser = () => {
             isPrimary={false}
             isDanger={true}
             onClick={() => {
-              // setIsOpenRemoveForm(true);
+              if (selectedItem?.id !== undefined)
+                dispatch(lockAStudent(selectedItem.id));
             }}
           >
-            Xóa
+            Khoá tài khoản
           </Button>
         </div>
         <table className={cx("table")}>
@@ -71,7 +70,6 @@ const IndexManageUser = () => {
                         value={item.id}
                         isChecked={getCheckedItem(item.id)}
                         onChecked={() => {
-                          // setSelectPath(item.id);
                           setSelectedItem(item);
                         }}
                       ></Checkbox>

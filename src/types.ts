@@ -30,6 +30,7 @@ export interface Account {
   user_id: string;
   role: string;
   create_date: Date;
+  isLocked?: boolean;
 }
 
 export enum Gender {

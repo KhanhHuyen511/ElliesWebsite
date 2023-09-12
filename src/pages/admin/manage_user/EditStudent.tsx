@@ -11,12 +11,11 @@ const cx = classNames.bind(style);
 
 interface Props {
   data: Student;
-  classNames?: string;
   onClose: () => void;
   isDisplay: boolean;
 }
 
-const EditStudent = ({ data, classNames, onClose, isDisplay }: Props) => {
+const EditStudent = ({ data, onClose, isDisplay }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [name, setName] = useState<string>();
@@ -26,7 +25,6 @@ const EditStudent = ({ data, classNames, onClose, isDisplay }: Props) => {
   const [bio, setBio] = useState<string>();
 
   useEffect(() => {
-    console.log("render");
     setName(data.name);
     setEmail(data.email);
     setGender(data.gender ? data.gender : Gender.Female);
