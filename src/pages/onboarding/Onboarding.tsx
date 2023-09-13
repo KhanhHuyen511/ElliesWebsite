@@ -5,16 +5,24 @@ import { Button } from "../../components";
 import { ToastContainer, toast } from "react-toastify";
 import ChooseRoute from "./ChooseRoute";
 import { LevelType } from "../../types";
+import getLevel from "./CheckResult";
 const cx = classNames.bind(style);
 
 const Onboarding = () => {
   const [age, setAge] = useState<string>("");
   const [purpose, setPurpose] = useState<string>("");
-  const [q1, setQ1] = useState<string>("");
-  const [q2, setQ2] = useState<string>("");
-  const [q3, setQ3] = useState<string>("");
-  const [q4, setQ4] = useState<string>("");
-  const [q5, setQ5] = useState<string>("");
+  const [q, setQ] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
   const [isDone, setIsDone] = useState<boolean>(false);
   const [level, setLevel] = useState<LevelType>(LevelType.Beginner);
 
@@ -27,25 +35,9 @@ const Onboarding = () => {
   };
 
   const onChangeQuestion = (e: any, order: number) => {
-    switch (order) {
-      case 0:
-        setQ1(e.target.value);
-        break;
-      case 1:
-        setQ2(e.target.value);
-        break;
-      case 2:
-        setQ3(e.target.value);
-        break;
-      case 3:
-        setQ4(e.target.value);
-        break;
-      case 4:
-        setQ5(e.target.value);
-        break;
-      default:
-        break;
-    }
+    let newQ = q;
+    newQ[order] = e.target.value;
+    setQ(newQ);
   };
 
   const questions = [
@@ -53,6 +45,11 @@ const Onboarding = () => {
       question: "Hãy dịch nghĩa của từ này: Butterfly",
       options: ["Con cá", "Tuyệt vời", "Con bướm", "Xinh đẹp"],
       answer: "Con bướm",
+    },
+    {
+      question: "Hãy chọn nghĩa phù hợp nhất của từ này: Consider",
+      options: ["Xem xét", "Tôn trọng", "Cho phép", "Đánh giá"],
+      answer: "Xem xét",
     },
     {
       question: "Hãy chọn câu có nghĩa sau: Đã lâu rồi tôi không gặp bạn.",
@@ -80,6 +77,54 @@ const Onboarding = () => {
         "All are Incorrect.",
       ],
       answer: "It took him 10 minutes to do this exercise yesterday.",
+    },
+    {
+      question: "Nghe đoạn âm thanh sau và chọn câu mà bạn nghe được nhé!",
+      audio: "onboarding.mp3",
+      options: [
+        "Everything has beauty, but not everyone sees it.",
+        "Every thing has beauty, but not everyone sees it.",
+        "Everything have beauty, but everyone see it.",
+        "All are Incorrect.",
+      ],
+      answer: "Everything has beauty, but not everyone sees it.",
+    },
+    {
+      question:
+        "Hãy sắp xếp các từ sau thành câu có nghĩa: through/ ears,/ while/ women/ eyes!/ love/ men/ love/ through",
+      audio: "",
+      options: [
+        "Women love through ears, while men love through eyes!",
+        "Women through love ears, while men throsugh love eyes!",
+        "Men love through ears, while women love through eyes!",
+        "Men through love ears, while women through love eyes!",
+      ],
+      answer: "Women love through ears, while men love through eyes!",
+    },
+    {
+      question: "Nghe đoạn hội thoại sau và trả lời câu hỏi sau",
+      audio: "",
+      paraph_question: "What are conversation infer to?",
+      options: [
+        "They will go to the Geneva Bank together.",
+        "The man want to go to nearest street.",
+        "They will have a meeting on Geneva Street.",
+        "The man want to go to the nearest bank, that is on Geneva Street.",
+      ],
+      answer:
+        "The man want to go to the nearest bank, that is on Geneva Street.",
+    },
+    {
+      question: "Nghe và chọn từ điền vào đoạn hội thoại sau",
+      audio: "",
+      options: [
+        "umbrellas - have no black umbrella - yellow umbrella - this year",
+        "umbrellas - have black umbrellas - yellow umbrella - next year.",
+        "umbrella - have black umbrellas - yellow umbrella - next year.",
+        "umbrella - have no black umbrella - yellow umbrellas - this year.",
+      ],
+      answer:
+        "umbrella - have no black umbrella - yellow umbrellas - this year.",
     },
     {
       question: "Hãy đọc đoạn văn sau và trả lời câu hỏi bên dưới",
@@ -144,7 +189,7 @@ const Onboarding = () => {
   };
 
   const checkResult = () => {
-    const temp = [age, purpose, q1, q2, q3, q4, q5];
+    const temp = [age, purpose, ...q];
     // check if user fill all questions
     // if don't
     if (temp.filter((i) => i === "").length > 0) {
@@ -155,20 +200,27 @@ const Onboarding = () => {
       setIsDone(true);
 
       // check result -> define level -> recommend study path
-      const results: boolean[] = [
-        q1 === questions[0].answer,
-        q2 === questions[1].answer,
-        q3 === questions[2].answer,
-        q4 === questions[3].answer,
-        q5 === questions[4].answer,
-      ];
+      let result: number = 0;
 
-      if (results[0] && results[1] && results[2]) {
-        if (results[3] && results[4]) setLevel(LevelType.Advanced);
-        else setLevel(LevelType.Intermediate);
-      } else {
-        setLevel(LevelType.Beginner);
-      }
+      q.forEach((i, index) => {
+        if (index in [0, 1, 2]) {
+          if (i === questions[index].answer) {
+            result += 1.5;
+          }
+        } else if (index in [3, 4, 5, 6]) {
+          if (i === questions[index].answer) {
+            result += 1;
+          }
+        } else if (i === questions[index].answer) {
+          result += 0.5;
+        }
+      });
+
+      console.log(result);
+
+      const level = getLevel(result);
+
+      if (level) setLevel(level);
     }
   };
 
