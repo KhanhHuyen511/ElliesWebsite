@@ -6,7 +6,7 @@ import { Gender, Student } from "../../../types";
 import style from "./IndexManageUser.module.scss";
 import classNames from "classnames/bind";
 import { updateAStudent } from "../../../redux/slice/adminSlice";
-import { formatDate } from "../../../utils";
+import { formatDate } from "../../../utils/utils";
 const cx = classNames.bind(style);
 
 interface Props {

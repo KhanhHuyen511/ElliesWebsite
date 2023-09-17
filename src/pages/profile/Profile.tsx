@@ -15,7 +15,7 @@ import { Button, Input, TextArea } from "../../components";
 import EditProfile from "./EditProfile";
 import EditAvatar from "./EditAvatar";
 import { getCurrentStudent } from "../../redux/slice/studentSlice";
-import { formatDate, getDate } from "../../utils";
+import { formatDate, getDate } from "../../utils/utils";
 import { getDownloadURL, ref } from "firebase/storage";
 import { auth, storage } from "../../firebase/config";
 import { onAuthStateChanged, signOut } from "firebase/auth";

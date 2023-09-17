@@ -4,7 +4,7 @@ import { Bar } from "react-chartjs-2";
 import { ChartData } from "chart.js/auto";
 import { FilterProps } from "./Dashboard";
 import { FilterType } from "./FilterDashboard";
-import { getDaysStringOfMonth, getYearly } from "../../../utils";
+import { getDaysStringOfMonth, getYearly } from "../../../utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getDataStudent } from "../../../redux/slice/dashboardSlice";

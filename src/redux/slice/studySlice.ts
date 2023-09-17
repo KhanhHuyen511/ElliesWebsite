@@ -12,7 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { getDate } from "../../utils";
+import { getDate } from "../../utils/utils";
 import {
   LevelType,
   Student,

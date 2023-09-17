@@ -8,7 +8,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase/config";
-import { getDate } from "../../utils";
+import { getDate } from "../../utils/utils";
 import { ref, uploadBytes } from "firebase/storage";
 
 interface types {

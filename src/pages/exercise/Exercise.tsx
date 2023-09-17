@@ -12,7 +12,7 @@ import {
 } from "../../redux/slice/exSlice";
 import { useNavigate } from "react-router-dom";
 import { Ex, ExState, UserEx } from "../../types";
-import { getTimes } from "../../utils";
+import { getTimes } from "../../utils/utils";
 const cx = classNames.bind(styles);
 
 const Exercise = () => {

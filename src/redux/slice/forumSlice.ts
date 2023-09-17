@@ -16,7 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { Blog, BlogComment, BlogLike, BlogState, Student } from "../../types";
-import { getDate } from "../../utils";
+import { getDate } from "../../utils/utils";
 
 interface types {
   listBlogs: Blog[];

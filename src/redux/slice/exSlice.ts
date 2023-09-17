@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { Ex, ExAgain, ExDetail, ExState, Student, UserEx } from "../../types";
-import { getDate, getTimes } from "../../utils";
+import { getDate, getTimes } from "../../utils/utils";
 
 interface types {
   listExs: Ex[];
