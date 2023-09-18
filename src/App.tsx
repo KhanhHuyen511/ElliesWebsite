@@ -33,34 +33,42 @@ import {
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
-import { LightTheme, DarkTheme } from "./theme/themes";
+import { DarkTheme } from "./theme/themes";
 
 function App() {
   const [userRole, setUserRole] = useState("student");
   const userID = useSelector((state: RootState) => state.auth.userID);
   const uRole = useSelector((state: RootState) => state.auth.userRole);
+  const [theme, setTheme] = useState<string | null>("light");
 
   useEffect(() => {
     if (userID) setUserRole(uRole);
-  }, [userID, uRole]);
+    if (localStorage.getItem("theme") !== null) {
+      setTheme(localStorage.getItem("theme"));
+    }
+  }, [userID, uRole, theme]);
 
   return (
     <div
       className="app"
-      style={{
-        "--bg-color": DarkTheme.backgroundColor,
-        "--text-color": DarkTheme.color,
-        "--text-m-color": DarkTheme.textMediumColor,
-        "--text-l-color": DarkTheme.textLightColor,
-        "--text-G050-color": DarkTheme.textG050Color,
-        "--text-b-color": DarkTheme.textBoldColor,
-        "--bg-m-color": DarkTheme.bgMediumColor,
-        "--bg-b-color": DarkTheme.bgBoldColor,
-        "--bg-card-light": DarkTheme.bgCardLight,
-        "--bg-save-light": DarkTheme.bgSaveLight,
-        "--bg-G050-color": DarkTheme.bgG050Color,
-        "--icon-m-color": DarkTheme.iconMediumColor,
-      }}
+      style={
+        theme === "dark"
+          ? {
+              "--bg-color": DarkTheme.backgroundColor,
+              "--text-color": DarkTheme.color,
+              "--text-m-color": DarkTheme.textMediumColor,
+              "--text-l-color": DarkTheme.textLightColor,
+              "--text-G050-color": DarkTheme.textG050Color,
+              "--text-b-color": DarkTheme.textBoldColor,
+              "--bg-m-color": DarkTheme.bgMediumColor,
+              "--bg-b-color": DarkTheme.bgBoldColor,
+              "--bg-card-light": DarkTheme.bgCardLight,
+              "--bg-save-light": DarkTheme.bgSaveLight,
+              "--bg-G050-color": DarkTheme.bgG050Color,
+              "--icon-m-color": DarkTheme.iconMediumColor,
+            }
+          : {}
+      }
     >
       {userRole === "student" && (
         <BrowserRouter>
