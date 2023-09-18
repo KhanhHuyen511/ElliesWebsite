@@ -1,8 +1,8 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .input-wrapper {
-  color: var(--text-bold-color);
+  color: var(--text-m-color);
 
   & > .label {
     @include typo-body-small;
@@ -16,7 +16,8 @@
     outline: none;
     width: 100%;
     padding: 16px 12px;
-    color: var(--text-bold-color);
+    color: var(--text-b-color);
+    background-color: var(--bg-b-color);
     @include typo-button;
 
     &::placeholder {

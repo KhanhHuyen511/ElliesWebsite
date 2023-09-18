@@ -1,9 +1,25 @@
 @import "./assets/theme/shared.css";
 
+:root {
+  --bg-color: var(--W);
+  --bg-m-color: var(--W);
+  --bg-b-color: var(--W);
+  --bg-card-light: var(--Y200);
+  --bg-save-light: var(--BL050);
+  --text-color: var(--text-bold-color);
+  --text-m-color: var(--text-medium-color);
+  --text-l-color: var(--text-light-color);
+  --text-G050-color: var(--G050);
+  --text-b-color: var(--text-bold-color);
+  --bg-G050-color: var(--G050);
+  --icon-m-color: var(--text-bold-color);
+}
+
 .app {
   min-height: 100vh;
-  color: var(--text-bold-color);
+  color: var(--text-color);
   position: relative;
+  background-color: var(--bg-color);
 }
 
 .container {
@@ -47,7 +63,6 @@ input[type="radio"] {
   height: 0;
 }
 
-
 label:has(input[type="radio"]):before {
   content: "";
   display: inline-block;
@@ -58,7 +73,6 @@ label:has(input[type="radio"]):before {
   margin-right: 10px;
   transition: all 0.1s ease-in 0.05s;
 }
-
 
 label:has(input[type="radio"])::after {
   content: "";

@@ -4,7 +4,7 @@
 .wrapper {
   min-height: calc(100vh - 72px);
   width: 100%;
-  background-color: #fafafa;
+  background-color: var(--bg-G050-color);
   padding-top: 24px;
   margin: 0;
 
@@ -46,11 +46,12 @@
 
   .item {
     padding: 12px 18px;
-    background-color: rgba(84, 147, 255, 0.15);
+    background-color: var(--bg-save-light);
     border-radius: 4px;
+    color: var(--text-G050-color);
 
     &.is-active {
-      background-color: rgba(84, 147, 255, 1);
+      background-color: var(--BL500);
       color: #fff;
       font-weight: 700;
     }
@@ -64,7 +65,7 @@
 
   .item {
     width: 50%;
-    background-color: #fff;
+    background-color: var(--bg-b-color);
     border-radius: 16px;
     padding: 16px;
 

@@ -79,7 +79,7 @@
 
 //
 @mixin hover-icon-primary {
-  color: var(--text-bold-color);
+  color: var(--icon-m-color);
 
   &:hover {
     color: var(--primary-color);

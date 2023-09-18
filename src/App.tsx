@@ -33,6 +33,7 @@ import {
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
+import { LightTheme, DarkTheme } from "./theme/themes";
 
 function App() {
   const [userRole, setUserRole] = useState("student");
@@ -44,7 +45,23 @@ function App() {
   }, [userID, uRole]);
 
   return (
-    <div className="app">
+    <div
+      className="app"
+      style={{
+        "--bg-color": DarkTheme.backgroundColor,
+        "--text-color": DarkTheme.color,
+        "--text-m-color": DarkTheme.textMediumColor,
+        "--text-l-color": DarkTheme.textLightColor,
+        "--text-G050-color": DarkTheme.textG050Color,
+        "--text-b-color": DarkTheme.textBoldColor,
+        "--bg-m-color": DarkTheme.bgMediumColor,
+        "--bg-b-color": DarkTheme.bgBoldColor,
+        "--bg-card-light": DarkTheme.bgCardLight,
+        "--bg-save-light": DarkTheme.bgSaveLight,
+        "--bg-G050-color": DarkTheme.bgG050Color,
+        "--icon-m-color": DarkTheme.iconMediumColor,
+      }}
+    >
       {userRole === "student" && (
         <BrowserRouter>
           <Header />
