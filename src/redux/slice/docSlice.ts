@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { Doc, StudyCard, StudyCardType } from "../../types";
-import { getDate } from "../../utils";
+import { getDate } from "../../utils/utils";
 
 interface types {
   listDocs: Doc[];

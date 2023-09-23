@@ -28,6 +28,8 @@
       background-position-x: 92%;
       background-position-y: 18px;
       background-size: 14px;
+      background-color: var(--bg-b-color);
+      color: var(--text-b-color);
       width: 130px;
     }
 
@@ -47,6 +49,8 @@
             border: 2px solid var(--G400);
             border-radius: 6px;
             padding-left: 16px;
+            background-color: var(--bg-b-color);
+            color: var(--text-b-color);
           }
         }
       }

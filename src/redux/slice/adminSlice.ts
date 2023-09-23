@@ -27,7 +27,7 @@ import {
   StudyRoute,
 } from "../../types";
 import { ref, uploadBytes } from "firebase/storage";
-import { getDate } from "../../utils";
+import { getDate } from "../../utils/utils";
 
 interface types {
   listStudyPaths: StudyPath[];

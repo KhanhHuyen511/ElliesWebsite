@@ -6,7 +6,7 @@
   width: 100%;
   justify-content: space-between;
   padding: 16px;
-  background-color: var(--W);
+  background-color: var(--bg-color);
   position: sticky;
   top: 0;
   z-index: 1;
@@ -37,7 +37,7 @@
   @include for-desktop {
     display: block;
     @include typo-heading-1;
-    color: var(--text-bold-color);
+    color: var(--text-color);
   }
 }
 
@@ -71,8 +71,8 @@
       background-color: #fff;
       width: 160px;
       position: absolute;
-      top: 36px;
-      left: -60px;
+      top: 48px;
+      left: -80px;
       border-radius: 8px;
       border: 1px solid #000;
       overflow: hidden;
@@ -118,7 +118,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: var(--W);
+  background-color: var(--bg-color);
   box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.25);
   width: 50%;
   height: 100vh;

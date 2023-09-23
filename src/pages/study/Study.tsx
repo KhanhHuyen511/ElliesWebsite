@@ -137,7 +137,7 @@ const Study = () => {
   return (
     <div className="container">
       <Col xs={12} md={8} lg={6}>
-        <p className={cx("title")}>Chào Huyền,</p>
+        <p className={cx("title")}>Hi,</p>
         <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
         <p className={cx("page-title")}>Lộ trình</p>
         <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>

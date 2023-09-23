@@ -4,7 +4,7 @@ import { Gender, Student } from "../../types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { updateCurrentStudent } from "../../redux/slice/studentSlice";
-import { formatDate } from "../../utils";
+import { formatDate } from "../../utils/utils";
 import style from "./Profile.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(style);

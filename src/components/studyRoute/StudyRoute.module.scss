@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .wrapper {
   text-align: center;
@@ -15,7 +15,7 @@
 
   &::after {
     position: absolute;
-    content: '';
+    content: "";
     width: 60px;
     height: 60px;
     top: 21%;
@@ -28,7 +28,7 @@
 
 .label {
   @include typo-body-small;
-  color: var(--text-medium-color);
+  color: var(--text-m-color);
   margin-top: 8px;
 }
 
@@ -46,7 +46,7 @@
   }
 
   & > .label {
-    color: var(--text-bold-color);
+    color: var(--text-color);
   }
 }
 

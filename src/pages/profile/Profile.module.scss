@@ -172,3 +172,39 @@
   width: 100%;
   margin-bottom: 12px;
 }
+
+.theme-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & > p {
+    @include typo-caption;
+  }
+}
+
+.theme {
+  width: 58px;
+  height: 36px;
+  background-color: var(--text-color);
+  position: relative;
+  border-radius: 16px;
+  cursor: pointer;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 30px;
+    height: 30px;
+    background-color: var(--Y200);
+    border-radius: 50%;
+  }
+
+  &.dark::after {
+    left: auto;
+    right: 3px;
+    background-color: var(--Y500);
+  }
+}

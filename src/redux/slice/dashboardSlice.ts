@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, Update } from "@reduxjs/toolkit";
 import { query, collection, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { getDate } from "../../utils";
+import { getDate } from "../../utils/utils";
 import { BlogState, LevelType, UpdateStudyPath } from "../../types";
 
 interface types {

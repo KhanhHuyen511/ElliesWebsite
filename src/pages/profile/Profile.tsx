@@ -15,7 +15,7 @@ import { Button, Input, TextArea } from "../../components";
 import EditProfile from "./EditProfile";
 import EditAvatar from "./EditAvatar";
 import { getCurrentStudent } from "../../redux/slice/studentSlice";
-import { formatDate, getDate } from "../../utils";
+import { formatDate, getDate } from "../../utils/utils";
 import { getDownloadURL, ref } from "firebase/storage";
 import { auth, storage } from "../../firebase/config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -225,11 +225,11 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className={cx("social-section", "section")}>
+            {/* <div className={cx("social-section", "section")}>
               <p className={cx("section-title")}>Liên kết mạng xã hội</p>
               <div className={cx("social-body")}></div>
-            </div>
-            <div className={cx("account-section", "section")}>
+            </div> */}
+            {/* <div className={cx("account-section", "section")}>
               <p className={cx("section-title")}>Tài khoản</p>
               <div className={cx("account-body")}>
                 <Button
@@ -239,6 +239,28 @@ const Profile = () => {
                 >
                   Khóa tài khoản
                 </Button>
+              </div>
+            </div> */}
+
+            <div className={cx("section")}>
+              <p className={cx("section-title")}>
+                Dark Theme:{" "}
+                {localStorage.getItem("theme") === "dark" ? "ON" : "OFF"}
+              </p>
+              <div className={cx("theme-wrapper")}>
+                <div
+                  onClick={() => {
+                    let theme = localStorage.getItem("theme");
+                    if (theme === "light")
+                      localStorage.setItem("theme", "dark");
+                    else localStorage.setItem("theme", "light");
+                  }}
+                  className={cx("theme", {
+                    light: localStorage.getItem("theme") === "light",
+                    dark: localStorage.getItem("theme") === "dark",
+                  })}
+                />
+                <p>Reload to apply change</p>
               </div>
             </div>
           </Col>

@@ -19,8 +19,10 @@
   --R: #da291c;
   --R150: rgba(218, 41, 28, 0.15);
   --R300: rgba(218, 41, 28, 0.3);
+  --BL050: rgba(84, 147, 255, 0.15);
   --BL200: #b4cfff;
   --BL400: #4c76be;
+  --BL500: rgba(84, 147, 255, 1);
   --BL800: #113077;
   --BL1000: #0f172a;
   --BL050: rgba(76, 118, 190, 0.2);
@@ -32,4 +34,8 @@
   --text-bold-color: var(--G900);
   --text-medium-color: var(--G800);
   --text-light-color: var(--G500);
+
+  /* DARK THEME */
+  --BG-Dark: #292841;
+  --BG-m-Dark: #1c1b29;
 }
