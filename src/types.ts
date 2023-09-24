@@ -54,6 +54,7 @@ export interface Student {
   currentPathId?: string;
   level?: LevelType;
   savedList: [];
+  point: number;
 }
 
 export enum LevelType {
