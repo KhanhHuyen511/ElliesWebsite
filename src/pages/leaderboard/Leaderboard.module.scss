@@ -1,0 +1,57 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.page-title {
+  @include typo-heading-1;
+}
+
+.top-three {
+  margin-top: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 46px;
+}
+
+.top-remain {
+  margin-top: 16px;
+
+  .item {
+    padding: 18px 18px 16px 16px;
+    border: 2px solid #4c76be33;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+
+    .stt {
+      margin-right: 18px;
+
+      color: var(--G800);
+      @include typo-heading-3;
+    }
+
+    .name {
+      @include typo-body;
+    }
+
+    img {
+      width: 51px;
+      height: 51px;
+      border: 2px solid #4c76be33;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+
+    .point {
+      flex-grow: 1;
+      justify-self: end;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+
+      > span {
+        @include typo-button;
+      }
+    }
+  }
+}
