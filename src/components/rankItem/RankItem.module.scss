@@ -1,0 +1,69 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.item {
+  .avt {
+    width: 102px;
+    height: 102px;
+    border-radius: 50%;
+    border: 4px solid var(--O200);
+    position: relative;
+
+    & > span {
+      position: absolute;
+      top: 70px;
+      left: 27px;
+      width: 38px;
+      height: 38px;
+      background-color: var(--O500);
+      border-radius: 50%;
+      border: 4px solid var(--O200);
+      text-align: center;
+
+      @include typo-heading-3;
+      color: var(--W);
+    }
+
+    & > img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+
+  .name {
+    @include typo-heading-2;
+    margin-top: 6px;
+    text-align: center;
+  }
+
+  .point {
+    @include typo-button;
+    text-align: center;
+  }
+
+  .avt.first {
+  }
+
+  .avt.second {
+    border: 4px solid var(--G400);
+    margin-top: 60px;
+
+    & > span {
+      background-color: var(--G400);
+      border: 4px solid var(--G400);
+    }
+  }
+
+  .avt.third {
+    border: 4px solid #d5e5ff;
+    margin-top: 70px;
+
+    & > span {
+      background-color: #4c76be;
+      border: 4px solid #d5e5ff;
+    }
+  }
+}

@@ -15,3 +15,4 @@ export { default as ResultDetail } from "./exercise/ResultDetail";
 export { default as Onboarding } from "./onboarding/Onboarding";
 export { default as SavedPage } from "./saved/SavedPage";
 export { default as StudentDashboard } from "./dashboard/StudentDashboard";
+export { default as Leaderboard } from "./leaderboard/Leaderboard";

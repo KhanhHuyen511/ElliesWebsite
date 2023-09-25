@@ -1019,6 +1019,25 @@ export const getAllStudents = createAsyncThunk(
   }
 );
 
+export const getAllStudentsAscendByPoint = createAsyncThunk(
+  "admin/users/get_users_ascend_by_point",
+  async () => {
+    console.log("hi");
+    var items: Student[] = [];
+
+    const querySnapshot = await getDocs(collection(db, "students"));
+
+    querySnapshot.forEach(async (e) => {
+      var item: Student = e.data() as Student;
+      if (e.data().birthday) item.birthday = getDate(e.data().birthday.seconds);
+      items.push(item);
+    });
+    items = items.slice().sort((a, b) => b.point - a.point);
+
+    return items;
+  }
+);
+
 export const updateAStudent = createAsyncThunk(
   "admin/users/update_a_user",
   async ({ data, oldData }: { data: Student; oldData: Student }) => {
@@ -1283,6 +1302,9 @@ const adminSlice = createSlice({
         state.currentEx.listItems.splice(i, 1);
     });
     builder.addCase(getAllStudents.fulfilled, (state, action) => {
+      state.listUsers = action.payload;
+    });
+    builder.addCase(getAllStudentsAscendByPoint.fulfilled, (state, action) => {
       state.listUsers = action.payload;
     });
   },
