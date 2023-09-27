@@ -35,6 +35,7 @@ import {
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
 import { DarkTheme } from "./theme/themes";
+import IndexPage from "./pages/game/IndexPage";
 
 function App() {
   const [userRole, setUserRole] = useState("student");
@@ -100,6 +101,7 @@ function App() {
             />
             <Route path="/dashboard" element={<StudentDashboard />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/game" element={<IndexPage />} />
           </Routes>
         </BrowserRouter>
       )}
