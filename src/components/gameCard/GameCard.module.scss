@@ -1,0 +1,63 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.card-wrapper {
+  border-radius: 8px;
+  background: var(--BL050);
+  position: relative;
+  height: 126px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 145px;
+    height: 145px;
+    background-color: var(--BL050);
+    border-radius: 50%;
+    top: -82px;
+    left: -87px;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 145px;
+    height: 145px;
+    background-color: var(--BL050);
+    border-radius: 50%;
+    top: 44px;
+    right: -56px;
+  }
+
+  .driver {
+    position: absolute;
+    top: 36px;
+    left: 4px;
+    z-index: 2;
+  }
+
+  .homes-wrapper {
+    position: absolute;
+    left: 22px;
+    right: 23px;
+    bottom: -2px;
+    display: flex;
+    flex-wrap: nowrap;
+    width: calc(100% - 22px);
+    overflow: hidden;
+  }
+
+  .home {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+  }
+
+  p {
+    @include typo-heading-2;
+    color: var(--R);
+    position: absolute;
+    left: calc(50% - 50px);
+    top: 38px;
+  }
+}

@@ -20,3 +20,4 @@ export { default as PendingBlogCard } from "./pendingBlogCard/PendingBlogCard";
 export { default as Popup } from "./popup/Popup";
 export { default as Comment } from "./comment/Comment";
 export { default as RankItem } from "./rankItem/RankItem";
+export { default as GameCard } from "./gameCard/GameCard";
