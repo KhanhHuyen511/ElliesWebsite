@@ -7,26 +7,32 @@
   position: relative;
   height: 126px;
 
-  &::before {
-    content: "";
-    position: absolute;
-    width: 145px;
-    height: 145px;
-    background-color: var(--BL050);
-    border-radius: 50%;
-    top: -82px;
-    left: -87px;
+  &.finish {
+    background: var(--Y50);
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    width: 145px;
-    height: 145px;
-    background-color: var(--BL050);
-    border-radius: 50%;
-    top: 44px;
-    right: -56px;
+  &.withCircle {
+    &::before {
+      content: "";
+      position: absolute;
+      width: 145px;
+      height: 145px;
+      background-color: var(--BL050);
+      border-radius: 50%;
+      top: -82px;
+      left: -87px;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 145px;
+      height: 145px;
+      background-color: var(--BL050);
+      border-radius: 50%;
+      top: 44px;
+      right: -56px;
+    }
   }
 
   .driver {

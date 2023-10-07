@@ -18,6 +18,7 @@ import {
   SavedPage,
   StudentDashboard,
   Leaderboard,
+  GoHome,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -102,6 +103,7 @@ function App() {
             <Route path="/dashboard" element={<StudentDashboard />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/game" element={<IndexPage />} />
+            <Route path="/go_home" element={<GoHome />} />
           </Routes>
         </BrowserRouter>
       )}

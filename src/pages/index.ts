@@ -17,3 +17,4 @@ export { default as SavedPage } from "./saved/SavedPage";
 export { default as StudentDashboard } from "./dashboard/StudentDashboard";
 export { default as Leaderboard } from "./leaderboard/Leaderboard";
 export { default as Game } from "./game/IndexPage";
+export { default as GoHome } from "./game/goHome/Index";

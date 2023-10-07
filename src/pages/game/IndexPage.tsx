@@ -9,7 +9,7 @@ const IndexPage = () => {
     <div className="container">
       <Col xs={12} md={8} lg={6}>
         <p className={cx("page-title")}>Game</p>
-        <GameCard />
+        <GameCard title={"Go Home!"} />
       </Col>
     </div>
   );

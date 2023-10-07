@@ -3,15 +3,21 @@ import style from "./GameCard.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(style);
 
-const GameCard = () => {
+export interface GameCardProps {
+  title: string;
+  state?: "default" | "finish";
+  withCircle?: boolean;
+}
+
+const GameCard = ({ title, state, withCircle = true }: GameCardProps) => {
   return (
-    <div className={cx("card-wrapper")}>
+    <div className={cx("card-wrapper", `${state}`, { withCircle: withCircle })}>
       <img
         src="./images/game/driver-small.png"
         alt=""
         className={cx("driver")}
       />
-      <p>Go home!</p>
+      <p>{title}</p>
       <img src="./images/game/house-small.png" alt="" className={cx("home")} />
       <div className={cx("homes-wrapper")}>
         <img

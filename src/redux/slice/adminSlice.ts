@@ -1278,9 +1278,6 @@ const adminSlice = createSlice({
     builder.addCase(getAExercise.fulfilled, (state, action) => {
       state.currentEx = action.payload as Ex;
     });
-    // builder.addCase(getVocabsByTopic.fulfilled, (state, action) => {
-    //   state.listVocabs = action.payload as StudyCard[];
-    // });
     builder.addCase(setExercise.fulfilled, (state, action) => {
       state.listEx?.push(action.payload as Ex);
     });
