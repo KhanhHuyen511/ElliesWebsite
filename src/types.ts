@@ -190,3 +190,21 @@ export interface UpdateStudyPath {
   pathID: string;
   updateDate: any;
 }
+
+export interface Game {
+  name: string;
+  rounds: GameRound[];
+}
+
+export interface GameRound {
+  name: string;
+  questions: GameQuestion[];
+}
+
+export interface GameQuestion {
+  question: string;
+  options: string[];
+  vocab: string;
+  answer: string;
+  level: number;
+}
