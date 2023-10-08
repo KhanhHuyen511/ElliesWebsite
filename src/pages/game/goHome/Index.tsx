@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { GameCard } from "../../../components";
 import { Col } from "react-flexbox-grid";
 import style from "../IndexPage.module.scss";
