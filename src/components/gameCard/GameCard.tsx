@@ -7,11 +7,20 @@ export interface GameCardProps {
   title: string;
   state?: "default" | "finish";
   withCircle?: boolean;
+  onClick?: () => void;
 }
 
-const GameCard = ({ title, state, withCircle = true }: GameCardProps) => {
+const GameCard = ({
+  title,
+  state,
+  withCircle = true,
+  ...props
+}: GameCardProps) => {
   return (
-    <div className={cx("card-wrapper", `${state}`, { withCircle: withCircle })}>
+    <div
+      className={cx("card-wrapper", `${state}`, { withCircle: withCircle })}
+      {...props}
+    >
       <img
         src="./images/game/driver-small.png"
         alt=""

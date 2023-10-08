@@ -197,6 +197,7 @@ export interface Game {
 }
 
 export interface GameRound {
+  id: string;
   name: string;
   questions: GameQuestion[];
 }

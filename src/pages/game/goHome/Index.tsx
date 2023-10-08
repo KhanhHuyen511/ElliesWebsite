@@ -6,12 +6,14 @@ import classNames from "classnames/bind";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getAllGameRounds } from "../../../redux/slice/gameSlice";
+import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(style);
 
 const Index = () => {
   const rounds = useSelector((state: RootState) => state.game.rounds);
 
   const dispatch = useDispatch<AppDispatch>();
+  const navigator = useNavigate();
 
   useEffect(() => {
     dispatch(getAllGameRounds("Go home!"));
@@ -28,6 +30,9 @@ const Index = () => {
                 key={index}
                 title={`Round ${item.name}`}
                 withCircle={index % 2 === 0}
+                onClick={() => {
+                  navigator(`./${item.id}`);
+                }}
               />
             ))}
         </div>
