@@ -1,0 +1,22 @@
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.page-title {
+  @include typo-heading-1;
+  margin-top: 26px;
+  margin-bottom: 32px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cta-wrapper {
+  margin-top: 83px;
+
+  .btn-start {
+    width: 100%;
+  }
+}
