@@ -203,9 +203,29 @@ export interface GameRound {
 }
 
 export interface GameQuestion {
-  question: string;
+  id: string;
+  question: {
+    label: string;
+    ques: string;
+  };
   options: string[];
-  vocab: string;
   answer: string;
   level: number;
+  point: number;
+}
+
+export interface UserGameCard {
+  id: string;
+  userId: string;
+  gameQuestionId: string;
+  isRight: boolean;
+  point: number;
+}
+
+export interface UserGameRound {
+  id: string;
+  userId: string;
+  gameRoundId: string;
+  listUserGameCard: UserGameCard[];
+  totalPoint: number;
 }
