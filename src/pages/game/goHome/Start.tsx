@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getAGameRound } from "../../../redux/slice/gameSlice";
@@ -27,6 +27,28 @@ const Start = () => {
       );
     }
   }, []);
+
+  const homeWrapperRef = useRef<HTMLDivElement>(null);
+  const obstacleWrapperRef = useRef(null);
+
+  useEffect(() => {
+    if (homeWrapperRef.current) {
+      homeWrapperRef.current.style.backgroundColor = "red";
+    }
+  });
+
+  const [leftOffset, setLeftOffset] = useState(0);
+  const [isMoving, setIsMoving] = useState(false);
+
+  useEffect(() => {
+    if (isMoving) {
+      const intervalId = setInterval(
+        () => setLeftOffset((pre) => pre - 2),
+        100
+      );
+      return () => clearInterval(intervalId);
+    }
+  }, [isMoving]);
 
   return (
     <div className={cx("stage")}>
@@ -58,14 +80,21 @@ const Start = () => {
           <img src="/images/game/driver.png" alt="" />
         </span>
       </section>
-      <div className={cx("bg-home-lines")}>
+      <div
+        className={cx("bg-home-lines")}
+        ref={homeWrapperRef}
+        style={{ left: `${leftOffset}px` }}
+      >
         {[...Array(9)].map((i) => (
           <div className={cx("bg-home-item")} />
         ))}
       </div>
-      <div className={cx("obstacles")}>
+      <div className={cx("obstacles")} ref={obstacleWrapperRef}>
         <div style={{ top: "50%", left: "50%" }} />
       </div>
+      <Button isPrimary={false} onClick={() => setIsMoving(!isMoving)}>
+        Click
+      </Button>
     </div>
   );
 };
