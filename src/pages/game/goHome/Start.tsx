@@ -30,12 +30,13 @@ const Start = () => {
   }, []);
 
   const homeWrapperRef = useRef<HTMLDivElement>(null);
+  const driverRef = useRef<HTMLSpanElement>(null);
   const obstacleWrapperRef = useRef(null);
 
   const [leftOffset, setLeftOffset] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
 
-  const driverBoundaryRightOffset = [-120, -376];
+  const driverBoundaryRightOffset = [-50, -80];
 
   useEffect(() => {
     if (isMoving) {
@@ -45,7 +46,7 @@ const Start = () => {
         return;
       }
       const intervalId = setInterval(
-        () => setLeftOffset((pre) => pre - 4),
+        () => setLeftOffset((pre) => pre - 1),
         100
       );
       return () => clearInterval(intervalId);
@@ -93,7 +94,7 @@ const Start = () => {
   ];
 
   const continueMove = () => {
-    setLeftOffset((pre) => pre - 4);
+    setLeftOffset((pre) => pre - 1);
     setIsMoving(true);
   };
 
@@ -129,6 +130,7 @@ const Start = () => {
       <section>
         <span
           className={cx("driver")}
+          ref={driverRef}
           style={{ marginTop: `${driverOffset}px` }}
         >
           <img src="/images/game/driver.png" alt="" />
@@ -137,7 +139,7 @@ const Start = () => {
       <div
         className={cx("bg-home-lines")}
         ref={homeWrapperRef}
-        style={{ left: `${leftOffset}px` }}
+        style={{ left: `calc(${leftOffset}% + 269px)` }}
       >
         {[...Array(9)].map((i) => (
           <div className={cx("bg-home-item")} />
@@ -146,7 +148,7 @@ const Start = () => {
       <div
         className={cx("obstacles")}
         ref={obstacleWrapperRef}
-        style={{ left: `${leftOffset}px` }}
+        style={{ left: `calc(${leftOffset}% + 269px)` }}
       >
         {obstacleList.map((obstacle, index) => (
           <div
