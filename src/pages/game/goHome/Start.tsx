@@ -26,29 +26,80 @@ const Start = () => {
         })
       );
     }
+    setIsMoving(true);
   }, []);
 
   const homeWrapperRef = useRef<HTMLDivElement>(null);
   const obstacleWrapperRef = useRef(null);
 
-  useEffect(() => {
-    if (homeWrapperRef.current) {
-      homeWrapperRef.current.style.backgroundColor = "red";
-    }
-  });
-
   const [leftOffset, setLeftOffset] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
 
+  const driverBoundaryRightOffset = [-120, -376];
+
   useEffect(() => {
     if (isMoving) {
+      console.log(leftOffset);
+      if (driverBoundaryRightOffset.find((i) => i === leftOffset)) {
+        setIsMoving(false);
+        return;
+      }
       const intervalId = setInterval(
-        () => setLeftOffset((pre) => pre - 2),
+        () => setLeftOffset((pre) => pre - 4),
         100
       );
       return () => clearInterval(intervalId);
     }
-  }, [isMoving]);
+  }, [isMoving, leftOffset]);
+
+  const [driverOffset, setDriverOffset] = useState(0);
+  const [isDriverMovingUp, setIsDriverMovingUp] = useState(false);
+
+  useEffect(() => {
+    if (isMoving) {
+      const intervalDriver = setInterval(
+        () =>
+          setDriverOffset((pre) => {
+            if (isDriverMovingUp) {
+              setIsDriverMovingUp(false);
+              return pre + 2;
+            } else {
+              setIsDriverMovingUp(true);
+              return pre - 2;
+            }
+          }),
+        150
+      );
+      return () => clearInterval(intervalDriver);
+    }
+  }, [isDriverMovingUp, isMoving]);
+
+  interface OffsetType {
+    x: number; // percent: x%
+    y: number;
+    height?: number;
+  }
+
+  const obstacleList: OffsetType[] = [
+    {
+      x: 50,
+      y: 50,
+    },
+    {
+      x: 80,
+      y: 40,
+      height: 100,
+    },
+  ];
+
+  const continueMove = () => {
+    setLeftOffset((pre) => pre - 4);
+    setIsMoving(true);
+  };
+
+  const pauseMove = () => {
+    setIsMoving(!isMoving);
+  };
 
   return (
     <div className={cx("stage")}>
@@ -76,7 +127,10 @@ const Start = () => {
       </section>
       <h1>Round 01</h1>
       <section>
-        <span className={cx("driver")}>
+        <span
+          className={cx("driver")}
+          style={{ marginTop: `${driverOffset}px` }}
+        >
           <img src="/images/game/driver.png" alt="" />
         </span>
       </section>
@@ -89,11 +143,27 @@ const Start = () => {
           <div className={cx("bg-home-item")} />
         ))}
       </div>
-      <div className={cx("obstacles")} ref={obstacleWrapperRef}>
-        <div style={{ top: "50%", left: "50%" }} />
+      <div
+        className={cx("obstacles")}
+        ref={obstacleWrapperRef}
+        style={{ left: `${leftOffset}px` }}
+      >
+        {obstacleList.map((obstacle, index) => (
+          <div
+            key={index}
+            style={{
+              top: `${obstacle.y}%`,
+              left: `${obstacle.x}%`,
+              height: `${obstacle.height}px`,
+            }}
+          />
+        ))}
       </div>
-      <Button isPrimary={false} onClick={() => setIsMoving(!isMoving)}>
-        Click
+      <Button isPrimary={false} onClick={pauseMove}>
+        Pause
+      </Button>
+      <Button isPrimary={false} onClick={continueMove}>
+        Continue
       </Button>
     </div>
   );
