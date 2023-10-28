@@ -12,7 +12,7 @@ interface Props {
   type?: string;
   isPrimary: boolean;
   onClick: () => void;
-  children?: string;
+  children?: React.ReactNode;
   haveIcon?: boolean;
   icon?: string;
   isDanger?: boolean;

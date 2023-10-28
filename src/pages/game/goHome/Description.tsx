@@ -10,7 +10,7 @@ const Description = () => {
 
   return (
     <Col xs={12} md={8} lg={6} className="container">
-      <h1 className={cx("page-title")}>Go home! Round 01!</h1>
+      <p className={cx("page-title")}>Go home! Round 01!</p>
       <p>
         Now, it is 5PM. Alice are an IT-er and she has to “Go home”! News talk
         road to her home is very bad. You need help Alice across obstacles!
