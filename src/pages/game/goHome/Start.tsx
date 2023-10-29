@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { getAGameRound } from "../../../redux/slice/gameSlice";
-
+import Question from "./Question";
 import styles from "./GoHome.module.scss";
 import classNames from "classnames/bind";
 import { Button } from "../../../components";
@@ -18,14 +17,6 @@ const Start = () => {
   const round = useSelector((state: RootState) => state.game.currentRound);
 
   useEffect(() => {
-    if (round) {
-      dispatch(
-        getAGameRound({
-          nameOfGame: "Go home!",
-          id: round.id,
-        })
-      );
-    }
     setIsMoving(true);
   }, []);
 
@@ -38,11 +29,19 @@ const Start = () => {
 
   const driverBoundaryRightOffset = [-50, -80];
 
+  const [currentQuestion, setCurrentQuestion] = useState<any>();
+  const [isMeetObstacle, setIsMeetObstacle] = useState(false);
+
   useEffect(() => {
     if (isMoving) {
-      console.log(leftOffset);
-      if (driverBoundaryRightOffset.find((i) => i === leftOffset)) {
+      const meetPos = driverBoundaryRightOffset.findIndex(
+        (i) => i === leftOffset
+      );
+      console.log(meetPos);
+      if (meetPos >= 0) {
         setIsMoving(false);
+        setIsMeetObstacle(true);
+        setCurrentQuestion(round?.questions[meetPos]);
         return;
       }
       const intervalId = setInterval(
@@ -126,7 +125,7 @@ const Start = () => {
           <div>Point</div>
         </div>
       </section>
-      <h1>Round 01</h1>
+      <h1>Round {round?.name}</h1>
       <section>
         <span
           className={cx("driver")}
@@ -167,6 +166,20 @@ const Start = () => {
       <Button isPrimary={false} onClick={continueMove}>
         Continue
       </Button>
+      {isMeetObstacle && (
+        <div>
+          <div className={cx("modal")}></div>
+          {currentQuestion && (
+            <Question
+              question={currentQuestion}
+              onSubmit={() => {
+                setIsMeetObstacle(false);
+                continueMove();
+              }}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

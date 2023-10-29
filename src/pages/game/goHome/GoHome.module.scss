@@ -114,3 +114,59 @@ h1 {
     }
   }
 }
+
+.question {
+  &-wrapper {
+    width: 640px;
+    height: 360px;
+    background-color: var(--W);
+    border-radius: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 9;
+    text-align: center;
+    padding: 40px 120px;
+
+    .ques {
+      @include typo-heading-2;
+      margin: 0;
+    }
+
+    .option-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 42px;
+      .option {
+        @include typo-heading-3;
+        padding: 16px;
+        color: var(--O500);
+        background-color: #fff5dd;
+        width: 128px;
+        border-radius: 8px;
+      }
+    }
+
+    .btn-submit {
+      position: absolute;
+      right: 30px;
+      bottom: 24px;
+    }
+  }
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0.2;
+}
