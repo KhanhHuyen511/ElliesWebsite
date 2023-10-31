@@ -1,19 +1,35 @@
-import React from "react";
+import { useState } from "react";
 import style from "./GoHome.module.scss";
 import className from "classnames/bind";
 import { GameQuestion } from "../../../types";
 import { Button } from "../../../components";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
 const cx = className.bind(style);
 
 interface QuestionProps {
   question: GameQuestion;
-  onSubmit: () => void;
+  onSubmit?: (result: boolean) => void;
+  onSelect?: () => void;
 }
 
-const Question = ({ question, onSubmit }: QuestionProps) => {
+const Question = ({ question, onSubmit, onSelect }: QuestionProps) => {
+  const [selected, setSelected] = useState<number>();
+
   const handleSubmit = () => {
-    if (onSubmit) onSubmit();
+    if (selected && onSubmit) {
+      const result = selected.toString() === question.answer;
+
+      onSubmit(result);
+    } else {
+      toast.warning("Please select an option!");
+    }
+  };
+
+  const handleSelect = (index: number) => {
+    if (onSelect) onSelect();
+
+    if (index) setSelected((pre) => index);
   };
 
   return (
@@ -23,7 +39,13 @@ const Question = ({ question, onSubmit }: QuestionProps) => {
 
       <ul className={cx("option-wrapper")}>
         {question.options.map((option, index) => (
-          <li key={index} className={cx("option")}>
+          <li
+            key={index}
+            className={cx("option", { selected: selected === index + 1 })}
+            onClick={() => {
+              handleSelect(index + 1);
+            }}
+          >
             {option}
           </li>
         ))}

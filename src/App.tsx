@@ -39,6 +39,7 @@ import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
 import { DarkTheme } from "./theme/themes";
 import IndexPage from "./pages/game/IndexPage";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [userRole, setUserRole] = useState("student");
@@ -75,6 +76,7 @@ function App() {
           : {}
       }
     >
+      <ToastContainer />
       {userRole === "student" && (
         <BrowserRouter>
           <Header />

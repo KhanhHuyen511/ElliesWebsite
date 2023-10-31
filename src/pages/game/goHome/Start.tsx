@@ -27,28 +27,58 @@ const Start = () => {
   const [leftOffset, setLeftOffset] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
 
-  const driverBoundaryRightOffset = [-50, -80];
+  const driverBoundaryRightOffset = [-30, -40, -50, -60, -70, -80, -90];
 
   const [currentQuestion, setCurrentQuestion] = useState<any>();
   const [isMeetObstacle, setIsMeetObstacle] = useState(false);
 
+  const [results, setResults] = useState<boolean[]>();
+  const [isFinished, setIsFinished] = useState(false);
+  const [heart, setHeart] = useState<number>(3);
+
+  if (isFinished) {
+    console.log("finished!");
+  }
+
+  const handleHeart = (result: boolean) => {
+    if (result === false) {
+      setHeart((pre) => pre - 1);
+
+      if (heart === 0) {
+        setIsFinished(true);
+      }
+    } else
+      setResults((pre) => {
+        const temp = pre;
+        temp?.push(result);
+        return temp;
+      });
+  };
+
   useEffect(() => {
     if (isMoving) {
-      const meetPos = driverBoundaryRightOffset.findIndex(
-        (i) => i === leftOffset
-      );
-      console.log(meetPos);
-      if (meetPos >= 0) {
+      if (leftOffset < -90) {
         setIsMoving(false);
-        setIsMeetObstacle(true);
-        setCurrentQuestion(round?.questions[meetPos]);
+        setIsFinished(true);
+
+        console.log("results", results);
         return;
+      } else {
+        const meetPos = driverBoundaryRightOffset.findIndex(
+          (i) => i === leftOffset
+        );
+        if (meetPos >= 0) {
+          setIsMoving(false);
+          setIsMeetObstacle(true);
+          setCurrentQuestion(round?.questions[meetPos]);
+          return;
+        }
+        const intervalId = setInterval(
+          () => setLeftOffset((pre) => pre - 1),
+          100
+        );
+        return () => clearInterval(intervalId);
       }
-      const intervalId = setInterval(
-        () => setLeftOffset((pre) => pre - 1),
-        100
-      );
-      return () => clearInterval(intervalId);
     }
   }, [isMoving, leftOffset]);
 
@@ -82,11 +112,36 @@ const Start = () => {
 
   const obstacleList: OffsetType[] = [
     {
-      x: 50,
+      x: 30,
       y: 50,
     },
     {
+      x: 40,
+      y: 40,
+      height: 100,
+    },
+    {
+      x: 50,
+      y: 40,
+      height: 100,
+    },
+    {
+      x: 60,
+      y: 40,
+      height: 100,
+    },
+    {
+      x: 70,
+      y: 40,
+      height: 100,
+    },
+    {
       x: 80,
+      y: 40,
+      height: 100,
+    },
+    {
+      x: 90,
       y: 40,
       height: 100,
     },
@@ -118,9 +173,7 @@ const Start = () => {
         </div>
         <div>
           <div className={cx("heart-wrapper")}>
-            <HeartIcon width={32} height={32} />
-            <HeartIcon width={32} height={32} />
-            <HeartIcon width={32} height={32} />
+            {[...Array(heart).map((i) => <HeartIcon width={32} height={32} />)]}
           </div>
           <div>Point</div>
         </div>
@@ -172,9 +225,11 @@ const Start = () => {
           {currentQuestion && (
             <Question
               question={currentQuestion}
-              onSubmit={() => {
+              onSubmit={(r) => {
                 setIsMeetObstacle(false);
                 continueMove();
+
+                handleHeart(r);
               }}
             />
           )}

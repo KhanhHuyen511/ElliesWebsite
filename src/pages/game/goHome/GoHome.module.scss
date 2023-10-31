@@ -143,6 +143,7 @@ h1 {
       justify-content: center;
       gap: 32px;
       margin-top: 42px;
+
       .option {
         @include typo-heading-3;
         padding: 16px;
@@ -150,6 +151,12 @@ h1 {
         background-color: #fff5dd;
         width: 128px;
         border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .option.selected {
+        background: var(--Y500);
+        color: white;
       }
     }
 
