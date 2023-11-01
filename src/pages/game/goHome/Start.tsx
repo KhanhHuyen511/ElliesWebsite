@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import Question from "./Question";
@@ -32,36 +32,31 @@ const Start = () => {
   const [currentQuestion, setCurrentQuestion] = useState<any>();
   const [isMeetObstacle, setIsMeetObstacle] = useState(false);
 
-  const [results, setResults] = useState<boolean[]>();
+  const [right, setRight] = useState<boolean[]>();
   const [isFinished, setIsFinished] = useState(false);
   const [heart, setHeart] = useState<number>(3);
-
-  if (isFinished) {
-    console.log("finished!");
-  }
+  const [point, setPoint] = useState<number>(0);
 
   const handleHeart = (result: boolean) => {
     if (result === false) {
       setHeart((pre) => pre - 1);
 
-      if (heart === 0) {
+      if (heart === 1) {
         setIsFinished(true);
       }
-    } else
-      setResults((pre) => {
-        const temp = pre;
-        temp?.push(result);
-        return temp;
-      });
+    } else {
+      setRight((pre) => [...(pre ?? []).map((i) => i), result]);
+      setPoint((pre) => pre + 20);
+    }
   };
 
   useEffect(() => {
-    if (isMoving) {
+    if (!isFinished && isMoving) {
       if (leftOffset < -90) {
         setIsMoving(false);
         setIsFinished(true);
 
-        console.log("results", results);
+        console.log("right", right);
         return;
       } else {
         const meetPos = driverBoundaryRightOffset.findIndex(
@@ -86,7 +81,7 @@ const Start = () => {
   const [isDriverMovingUp, setIsDriverMovingUp] = useState(false);
 
   useEffect(() => {
-    if (isMoving) {
+    if (!isFinished && isMoving) {
       const intervalDriver = setInterval(
         () =>
           setDriverOffset((pre) => {
@@ -173,9 +168,11 @@ const Start = () => {
         </div>
         <div>
           <div className={cx("heart-wrapper")}>
-            {[...Array(heart).map((i) => <HeartIcon width={32} height={32} />)]}
+            {[...Array(heart)].map((i) => (
+              <HeartIcon width={32} height={32} />
+            ))}
           </div>
-          <div>Point</div>
+          <div>Point: {point}</div>
         </div>
       </section>
       <h1>Round {round?.name}</h1>
