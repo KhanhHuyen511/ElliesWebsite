@@ -8,11 +8,15 @@ import { Button } from "../../../components";
 import {
   ArrowLeftOnRectangleIcon,
   HeartIcon,
+  HomeIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 const Start = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigator = useNavigate();
 
   const round = useSelector((state: RootState) => state.game.currentRound);
 
@@ -27,7 +31,9 @@ const Start = () => {
   const [leftOffset, setLeftOffset] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
 
-  const driverBoundaryRightOffset = [-30, -40, -50, -60, -70, -80, -90];
+  const driverBoundaryRightOffset = [
+    -30, -40, -50, -60, -70, -80, -90, -100, -110, -120, -130,
+  ];
 
   const [currentQuestion, setCurrentQuestion] = useState<any>();
   const [isMeetObstacle, setIsMeetObstacle] = useState(false);
@@ -52,7 +58,7 @@ const Start = () => {
 
   useEffect(() => {
     if (!isFinished && isMoving) {
-      if (leftOffset < -90) {
+      if (leftOffset < driverBoundaryRightOffset[10]) {
         setIsMoving(false);
         setIsFinished(true);
 
@@ -113,32 +119,42 @@ const Start = () => {
     {
       x: 40,
       y: 40,
-      height: 100,
     },
     {
       x: 50,
       y: 40,
-      height: 100,
     },
     {
       x: 60,
       y: 40,
-      height: 100,
     },
     {
       x: 70,
       y: 40,
-      height: 100,
     },
     {
       x: 80,
       y: 40,
-      height: 100,
     },
     {
       x: 90,
       y: 40,
-      height: 100,
+    },
+    {
+      x: 100,
+      y: 40,
+    },
+    {
+      x: 110,
+      y: 40,
+    },
+    {
+      x: 120,
+      y: 40,
+    },
+    {
+      x: 130,
+      y: 40,
     },
   ];
 
@@ -190,9 +206,12 @@ const Start = () => {
         ref={homeWrapperRef}
         style={{ left: `calc(${leftOffset}% + 269px)` }}
       >
-        {[...Array(9)].map((i) => (
+        {[...Array(20)].map((i) => (
           <div className={cx("bg-home-item")} />
         ))}
+        <div className={cx("end-home")}>
+          <img src="/images/game/house-small.png" alt="" />
+        </div>
       </div>
       <div
         className={cx("obstacles")}
@@ -230,6 +249,37 @@ const Start = () => {
               }}
             />
           )}
+        </div>
+      )}
+      {isFinished && (
+        <div className={cx("result-wrapper")}>
+          <div className={cx("content")}>
+            <div className={cx("left")}>
+              <span className={cx("result-title")}>
+                You {heart > 0 ? "win" : "lose"}!!
+              </span>
+              <div className={cx("stars")}>
+                {[...Array((point / 60).toFixed(0))].map((i) => (
+                  <StarIcon
+                    width={36}
+                    height={36}
+                    fill="var(--Y500)"
+                    color="transparent"
+                  />
+                ))}
+              </div>
+            </div>
+            <div className={cx("right")}>
+              <HomeIcon
+                width={36}
+                height={36}
+                onClick={() => navigator("./../result")}
+              />
+              <Button isPrimary onClick={() => {}} haveIcon>
+                Next
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>
