@@ -228,4 +228,5 @@ export interface UserGameRound {
   gameRoundId: string;
   listUserGameCard: UserGameCard[];
   totalPoint: number;
+  rightCount: number;
 }
