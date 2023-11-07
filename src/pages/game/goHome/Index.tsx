@@ -11,12 +11,14 @@ const cx = classNames.bind(style);
 
 const Index = () => {
   const rounds = useSelector((state: RootState) => state.game.rounds);
+  const userID = useSelector((state: RootState) => state.auth.userID);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigator = useNavigate();
 
   useEffect(() => {
-    dispatch(getAllGameRounds("Go home!"));
+    if (userID)
+      dispatch(getAllGameRounds({ nameOfGame: "Go home!", userID: userID }));
   }, []);
 
   return (
