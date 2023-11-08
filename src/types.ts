@@ -216,10 +216,8 @@ export interface GameQuestion {
 
 export interface UserGameCard {
   id: string;
-  userId: string;
-  gameQuestionId: string;
+  gameQuestion: GameQuestion;
   isRight: boolean;
-  point: number;
 }
 
 export interface UserGameRound {

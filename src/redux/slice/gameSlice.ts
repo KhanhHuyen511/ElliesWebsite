@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { GameRound, UserGameRound } from "../../types";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -90,19 +91,11 @@ export const getAGameRound = createAsyncThunk(
 
 export const setAUserGameRound = createAsyncThunk(
   "game/round/set_user",
-  async ({ nameOfGame, id }: { nameOfGame: string; id: string }) => {
-    const q = query(collection(db, "game"), where("name", "==", "Go home!"));
+  async (data: UserGameRound) => {
+    console.log("in:", data);
+    await addDoc(collection(db, "user_game_rounds"), data);
 
-    const querySnapshot = (await getDocs(q)).docs[0].id;
-
-    const roundSnapshot = await getDoc(
-      doc(db, "game", querySnapshot, "rounds", id)
-    );
-
-    const item = roundSnapshot.data() as GameRound;
-    item.id = roundSnapshot.id;
-
-    return item;
+    // return data;
   }
 );
 

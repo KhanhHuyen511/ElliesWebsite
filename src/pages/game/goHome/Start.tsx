@@ -12,6 +12,8 @@ import {
   StarIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { setAUserGameRound } from "../../../redux/slice/gameSlice";
+import { UserGameCard } from "../../../types";
 const cx = classNames.bind(styles);
 
 const Start = () => {
@@ -19,6 +21,7 @@ const Start = () => {
   const navigator = useNavigate();
 
   const round = useSelector((state: RootState) => state.game.currentRound);
+  const userID = useSelector((state: RootState) => state.auth.userID);
 
   useEffect(() => {
     setIsMoving(true);
@@ -43,16 +46,38 @@ const Start = () => {
   const [heart, setHeart] = useState<number>(3);
   const [point, setPoint] = useState<number>(0);
 
+  const handleSaveResult = () => {
+    console.log("in");
+    if (userID && round?.id && right)
+      dispatch(
+        setAUserGameRound({
+          id: "",
+          userId: userID,
+          gameRoundId: round?.id,
+          listUserGameCard: right.map((i, index) => {
+            return {
+              id: "",
+              gameQuestionId: round.questions[index],
+              isRight: i,
+            } as unknown as UserGameCard;
+          }),
+
+          totalPoint: point,
+          rightCount: right?.length ? right.length : 0,
+        })
+      );
+  };
+
   const handleHeart = (result: boolean) => {
     if (result === false) {
       setHeart((pre) => pre - 1);
-
-      if (heart === 1) {
-        setIsFinished(true);
-      }
     } else {
-      setRight((pre) => [...(pre ?? []).map((i) => i), result]);
       setPoint((pre) => pre + 20);
+    }
+    setRight((pre) => [...(pre ?? []).map((i) => i), result]);
+    if (heart === 1) {
+      setIsFinished(true);
+      handleSaveResult();
     }
   };
 
@@ -61,8 +86,8 @@ const Start = () => {
       if (leftOffset < driverBoundaryRightOffset[10]) {
         setIsMoving(false);
         setIsFinished(true);
+        handleSaveResult();
 
-        console.log("right", right);
         return;
       } else {
         const meetPos = driverBoundaryRightOffset.findIndex(
