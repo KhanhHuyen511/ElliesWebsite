@@ -12,7 +12,10 @@ import {
   StarIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-import { setAUserGameRound } from "../../../redux/slice/gameSlice";
+import {
+  setAUserGameRound,
+  setPointUser,
+} from "../../../redux/slice/gameSlice";
 import { UserGameCard } from "../../../types";
 const cx = classNames.bind(styles);
 
@@ -45,9 +48,10 @@ const Start = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [heart, setHeart] = useState<number>(3);
   const [point, setPoint] = useState<number>(0);
+  const [result, setResult] = useState<"win" | "lose">();
 
   const handleSaveResult = () => {
-    if (userID && round?.id)
+    if (userID && round?.id) {
       dispatch(
         setAUserGameRound({
           id: "",
@@ -65,6 +69,9 @@ const Start = () => {
           rightCount: right.filter((item) => item === true).length,
         })
       );
+
+      if (result === "win") dispatch(setPointUser({ userID, point }));
+    }
   };
 
   const handleHeart = (result: boolean) => {
@@ -72,6 +79,7 @@ const Start = () => {
       setHeart((pre) => pre - 1);
       if (heart === 1) {
         setIsFinished(true);
+        setResult("lose");
         handleSaveResult();
       }
     } else {
@@ -88,6 +96,7 @@ const Start = () => {
       if (leftOffset < driverBoundaryRightOffset[10]) {
         setIsMoving(false);
         setIsFinished(true);
+        setResult("win");
         handleSaveResult();
 
         return;
@@ -282,9 +291,7 @@ const Start = () => {
         <div className={cx("result-wrapper")}>
           <div className={cx("content")}>
             <div className={cx("left")}>
-              <span className={cx("result-title")}>
-                You {heart > 0 ? "win" : "lose"}!!
-              </span>
+              <span className={cx("result-title")}>You {result}!!</span>
               <div className={cx("stars")}>
                 {[...Array((point / 60).toFixed(0))].map((i) => (
                   <StarIcon

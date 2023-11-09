@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { GameRound, UserGameRound } from "../../types";
+import { GameRound, Student, UserGameRound } from "../../types";
 import {
   addDoc,
   collection,
@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
@@ -96,6 +97,23 @@ export const setAUserGameRound = createAsyncThunk(
     await addDoc(collection(db, "user_game_rounds"), data);
 
     return data;
+  }
+);
+
+export const setPointUser = createAsyncThunk(
+  "game/round/set_point_user",
+  async ({ userID, point }: { userID: string; point: number }) => {
+    console.log("in");
+
+    const userQ = query(collection(db, "students"), where("id", "==", userID));
+    const userSnapshot = (await getDocs(userQ)).docs[0];
+    const user = userSnapshot.data() as Student;
+
+    if (user) {
+      await updateDoc(doc(db, "students", userSnapshot.id), {
+        point: user.point + point,
+      });
+    }
   }
 );
 
