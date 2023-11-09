@@ -41,14 +41,13 @@ const Start = () => {
   const [currentQuestion, setCurrentQuestion] = useState<any>();
   const [isMeetObstacle, setIsMeetObstacle] = useState(false);
 
-  const [right, setRight] = useState<boolean[]>();
+  const [right, setRight] = useState<boolean[]>([]);
   const [isFinished, setIsFinished] = useState(false);
   const [heart, setHeart] = useState<number>(3);
   const [point, setPoint] = useState<number>(0);
 
   const handleSaveResult = () => {
-    console.log("in");
-    if (userID && round?.id && right)
+    if (userID && round?.id)
       dispatch(
         setAUserGameRound({
           id: "",
@@ -63,7 +62,7 @@ const Start = () => {
           }),
 
           totalPoint: point,
-          rightCount: right?.length ? right.length : 0,
+          rightCount: right.filter((item) => item === true).length,
         })
       );
   };
@@ -71,14 +70,17 @@ const Start = () => {
   const handleHeart = (result: boolean) => {
     if (result === false) {
       setHeart((pre) => pre - 1);
+      if (heart === 1) {
+        setIsFinished(true);
+        handleSaveResult();
+      }
     } else {
       setPoint((pre) => pre + 20);
     }
-    setRight((pre) => [...(pre ?? []).map((i) => i), result]);
-    if (heart === 1) {
-      setIsFinished(true);
-      handleSaveResult();
-    }
+    setRight((pre) => {
+      pre.push(result);
+      return pre;
+    });
   };
 
   useEffect(() => {

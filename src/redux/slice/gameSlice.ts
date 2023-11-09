@@ -14,6 +14,7 @@ import { db } from "../../firebase/config";
 interface types {
   rounds?: GameRound[];
   currentRound?: GameRound;
+  userGameRound?: UserGameRound;
 }
 
 const initialState: types = {
@@ -92,10 +93,9 @@ export const getAGameRound = createAsyncThunk(
 export const setAUserGameRound = createAsyncThunk(
   "game/round/set_user",
   async (data: UserGameRound) => {
-    console.log("in:", data);
     await addDoc(collection(db, "user_game_rounds"), data);
 
-    // return data;
+    return data;
   }
 );
 
@@ -109,6 +109,9 @@ const gameSlice = createSlice({
     });
     builder.addCase(getAGameRound.fulfilled, (state, action) => {
       state.currentRound = action.payload;
+    });
+    builder.addCase(setAUserGameRound.fulfilled, (state, action) => {
+      state.userGameRound = action.payload;
     });
   },
 });
