@@ -284,6 +284,13 @@ h1 {
     color: var(--G050);
   }
 
+  .theme-icon-wrapper,
+  .heart-wrapper,
+  .point-wrapper,
+  .logout-button {
+    z-index: 9;
+  }
+
   .theme-icon {
     fill: var(--G050);
     stroke: none;

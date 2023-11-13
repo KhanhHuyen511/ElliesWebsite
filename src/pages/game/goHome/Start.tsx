@@ -207,6 +207,10 @@ const Start = () => {
     setIsMoving(!isMoving);
   };
 
+  const changeTheme = () => {
+    setIsDarkTheme((pre) => !pre);
+  };
+
   return (
     <div className={cx("stage", isDarkTheme && "dark")}>
       <section className={cx("header")}>
@@ -220,11 +224,13 @@ const Start = () => {
           >
             <ArrowLeftOnRectangleIcon width={24} height={24} />
           </Button>
-          {isDarkTheme ? (
-            <MoonIcon className={cx("theme-icon")} />
-          ) : (
-            <SunIcon className={cx("theme-icon")} />
-          )}
+          <span className={cx("theme-icon-wrapper")} onClick={changeTheme}>
+            {isDarkTheme ? (
+              <MoonIcon className={cx("theme-icon")} />
+            ) : (
+              <SunIcon className={cx("theme-icon")} />
+            )}
+          </span>
         </div>
         <div>
           <div className={cx("heart-wrapper")}>
@@ -232,7 +238,7 @@ const Start = () => {
               <HeartIcon width={32} height={32} className={cx("heart-icon")} />
             ))}
           </div>
-          <div>Point: {point}</div>
+          <div className={cx("point-wrapper")}>Point: {point}</div>
         </div>
       </section>
       <h1>Round {round?.name}</h1>
