@@ -9,7 +9,9 @@ import {
   ArrowLeftOnRectangleIcon,
   HeartIcon,
   HomeIcon,
+  MoonIcon,
   StarIcon,
+  SunIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import {
@@ -33,6 +35,8 @@ const Start = () => {
   const homeWrapperRef = useRef<HTMLDivElement>(null);
   const driverRef = useRef<HTMLSpanElement>(null);
   const obstacleWrapperRef = useRef(null);
+
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
 
   const [leftOffset, setLeftOffset] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
@@ -204,7 +208,7 @@ const Start = () => {
   };
 
   return (
-    <div className={cx("stage")}>
+    <div className={cx("stage", isDarkTheme && "dark")}>
       <section className={cx("header")}>
         <div>
           <Button
@@ -216,12 +220,16 @@ const Start = () => {
           >
             <ArrowLeftOnRectangleIcon width={24} height={24} />
           </Button>
-          theme
+          {isDarkTheme ? (
+            <MoonIcon className={cx("theme-icon")} />
+          ) : (
+            <SunIcon className={cx("theme-icon")} />
+          )}
         </div>
         <div>
           <div className={cx("heart-wrapper")}>
             {[...Array(heart)].map((i) => (
-              <HeartIcon width={32} height={32} />
+              <HeartIcon width={32} height={32} className={cx("heart-icon")} />
             ))}
           </div>
           <div>Point: {point}</div>
@@ -265,12 +273,12 @@ const Start = () => {
           />
         ))}
       </div>
-      <Button isPrimary={false} onClick={pauseMove}>
+      {/* <Button isPrimary={false} onClick={pauseMove}>
         Pause
       </Button>
       <Button isPrimary={false} onClick={continueMove}>
         Continue
-      </Button>
+      </Button> */}
       {isMeetObstacle && (
         <div>
           <div className={cx("modal")}></div>
