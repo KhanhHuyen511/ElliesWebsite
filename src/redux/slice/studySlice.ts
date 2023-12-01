@@ -177,25 +177,9 @@ export const setStudyPathForStudent = createAsyncThunk(
     const querySnapshot = (await getDocs(q)).docs[0];
 
     if (querySnapshot) {
-      let levelVN = "";
-
-      switch (data.level) {
-        case LevelType.Beginner:
-          levelVN = "Sơ cấp";
-          break;
-        case LevelType.Intermediate:
-          levelVN = "Trung cấp";
-          break;
-        case LevelType.Advanced:
-          levelVN = "Nâng cao";
-          break;
-        default:
-          break;
-      }
-
       const q1 = query(
         collection(db, "study_paths"),
-        where("level", "==", levelVN)
+        where("level", "==", data.level)
       );
       const querySnapshots = (await getDocs(q1)).docs[0];
       await updateDoc(querySnapshot.ref, {
