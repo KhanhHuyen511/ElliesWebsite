@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LevelType } from "../../types";
 import { Button } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { setStudyPathForStudent } from "../../redux/slice/studySlice";
+import {
+  getListTopicByLevel,
+  setStudyPathForStudent,
+} from "../../redux/slice/studySlice";
 import { useNavigate } from "react-router-dom";
 import style from "./ChooseRoute.module.scss";
 import classNames from "classnames/bind";
@@ -14,21 +17,22 @@ const ChooseRoute = ({ level }: { level: LevelType }) => {
 
   const [newLevel, setNewLevel] = useState<LevelType>(LevelType.Beginner);
   const [choose, setChoose] = useState<string>("accept");
+  const [listTopic, setListTopic] = useState<string[]>([]);
+  const [newListTopic, setNewListTopic] = useState<string[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const getLevelVN = (level: LevelType) => {
-    switch (level) {
-      case LevelType.Beginner:
-        return "sơ cấp";
-      case LevelType.Intermediate:
-        return "trung cấp";
-      case LevelType.Advanced:
-        return "nâng cao";
-      default:
-        break;
-    }
+  useEffect(() => {
+    dispatch(getListTopicByLevel(level)).then((data) => {
+      setListTopic(data.payload as string[]);
+    });
+  }, [level, dispatch]);
+
+  const getNewListTopic = (level: number) => {
+    dispatch(getListTopicByLevel(level)).then((data) => {
+      setNewListTopic(data.payload as string[]);
+    });
   };
 
   return (
@@ -44,9 +48,7 @@ const ChooseRoute = ({ level }: { level: LevelType }) => {
           Chúng tôi gợi ý cho bạn lộ trình học theo chủ đề như sau:
         </p>
         <ul className={cx("rec-list")}>
-          <li>Giới thiệu {getLevelVN(level)}</li>
-          <li>Nghề nghiệp {getLevelVN(level)}</li>
-          <li>Thói quen {getLevelVN(level)}</li>
+          {listTopic.length > 0 && listTopic.map((topic) => <li>{topic}</li>)}
         </ul>
         <br></br>
         <p className={cx("sub-title")}>
@@ -69,16 +71,18 @@ const ChooseRoute = ({ level }: { level: LevelType }) => {
           value={newLevel}
           disabled={choose === "accept"}
           onChange={(e) => {
-            console.log(e.target.value);
             switch (e.target.value) {
               case LevelType.Beginner.toString():
                 setNewLevel(LevelType.Beginner);
+                getNewListTopic(LevelType.Beginner);
                 break;
               case LevelType.Intermediate.toString():
                 setNewLevel(LevelType.Intermediate);
+                getNewListTopic(LevelType.Intermediate);
                 break;
               case LevelType.Advanced.toString():
                 setNewLevel(LevelType.Advanced);
+                getNewListTopic(LevelType.Advanced);
                 break;
               default:
                 break;
@@ -95,9 +99,8 @@ const ChooseRoute = ({ level }: { level: LevelType }) => {
               Chúng tôi gợi ý cho bạn lộ trình học theo chủ đề như sau:
             </p>
             <ul className={cx("rec-list")}>
-              <li>Giới thiệu {getLevelVN(newLevel)}</li>
-              <li>Nghề nghiệp {getLevelVN(newLevel)}</li>
-              <li>Thói quen {getLevelVN(newLevel)}</li>
+              {newListTopic.length > 0 &&
+                newListTopic.map((topic) => <li>{topic}</li>)}
             </ul>
           </>
         )}
