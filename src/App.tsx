@@ -21,6 +21,7 @@ import {
   GoHome,
   GoHomeDetail,
   GoHomeStart,
+  GoHomeResult,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -110,6 +111,7 @@ function App() {
             <Route path="/go_home" element={<GoHome />} />
             <Route path="/go_home/:id" element={<GoHomeDetail />} />
             <Route path="/go_home/:id/start" element={<GoHomeStart />} />
+            <Route path="/go_home/:id/result" element={<GoHomeResult />} />
           </Routes>
         </BrowserRouter>
       )}

@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import style from "./Leaderboard.module.scss";
 import classNames from "classnames/bind";
 import { RankItem } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import {
-  getAllStudents,
-  getAllStudentsAscendByPoint,
-} from "../../redux/slice/adminSlice";
-import { Student } from "../../types";
+import { getAllStudentsAscendByPoint } from "../../redux/slice/adminSlice";
 const cx = classNames.bind(style);
 
 const Leaderboard = () => {
