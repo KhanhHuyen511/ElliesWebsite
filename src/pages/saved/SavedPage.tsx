@@ -24,11 +24,8 @@ const SavedPage = () => {
   const [searchSubmit, setSearchSubmit] = useState(false);
   const [searchList, setSearchList] = useState<StudyCard[]>();
 
-  const [filter, setFilter] = useState("All");
-
   useEffect(() => {
     if (userID) dispatch(getAllSaved(userID));
-    console.log("render");
   }, [userID, dispatch]);
 
   const getSavedList = () => {
@@ -110,34 +107,9 @@ const SavedPage = () => {
             </Button>
           </div>
 
-          <ul className={cx("search-list")}>
-            <li
-              className={cx("item", { "is-active": filter === "All" })}
-              onClick={() => {
-                setFilter("All");
-              }}
-            >
-              All
-            </li>
-            <li
-              className={cx("item", { "is-active": filter === "Word" })}
-              onClick={() => {
-                setFilter("Word");
-              }}
-            >
-              Word
-            </li>
-            <li
-              className={cx("item", { "is-active": filter === "Sentence" })}
-              onClick={() => {
-                setFilter("Sentence");
-              }}
-            >
-              Sentence
-            </li>
-          </ul>
-
-          <ul className={cx("saved-list")}>{getSavedList()}</ul>
+          {savedList && savedList.length > 0 && (
+            <ul className={cx("saved-list")}>{getSavedList()}</ul>
+          )}
         </Col>
       </div>
     </>
