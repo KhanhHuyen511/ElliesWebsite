@@ -190,6 +190,19 @@ export const setStudyPathForStudent = createAsyncThunk(
   }
 );
 
+export const getListTopicByLevel = createAsyncThunk(
+  "study/get_list_topic_by_level",
+  async (level: number) => {
+    const q = query(collection(db, "study_paths"), where("level", "==", level));
+
+    const listTopic: string[] = (await getDocs(q)).docs.map(
+      (item) => item.data().topic
+    );
+
+    return listTopic || [];
+  }
+);
+
 // Write reducer set check in today
 export const setCheckInToday = createAsyncThunk(
   "study/setCheckIn",
