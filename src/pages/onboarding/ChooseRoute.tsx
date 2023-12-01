@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { LevelType } from "../../types";
 import { Button } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
@@ -108,7 +108,6 @@ const ChooseRoute = ({ level }: { level: LevelType }) => {
         isPrimary
         isDisabled={choose === undefined}
         onClick={() => {
-          // set study path
           if (choose === "accept") {
             dispatch(setStudyPathForStudent({ userID, level })).then(() =>
               navigate("/")
