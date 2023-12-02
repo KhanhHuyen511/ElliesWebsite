@@ -26,8 +26,6 @@ const PersonalBlogManage = () => {
   const list = useSelector((state: RootState) => state.forum.listUserBlogs);
   const [tabList, setTabList] = useState(initialTabList);
 
-  console.log(list);
-
   useEffect(() => {
     if (userID)
       dispatch(getListBlogsByUserId(userID)).then(() => {

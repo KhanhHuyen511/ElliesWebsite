@@ -81,7 +81,7 @@ const Forum = () => {
             </ul>
           </>
         ) : (
-          <PersonalBlogManage></PersonalBlogManage>
+          <PersonalBlogManage />
         )}
       </div>
     </>
