@@ -1041,13 +1041,9 @@ export const getAllStudentsAscendByPoint = createAsyncThunk(
 export const updateAStudent = createAsyncThunk(
   "admin/users/update_a_user",
   async ({ data, oldData }: { data: Student; oldData: Student }) => {
-    console.log("hi");
-
     if (data.id) {
       const q = query(collection(db, "students"), where("id", "==", data.id));
       const user = (await getDocs(q)).docs[0];
-
-      console.log(data);
 
       await updateDoc(user.ref, {
         name:
@@ -1058,12 +1054,13 @@ export const updateAStudent = createAsyncThunk(
           data.gender !== null && data.gender !== oldData.gender?.toString()
             ? (data.gender as Gender)
             : (oldData.gender as Gender),
-        birthday:
-          data.birthday !== null && data.birthday !== oldData.birthday
-            ? data.birthday
-            : oldData.birthday,
         bio: data.bio !== oldData.bio ? data.bio : oldData.bio,
       });
+
+      if (data.birthday && data.birthday !== oldData.birthday)
+        await updateDoc(user.ref, {
+          birthday: data.birthday,
+        });
     }
   }
 );
