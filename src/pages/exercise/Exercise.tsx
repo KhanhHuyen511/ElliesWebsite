@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Col } from "react-flexbox-grid";
 import styles from "./Exercise.module.scss";
 import classNames from "classnames/bind";
@@ -11,23 +11,27 @@ import {
   getListUserExs,
 } from "../../redux/slice/exSlice";
 import { useNavigate } from "react-router-dom";
-import { Ex, ExState, UserEx } from "../../types";
+import { Ex, ExAgain, ExState, UserEx } from "../../types";
 import { getTimes } from "../../utils/utils";
 const cx = classNames.bind(styles);
 
 const Exercise = () => {
   const userExs = useSelector((state: RootState) => state.ex.listUserExs);
   const exs = useSelector((state: RootState) => state.ex.listExs);
-  const exAgain = useSelector((state: RootState) => state.ex.currentExAgain);
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const userID = useSelector((state: RootState) => state.auth.userID) || "";
 
+  const [exAgain, setExAgain] = useState<ExAgain>();
+
   useEffect(() => {
     dispatch(getListUserExs(userID));
     dispatch(getListExsByLevel(userID));
-    dispatch(getExAgain(userID));
+    dispatch(getExAgain(userID)).then((data) => {
+      setExAgain(data.payload as ExAgain);
+    });
   }, [dispatch, userID]);
 
   const checkUserExs = (item: Ex) => {
@@ -42,7 +46,6 @@ const Exercise = () => {
       const itemState = lastItem.state;
 
       if (itemState !== undefined) {
-        console.log(itemState);
         return itemState;
       }
     }
