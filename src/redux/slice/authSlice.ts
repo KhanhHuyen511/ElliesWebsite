@@ -1,19 +1,26 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addDoc, collection, doc, query, setDoc, where } from 'firebase/firestore';
-import { db } from '../../firebase/config';
-import { RootState } from '../store';
-import { stat } from 'fs';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  addDoc,
+  collection,
+  doc,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase/config";
+import { RootState } from "../store";
+import { stat } from "fs";
 
 const initialState = {
   isLoggedIn: false,
   email: null,
   userName: null,
   userID: null,
-  userRole: null || '',
+  userRole: null || "",
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     SET_ACTIVE_USER: (state, action) => {
@@ -29,7 +36,7 @@ const authSlice = createSlice({
       state.email = null;
       state.userName = null;
       state.userID = null;
-      state.userRole = null || '';
+      state.userRole = null || "";
     },
   },
 });
