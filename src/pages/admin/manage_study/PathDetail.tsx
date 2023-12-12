@@ -32,9 +32,6 @@ const PathDetail = () => {
     (state: RootState) => state.admin.currentStudyRoute
   );
 
-  // let { current: listRoutes } = useRef(data.studyRoutes);
-  // const hihi = useRef(listRoutes);
-
   useEffect(() => {
     if (id) dispatch(getStudyPath(id));
     setName(data.name);
@@ -61,34 +58,34 @@ const PathDetail = () => {
       <Row>
         <Col md={6}>
           <form>
-            <p className={cx("form-title")}>Chi tiết lộ trình học</p>
+            <p className={cx("form-title")}>Path {data.name}</p>
             <div className={cx("form-body")}>
               <Input
-                label="Tên"
+                label="Name"
                 type="text"
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                placeholder="abc"
+                placeholder="fill name"
               />
               <Input
-                label="Chủ đề"
+                label="Topic"
                 type="text"
                 value={topic}
                 onChange={(e) => {
                   setTopic(e.target.value);
                 }}
-                placeholder="abc"
+                placeholder="fill topic"
               />
               <Input
-                label="Cấp độ"
+                label="Level"
                 type="text"
                 value={level}
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
-                placeholder="abc"
+                placeholder="fill level"
               />
             </div>
             <Button
@@ -99,7 +96,7 @@ const PathDetail = () => {
               }}
               className={cx("submit-btn")}
             >
-              Cập nhật
+              Update
             </Button>
             <div>
               <div className={cx("handler", "list")}>
@@ -110,7 +107,7 @@ const PathDetail = () => {
                     setIsOpenRouteForm(true);
                   }}
                 >
-                  Thêm chặng
+                  Add route
                 </Button>
                 <Button
                   isPrimary={false}
@@ -123,7 +120,7 @@ const PathDetail = () => {
                   }}
                   preventDefault
                 >
-                  Xem chặng
+                  View
                 </Button>
                 <Button
                   isPrimary={false}
@@ -136,7 +133,7 @@ const PathDetail = () => {
                   }}
                   preventDefault
                 >
-                  Chỉnh sửa chặng
+                  Edit
                 </Button>
                 <Button
                   isPrimary={false}
@@ -145,7 +142,7 @@ const PathDetail = () => {
                   }}
                   preventDefault
                 >
-                  Xóa chặng
+                  Delete
                 </Button>
               </div>
               <table className={cx("table")}>
@@ -153,9 +150,8 @@ const PathDetail = () => {
                   <tr>
                     <th></th>
                     <th>STT</th>
-                    <th>Tên</th>
-                    <th>Số từ/câu</th>
-                    {/* <th>Số câu</th> */}
+                    <th>Name</th>
+                    <th>Count word/sentence</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -171,7 +167,6 @@ const PathDetail = () => {
                       <td>{index + 1}</td>
                       <td>{item.name}</td>
                       <td>{item.cards?.length}</td>
-                      {/* <td>{item.sentences?.length}</td> */}
                     </tr>
                   ))}
                 </tbody>
@@ -181,7 +176,7 @@ const PathDetail = () => {
         </Col>
         <Col md={6}>
           <>
-            <p className={cx("form-title")}>Chi tiết chặng</p>
+            <p className={cx("form-title")}>Route {currentRoute.name}</p>
             <div className={cx("handler", "list")}>
               <Button
                 isPrimary={false}
@@ -190,7 +185,7 @@ const PathDetail = () => {
                   setIsOpenCardForm(true);
                 }}
               >
-                Thêm câu
+                Add sentence
               </Button>
               <Button
                 isPrimary={false}
@@ -199,7 +194,7 @@ const PathDetail = () => {
                 }}
                 preventDefault
               >
-                Xóa câu
+                Delete
               </Button>
             </div>
             <table className={cx("table")}>
@@ -207,8 +202,8 @@ const PathDetail = () => {
                 <tr>
                   <th></th>
                   <th>STT</th>
-                  <th>Tên</th>
-                  <th>Nghĩa</th>
+                  <th>Name</th>
+                  <th>Meaning</th>
                 </tr>
               </thead>
               <tbody>
@@ -232,7 +227,7 @@ const PathDetail = () => {
         </Col>
       </Row>
 
-      {id && (
+      {id && isOpenRouteForm && (
         <CreateRouteForm
           isDisplay={isOpenRouteForm}
           pathID={id}
@@ -242,7 +237,7 @@ const PathDetail = () => {
         />
       )}
 
-      {id && selectRoute?.id && (
+      {id && selectRoute?.id && isOpenEditRouteForm && (
         <EditRouteForm
           pathID={id}
           id={selectRoute.id}
@@ -253,7 +248,7 @@ const PathDetail = () => {
         />
       )}
 
-      {id && selectRoute?.id && (
+      {id && selectRoute?.id && isOpenCardForm && (
         <CreateStudyCard
           pathID={id}
           routeID={selectRoute.id}

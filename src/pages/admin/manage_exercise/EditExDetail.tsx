@@ -69,8 +69,8 @@ const EditExDetail = ({
             <table className={cx("table")}>
               <thead>
                 <tr>
-                  <th>Từ vựng</th>
-                  <th>Nghĩa</th>
+                  <th>Display</th>
+                  <th>Meaning</th>
                 </tr>
               </thead>
               <tbody>
@@ -84,7 +84,7 @@ const EditExDetail = ({
           <Col md={6}>
             {type == GameType.FillInSentence && (
               <Input
-                label={"Nhập từ khoá"}
+                label="Keyword"
                 value={keyWord}
                 placeholder={""}
                 onChange={(e) => {
@@ -97,42 +97,42 @@ const EditExDetail = ({
               <>
                 {" "}
                 <Input
-                  label={"Sự lựa chọn 1"}
+                  label="Option 1"
                   value={option1}
-                  placeholder={"abc"}
+                  placeholder={""}
                   onChange={(e) => {
                     setOption1(e.target.value);
                   }}
                   isRequired
                 ></Input>
                 <Input
-                  label={"Sự lựa chọn 2"}
+                  label="Option 2"
                   value={option2}
-                  placeholder={"abc"}
+                  placeholder={""}
                   onChange={(e) => {
                     setOption2(e.target.value);
                   }}
                 ></Input>
                 <Input
-                  label={"Sự lựa chọn 3"}
+                  label="Option 3"
                   value={option3}
-                  placeholder={"abc"}
+                  placeholder={""}
                   onChange={(e) => {
                     setOption3(e.target.value);
                   }}
                 ></Input>
                 <Input
-                  label={"Sự lựa chọn 4"}
+                  label="Option 4"
                   value={option4}
-                  placeholder={"abc"}
+                  placeholder={""}
                   onChange={(e) => {
                     setOption4(e.target.value);
                   }}
                 ></Input>
                 <Input
-                  label={"Đáp án đúng"}
+                  label="Answer"
                   value={answer}
-                  placeholder={"abc"}
+                  placeholder={""}
                   onChange={(e) => {
                     setAnswer(e.target.value);
                   }}

@@ -1,59 +1,67 @@
-import React, { useState } from "react";
 import { Input, Popup } from "../../../components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { setExercise } from "../../../redux/slice/adminSlice";
 import { LevelType } from "../../../types";
+import { useForm } from "react-hook-form";
 
 interface Props {
   classNames?: string;
   onClose: () => void;
+  onReload?: () => void;
   isDisplay: boolean;
 }
 
 const CreateExForm = (props: Props) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [level, setLevel] = useState<LevelType>(LevelType.Beginner);
+  const { register, handleSubmit, reset, getValues, setValue } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+      level: LevelType.Beginner,
+    },
+  });
+
+  const onSubmit = async () => {
+    await dispatch(
+      setExercise({
+        data: {
+          id: "",
+          title: getValues("title"),
+          description: getValues("description"),
+          level: getValues("level"),
+        },
+      })
+    );
+
+    reset();
+  };
 
   return (
     <>
       <Popup
-        title={"Tạo bài luyện tập mới"}
-        classNames={""}
+        title={"Create new exercise"}
         onClose={props.onClose}
-        onSubmit={() => {
-          dispatch(
-            setExercise({ data: { id: "", title, description, level } })
-          );
-        }}
+        onSubmit={handleSubmit(onSubmit)}
         isDisplay={props.isDisplay}
       >
         <Input
           type="text"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-          label={"Chủ đề"}
-          placeholder={"abc"}
+          label="Topic"
+          placeholder={"fill topic"}
+          register={register("title")}
         ></Input>
         <Input
           type="text"
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-          label={"Mô tả"}
-          placeholder={"abc"}
+          label="Description"
+          placeholder={"fill description"}
+          register={register("description")}
         />
         <select
-          defaultValue={level}
-          // className={cx("filter-type")}
+          defaultValue={getValues("level")}
           onChange={(e) => {
-            setLevel(e.target.value as unknown as LevelType);
+            setValue("level", e.target.value as unknown as LevelType);
           }}
         >
           <option value={LevelType.Beginner}>{LevelType[0]}</option>

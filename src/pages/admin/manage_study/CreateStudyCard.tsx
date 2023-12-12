@@ -41,25 +41,27 @@ const CreateStudyCard = (props: Props) => {
     dispatch(
       getDocCardWithTopic({ topic: props.topic, type: StudyCardType.Sentence })
     );
-  }, [dispatch]);
+  }, [dispatch, props.topic]);
+
+  const onSubmit = () => {
+    if (selectedItem?.id) {
+      dispatch(
+        setStudyCard({
+          path_id: props.pathID,
+          route_id: props.routeID,
+          card: selectedItem,
+        })
+      );
+    }
+  };
 
   return (
     <>
       <Popup
-        title={"Tạo câu mới"}
+        title={"Create new sentence"}
         classNames={""}
         onClose={props.onClose}
-        onSubmit={() => {
-          if (selectedItem?.id) {
-            dispatch(
-              setStudyCard({
-                path_id: props.pathID,
-                route_id: props.routeID,
-                card: selectedItem,
-              })
-            );
-          }
-        }}
+        onSubmit={onSubmit}
         isDisplay={props.isDisplay}
       >
         <Row>
@@ -69,8 +71,8 @@ const CreateStudyCard = (props: Props) => {
                 <tr>
                   <th></th>
                   <th>STT</th>
-                  <th>Từ vựng</th>
-                  <th>Nghĩa</th>
+                  <th>Vocab</th>
+                  <th>Meaning</th>
                 </tr>
               </thead>
               <tbody>

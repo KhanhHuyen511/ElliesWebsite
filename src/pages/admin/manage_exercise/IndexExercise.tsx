@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./IndexExercise.module.scss";
 import classNames from "classnames/bind";
-import { Button, CategoryPanel, Checkbox } from "../../../components";
+import { Button, Checkbox } from "../../../components";
 import { Ex } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { getExercises } from "../../../redux/slice/adminSlice";
 import { useNavigate } from "react-router-dom";
 import CreateExForm from "./CreateExForm";
-import {
-  AcademicCapIcon,
-  BookOpenIcon,
-  QueueListIcon,
-  SpeakerWaveIcon,
-} from "@heroicons/react/24/outline";
 const cx = classNames.bind(style);
 
 const IndexExercise = () => {
@@ -37,30 +31,7 @@ const IndexExercise = () => {
       <div className={cx("container")}>
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
-          <h2 className={cx("title")}>Quản lý bài luyện tập</h2>
-          {/* <ul className={cx("doc-cate-wrapper")}>
-            <CategoryPanel
-              label={"Vocabs"}
-              isActive={currentType === "vocabs"}
-              classNames={cx("cate-item")}
-              icon={<AcademicCapIcon />}
-              onClick={() => setCurrentType("vocabs")}
-            />
-            <CategoryPanel
-              label={"Sentences"}
-              isActive={currentType === "sentences"}
-              classNames={cx("cate-item")}
-              icon={<QueueListIcon />}
-              onClick={() => setCurrentType("sentences")}
-            />
-            <CategoryPanel
-              label={"Paraphs"}
-              isActive={currentType === "paraphs"}
-              classNames={cx("cate-item")}
-              icon={<SpeakerWaveIcon />}
-              onClick={() => setCurrentType("paraphs")}
-            />
-          </ul> */}
+          <h2 className={cx("title")}>Manage exercise</h2>
           <>
             <div className={cx("handler")}>
               <Button
@@ -70,7 +41,7 @@ const IndexExercise = () => {
                     navigate(`/exercise_detail/${selectedItem}`); // set type
                 }}
               >
-                Xem chi tiết
+                View
               </Button>
               <Button
                 isPrimary={false}
@@ -78,7 +49,7 @@ const IndexExercise = () => {
                   setIsOpenForm(true);
                 }}
               >
-                Tạo mới
+                Create new
               </Button>
               {/* <Button isPrimary={false} isDanger={true} onClick={() => {}}>
                 Xóa
@@ -93,10 +64,10 @@ const IndexExercise = () => {
               <thead>
                 <tr>
                   <th></th>
-                  <th>Chủ đề</th>
-                  <th>Mô tả</th>
-                  <th>Cấp độ</th>
-                  <th>Số câu hỏi</th>
+                  <th>Topic</th>
+                  <th>Description</th>
+                  <th>Level</th>
+                  <th>Count</th>
                 </tr>
               </thead>
               <tbody>

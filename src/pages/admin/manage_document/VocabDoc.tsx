@@ -27,7 +27,7 @@ const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
               navigate(`/doc_detail/${selectedItem.id}/${type}`);
           }}
         >
-          Xem chi tiết
+          View
         </Button>
         <Button
           isPrimary={false}
@@ -35,7 +35,7 @@ const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
             setIsOpenForm(true);
           }}
         >
-          Tạo mới
+          Create new
         </Button>
         {/* <Button isPrimary={false} isDanger={true} onClick={() => {}}>
           Xóa
@@ -50,8 +50,8 @@ const VocabDoc = ({ list, type }: { list?: Doc[]; type: StudyCardType }) => {
         <thead>
           <tr>
             <th></th>
-            <th>Chủ đề</th>
-            <th>Số lượng</th>
+            <th>Topic</th>
+            <th>Count</th>
             {/* <th>Audio</th> */}
           </tr>
         </thead>

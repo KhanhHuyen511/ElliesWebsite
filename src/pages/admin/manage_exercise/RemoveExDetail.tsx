@@ -1,16 +1,11 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Input, Popup } from "../../../components";
-import {
-  removeAExDetail,
-  updateAExDetail,
-} from "../../../redux/slice/adminSlice";
+import { removeAExDetail } from "../../../redux/slice/adminSlice";
 import { AppDispatch } from "../../../redux/store";
 import { ExDetail, GameType } from "../../../types";
 import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { Col, Row } from "react-flexbox-grid";
-import React from "react";
 const cx = classNames.bind(style);
 
 const RemoveExDetail = ({
@@ -31,7 +26,7 @@ const RemoveExDetail = ({
   return (
     <>
       <Popup
-        title={"Xóa câu hỏi "}
+        title={`Delete - ${title}`}
         onClose={onClose}
         onSubmit={() => {
           if (data) {
@@ -51,8 +46,8 @@ const RemoveExDetail = ({
             <table className={cx("table")}>
               <thead>
                 <tr>
-                  <th>Từ vựng</th>
-                  <th>Nghĩa</th>
+                  <th>Display</th>
+                  <th>Meaning</th>
                 </tr>
               </thead>
               <tbody>
@@ -66,7 +61,7 @@ const RemoveExDetail = ({
           <Col md={6}>
             {data.type == GameType.FillInSentence && (
               <Input
-                label={"Từ khoá"}
+                label="Keyword"
                 value={data.keyWord}
                 placeholder={""}
                 onChange={() => {}}
@@ -75,43 +70,28 @@ const RemoveExDetail = ({
             )}
             {data.type != GameType.SortWords && (
               <>
-                {" "}
                 <Input
-                  label={"Sự lựa chọn 1"}
+                  label="Option 1"
                   value={data.options ? data.options[0] : ""}
-                  placeholder={"abc"}
-                  onChange={() => {}}
                   isDisabled
                 ></Input>
                 <Input
-                  label={"Sự lựa chọn 2"}
+                  label="Option 2"
                   value={data.options ? data.options[1] : ""}
-                  placeholder={"abc"}
-                  onChange={() => {}}
                 ></Input>
                 <Input
-                  label={"Sự lựa chọn 3"}
+                  label="Option 3"
                   value={data.options ? data.options[2] : ""}
-                  placeholder={"abc"}
-                  onChange={() => {}}
                 ></Input>
                 <Input
-                  label={"Sự lựa chọn 4"}
+                  label="Option 4"
                   value={data.options ? data.options[3] : ""}
-                  placeholder={"abc"}
-                  onChange={() => {}}
                 ></Input>
-                <Input
-                  label={"Đáp án đúng"}
-                  value={data.answer}
-                  placeholder={"abc"}
-                  onChange={() => {}}
-                  isRequired
-                ></Input>
+                <Input label="Answer" value={data.answer} isRequired></Input>
               </>
             )}
             <Input
-              label={"Loại câu hỏi "}
+              label="Type"
               value={data.type.toString()}
               placeholder={""}
               onChange={() => {}}

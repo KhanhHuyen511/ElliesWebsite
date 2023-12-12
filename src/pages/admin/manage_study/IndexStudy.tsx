@@ -7,8 +7,6 @@ import { Button, Checkbox } from "../../../components";
 import CreateStudyForm from "./CreateStudyForm";
 import { useNavigate } from "react-router-dom";
 import { getStudyPaths } from "../../../redux/slice/adminSlice";
-import { storage } from "../../../firebase/config";
-import { getDownloadURL, ref } from "firebase/storage";
 import RemovePathForm from "./RemovePathForm";
 import { StudyPath } from "../../../types";
 const cx = classNames.bind(styles);
@@ -44,8 +42,6 @@ const IndexStudy = () => {
 
   const setSelectPath = (pathID?: string) => {
     if (pathID && selectedItems && selectedItems.length > 0) {
-      // if select multi item
-      // checked = false
       if (!selectedItems.includes(pathID)) {
         if (typeof selectedItems !== "string" && selectedItems.length > 1) {
           setSelectedItems([...selectedItems, pathID]);
@@ -56,7 +52,6 @@ const IndexStudy = () => {
           setSelectedItems(ids);
         }
       } else {
-        // checked = true
         if (selectedItems.length > 1 && typeof selectedItems !== "string") {
           const pathIndex = selectedItems.indexOf(pathID);
           const newItems: string[] = selectedItems as string[];
@@ -66,14 +61,12 @@ const IndexStudy = () => {
           setSelectedItems(undefined);
         }
       }
-      // if select a single item
     } else {
       setSelectedItems(pathID);
     }
   };
 
   const getCheckedItems = (pathID: string): boolean => {
-    // return value true or false if this pathID is selected
     if (selectedItems)
       return selectedItems.length > 0 && selectedItems.includes(pathID);
     else return false;
@@ -84,8 +77,7 @@ const IndexStudy = () => {
       <div className={cx("container")}>
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
-
-          <h2 className={cx("title")}>Quản lý lộ trình học</h2>
+          <h2 className={cx("title")}>Manage Study</h2>
           <div className={cx("handler")}>
             <Button
               isPrimary={false}
@@ -93,7 +85,7 @@ const IndexStudy = () => {
                 navigate("/path_detail/" + selectedItems);
               }}
             >
-              Xem chi tiết
+              View
             </Button>
             <Button
               isPrimary={false}
@@ -101,7 +93,7 @@ const IndexStudy = () => {
                 setIsOpenForm(true);
               }}
             >
-              Tạo mới
+              Add
             </Button>
             <Button
               isPrimary={false}
@@ -110,7 +102,7 @@ const IndexStudy = () => {
                 setIsOpenRemoveForm(true);
               }}
             >
-              Xóa
+              Delete
             </Button>
             {/* <Checkbox
               isChecked={isSelectedAll}
@@ -123,10 +115,10 @@ const IndexStudy = () => {
             <thead>
               <tr>
                 <th></th>
-                <th>Lộ trình</th>
-                <th>Số route</th>
-                <th>Chủ đề</th>
-                <th>Mức độ</th>
+                <th>Path</th>
+                <th>Count route</th>
+                <th>Topic</th>
+                <th>Level</th>
               </tr>
             </thead>
             <tbody>
@@ -164,7 +156,7 @@ const IndexStudy = () => {
         isDisplay={isOpenForm}
       />
 
-      {selectItem && selectItem.id && (
+      {selectItem && selectItem.id && isOpenRemoveForm && (
         <RemovePathForm
           onClose={() => {
             setIsOpenRemoveForm(false);

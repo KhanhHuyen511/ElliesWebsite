@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Input } from '../../../components';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateStudyRoute } from '../../../redux/slice/adminSlice';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { StudyRoute } from '../../../types';
-import Popup from '../../../components/popup/Popup';
+import { Input } from "../../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { updateStudyRoute } from "../../../redux/slice/adminSlice";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { StudyRoute } from "../../../types";
+import Popup from "../../../components/popup/Popup";
+import { useForm } from "react-hook-form";
 
 interface Props {
   classNames?: string;
@@ -21,36 +21,35 @@ const EditRouteForm = (props: Props) => {
     (state: RootState) => state.admin.currentStudyRoute
   );
 
-  useEffect(() => {
-    setName(currentRoute.name);
-  }, [dispatch, currentRoute.name]);
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      name: currentRoute.name,
+    },
+  });
 
-  const [name, setName] = useState<string>();
+  const onSubmit = () => {
+    dispatch(
+      updateStudyRoute({
+        path_id: props.pathID,
+        route: { id: props.id, name: getValues("name") },
+      })
+    );
+  };
 
   return (
     <>
       <Popup
-        onSubmit={() =>
-          dispatch(
-            updateStudyRoute({
-              path_id: props.pathID,
-              route: { id: props.id, name: name },
-            })
-          )
-        }
+        onSubmit={handleSubmit(onSubmit)}
         onClose={props.onClose}
-        title={'Chỉnh sửa chặng'}
-        classNames=''
+        title={`Edit route ${currentRoute.name}`}
+        classNames=""
         isDisplay={props.isDisplay}
       >
         <Input
-          label='Name'
-          type='text'
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          placeholder='abc'
+          label="Name"
+          type="text"
+          placeholder="fill name"
+          register={register("name")}
         />
       </Popup>
     </>

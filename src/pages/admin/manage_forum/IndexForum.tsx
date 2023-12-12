@@ -29,7 +29,7 @@ const IndexForum = () => {
       <div className="container">
         <Row>
           <Col xs={12} md={8} lg={6}>
-            <p className={cx("title")}>Quản lý diễn đàn</p>
+            <p className={cx("title")}>Manage forum</p>
             <ul className={cx("list")}>
               {list &&
                 list.length > 0 &&
@@ -41,8 +41,7 @@ const IndexForum = () => {
             </ul>
           </Col>
           <Col xs={12} md={8} lg={4} lgOffset={2}>
-            <p className={cx("sub-title")}>Bài viết chưa duyệt</p>
-            {/* <ul className={cx("list")}>{getListPending()}</ul> */}
+            <p className={cx("sub-title")}>Pending post</p>
             <ul className={cx("list")}>
               {pendingList &&
                 pendingList.length > 0 &&

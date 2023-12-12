@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { Button, Input } from "../../../components";
+import { Input } from "../../../components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { setStudyPath } from "../../../redux/slice/adminSlice";
-import { StudyRoute } from "../../../types";
 import Popup from "../../../components/popup/Popup";
+import { useForm } from "react-hook-form";
 
 interface Props {
   classNames?: string;
@@ -15,42 +14,51 @@ interface Props {
 const CreateStudyForm = (props: Props) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [name, setName] = useState("");
-  const [level, setLevel] = useState("");
-  const [topic, setTopic] = useState("");
+  const { register, handleSubmit, reset, getValues } = useForm({
+    defaultValues: {
+      name: "",
+      level: "",
+      topic: "",
+    },
+  });
+
+  const onSubmit = async () => {
+    await dispatch(
+      setStudyPath({
+        name: getValues("name"),
+        topic: getValues("topic"),
+        level: getValues("level"),
+      })
+    );
+    reset();
+  };
 
   return (
     <>
       <Popup
         classNames={""}
-        title={"Tao moi lo trinh hoc"}
+        title={"Create new study path"}
         onClose={props.onClose}
-        onSubmit={() => dispatch(setStudyPath({ name, topic, level }))}
+        onSubmit={handleSubmit(onSubmit)}
         isDisplay={props.isDisplay}
       >
         <Input
-          label="Tên"
+          label="Name"
           type="text"
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          placeholder="abc"
+          placeholder="fill name"
+          register={register("name")}
         />
         <Input
-          label="Chủ đề"
+          label="Topic"
           type="text"
-          onChange={(e) => {
-            setTopic(e.target.value);
-          }}
-          placeholder="abc"
+          placeholder="fill topic"
+          register={register("topic")}
         />
         <Input
-          label="Cấp độ"
+          label="Level"
           type="text"
-          onChange={(e) => {
-            setLevel(e.target.value);
-          }}
-          placeholder="abc"
+          placeholder="fill level"
+          register={register("level")}
         />
       </Popup>
     </>

@@ -63,7 +63,7 @@ const adminLinks = [
 const getLinks = (role: string) => {
   const array = role === "admin" ? adminLinks : links;
   return array.map((link) => (
-    <li>
+    <li key={`nav-${link.to}`}>
       <NavLink
         to={link.to}
         className={({ isActive }) => cx("nav-link", { active: isActive })}
@@ -77,7 +77,7 @@ const getLinks = (role: string) => {
 const getLinksSlide = (role: string) => {
   const array = role === "admin" ? adminLinks : links;
   return array.map((link) => (
-    <li className={cx("nav-item")}>
+    <li key={`nav-${link.to}`} className={cx("nav-item")}>
       <NavLink
         to={link.to}
         className={({ isActive }) => cx("nav-link", { active: isActive })}

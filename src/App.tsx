@@ -35,6 +35,7 @@ import {
   DetailPendingBlog,
   Dashboard,
   ManageUser,
+  EditSentenceDocForm,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
@@ -127,7 +128,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/path_detail/:id" element={<PathDetail />} />
             <Route path="/exercise_detail/:id" element={<DetailExercise />} />
-            <Route path="/doc_detail/:id/:type" element={<EditDocForm />} />
+            <Route path="/doc_detail/:id/0" element={<EditDocForm />} />
+            <Route path="/doc_detail/:id/1" element={<EditSentenceDocForm />} />
             <Route path="/forum" element={<IndexForum />} />
             <Route path="/blog_detail/:id" element={<BlogDetail />} />
             <Route

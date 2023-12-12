@@ -8,33 +8,29 @@ import { updateDocCard } from "../../../redux/slice/adminSlice";
 import style from "./IndexDocument.module.scss";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../../firebase/config";
+import { useForm } from "react-hook-form";
 
 const EditVocabForm = ({
   vocab,
   onClose,
   isDisplay,
   type,
+  onReload,
 }: {
   vocab: StudyCard;
   onClose: () => void;
   isDisplay: boolean;
   type: StudyCardType;
+  onReload?: () => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [display, setDisplay] = useState<string>(
-    vocab.display ? vocab.display : ""
-  );
-  const [meaning, setMeaning] = useState<string>(
-    vocab.meaning ? vocab.meaning : ""
-  );
   const [image, setImage] = useState<any>(
     vocab.imageFile &&
       getDownloadURL(ref(storage, `images/${vocab.imageFile}`)).then((url) => {
         setImage(url);
       })
   );
-  const [newImage, setNewImage] = useState<any>();
 
   const [audio, setAudio] = useState<any>(
     vocab.audio &&
@@ -44,52 +40,61 @@ const EditVocabForm = ({
   );
 
   const [newAudio, setNewAudio] = useState<any>();
+  const [newImage, setNewImage] = useState<any>();
+
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      display: vocab.display || "",
+      meaning: vocab.meaning || "",
+    },
+  });
+
+  const onSubmit = async () => {
+    await dispatch(
+      updateDocCard({
+        data: {
+          id: vocab.id,
+          display: getValues("display"),
+          meaning: getValues("meaning"),
+          imageFile: newImage,
+          audio: newAudio,
+        },
+        oldImage: vocab.imageFile,
+        oldAudio: vocab.audio,
+        type: type,
+      })
+    );
+
+    onReload && onReload();
+  };
+
+  const handleClose = () => {
+    onClose();
+  };
 
   return (
     <>
       <Popup
-        classNames={""}
-        title={"Chỉnh sửa từ vựng"}
-        onClose={onClose}
-        onSubmit={() => {
-          dispatch(
-            updateDocCard({
-              data: {
-                id: vocab.id,
-                display,
-                meaning,
-                imageFile: newImage,
-                audio: newAudio,
-              },
-              oldImage: vocab.imageFile,
-              oldAudio: vocab.audio,
-              type: type,
-            })
-          );
-        }}
+        title={`Edit - ${vocab.display}`}
+        onClose={handleClose}
+        onSubmit={handleSubmit(onSubmit)}
         isDisplay={isDisplay}
       >
         <Input
           type="text"
-          value={display}
-          onChange={(e) => {
-            setDisplay(e.target.value);
-          }}
-          label={"Display"}
-          placeholder={"abc"}
+          label="Display"
+          placeholder={"fill display"}
+          register={register("display")}
         ></Input>
         <Input
           type="text"
-          value={meaning}
-          onChange={(e) => {
-            setMeaning(e.target.value);
-          }}
           label={"Meaning"}
-          placeholder={"abc"}
+          placeholder={"fill meaning"}
+          register={register("meaning")}
         ></Input>
         <Input
           type="file"
-          label={"Cập nhật ảnh"}
+          label="Image"
           placeholder={""}
           onChange={(e) => {
             if (e.target.files) setNewImage(e.target.files[0]);
@@ -107,7 +112,7 @@ const EditVocabForm = ({
         )}
         <Input
           type="file"
-          label={"Cập nhật âm thanh"}
+          label="Audio"
           placeholder={""}
           onChange={(e) => {
             if (e.target.files) setNewAudio(e.target.files[0]);

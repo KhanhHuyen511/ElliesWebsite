@@ -51,7 +51,7 @@ const IndexManageUser = () => {
               setIsOpenForm(true);
             }}
           >
-            Cập nhật
+            Edit
           </Button>
           {selectedItem ? (
             !isLockedStudent ? (
@@ -63,7 +63,7 @@ const IndexManageUser = () => {
                     dispatch(lockAStudent(selectedItem.id));
                 }}
               >
-                Khoá tài khoản
+                Deactive account
               </Button>
             ) : (
               <Button
@@ -74,7 +74,7 @@ const IndexManageUser = () => {
                     dispatch(unlockAStudent(selectedItem.id));
                 }}
               >
-                Mở lại tài khoản
+                Reactive account
               </Button>
             )
           ) : (

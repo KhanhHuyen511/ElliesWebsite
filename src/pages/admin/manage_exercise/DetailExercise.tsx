@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Checkbox, Input, TextArea } from "../../../components";
 import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-flexbox-grid";
-import { Ex, ExDetail, GameType, LevelType, StudyCard } from "../../../types";
+import { Ex, ExDetail, GameType, LevelType } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
@@ -15,6 +15,7 @@ import {
 import CreateExDetail from "./CreateExDetail";
 import EditExDetail from "./EditExDetail";
 import RemoveExDetail from "./RemoveExDetail";
+import { useForm } from "react-hook-form";
 const cx = classNames.bind(style);
 
 const DetailExercise = () => {
@@ -27,20 +28,42 @@ const DetailExercise = () => {
 
   let { id } = useParams();
 
+  let defaultValues = {
+    title: "",
+    description: "",
+  };
+
+  if (data) {
+    defaultValues = {
+      title: data?.title || "",
+      description: data?.description || "",
+    };
+  }
+
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: defaultValues,
+  });
+
   useEffect(() => {
     if (id) dispatch(getAExercise(id));
-    if (data) {
-      setTitle(data.title);
-      setDescription(data.description);
-    }
-  }, [dispatch, id, data?.title, data?.description]);
+  }, [dispatch, id]);
 
-  const [title, setTitle] = useState("hi");
-  const [description, setDescription] = useState("");
   const [isOpenCreateForm, setIsOpenCreateForm] = useState<boolean>(false);
   const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
   const [isOpenRemoveForm, setIsOpenRemoveForm] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<ExDetail>();
+
+  const onSubmit = async () => {
+    if (id) {
+      await dispatch(
+        updateAExercise({
+          id,
+          title: getValues("title"),
+          description: getValues("description"),
+        })
+      );
+    }
+  };
 
   return (
     <>
@@ -50,38 +73,32 @@ const DetailExercise = () => {
             <Row>
               <Col md={6}>
                 <form>
-                  <p className={cx("form-title")}>Chi tiết bài luyện tập</p>
+                  <p className={cx("form-title")}>
+                    Detail exercise - {data.title}
+                  </p>
                   <div className={cx("form-body")}>
                     <Input
-                      label="Chủ đề"
+                      label="Topic"
                       type="text"
-                      value={title}
-                      onChange={(e) => {
-                        setTitle(e.target.value);
-                      }}
-                      placeholder="abc"
+                      placeholder="fill topic"
+                      // value={data.title}
+                      register={register("title")}
                     />
                     <TextArea
-                      label="Mô tả"
-                      value={description}
-                      onChange={(e) => {
-                        setDescription(e.target.value);
-                      }}
-                      placeholder="abc"
+                      label="Description"
+                      placeholder="fill description"
                       classNames={cx("textarea")}
+                      register={register("description")}
                     />
                   </div>
                   <div className={cx("handler")}>
                     <Button
                       isPrimary
                       preventDefault
-                      onClick={() => {
-                        if (id)
-                          dispatch(updateAExercise({ id, title, description }));
-                      }}
+                      onClick={handleSubmit(onSubmit)}
                       className={cx("submit-btn")}
                     >
-                      Cập nhật
+                      Save
                     </Button>
                     <Button
                       isPrimary={false}
@@ -94,7 +111,7 @@ const DetailExercise = () => {
                       }}
                       className={cx("submit-btn")}
                     >
-                      Xóa
+                      Remove
                     </Button>
                   </div>
                 </form>
@@ -109,7 +126,7 @@ const DetailExercise = () => {
                         setIsOpenCreateForm(true);
                       }}
                     >
-                      Thêm câu hỏi
+                      Add question
                     </Button>
                     <Button
                       isPrimary={false}
@@ -118,7 +135,7 @@ const DetailExercise = () => {
                       }}
                       preventDefault
                     >
-                      Xem câu hỏi
+                      View
                     </Button>
                     <Button
                       isPrimary={false}
@@ -127,7 +144,7 @@ const DetailExercise = () => {
                       }}
                       preventDefault
                     >
-                      Xóa câu hỏi
+                      Delete
                     </Button>
                   </div>
                   <table className={cx("table")}>
@@ -135,9 +152,9 @@ const DetailExercise = () => {
                       <tr>
                         <th></th>
                         <th>STT</th>
-                        <th>Từ vựng</th>
-                        <th>Loại câu hỏi</th>
-                        <th>Đáp án</th>
+                        <th>Vocab</th>
+                        <th>Type</th>
+                        <th>Answer</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -164,7 +181,7 @@ const DetailExercise = () => {
                 </form>
               </Col>
             </Row>
-            {id && isOpenCreateForm && title && (
+            {id && isOpenCreateForm && (
               <CreateExDetail
                 id={id}
                 title={data.title}
@@ -173,7 +190,7 @@ const DetailExercise = () => {
                 onClose={() => setIsOpenCreateForm(false)}
               />
             )}
-            {id && selectedItem && isOpenEditForm && title && (
+            {id && selectedItem && isOpenEditForm && (
               <EditExDetail
                 exId={id}
                 data={selectedItem}
@@ -183,7 +200,7 @@ const DetailExercise = () => {
               />
             )}
 
-            {id && selectedItem && isOpenRemoveForm && title && (
+            {id && selectedItem && isOpenRemoveForm && (
               <RemoveExDetail
                 exId={id}
                 data={selectedItem}
