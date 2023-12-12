@@ -26,7 +26,7 @@ const RemovePathForm = (props: Props) => {
     <>
       <Popup
         classNames={""}
-        title={"Xóa lộ trình"}
+        title={`Remove path ${props.data.name}`}
         onClose={props.onClose}
         onSubmit={() => {
           if (props.data.id) {
@@ -43,7 +43,7 @@ const RemovePathForm = (props: Props) => {
           type="text"
           value={props.data.name}
           onChange={() => {}}
-          label={"Tên"}
+          label={"Name"}
           placeholder={"abc"}
           isDisabled
         ></Input>
@@ -51,7 +51,7 @@ const RemovePathForm = (props: Props) => {
           type="text"
           value={props.data.topic}
           onChange={() => {}}
-          label={"Chủ đề"}
+          label={"Topic"}
           placeholder={"abc"}
           isDisabled
         ></Input>
@@ -59,7 +59,7 @@ const RemovePathForm = (props: Props) => {
           type="text"
           value={props.data.level}
           onChange={() => {}}
-          label={"Cấp độ"}
+          label={"Level"}
           placeholder={"abc"}
           isDisabled
         ></Input>

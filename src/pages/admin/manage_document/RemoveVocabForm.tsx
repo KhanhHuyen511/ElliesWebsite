@@ -4,11 +4,11 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { StudyCard, StudyCardType } from "../../../types";
 import Popup from "../../../components/popup/Popup";
-import { removeDocCard, updateDocCard } from "../../../redux/slice/adminSlice";
+import { removeDocCard } from "../../../redux/slice/adminSlice";
 import style from "./IndexDocument.module.scss";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../../firebase/config";
-import React from "react";
+import { useForm } from "react-hook-form";
 
 const RemoveVocabForm = ({
   vocab,
@@ -16,21 +16,32 @@ const RemoveVocabForm = ({
   onClose,
   isDisplay,
   type,
+  onReload,
 }: {
   vocab: StudyCard;
   docId: string;
   onClose: () => void;
   isDisplay: boolean;
   type: StudyCardType;
+  onReload?: () => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [display, setDisplay] = useState<string>(
-    vocab.display ? vocab.display : ""
-  );
-  const [meaning, setMeaning] = useState<string>(
-    vocab.meaning ? vocab.meaning : ""
-  );
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      display: vocab.display || "",
+      meaning: vocab.meaning || "",
+      image: vocab.imageFile,
+      audio: vocab.audio,
+    },
+  });
+
+  const onSubmit = async () => {
+    await dispatch(removeDocCard({ docId: docId, data: vocab, type: type }));
+
+    onReload && onReload();
+  };
+
   const [image, setImage] = useState<any>(
     vocab.imageFile &&
       getDownloadURL(ref(storage, `images/${vocab.imageFile}`)).then((url) => {
@@ -45,56 +56,43 @@ const RemoveVocabForm = ({
       })
   );
 
+  const handleClose = () => {
+    setTimeout(() => onClose(), 250);
+  };
+
   return (
     <>
       <Popup
-        classNames={""}
-        title={"Xóa"}
-        onClose={onClose}
-        onSubmit={() => {
-          dispatch(removeDocCard({ docId: docId, data: vocab, type: type }));
-        }}
+        title={`Delete - ${vocab.display}`}
+        onClose={handleClose}
+        onSubmit={handleSubmit(onSubmit)}
         isDisplay={isDisplay}
       >
         <Input
           type="text"
-          value={display}
-          onChange={(e) => {
-            setDisplay(e.target.value);
-          }}
-          label={"Tiếng Anh"}
-          placeholder={"abc"}
+          register={register("display")}
+          label={"Display"}
           isDisabled
         ></Input>
         <Input
           type="text"
-          value={meaning}
-          onChange={(e) => {
-            setMeaning(e.target.value);
-          }}
-          label={"Nghĩa"}
-          placeholder={"abc"}
+          register={register("meaning")}
+          label={"Meaning"}
           isDisabled
         ></Input>
         <Input
           type="file"
-          label={"Cập nhật ảnh"}
-          placeholder={""}
-          onChange={() => {}}
+          label={"Image"}
+          register={register("image")}
           isDisabled
         ></Input>
-        {image && (
+        {getValues("image") && (
           <div className={style.image}>
             <img src={image} alt="" />
           </div>
         )}
-        <Input
-          type="file"
-          label={"Cập nhật âm thanh"}
-          placeholder={""}
-          onChange={(e) => {}}
-        ></Input>
-        {audio && <audio controls src={audio}></audio>}
+        <Input type="file" label={"Audio"} register={register("audio")}></Input>
+        {getValues("audio") && <audio controls src={audio}></audio>}
       </Popup>
     </>
   );

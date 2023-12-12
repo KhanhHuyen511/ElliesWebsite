@@ -1,15 +1,14 @@
 /* eslint-disable eqeqeq */
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import style from "./Dashboard.module.scss";
 import classNames from "classnames/bind";
-import { Button, Input } from "../../../components";
+import { Button } from "../../../components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FilterProps } from "./Dashboard";
 const cx = classNames.bind(style);
 
 export enum FilterType {
-  // Daily,
   Monthly,
   Yearly,
 }
@@ -31,7 +30,6 @@ const FilterDashboard = ({
           setFilterType(e.target.value as unknown as FilterType);
         }}
       >
-        {/* <option value={FilterType.Daily}>{FilterType[0]}</option> */}
         <option value={FilterType.Monthly}>{FilterType[0]}</option>
         <option value={FilterType.Yearly}>{FilterType[1]}</option>
       </select>

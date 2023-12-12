@@ -1,13 +1,8 @@
-import React, { useState } from "react";
-import { Button, Input } from "../../../components";
+import { Input } from "../../../components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import {
-  setStudyCard,
-  removeStudyCard,
-  removeStudyRoute,
-} from "../../../redux/slice/adminSlice";
-import { StudyCard, StudyRoute } from "../../../types";
+import { removeStudyRoute } from "../../../redux/slice/adminSlice";
+import { StudyRoute } from "../../../types";
 import Popup from "../../../components/popup/Popup";
 
 interface Props {
@@ -26,7 +21,7 @@ const RemoveRouteForm = (props: Props) => {
     <>
       <Popup
         classNames={""}
-        title={"Xóa chặng"}
+        title={`Delete route ${props.data.name}`}
         onClose={props.onClose}
         onSubmit={() => {
           if (props.data.id) {
@@ -44,16 +39,14 @@ const RemoveRouteForm = (props: Props) => {
           type="text"
           value={props.data.name}
           onChange={() => {}}
-          label={"Tên"}
-          placeholder={"abc"}
+          label={"Name"}
           isDisabled
         ></Input>
         <Input
           type="text"
           value={props.data.cards?.length.toString()}
           onChange={() => {}}
-          label={"Số lượng từ/câu"}
-          placeholder={"abc"}
+          label={"Count word/sentence"}
           isDisabled
         ></Input>
       </Popup>

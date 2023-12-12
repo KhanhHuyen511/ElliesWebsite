@@ -15,20 +15,30 @@ import EditVocab from "./EditVocabForm";
 import RemoveVocab from "./RemoveVocabForm";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import React from "react";
 const cx = classNames.bind(style);
 
-const EditDocForm = () => {
+const EditSentenceDocForm = () => {
   let { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
 
   const data = useSelector((state: RootState) => state.admin.currentDoc);
   const [list, setList] = useState<StudyCard[]>();
 
-  const { register, handleSubmit, reset, getValues, setValue } = useForm({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
+  let defaultValues = {
+    title: "",
+    description: "",
+  };
+
+  if (data) {
+    defaultValues = {
+      title: data.title || "",
+      description: data.description || "",
+    };
+  }
+
+  const { register, handleSubmit, reset, getValues } = useForm({
+    defaultValues: defaultValues,
   });
 
   const onSubmit = async () => {
@@ -53,16 +63,9 @@ const EditDocForm = () => {
 
   const reloadList = async () => {
     if (id) {
-      await dispatch(getADocWithType({ doc_id: id, type: "0" })).then(
+      await dispatch(getADocWithType({ doc_id: id, type: "1" })).then(
         (data) => {
-          const newData = data.payload as Doc;
-
-          setValue("title", newData.title);
-          setValue(
-            "description",
-            newData.description ? newData.description : ""
-          );
-          setList(newData.vocabs);
+          setList((data.payload as Doc).sentences);
         }
       );
     }
@@ -70,15 +73,11 @@ const EditDocForm = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(getADocWithType({ doc_id: id, type: "0" }));
+      dispatch(getADocWithType({ doc_id: id, type: "1" }));
 
-      if (data) {
-        setValue("title", data.title);
-        setValue("description", data.description ? data.description : "");
-        setList(data.vocabs);
-      }
+      setList(data?.sentences);
     }
-  }, [data, dispatch, id, setValue]);
+  }, [dispatch, id, data?.title, data?.description, data?.sentences]);
 
   const [isOpenCard, setIsOpenCard] = useState(false);
   const [isOpenEditCardForm, setIsOpenEditCardForm] = useState(false);
@@ -131,7 +130,7 @@ const EditDocForm = () => {
               <thead>
                 <tr>
                   <th></th>
-                  <th>Vocabulary</th>
+                  <th>Sentence</th>
                   <th>Meaning</th>
                 </tr>
               </thead>
@@ -172,7 +171,7 @@ const EditDocForm = () => {
             <Button isPrimary={false} onClick={onCancel}>
               Cancel
             </Button>
-            <Button isPrimary onClick={handleSubmit(onSubmit)}>
+            <Button isPrimary onClick={() => handleSubmit(onSubmit)}>
               Save
             </Button>
           </Col>
@@ -181,7 +180,7 @@ const EditDocForm = () => {
 
       {id && isOpenCard && (
         <CreateVocab
-          type={StudyCardType.Vocab}
+          type={StudyCardType.Sentence}
           onClose={() => setIsOpenCard(false)}
           isDisplay={isOpenCard}
           doc_id={id}
@@ -194,7 +193,7 @@ const EditDocForm = () => {
           vocab={selectedItem}
           onClose={() => setIsOpenEditCardForm(false)}
           isDisplay={isOpenEditCardForm}
-          type={StudyCardType.Vocab}
+          type={StudyCardType.Sentence}
           onReload={reloadList}
         ></EditVocab>
       )}
@@ -203,7 +202,7 @@ const EditDocForm = () => {
         <RemoveVocab
           docId={id}
           vocab={selectedItem}
-          type={StudyCardType.Vocab}
+          type={StudyCardType.Sentence}
           onClose={() => setIsOpenRemoveCardForm(false)}
           isDisplay={isOpenRemoveCardForm}
           onReload={reloadList}
@@ -213,4 +212,4 @@ const EditDocForm = () => {
   );
 };
 
-export default EditDocForm;
+export default EditSentenceDocForm;

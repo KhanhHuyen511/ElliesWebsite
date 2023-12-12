@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Input, TextArea } from "../../../components";
 import Popup from "../../../components/popup/Popup";
@@ -7,58 +7,66 @@ import { AppDispatch } from "../../../redux/store";
 import { StudyCardType } from "../../../types";
 import style from "./IndexDocument.module.scss";
 import classNames from "classnames/bind";
+import { useForm } from "react-hook-form";
 const cx = classNames.bind(style);
 
 interface Props {
   classNames?: string;
   onClose: () => void;
+  onReload?: () => void;
   isDisplay: boolean;
   type: StudyCardType;
   doc_id: string;
 }
 
 const CreateVocabForm = (props: Props) => {
-  const [display, setDisplay] = useState<string>("");
-  const [meaning, setMeaning] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
+
   const [image, setImage] = useState<any>();
   const [audio, setAudio] = useState<any>();
 
-  const dispatch = useDispatch<AppDispatch>();
+  const { register, handleSubmit, reset, getValues } = useForm({
+    defaultValues: {
+      display: "",
+      meaning: "",
+    },
+  });
 
-  const onClear = () => {
-    console.log("clear");
-    setDisplay("");
-    setMeaning("");
-    setAudio(undefined);
-    setImage(undefined);
+  const onSubmit = async () => {
+    await dispatch(
+      setDocCard({
+        data: {
+          display: getValues("display"),
+          meaning: getValues("meaning"),
+          imageFile:
+            image && (image as unknown as FileList).length > 0
+              ? (image as unknown as FileList)[0]
+              : null,
+          audio:
+            audio && (audio as unknown as FileList).length > 0
+              ? (audio as unknown as FileList)[0]
+              : null,
+        },
+        type: props.type,
+        doc_id: props.doc_id,
+      })
+    );
+
+    reset();
+    props.onReload && props.onReload();
   };
-
-  // useEffect(() => onClear, []);
 
   return (
     <>
       <Popup
-        title={"Tạo từ vựng mới"}
+        title={`Create new ${
+          props.type === StudyCardType.Vocab ? "vocab" : "sentence"
+        }`}
         classNames={""}
         onClose={() => {
           props.onClose();
-          onClear();
         }}
-        onSubmit={() => {
-          dispatch(
-            setDocCard({
-              data: {
-                display,
-                meaning,
-                imageFile: image,
-                audio,
-              },
-              type: props.type,
-              doc_id: props.doc_id,
-            })
-          );
-          onClear();
-        }}
+        onSubmit={handleSubmit(onSubmit)}
         isDisplay={props.isDisplay}
       >
         {props.type === StudyCardType.Paraph ? (
@@ -66,55 +74,49 @@ const CreateVocabForm = (props: Props) => {
             <TextArea
               label={"Display"}
               placeholder={""}
-              onChange={(e) => setDisplay(e.target.value)}
               classNames={cx("paraph-text")}
+              register={register("display")}
             />
             <TextArea
               label={"Meaning"}
               placeholder={""}
-              onChange={(e) => setMeaning(e.target.value)}
               classNames={cx("paraph-text")}
+              register={register("meaning")}
             />
           </>
         ) : (
           <>
             <Input
               type="text"
-              onChange={(e) => {
-                setDisplay(e.target.value);
-              }}
-              value={display}
               label={"Display"}
-              placeholder={"abc"}
+              placeholder={"fill display"}
+              register={register("display")}
             ></Input>
             <Input
               type="text"
-              value={meaning}
-              onChange={(e) => {
-                setMeaning(e.target.value);
-              }}
               label={"Meaning"}
-              placeholder={"abc"}
+              placeholder={"fill meaning"}
+              register={register("meaning")}
             ></Input>
           </>
         )}
 
         <Input
           type="file"
-          label={"Thêm ảnh"}
+          label={"Image"}
           placeholder={""}
           onChange={(e) => {
             if (e.target.files) setImage(e.target.files[0]);
           }}
         ></Input>
-        {image && (
+        {image !== undefined && (
           <div className={style.image}>
             <img src={URL.createObjectURL(image)} alt="" />
           </div>
         )}
         <Input
           type="file"
-          label={"Thêm âm thanh"}
+          label={"Audio"}
           placeholder={""}
           onChange={(e) => {
             if (e.target.files) setAudio(e.target.files[0]);

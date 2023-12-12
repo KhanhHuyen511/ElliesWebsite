@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Input, Popup } from "../../../components";
 import {
-  getDocCardWithTopic,
   getDocCardWithTopicLevel,
   setAExDetail,
 } from "../../../redux/slice/adminSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { GameType, LevelType, StudyCard, StudyCardType } from "../../../types";
+import { GameType, LevelType, StudyCard } from "../../../types";
 import style from "./DetailExercise.module.scss";
 import classNames from "classnames/bind";
 import { Col, Row } from "react-flexbox-grid";
@@ -46,30 +45,32 @@ const CreateExDetail = ({
     dispatch(getDocCardWithTopicLevel({ topic: title, level }));
   }, [dispatch]);
 
+  const onSubmit = () => {
+    if (id && selectedItem) {
+      dispatch(
+        setAExDetail({
+          exId: id,
+          vocab: selectedItem,
+          options: [
+            option1 ? option1 : "",
+            option2 ? option2 : "",
+            option3 ? option3 : "",
+            option4 ? option4 : "",
+          ],
+          answer: answer ? answer : "",
+          type,
+          keyWord,
+        })
+      );
+    }
+  };
+
   return (
     <>
       <Popup
-        title={"Tạo câu hỏi mới"}
+        title={"Create new question"}
         onClose={onClose}
-        onSubmit={() => {
-          if (id && selectedItem) {
-            dispatch(
-              setAExDetail({
-                exId: id,
-                vocab: selectedItem,
-                options: [
-                  option1 ? option1 : "",
-                  option2 ? option2 : "",
-                  option3 ? option3 : "",
-                  option4 ? option4 : "",
-                ],
-                answer: answer ? answer : "",
-                type,
-                keyWord,
-              })
-            );
-          }
-        }}
+        onSubmit={onSubmit}
         isDisplay={isDisplay}
         classNames={cx("create-form")}
       >
@@ -80,8 +81,8 @@ const CreateExDetail = ({
                 <tr>
                   <th></th>
                   <th>STT</th>
-                  <th>Từ vựng</th>
-                  <th>Nghĩa</th>
+                  <th>Vocab</th>
+                  <th>Meaning</th>
                 </tr>
               </thead>
               <tbody>
@@ -106,9 +107,9 @@ const CreateExDetail = ({
           <Col md={6}>
             {type == GameType.FillInSentence && (
               <Input
-                label={"Nhập từ khoá"}
+                label="Keyword"
                 value={keyWord}
-                placeholder={""}
+                placeholder={"#"}
                 onChange={(e) => {
                   setKeyWord(e.target.value);
                 }}
@@ -118,42 +119,42 @@ const CreateExDetail = ({
             {type != GameType.SortWords && (
               <>
                 <Input
-                  label={"Nhập sự lựa chọn 1"}
+                  label="Option 1"
                   value={option1}
-                  placeholder={"abc"}
+                  placeholder={"fill option 1"}
                   onChange={(e) => {
                     setOption1(e.target.value);
                   }}
                   isRequired
                 ></Input>
                 <Input
-                  label={"Nhập sự lựa chọn 2"}
+                  label="Option 2"
                   value={option2}
-                  placeholder={"abc"}
+                  placeholder={"fill option 2"}
                   onChange={(e) => {
                     setOption2(e.target.value);
                   }}
                 ></Input>
                 <Input
-                  label={"Nhập sự lựa chọn 3"}
+                  label="Option 3"
                   value={option3}
-                  placeholder={"abc"}
+                  placeholder={"fill option 3"}
                   onChange={(e) => {
                     setOption3(e.target.value);
                   }}
                 ></Input>
                 <Input
-                  label={"Nhập sự lựa chọn 4"}
+                  label="Option 4"
                   value={option4}
-                  placeholder={"abc"}
+                  placeholder={"fill option 4"}
                   onChange={(e) => {
                     setOption4(e.target.value);
                   }}
                 ></Input>
                 <Input
-                  label={"Nhập đáp án đúng"}
+                  label={"Answer"}
                   value={answer}
-                  placeholder={"abc"}
+                  placeholder={"fill answer"}
                   onChange={(e) => {
                     setAnswer(e.target.value);
                   }}

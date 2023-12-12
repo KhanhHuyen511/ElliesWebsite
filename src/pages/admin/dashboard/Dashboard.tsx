@@ -1,6 +1,5 @@
 import style from "./Dashboard.module.scss";
 import classNames from "classnames/bind";
-import { Button, Input } from "../../../components";
 import { Col, Row } from "react-flexbox-grid";
 import "chart.js/auto";
 import StudentChart from "./StudentChart";
@@ -34,7 +33,7 @@ const Dashboard = () => {
     dispatch(getDataStudent());
     dispatch(getDataBlog());
     dispatch(getDataAccount());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -50,13 +49,12 @@ const Dashboard = () => {
           <Col lg={9} className={cx("bar-chart-wrapper")}>
             <p className={cx("sub-title")}>Students</p>
             <StudentChart filter={filterOptions} />
-            <div className={cx("detail")}>detail</div>
+            <div className={cx("detail")}>Detail</div>
           </Col>
           <Col lg={3}>
             <div className={cx("pie-chart-wrapper")}>
               <p className={cx("sub-title")}>Levels</p>
               <LevelChart />
-              {/* <div className={cx("detail")}>detail</div> */}
             </div>
             <div className={cx("figure-wrapper")}>
               <p className={cx("sub-title")}>Common</p>

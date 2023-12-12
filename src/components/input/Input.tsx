@@ -1,22 +1,24 @@
-import React from "react";
 import classNames from "classnames/bind";
 import style from "./Input.module.scss";
+import { UseFormRegisterReturn } from "react-hook-form";
 const cx = classNames.bind(style);
 
 interface Props {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   type?: string;
   smallText?: string;
   isDisabled?: boolean;
   haveIcon?: boolean;
   icon?: string;
   value?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void | undefined;
+  defaultValue?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void | undefined;
   isRequired?: boolean;
   className?: string;
   rowDirection?: boolean;
   noMargin?: boolean;
+  register?: UseFormRegisterReturn<any>;
 }
 
 const Input = (props: Props) => {
@@ -45,6 +47,8 @@ const Input = (props: Props) => {
         value={props.value}
         required={props.isRequired}
         disabled={props.isDisabled}
+        defaultValue={props.defaultValue}
+        {...props.register}
       />
       {props.smallText && <p className={cx("small-text")}>{props.smallText}</p>}
     </div>

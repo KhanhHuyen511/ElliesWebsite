@@ -11,7 +11,7 @@ const cx = classNames.bind(style);
 interface Props {
   type?: string;
   isPrimary: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   children?: React.ReactNode;
   haveIcon?: boolean;
   icon?: string;
@@ -27,7 +27,7 @@ const Button = (props: Props) => {
       disabled={props.isDisabled}
       onClick={(e) => {
         if (props.preventDefault) e.preventDefault();
-        props.onClick();
+        props.onClick && props.onClick();
       }}
       className={cx(
         "btn",

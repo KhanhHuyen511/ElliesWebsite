@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { Button, Input } from "../../../components";
+import { Input } from "../../../components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import { setStudyCard, removeStudyCard } from "../../../redux/slice/adminSlice";
+import { removeStudyCard } from "../../../redux/slice/adminSlice";
 import { StudyCard } from "../../../types";
 import Popup from "../../../components/popup/Popup";
 
@@ -22,7 +21,7 @@ const EditCardForm = (props: Props) => {
     <>
       <Popup
         classNames={""}
-        title={"Chỉnh sửa câu"}
+        title={`Delete - ${props.data.display}`}
         onClose={props.onClose}
         onSubmit={() => {
           if (props.data.id) {
@@ -42,7 +41,7 @@ const EditCardForm = (props: Props) => {
           value={props.data.display}
           onChange={() => {}}
           label={"Display"}
-          placeholder={"abc"}
+          placeholder={"fill display"}
           isDisabled
         ></Input>
         <Input
@@ -50,7 +49,7 @@ const EditCardForm = (props: Props) => {
           value={props.data.meaning}
           onChange={() => {}}
           label={"Meaning"}
-          placeholder={"abc"}
+          placeholder={"fill meaning"}
           isDisabled
         ></Input>
       </Popup>

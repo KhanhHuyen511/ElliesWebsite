@@ -88,13 +88,6 @@ export const getStudyPath = createAsyncThunk(
     const docRef = await getDoc(doc(db, "study_paths", id));
     path = docRef.data() as StudyPath;
 
-    // const routeRef = await getDocs(
-    //   collection(db, "study_paths", id, "study_routes")
-    // );
-    // path.studyRoutes = routeRef.docs.map(
-    //   (d) => ({ id: d.id, ...d.data() } as StudyRoute)
-    // );
-
     const itemSnapshot = await (
       await getDocs(collection(db, "study_paths", id, "study_routes"))
     ).docs;
@@ -119,7 +112,9 @@ export const getStudyPath = createAsyncThunk(
         })
       );
 
-      // path.studyRoutes = studyRoutes;
+      path.studyRoutes = path.studyRoutes.sort(
+        (a, b) => Number(a.name) - Number(b.name)
+      );
     }
 
     return path;
@@ -671,7 +666,6 @@ export const removeDocCard = createAsyncThunk(
   }) => {
     if (docId && data.id) {
       console.log("hi");
-      // console.log(type === StudyCardType.Vocab);
       let typeCard = "";
 
       // get Type

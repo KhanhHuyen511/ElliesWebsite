@@ -1,6 +1,10 @@
 @import "../../../assets/style/shared.scss";
 @import "../../../assets/theme/shared.css";
 
+.title {
+  @include typo-heading-1;
+}
+
 .table {
   width: 100%;
   border-spacing: 0;
