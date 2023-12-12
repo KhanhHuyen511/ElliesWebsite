@@ -90,13 +90,7 @@ const RemoveExDetail = ({
                 <Input label="Answer" value={data.answer} isRequired></Input>
               </>
             )}
-            <Input
-              label="Type"
-              value={data.type.toString()}
-              placeholder={""}
-              onChange={() => {}}
-              isDisabled
-            ></Input>
+            <Input label="Type" value={data.type.toString()} isDisabled></Input>
           </Col>
         </Row>
       </Popup>

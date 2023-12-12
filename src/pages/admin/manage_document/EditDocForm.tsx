@@ -24,20 +24,11 @@ const EditDocForm = () => {
   const data = useSelector((state: RootState) => state.admin.currentDoc);
   const [list, setList] = useState<StudyCard[]>();
 
-  let defaultValues = {
-    title: "",
-    description: "",
-  };
-
-  if (data) {
-    defaultValues = {
-      title: data.title || "",
-      description: data.description || "",
-    };
-  }
-
-  const { register, handleSubmit, reset, getValues } = useForm({
-    defaultValues: defaultValues,
+  const { register, handleSubmit, reset, getValues, setValue } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+    },
   });
 
   const onSubmit = async () => {
@@ -64,7 +55,14 @@ const EditDocForm = () => {
     if (id) {
       await dispatch(getADocWithType({ doc_id: id, type: "0" })).then(
         (data) => {
-          setList((data.payload as Doc).vocabs);
+          const newData = data.payload as Doc;
+
+          setValue("title", newData.title);
+          setValue(
+            "description",
+            newData.description ? newData.description : ""
+          );
+          setList(newData.vocabs);
         }
       );
     }
@@ -74,9 +72,13 @@ const EditDocForm = () => {
     if (id) {
       dispatch(getADocWithType({ doc_id: id, type: "0" }));
 
-      if (data) setList(data.vocabs);
+      if (data) {
+        setValue("title", data.title);
+        setValue("description", data.description ? data.description : "");
+        setList(data.vocabs);
+      }
     }
-  }, [dispatch, id]);
+  }, [data, dispatch, id, setValue]);
 
   const [isOpenCard, setIsOpenCard] = useState(false);
   const [isOpenEditCardForm, setIsOpenEditCardForm] = useState(false);

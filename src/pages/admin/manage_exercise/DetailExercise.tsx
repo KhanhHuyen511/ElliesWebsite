@@ -28,25 +28,22 @@ const DetailExercise = () => {
 
   let { id } = useParams();
 
-  let defaultValues = {
-    title: "",
-    description: "",
-  };
-
-  if (data) {
-    defaultValues = {
-      title: data?.title || "",
-      description: data?.description || "",
-    };
-  }
-
-  const { register, handleSubmit, getValues } = useForm({
-    defaultValues: defaultValues,
+  const { register, handleSubmit, getValues, setValue } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+    },
   });
 
   useEffect(() => {
-    if (id) dispatch(getAExercise(id));
-  }, [dispatch, id]);
+    if (id)
+      dispatch(getAExercise(id)).then((d) => {
+        const newData = d.payload as Ex;
+
+        setValue("title", newData.title);
+        setValue("description", newData.description);
+      });
+  }, [dispatch, id, setValue]);
 
   const [isOpenCreateForm, setIsOpenCreateForm] = useState<boolean>(false);
   const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
@@ -72,7 +69,7 @@ const DetailExercise = () => {
           <>
             <Row>
               <Col md={6}>
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <p className={cx("form-title")}>
                     Detail exercise - {data.title}
                   </p>
@@ -81,7 +78,6 @@ const DetailExercise = () => {
                       label="Topic"
                       type="text"
                       placeholder="fill topic"
-                      // value={data.title}
                       register={register("title")}
                     />
                     <TextArea
@@ -92,12 +88,7 @@ const DetailExercise = () => {
                     />
                   </div>
                   <div className={cx("handler")}>
-                    <Button
-                      isPrimary
-                      preventDefault
-                      onClick={handleSubmit(onSubmit)}
-                      className={cx("submit-btn")}
-                    >
+                    <Button isPrimary className={cx("submit-btn")}>
                       Save
                     </Button>
                     <Button

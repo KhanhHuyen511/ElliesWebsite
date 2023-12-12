@@ -12,7 +12,6 @@ const cx = classNames.bind(style);
 const EditExDetail = ({
   exId,
   data,
-  title,
   isDisplay,
   onClose,
 }: {
@@ -45,7 +44,7 @@ const EditExDetail = ({
   return (
     <>
       <Popup
-        title={"Cập nhật câu hỏi"}
+        title={`Edit question`}
         onClose={onClose}
         onSubmit={() => {
           if (data) {
@@ -95,7 +94,6 @@ const EditExDetail = ({
             )}
             {type != GameType.SortWords && (
               <>
-                {" "}
                 <Input
                   label="Option 1"
                   value={option1}
