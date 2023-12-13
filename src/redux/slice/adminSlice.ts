@@ -12,7 +12,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { auth, db, storage } from "../../firebase/config";
+import { db, storage } from "../../firebase/config";
 import {
   Doc,
   Ex,
@@ -20,6 +20,7 @@ import {
   GameType,
   Gender,
   LevelType,
+  OnboardingType,
   Student,
   StudyCard,
   StudyCardType,
@@ -146,7 +147,6 @@ export const getStudyRoute = createAsyncThunk(
         })
       );
 
-    console.log(route);
     return route;
   }
 );
@@ -1112,6 +1112,71 @@ export const unlockAStudent = createAsyncThunk(
 
 //#endregion
 
+//#region [ONBOARDING]
+
+export const getOnboardingList = createAsyncThunk(
+  "admin/onboard/get_onboarding_list",
+  async () => {
+    console.log("hi");
+
+    const colRef = await getDocs(collection(db, "onboarding"));
+    const rawList = colRef.docs;
+
+    let list: OnboardingType[] = [];
+
+    if (rawList.length > 0) {
+      list = rawList.map((doc) => {
+        const item = doc.data() as OnboardingType;
+
+        item.id = doc.id;
+
+        return item;
+      });
+    }
+
+    return list;
+  }
+);
+
+export const addOnboardingQuestion = createAsyncThunk(
+  "admin/onboard/add_onboarding_question",
+  async (data: OnboardingType) => {
+    const ref = await addDoc(collection(db, "onboarding"), data);
+    data.id = ref.id;
+
+    return data;
+  }
+);
+
+export const editOnboardingQuestion = createAsyncThunk(
+  "admin/onboard/edit_onboarding_question",
+  async (data: OnboardingType) => {
+    const { id, question, answer, options, level, type } = data;
+    const ref = (await getDoc(doc(db, "onboarding", id))).ref;
+
+    await updateDoc(ref, {
+      question,
+      answer,
+      options,
+      level,
+      type,
+    });
+
+    return data;
+  }
+);
+
+export const deleteOnboardingQuestion = createAsyncThunk(
+  "admin/onboard/delete_onboarding_question",
+  async (id: string) => {
+    const ref = (await getDoc(doc(db, "onboarding", id))).ref;
+
+    await deleteDoc(ref);
+  }
+);
+
+//#endregion
+
 const adminSlice = createSlice({
   name: "admin_study",
   initialState,
@@ -1130,8 +1195,6 @@ const adminSlice = createSlice({
       state.currentStudyRoute = action.payload as StudyRoute;
     });
     builder.addCase(setStudyRoute.fulfilled, (state, action) => {
-      // console.log(action.payload);
-      // state.currentStudyPath.studyRoutes?.push(action.payload as StudyRoute);
       if (state.currentStudyPath.studyRoutes)
         state.currentStudyPath.studyRoutes = [
           ...state.currentStudyPath.studyRoutes,
@@ -1195,8 +1258,6 @@ const adminSlice = createSlice({
           state.currentDoc?.paraphs?.push(action.payload.data as StudyCard);
           break;
         case StudyCardType.Book:
-          // state.?.push(action.payload as StudyCard);
-          // state.currentDoc?.paraphs?.push(action.payload as StudyCard);
           break;
         default:
           break;

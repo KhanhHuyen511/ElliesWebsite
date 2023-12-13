@@ -36,6 +36,7 @@ import {
   Dashboard,
   ManageUser,
   EditSentenceDocForm,
+  ManageOnboarding,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
@@ -138,6 +139,7 @@ function App() {
             />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/manage_users" element={<ManageUser />} />
+            <Route path="/manage_onboarding" element={<ManageOnboarding />} />
           </Routes>
         </BrowserRouter>
       )}

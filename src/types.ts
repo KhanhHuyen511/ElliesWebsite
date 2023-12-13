@@ -75,9 +75,7 @@ export enum GameType {
   TranslateToEN,
   TranslateSentenceToVN,
   TranslateSentenceToEN,
-  ///
   FillInSentence,
-  ///
   SortWords,
 }
 
@@ -227,4 +225,17 @@ export interface UserGameRound {
   listUserGameCard: UserGameCard[];
   totalPoint: number;
   rightCount: number;
+}
+
+export interface OnboardingType {
+  id: string;
+  question: {
+    label: string;
+    ques: string;
+    keyword?: string;
+  };
+  options: string[];
+  answer: string;
+  type: GameType;
+  level: number;
 }
