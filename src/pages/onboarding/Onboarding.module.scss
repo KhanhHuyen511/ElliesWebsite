@@ -8,7 +8,6 @@
 .sub-title {
   @include typo-heading-2;
   margin-top: 24px;
-  margin-bottom: 20px;
 }
 
 .list {
@@ -43,4 +42,70 @@
     height: 60px;
     width: 60%;
   }
+}
+
+.wrapper {
+  text-align: center;
+  margin-top: 42px;
+}
+
+.options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px;
+
+  li {
+    width: calc(50% - 10px);
+    max-width: 240px;
+    height: 80px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--W);
+    border: 1px solid var(--Y500);
+    border-radius: 8px;
+    word-wrap: break-word;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--Y400);
+    }
+
+    &.active {
+      background-color: var(--O200);
+    }
+  }
+}
+
+.question {
+  &-label {
+    @include typo-body;
+  }
+  &-ques {
+    @include typo-heading-2;
+    margin-top: 16px;
+  }
+}
+
+.page-number {
+  @include typo-heading-2;
+  text-align: center;
+  margin-top: 50px;
+  color: var(--text-medium-color);
+
+  & span {
+    @include typo-heading-2;
+    color: var(--Y500);
+  }
+}
+
+.cta {
+  display: flex;
+  column-gap: 8px;
+  margin: 20px 5% 0 0;
+  justify-content: right;
 }

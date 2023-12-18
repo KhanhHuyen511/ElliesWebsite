@@ -10,3 +10,4 @@ export { default as DetailPendingBlog } from "./manage_forum/DetailPendingBlog";
 export { default as Dashboard } from "./dashboard/Dashboard";
 export { default as ManageUser } from "./manage_user/IndexManageUser";
 export { default as ManageOnboarding } from "./manage_onboarding/IndexOnboarding";
+export { default as ManageTestUpdateLevel } from "./manage_test_update_level/IndexTestUpdateLevel";

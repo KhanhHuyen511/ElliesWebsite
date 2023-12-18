@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import classNames from "classnames/bind";
-import style from "./IndexOnboarding.module.scss";
+import style from "./IndexTestUpdateLevel.module.scss";
 import { Input, Popup } from "../../../components";
-import { TestEnum, LevelType, OnboardingType } from "../../../types";
+import { TestEnum, LevelType, TestType } from "../../../types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { useForm } from "react-hook-form";
-import { editOnboardingQuestion } from "../../../redux/slice/adminSlice";
+import { editTestQuestion } from "../../../redux/slice/adminSlice";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../../firebase/config";
 const cx = classNames.bind(style);
 
-interface EditOnboardingFormProps {
+interface EditTestFormProps {
   isDisplay: boolean;
   onClose: () => void;
   onReload: () => void;
-  data: OnboardingType;
+  data: TestType;
 }
 
-const EditOnboardingForm = ({
+const EditTestForm = ({
   isDisplay,
   onClose,
   onReload,
   data: { options, question, answer, type, level, id, audio },
-}: EditOnboardingFormProps) => {
+}: EditTestFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [fbAudio, setFbAudio] = useState<any>(
@@ -51,7 +51,7 @@ const EditOnboardingForm = ({
 
   const onSubmit = () => {
     dispatch(
-      editOnboardingQuestion({
+      editTestQuestion({
         id,
         options: [
           getValues("option1"),
@@ -85,15 +85,10 @@ const EditOnboardingForm = ({
           isRequired
         ></Input>
         <Input
-          label="VN Label"
-          placeholder="fill vn label"
-          register={register("question.vnLabel")}
-          isRequired
-        ></Input>
-        <Input
           label="Question"
           placeholder="fill question"
           register={register("question.ques")}
+          isRequired
         ></Input>
         <Input
           type="file"
@@ -114,17 +109,13 @@ const EditOnboardingForm = ({
             isRequired
           ></Input>
         )}
-        <Input
-          label="Paraph"
-          placeholder="fill paraph"
-          register={register("question.paraph")}
-        ></Input>
         {getValues("type") != TestEnum.SortWords && (
           <>
             <Input
               label="Option 1"
               placeholder={"fill option 1"}
               register={register("option1")}
+              isRequired
             ></Input>
             <Input
               label="Option 2"
@@ -179,4 +170,4 @@ const EditOnboardingForm = ({
   );
 };
 
-export default EditOnboardingForm;
+export default EditTestForm;

@@ -22,6 +22,7 @@ import {
   GoHomeDetail,
   GoHomeStart,
   GoHomeResult,
+  TestLevelUp,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -37,6 +38,7 @@ import {
   ManageUser,
   EditSentenceDocForm,
   ManageOnboarding,
+  ManageTestUpdateLevel,
 } from "./pages/admin";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
@@ -114,6 +116,7 @@ function App() {
             <Route path="/go_home/:id" element={<GoHomeDetail />} />
             <Route path="/go_home/:id/start" element={<GoHomeStart />} />
             <Route path="/go_home/:id/result" element={<GoHomeResult />} />
+            <Route path="/test_level_up" element={<TestLevelUp />} />
           </Routes>
         </BrowserRouter>
       )}
@@ -140,6 +143,10 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/manage_users" element={<ManageUser />} />
             <Route path="/manage_onboarding" element={<ManageOnboarding />} />
+            <Route
+              path="/manage_test_update_level"
+              element={<ManageTestUpdateLevel />}
+            />
           </Routes>
         </BrowserRouter>
       )}

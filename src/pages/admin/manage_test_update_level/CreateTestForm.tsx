@@ -1,64 +1,57 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import classNames from "classnames/bind";
-import style from "./IndexOnboarding.module.scss";
+import style from "./IndexTestUpdateLevel.module.scss";
 import { Input, Popup } from "../../../components";
-import { TestEnum, LevelType, OnboardingType } from "../../../types";
+import { TestEnum, LevelType } from "../../../types";
+import { addTestQuestion } from "../../../redux/slice/adminSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { useForm } from "react-hook-form";
-import { editOnboardingQuestion } from "../../../redux/slice/adminSlice";
-import { getDownloadURL, ref } from "firebase/storage";
-import { storage } from "../../../firebase/config";
 const cx = classNames.bind(style);
 
-interface EditOnboardingFormProps {
+interface CreateTestFormProps {
   isDisplay: boolean;
   onClose: () => void;
   onReload: () => void;
-  data: OnboardingType;
 }
 
-const EditOnboardingForm = ({
+const CreateTestForm = ({
   isDisplay,
   onClose,
   onReload,
-  data: { options, question, answer, type, level, id, audio },
-}: EditOnboardingFormProps) => {
+}: CreateTestFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [fbAudio, setFbAudio] = useState<any>(
-    audio &&
-      getDownloadURL(ref(storage, `audios/${audio}`)).then((url) => {
-        setFbAudio(url);
-      })
-  );
+  const [audio, setAudio] = useState<any>();
 
-  const [newAudio, setNewAudio] = useState<any>();
-
-  const { register, getValues, setValue, handleSubmit } = useForm({
+  const { register, getValues, setValue, reset, handleSubmit } = useForm({
     defaultValues: {
-      option1: options[0],
-      option2: options[1],
-      option3: options[2],
-      option4: options[3],
-      question,
-      answer,
-      type,
-      level,
-      audio,
+      option1: "",
+      option2: "",
+      option3: "",
+      option4: "",
+      question: {
+        label: "",
+        ques: "",
+        keyword: "",
+      },
+      answer: "",
+      type: TestEnum.TranslateToVN,
+      level: LevelType.Beginner,
     },
   });
 
   const onSubmit = () => {
     dispatch(
-      editOnboardingQuestion({
-        id,
+      addTestQuestion({
+        id: "",
         options: [
           getValues("option1"),
           getValues("option2"),
           getValues("option3"),
           getValues("option4"),
         ],
+        audio: audio ? audio : null,
         answer: getValues("answer"),
         type: getValues("type"),
         question: getValues("question"),
@@ -66,8 +59,10 @@ const EditOnboardingForm = ({
       })
     );
 
+    reset();
     onReload();
   };
+
   return (
     <>
       <Popup
@@ -85,27 +80,11 @@ const EditOnboardingForm = ({
           isRequired
         ></Input>
         <Input
-          label="VN Label"
-          placeholder="fill vn label"
-          register={register("question.vnLabel")}
-          isRequired
-        ></Input>
-        <Input
           label="Question"
           placeholder="fill question"
           register={register("question.ques")}
+          isRequired
         ></Input>
-        <Input
-          type="file"
-          label="Audio"
-          onChange={(e) => {
-            if (e.target.files) setNewAudio(e.target.files[0]);
-          }}
-        ></Input>
-        {!newAudio && fbAudio && <audio controls src={fbAudio}></audio>}
-        {newAudio && (
-          <audio controls src={URL.createObjectURL(newAudio)}></audio>
-        )}
         {getValues("type") == TestEnum.FillInSentence && (
           <Input
             label="Keyword"
@@ -115,16 +94,20 @@ const EditOnboardingForm = ({
           ></Input>
         )}
         <Input
-          label="Paraph"
-          placeholder="fill paraph"
-          register={register("question.paraph")}
+          type="file"
+          label={"Audio"}
+          onChange={(e) => {
+            if (e.target.files) setAudio(e.target.files[0]);
+          }}
         ></Input>
+        {audio && <audio controls src={URL.createObjectURL(audio)}></audio>}
         {getValues("type") != TestEnum.SortWords && (
           <>
             <Input
               label="Option 1"
               placeholder={"fill option 1"}
               register={register("option1")}
+              isRequired
             ></Input>
             <Input
               label="Option 2"
@@ -179,4 +162,4 @@ const EditOnboardingForm = ({
   );
 };
 
-export default EditOnboardingForm;
+export default CreateTestForm;

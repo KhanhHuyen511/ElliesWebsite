@@ -26,6 +26,7 @@ import {
   StudyCardType,
   StudyPath,
   StudyRoute,
+  TestType,
 } from "../../types";
 import { ref, uploadBytes } from "firebase/storage";
 import { getDate } from "../../utils/utils";
@@ -1141,8 +1142,18 @@ export const getOnboardingList = createAsyncThunk(
 export const addOnboardingQuestion = createAsyncThunk(
   "admin/onboard/add_onboarding_question",
   async (data: OnboardingType) => {
-    const ref = await addDoc(collection(db, "onboarding"), data);
-    data.id = ref.id;
+    const convertedData = {
+      ...data,
+      audio: data.audio ? data.audio.name : null,
+    };
+
+    const addRef = await addDoc(collection(db, "onboarding"), convertedData);
+
+    if (data.audio) {
+      const audioRef = ref(storage, `audios/${data.audio.name}`);
+      uploadBytes(audioRef, data.audio);
+    }
+    data.id = addRef.id;
 
     return data;
   }
@@ -1170,6 +1181,81 @@ export const deleteOnboardingQuestion = createAsyncThunk(
   "admin/onboard/delete_onboarding_question",
   async (id: string) => {
     const ref = (await getDoc(doc(db, "onboarding", id))).ref;
+
+    await deleteDoc(ref);
+  }
+);
+
+//#endregion
+
+//#region [TEST UPDATE LEVEL]
+
+export const getTestList = createAsyncThunk(
+  "admin/test/get_test_update_level_list",
+  async () => {
+    console.log("hi");
+
+    const colRef = await getDocs(collection(db, "test_level_up"));
+    const rawList = colRef.docs;
+
+    let list: TestType[] = [];
+
+    if (rawList.length > 0) {
+      list = rawList.map((doc) => {
+        const item = doc.data() as TestType;
+
+        item.id = doc.id;
+
+        return item;
+      });
+    }
+
+    return list;
+  }
+);
+
+export const addTestQuestion = createAsyncThunk(
+  "admin/test/add_test_update_level_question",
+  async (data: TestType) => {
+    const convertedData = {
+      ...data,
+      audio: data.audio ? data.audio.name : null,
+    };
+
+    const addRef = await addDoc(collection(db, "test_level_up"), convertedData);
+
+    if (data.audio) {
+      const audioRef = ref(storage, `audios/${data.audio.name}`);
+      uploadBytes(audioRef, data.audio);
+    }
+    data.id = addRef.id;
+
+    return data;
+  }
+);
+
+export const editTestQuestion = createAsyncThunk(
+  "admin/test/edit_test_update_level_question",
+  async (data: TestType) => {
+    const { id, question, answer, options, level, type } = data;
+    const ref = (await getDoc(doc(db, "test_level_up", id))).ref;
+
+    await updateDoc(ref, {
+      question,
+      answer,
+      options,
+      level,
+      type,
+    });
+
+    return data;
+  }
+);
+
+export const deleteTestQuestion = createAsyncThunk(
+  "admin/test/delete_test_update_level_question",
+  async (id: string) => {
+    const ref = (await getDoc(doc(db, "test_level_up", id))).ref;
 
     await deleteDoc(ref);
   }

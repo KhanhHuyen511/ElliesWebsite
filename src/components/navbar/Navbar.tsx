@@ -31,6 +31,10 @@ const links = [
     to: "/saved",
     title: "Saved",
   },
+  {
+    to: "/game",
+    title: "Game",
+  },
 ];
 
 const adminLinks = [
@@ -57,6 +61,14 @@ const adminLinks = [
   {
     to: "/manage_users",
     title: "Users",
+  },
+  {
+    to: "/manage_onboarding",
+    title: "Onboard",
+  },
+  {
+    to: "/manage_test_update_level",
+    title: "Test",
   },
 ];
 
