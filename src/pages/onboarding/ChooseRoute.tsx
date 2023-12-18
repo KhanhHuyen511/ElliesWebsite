@@ -12,7 +12,11 @@ import style from "./ChooseRoute.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(style);
 
-const ChooseRoute = ({ level }: { level: LevelType }) => {
+interface ChooseRouteProps {
+  level: LevelType;
+}
+
+const ChooseRoute = ({ level }: ChooseRouteProps) => {
   const userID = useSelector((state: RootState) => state.auth.userID) || "";
 
   const [newLevel, setNewLevel] = useState<LevelType>(LevelType.Beginner);

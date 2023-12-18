@@ -77,6 +77,7 @@ export enum GameType {
   TranslateSentenceToEN,
   FillInSentence,
   SortWords,
+  Audio,
 }
 
 export interface Doc {
@@ -231,11 +232,38 @@ export interface OnboardingType {
   id: string;
   question: {
     label: string;
+    vnLabel?: string; // TODO: not allow null
     ques: string;
     keyword?: string;
+    paraph?: string;
   };
   options: string[];
+  audio?: any;
   answer: string;
-  type: GameType;
+  type: TestEnum;
   level: number;
+}
+
+export interface TestType {
+  id: string;
+  question: {
+    label: string;
+    ques: string;
+    keyword?: string;
+    paraph?: string;
+  };
+  options: string[];
+  audio?: any;
+  answer: string;
+  type: TestEnum;
+  level: number;
+}
+
+export enum TestEnum {
+  Basic,
+  TranslateToVN,
+  TranslateToEN,
+  FillInSentence,
+  SortWords,
+  Audio,
 }

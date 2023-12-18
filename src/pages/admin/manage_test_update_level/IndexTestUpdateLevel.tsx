@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames/bind";
-import style from "./IndexOnboarding.module.scss";
-import CreateOnboardingForm from "./CreateOnboardingForm";
-import EditOnboardingForm from "./EditOnboardingForm";
-import DeleteOnboardingForm from "./DeleteOnboardingForm";
+import style from "./IndexTestUpdateLevel.module.scss";
 import { Button, Checkbox } from "../../../components";
-import { OnboardingType } from "../../../types";
+import { TestType } from "../../../types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import { getOnboardingList } from "../../../redux/slice/adminSlice";
+import { getTestList } from "../../../redux/slice/adminSlice";
+import CreateTestForm from "./CreateTestForm";
+import EditTestForm from "./EditTestForm";
+import DeleteTestForm from "./DeleteTestForm";
 const cx = classNames.bind(style);
 
-const IndexOnboarding = () => {
+const IndexTestUpdateLevel = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [list, setList] = useState<OnboardingType[]>([]);
+  const [list, setList] = useState<TestType[]>([]);
   const [isOpenForm, setIsOpenForm] = useState(false);
   const [isOpenEditForm, setIsOpenEditForm] = useState(false);
   const [isOpenDeleteForm, setIsOpenDeleteForm] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<OnboardingType>();
+  const [selectedItem, setSelectedItem] = useState<TestType>();
 
   useEffect(() => {
     const fetchList = async () => {
-      const { payload: data } = await dispatch(getOnboardingList());
+      const { payload: data } = await dispatch(getTestList());
 
-      setList(data as OnboardingType[]);
+      setList(data as TestType[]);
     };
 
     fetchList();
   }, [dispatch]);
 
-  const getCheckedItems = (item: OnboardingType) => {
+  const getCheckedItems = (item: TestType) => {
     return item.id === selectedItem?.id;
   };
 
   const reloadList = async () => {
-    const { payload: data } = await dispatch(getOnboardingList());
+    const { payload: data } = await dispatch(getTestList());
 
-    setList(data as OnboardingType[]);
+    setList(data as TestType[]);
   };
 
   return (
@@ -45,7 +45,7 @@ const IndexOnboarding = () => {
       <div className={cx("container")}>
         <div className={cx("wrapper-filter")}></div>
         <div className={cx("section")}>
-          <h2 className={cx("title")}>Manage onboarding</h2>
+          <h2 className={cx("title")}>Manage test level up</h2>
           <>
             <div className={cx("handler")}>
               <Button isPrimary={false} onClick={() => setIsOpenEditForm(true)}>
@@ -94,7 +94,7 @@ const IndexOnboarding = () => {
                         )}
                       </td>
                       <td>{i + 1}</td>
-                      <td>{item.question.label + " " + item.question.ques}</td>
+                      <td>{item.question.ques}</td>
                       <td>{item.type}</td>
                       <td>{item.level}</td>
                     </tr>
@@ -106,7 +106,7 @@ const IndexOnboarding = () => {
       </div>
 
       {isOpenForm && (
-        <CreateOnboardingForm
+        <CreateTestForm
           onClose={() => setIsOpenForm(false)}
           isDisplay={isOpenForm}
           onReload={reloadList}
@@ -114,7 +114,7 @@ const IndexOnboarding = () => {
       )}
 
       {selectedItem && isOpenEditForm && (
-        <EditOnboardingForm
+        <EditTestForm
           data={selectedItem}
           onClose={() => setIsOpenEditForm(false)}
           isDisplay={isOpenEditForm}
@@ -123,7 +123,7 @@ const IndexOnboarding = () => {
       )}
 
       {selectedItem && isOpenDeleteForm && (
-        <DeleteOnboardingForm
+        <DeleteTestForm
           id={selectedItem.id}
           onClose={() => setIsOpenDeleteForm(false)}
           isDisplay={isOpenDeleteForm}
@@ -134,4 +134,4 @@ const IndexOnboarding = () => {
   );
 };
 
-export default IndexOnboarding;
+export default IndexTestUpdateLevel;

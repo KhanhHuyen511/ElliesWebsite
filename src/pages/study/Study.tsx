@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styles from "./Study.module.scss";
-import { Route, CheckinPanel } from "../../components";
+import { Route, CheckinPanel, Button } from "../../components";
 import classNames from "classnames/bind";
-import { Col } from "react-flexbox-grid";
+import { Col, Row } from "react-flexbox-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
@@ -12,11 +12,13 @@ import {
   setCheckInToday,
 } from "../../redux/slice/studySlice";
 import { useNavigate } from "react-router-dom";
-import { StudyRoute } from "../../types";
+import { LevelType, StudyRoute } from "../../types";
+import { getStudentLevel } from "../../redux/slice/studentSlice";
 const cx = classNames.bind(styles);
 
 const Study = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [level, setLevel] = useState<string>();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -26,8 +28,6 @@ const Study = () => {
     (state: RootState) => state.study.checkedInDays
   );
   const userID = useSelector((state: RootState) => state.auth.userID) || "";
-  const studyPathIds =
-    useSelector((state: RootState) => state.auth.userID) || "";
   const studiedRouteIDs = useSelector(
     (state: RootState) => state.study.studiedRouteIDs
   );
@@ -54,6 +54,9 @@ const Study = () => {
     dispatch(getStudyRoutes(userID));
     dispatch(getStudiedRoutes(userID));
     dispatch(getCheckedInDays(userID));
+    dispatch(getStudentLevel(userID)).then((data) =>
+      setLevel(data.payload as string)
+    );
   }, [dispatch, isCheckedIn, userID]);
 
   const CheckIn = (item: number) => {
@@ -134,14 +137,32 @@ const Study = () => {
       );
   };
 
+  const navigateToLevelUp = () => {
+    navigate("/test_level_up");
+  };
+
   return (
     <div className="container">
-      <Col xs={12} md={8} lg={6}>
-        <p className={cx("title")}>Hi,</p>
-        <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
-        <p className={cx("page-title")}>Lộ trình</p>
-        <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
-      </Col>
+      <Row>
+        <Col>
+          <p className={cx("title")}>Hi,</p>
+          <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
+        </Col>
+        {level !== undefined && (
+          <Col>
+            Current Level: {LevelType[Number(level)]}
+            <Button isPrimary={false} onClick={navigateToLevelUp}>
+              Level up
+            </Button>
+          </Col>
+        )}
+      </Row>
+      <Row>
+        <Col xs={12} md={8} lg={6}>
+          <p className={cx("page-title")}>Route</p>
+          <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
+        </Col>
+      </Row>
     </div>
   );
 };

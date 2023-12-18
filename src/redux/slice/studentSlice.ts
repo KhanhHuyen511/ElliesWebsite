@@ -62,6 +62,19 @@ export const getStudentName = createAsyncThunk(
   }
 );
 
+export const getStudentLevel = createAsyncThunk(
+  "student/level",
+  async (userID: string) => {
+    var stu: Student;
+    const q = query(collection(db, "students"), where("id", "==", userID));
+    const querySnapshot = (await getDocs(q)).docs[0];
+    stu = querySnapshot.data() as Student;
+
+    if (stu.name) return stu.level;
+    return "";
+  }
+);
+
 export const getAccountById = createAsyncThunk(
   "student/get_student_account_by_id",
   async (userID: string) => {

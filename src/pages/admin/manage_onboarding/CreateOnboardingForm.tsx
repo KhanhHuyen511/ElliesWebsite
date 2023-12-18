@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import classNames from "classnames/bind";
 import style from "./IndexOnboarding.module.scss";
 import { Input, Popup } from "../../../components";
-import { GameType, LevelType } from "../../../types";
+import { TestEnum, LevelType } from "../../../types";
 import { addOnboardingQuestion } from "../../../redux/slice/adminSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
@@ -22,6 +22,8 @@ const CreateOnboardingForm = ({
 }: CreateOnboardingFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const [audio, setAudio] = useState<any>();
+
   const { register, getValues, setValue, reset, handleSubmit } = useForm({
     defaultValues: {
       option1: "",
@@ -30,11 +32,13 @@ const CreateOnboardingForm = ({
       option4: "",
       question: {
         label: "",
+        vnLabel: "",
         ques: "",
         keyword: "",
+        paraph: "",
       },
       answer: "",
-      type: GameType.TranslateToVN,
+      type: TestEnum.TranslateToVN,
       level: LevelType.Beginner,
     },
   });
@@ -49,6 +53,7 @@ const CreateOnboardingForm = ({
           getValues("option3"),
           getValues("option4"),
         ],
+        audio: audio ? audio : null,
         answer: getValues("answer"),
         type: getValues("type"),
         question: getValues("question"),
@@ -77,12 +82,17 @@ const CreateOnboardingForm = ({
           isRequired
         ></Input>
         <Input
+          label="VN Label"
+          placeholder="fill vn label"
+          register={register("question.vnLabel")}
+          isRequired
+        ></Input>
+        <Input
           label="Question"
           placeholder="fill question"
           register={register("question.ques")}
-          isRequired
         ></Input>
-        {getValues("type") == GameType.FillInSentence && (
+        {getValues("type") == TestEnum.FillInSentence && (
           <Input
             label="Keyword"
             placeholder={"#"}
@@ -90,13 +100,25 @@ const CreateOnboardingForm = ({
             isRequired
           ></Input>
         )}
-        {getValues("type") != GameType.SortWords && (
+        <Input
+          label="Paraph"
+          placeholder="fill paraph"
+          register={register("question.paraph")}
+        ></Input>
+        <Input
+          type="file"
+          label={"Audio"}
+          onChange={(e) => {
+            if (e.target.files) setAudio(e.target.files[0]);
+          }}
+        ></Input>
+        {audio && <audio controls src={URL.createObjectURL(audio)}></audio>}
+        {getValues("type") != TestEnum.SortWords && (
           <>
             <Input
               label="Option 1"
               placeholder={"fill option 1"}
               register={register("option1")}
-              isRequired
             ></Input>
             <Input
               label="Option 2"
@@ -125,15 +147,15 @@ const CreateOnboardingForm = ({
         <select
           defaultValue={getValues("type")}
           onChange={(e) => {
-            setValue("type", e.target.value as unknown as GameType);
+            setValue("type", e.target.value as unknown as TestEnum);
           }}
         >
-          <option value={GameType.TranslateToVN}>{GameType[0]}</option>
-          <option value={GameType.TranslateToEN}>{GameType[1]}</option>
-          <option value={GameType.TranslateSentenceToVN}>{GameType[2]}</option>
-          <option value={GameType.TranslateSentenceToEN}>{GameType[3]}</option>
-          <option value={GameType.FillInSentence}>{GameType[4]}</option>
-          <option value={GameType.SortWords}>{GameType[5]}</option>
+          <option value={TestEnum.Basic}>{TestEnum[0]}</option>
+          <option value={TestEnum.TranslateToVN}>{TestEnum[1]}</option>
+          <option value={TestEnum.TranslateToEN}>{TestEnum[2]}</option>
+          <option value={TestEnum.FillInSentence}>{TestEnum[3]}</option>
+          <option value={TestEnum.SortWords}>{TestEnum[4]}</option>
+          <option value={TestEnum.Audio}>{TestEnum[5]}</option>
         </select>
         Level
         <select

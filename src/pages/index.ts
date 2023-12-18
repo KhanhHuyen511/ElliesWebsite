@@ -21,3 +21,4 @@ export { default as GoHome } from "./game/goHome/Index";
 export { default as GoHomeDetail } from "./game/goHome/Detail";
 export { default as GoHomeStart } from "./game/goHome/Start";
 export { default as GoHomeResult } from "./game/goHome/Result";
+export { default as TestLevelUp } from "./test_level_up/TestLevelUp";
