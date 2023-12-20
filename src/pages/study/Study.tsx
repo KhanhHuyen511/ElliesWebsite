@@ -142,28 +142,28 @@ const Study = () => {
   };
 
   return (
-    <div className="container">
-      <Row>
+    <Col className="container">
+      {/* <Row> */}
+      <Col>
+        <p className={cx("title")}>Hi, good day~</p>
+        <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
+      </Col>
+      {level !== undefined && (
         <Col>
-          <p className={cx("title")}>Hi,</p>
-          <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
+          Current Level: {LevelType[Number(level)]}
+          <Button isPrimary={false} onClick={navigateToLevelUp}>
+            Level up
+          </Button>
         </Col>
-        {level !== undefined && (
-          <Col>
-            Current Level: {LevelType[Number(level)]}
-            <Button isPrimary={false} onClick={navigateToLevelUp}>
-              Level up
-            </Button>
-          </Col>
-        )}
-      </Row>
-      <Row>
-        <Col xs={12} md={8} lg={6}>
-          <p className={cx("page-title")}>Route</p>
-          <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
-        </Col>
-      </Row>
-    </div>
+      )}
+      {/* </Row> */}
+      {/* <Row> */}
+      <Col xs={12} md={8} lg={6}>
+        <p className={cx("page-title")}>Route</p>
+        <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
+      </Col>
+      {/* </Row> */}
+    </Col>
   );
 };
 

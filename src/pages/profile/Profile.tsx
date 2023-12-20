@@ -77,7 +77,6 @@ const Profile = () => {
   return (
     <>
       <div className={"container"}>
-        <p className={cx("user-name")}>{user?.name}</p>
         <div className={cx("section-1")}>
           <div className={cx("avatar-wrapper")}>
             <div
@@ -120,7 +119,7 @@ const Profile = () => {
                         ).toFixed()
                       : 0}{" "}
                   </p>
-                  ngày học
+                  checked in
                 </p>
               </div>
               <div className={cx("stat-item")}>
@@ -129,14 +128,14 @@ const Profile = () => {
                   <p>
                     {user?.routes !== undefined ? user?.routes.length : 0}/
                     {studyRoutes ? studyRoutes.length : 0}
-                  </p>{" "}
-                  bài học
+                  </p>
+                  route
                 </p>
               </div>
               <div className={cx("stat-item")}>
                 <TrophyIcon className={cx("stat-item-icon")} />
                 <p className={cx("stat-item-label")}>
-                  <p>{userExs ? statsEx() : 0}%</p> đúng luyện tập
+                  <p>{userExs ? statsEx() : 0}%</p> right exercise
                 </p>
               </div>
             </div>
@@ -152,7 +151,7 @@ const Profile = () => {
           >
             <>
               <div className={cx("info-title-wrapper")}>
-                <p className={cx("section-title")}>Thông tin cá nhân</p>
+                <p className={cx("section-title")}>Personal information</p>
                 <PencilIcon
                   className={cx("edit-icon")}
                   onClick={() => setISOpenEditForm(true)}
@@ -161,28 +160,28 @@ const Profile = () => {
 
               <div className={cx("info-body")}>
                 <Input
-                  label={"Email"}
+                  label="Email"
                   value={user?.email}
                   placeholder={"abc@gm.uit.edu.vn"}
                   onChange={() => {}}
                   isDisabled
                 />
                 <Input
-                  label={"Tên"}
+                  label="Name"
                   value={user?.name}
                   placeholder={""}
                   onChange={() => {}}
                   isDisabled
                 />
                 <Input
-                  label={"Giới tính"}
+                  label="Gender"
                   value={user?.gender ? Gender[user.gender] : undefined}
                   placeholder={""}
                   onChange={() => {}}
                   isDisabled
                 />
                 <Input
-                  label={"Ngày sinh"}
+                  label="Birthday"
                   type="date"
                   value={
                     user?.birthday ? formatDate(user?.birthday) : undefined
@@ -192,9 +191,9 @@ const Profile = () => {
                   isDisabled
                 />
                 <TextArea
-                  label={"Tiểu sử"}
+                  label="Bio"
                   value={user?.bio}
-                  placeholder={"Nói gì đó về bạn"}
+                  placeholder="Write something about you..."
                   onChange={() => {}}
                   isDisabled
                 />
@@ -202,9 +201,9 @@ const Profile = () => {
             </>
           </Col>
 
-          <Col xs={12} md={4} mdOffset={6}>
+          <Col xs={12} md={6} mdOffset={6}>
             <div className={cx("blog-section", "section")}>
-              <p className={cx("section-title")}>Bài viết</p>
+              <p className={cx("section-title")}>Blog</p>
               <div className={cx("blog-body")}>
                 <Button
                   isPrimary={false}
@@ -213,15 +212,8 @@ const Profile = () => {
                   }}
                   className={cx("blog-button")}
                 >
-                  Bài viết của tôi
+                  My blogs
                 </Button>
-                {/* <Button
-              isPrimary={false}
-              onClick={() => {}}
-              className={cx("blog-button")}
-            >
-              Câu hỏi của tôi
-            </Button> */}
               </div>
             </div>
 
@@ -280,7 +272,7 @@ const Profile = () => {
           }}
           className={cx("log-out")}
         >
-          Đăng xuất
+          Logout
         </Button>
 
         {isOpenEditForm && user && (

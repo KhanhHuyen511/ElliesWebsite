@@ -1,10 +1,6 @@
 @import "../../assets/style/shared.scss";
 @import "../../assets/theme/shared.css";
 
-.user-name {
-  @include typo-heading-1;
-}
-
 .section-1 {
   margin-top: 14px;
   display: flex;
@@ -140,9 +136,6 @@
 .blog-section {
   .blog-button {
     width: 100%;
-  }
-  .blog-button:nth-of-type(1) {
-    margin-bottom: 16px;
   }
 }
 

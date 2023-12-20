@@ -69,7 +69,7 @@ const StudyDetail = () => {
     <>
       <div className={cx("container", "wrapper")}>
         <Col xs={12} md={8} lg={6}>
-          <p className={cx("title")}>Chặng {route.name}</p>
+          <p className={cx("title")}>Route {route.name}</p>
           {!studyCards && (
             <>
               <StudyDesc route={route}></StudyDesc>
@@ -91,8 +91,9 @@ const StudyDetail = () => {
                     );
                 }}
                 className={cx("submit")}
+                haveIcon
               >
-                Bắt đầu
+                Start
               </Button>
             </>
           )}

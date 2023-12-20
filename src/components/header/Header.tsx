@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./Header.module.scss";
 import {
   Bars3CenterLeftIcon,
@@ -120,6 +120,24 @@ const Header = () => {
       });
   };
 
+  const wrapperRef = useRef(null);
+
+  function useOutsideAlerter(ref: any) {
+    useEffect(() => {
+      function handleClickOutside(event: any) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setShowAuthWrapper(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  useOutsideAlerter(wrapperRef);
+
   return (
     <div className={cx("header")}>
       <Bars3CenterLeftIcon
@@ -168,9 +186,10 @@ const Header = () => {
           <div
             className={cx("user-name-wrapper")}
             onClick={() => toggleAuthWrapper()}
+            ref={wrapperRef}
           >
             <span className={cx("user-name")}>
-              Hi {currentUserName ? currentUserName : "friend"}
+              {currentUserName ? currentUserName : "friend"}
             </span>
             <ChevronDownIcon
               className={cx("dropdown-icon", "icon", {
@@ -181,15 +200,15 @@ const Header = () => {
               <ul className={cx("auth-wrapper")}>
                 {currentUserName ? (
                   <li onClick={logout} className={cx("auth-item")}>
-                    Đăng xuất
+                    Logout
                   </li>
                 ) : (
                   <>
                     <NavLink to="/login" className={cx("auth-item")}>
-                      Đăng nhập
+                      Login
                     </NavLink>
                     <NavLink to="/register" className={cx("auth-item")}>
-                      Đăng kí
+                      Register
                     </NavLink>
                   </>
                 )}

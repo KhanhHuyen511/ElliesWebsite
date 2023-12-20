@@ -24,34 +24,34 @@ const CreateBlog = () => {
   return (
     <>
       <div className="container">
-        <p className={cx("page-title")}>Tạo bài viết</p>
+        <p className={cx("page-title")}>Add new blog</p>
         <Input
-          label={"Tiêu đề"}
-          placeholder={""}
+          label="Title"
+          placeholder="fill in title"
           onChange={(e) => {
             setTitle(e.target.value);
           }}
         />
         <Input
-          label={"Từ khoá"}
-          placeholder={""}
+          label="Keyword"
+          placeholder="fill in keyword"
           onChange={(e) => {
             setKeyword(e.target.value);
           }}
         />
         <Input
-          label={"Tóm tắt"}
-          placeholder={""}
+          label="Brief"
+          placeholder="fill im brief"
           onChange={(e) => {
             setSummary(e.target.value);
           }}
         />
         <div className={cx("text-editor")}>
-          <p className={cx("text-editor-label")}>Nội dung</p>
+          <p className={cx("text-editor-label")}>Content</p>
           <ReactQuill
             theme="snow"
             value={content}
-            placeholder={"Nhập nội dung"}
+            placeholder="fill in content"
             onChange={(content, delta, source, editor) => {
               setContent(content);
             }}
@@ -100,7 +100,7 @@ const CreateBlog = () => {
             }}
             className={cx("submit")}
           >
-            Đăng
+            Submit
           </Button>
         </div>
       </div>

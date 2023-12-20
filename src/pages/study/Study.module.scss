@@ -1,5 +1,5 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .title {
   @include typo-heading-1;
@@ -9,10 +9,16 @@
 .check-in-wrapper {
   display: flex;
   justify-content: space-between;
-  column-gap: 8px;
+  column-gap: 2px;
+  overflow-x: auto;
+  width: 100%;
 
   & > .check-in-item {
     width: 100%;
+  }
+
+  @include for-desktop {
+    column-gap: 8px;
   }
 }
 

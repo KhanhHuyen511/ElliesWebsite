@@ -57,7 +57,7 @@ const Exercise = () => {
     <>
       <div className="container">
         <Col xs={12} md={8} lg={6}>
-          <p className={cx("title")}>Luyện tập</p>
+          <p className={cx("title")}>Exercise</p>
           <ul className={cx("")}>{}</ul>
           <p className={cx("sub-title")}>Topics</p>
           <ul className={cx("list")}>
@@ -71,16 +71,17 @@ const Exercise = () => {
           </ul>
           <p className={cx("sub-title")}>Do wrong sentences</p>
           <ul className={cx("list")}>
-            {exAgain !== undefined && (
+            {exAgain !== undefined ? (
               <li className={cx("item")}>
                 <ExCard data={exAgain} state={ExState.DoAgain} />
               </li>
+            ) : (
+              <p>Empty.</p>
             )}
           </ul>
           <p className={cx("sub-title")}>History</p>
           <ul className={cx("list")}>
-            {userExs &&
-              userExs.length > 0 &&
+            {userExs && userExs.length > 0 ? (
               userExs.map((item, index) => (
                 <li
                   key={index}
@@ -89,7 +90,10 @@ const Exercise = () => {
                 >
                   <UserExCard data={item} />
                 </li>
-              ))}
+              ))
+            ) : (
+              <p>Empty.</p>
+            )}
           </ul>
         </Col>
       </div>
