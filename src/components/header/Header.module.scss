@@ -38,14 +38,33 @@
   }
 }
 
-.logo-text {
-  display: none;
+.logo-text,
+.logo-text-slide {
   cursor: pointer;
 
   @include for-desktop {
-    display: block;
     @include typo-heading-1;
     color: var(--text-color);
+  }
+}
+
+.logo-text {
+  display: none;
+
+  @include for-desktop {
+    display: block;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.logo-text-slide {
+  .logo {
+    width: 40px;
+    height: 40px;
   }
 }
 
@@ -133,6 +152,13 @@
   padding: 0 22px;
   z-index: 2;
 
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+  }
+
   @include for-desktop {
     display: none;
   }
@@ -140,7 +166,6 @@
 
 .back-slide {
   text-align: right;
-  margin: 20px 0 32px 0;
 }
 
 .back-slide-icon {

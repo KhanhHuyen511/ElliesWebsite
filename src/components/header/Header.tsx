@@ -146,17 +146,26 @@ const Header = () => {
       ></Bars3CenterLeftIcon>
 
       <div className={cx("logo-text")} onClick={() => navigate("/")}>
-        Ellies
+        <img className={cx("logo")} src="/images/logo.png" alt="logo" />
       </div>
 
       {showMenu && (
         <div className={cx("slider-container")}>
-          <div className={cx("back-slide")}>
-            <ChevronLeftIcon
-              onClick={hideMenu}
-              className={cx("back-slide-icon", "icon")}
-            />
+          <div className={cx("slider-header")}>
+            <div
+              className={cx("logo-text-slide")}
+              onClick={() => navigate("/")}
+            >
+              <img className={cx("logo")} src="/images/logo.png" alt="logo" />
+            </div>
+            <div className={cx("back-slide")}>
+              <ChevronLeftIcon
+                onClick={hideMenu}
+                className={cx("back-slide-icon", "icon")}
+              />
+            </div>
           </div>
+
           <Navbar isSlider={true} />
         </div>
       )}
