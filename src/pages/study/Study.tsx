@@ -142,7 +142,7 @@ const Study = () => {
   };
 
   return (
-    <Col className="container">
+    <Col className={cx("container", "wrapper")}>
       <div>
         <p className={cx("title")}>Hi, good day~</p>
         <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>

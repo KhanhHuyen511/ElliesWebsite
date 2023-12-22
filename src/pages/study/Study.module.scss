@@ -4,6 +4,7 @@
 .title {
   @include typo-heading-1;
   margin-bottom: 26px;
+  z-index: 2;
 }
 
 .check-in-wrapper {

@@ -21,7 +21,7 @@ const StudyFinish = ({ cards }: { cards: StudyCard[] }) => {
   return (
     <>
       <div>
-        <p className={cx("studied-text")}>Bạn đã học được</p>
+        <p className={cx("studied-text")}>Amount you learned:</p>
         <table className={cx("list-card")}>
           <thead>
             <th></th>

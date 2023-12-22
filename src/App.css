@@ -23,6 +23,22 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.app::after {
+  content: "";
+  background-image: url("/public/images/test2.jpg");
+  background-size: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  margin: auto;
+  opacity: 0.15;
 }
 
 .container {
@@ -31,6 +47,7 @@
   overflow: hidden;
   flex-grow: 1 !important;
   width: 100%;
+  z-index: 1;
 }
 
 @media screen and (min-width: 600px) {

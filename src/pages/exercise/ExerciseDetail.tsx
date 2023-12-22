@@ -110,7 +110,7 @@ const ExerciseDetail = () => {
   return (
     <>
       <div className="container">
-        {isPrepare && <p className={cx("title")}>Luyện tập - {data?.title}</p>}
+        {isPrepare && <p className={cx("title")}>Exercise - {data?.title}</p>}
         {isPrepare && data !== undefined && (
           <>
             <ExDesc data={data}></ExDesc>
@@ -125,7 +125,7 @@ const ExerciseDetail = () => {
               }}
               className={cx("submit")}
             >
-              Bắt đầu
+              Start
             </Button>
           </>
         )}
@@ -157,7 +157,7 @@ const ExerciseDetail = () => {
                 }}
                 className={cx("cta-finish-btn")}
               >
-                Làm lại
+                Do again
               </Button>
               <Button
                 isPrimary
@@ -166,7 +166,7 @@ const ExerciseDetail = () => {
                 }}
                 className={cx("cta-finish-btn")}
               >
-                Xem kết quả chi tiết
+                View result detail
               </Button>
             </div>
           </>

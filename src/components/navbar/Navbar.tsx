@@ -35,6 +35,10 @@ const links = [
     to: "/game",
     title: "Game",
   },
+  {
+    to: "/leaderboard",
+    title: "Leaderboard",
+  },
 ];
 
 const adminLinks = [
@@ -69,6 +73,10 @@ const adminLinks = [
   {
     to: "/manage_test_update_level",
     title: "Test",
+  },
+  {
+    to: "/leaderboard",
+    title: "Leaderboard",
   },
 ];
 

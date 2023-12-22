@@ -7,7 +7,7 @@ const cx = classNames.bind(style);
 const ExDesc = ({ data }: { data: Ex | ExAgain }) => {
   return (
     <>
-      <div className={cx("section-title")}>Mô tả</div>
+      <div className={cx("section-title")}>Description</div>
       <div className={cx("desc")}>{data.description}</div>
     </>
   );

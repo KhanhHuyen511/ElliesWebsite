@@ -42,9 +42,9 @@ const DocDetail = () => {
 
   return (
     <div className="container">
-      <div className={cx("section-title")}>Mô tả</div>
+      <div className={cx("section-title")}>Description</div>
       <div className={cx("desc")}>{data?.description}</div>
-      <div className={cx("section-title")}>Từ vựng</div>
+      <div className={cx("section-title")}>Vocabs</div>
       <ul className={cx("list-card")}>
         {list &&
           list.length > 0 &&
