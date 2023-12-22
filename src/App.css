@@ -20,12 +20,17 @@
   color: var(--text-color);
   position: relative;
   background-color: var(--bg-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
   padding: 0 16px 32px;
   justify-content: center;
   overflow: hidden;
+  flex-grow: 1 !important;
+  width: 100%;
 }
 
 @media screen and (min-width: 600px) {

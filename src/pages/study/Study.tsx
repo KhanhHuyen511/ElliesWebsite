@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Study.module.scss";
 import { Route, CheckinPanel, Button } from "../../components";
 import classNames from "classnames/bind";
-import { Col, Row } from "react-flexbox-grid";
+import { Col } from "react-flexbox-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
@@ -143,26 +143,23 @@ const Study = () => {
 
   return (
     <Col className="container">
-      {/* <Row> */}
-      <Col>
+      <div>
         <p className={cx("title")}>Hi, good day~</p>
         <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
-      </Col>
+      </div>
       {level !== undefined && (
-        <Col>
+        <div>
           Current Level: {LevelType[Number(level)]}
           <Button isPrimary={false} onClick={navigateToLevelUp}>
             Level up
           </Button>
-        </Col>
+        </div>
       )}
-      {/* </Row> */}
-      {/* <Row> */}
+
       <Col xs={12} md={8} lg={6}>
         <p className={cx("page-title")}>Route</p>
         <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
       </Col>
-      {/* </Row> */}
     </Col>
   );
 };

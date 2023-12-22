@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./Header.module.scss";
 import {
   Bars3CenterLeftIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
-  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import classNames from "classnames/bind";
 import Navbar from "../navbar/Navbar";
@@ -149,7 +148,7 @@ const Header = () => {
         <img className={cx("logo")} src="/images/logo.png" alt="logo" />
       </div>
 
-      {showMenu && (
+      {currentUserName !== "" && showMenu && (
         <div className={cx("slider-container")}>
           <div className={cx("slider-header")}>
             <div
@@ -170,7 +169,9 @@ const Header = () => {
         </div>
       )}
 
-      {showMenu && <div className={cx("modal")}></div>}
+      {currentUserName !== "" && showMenu && (
+        <div className={cx("modal")}></div>
+      )}
 
       <div className={cx("navigation_bar")}>
         <div className={cx("navbar")}>
@@ -198,7 +199,7 @@ const Header = () => {
             ref={wrapperRef}
           >
             <span className={cx("user-name")}>
-              {currentUserName ? currentUserName : "friend"}
+              {currentUserName ? currentUserName : "Unregister User"}
             </span>
             <ChevronDownIcon
               className={cx("dropdown-icon", "icon", {
