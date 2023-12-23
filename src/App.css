@@ -42,7 +42,7 @@
 }
 
 .container {
-  padding: 0 16px 32px;
+  padding: 16px 16px 32px;
   justify-content: center;
   overflow: hidden;
   flex-grow: 1 !important;
@@ -52,13 +52,13 @@
 
 @media screen and (min-width: 600px) {
   .container {
-    padding: 0 0 42px;
+    padding: 20px 0 42px;
   }
 }
 
 @media screen and (min-width: 1200px) {
   .container {
-    padding: 0 120px 60px;
+    padding: 24px 120px 60px;
   }
 }
 

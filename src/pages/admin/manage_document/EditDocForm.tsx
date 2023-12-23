@@ -90,7 +90,7 @@ const EditDocForm = () => {
   };
 
   return (
-    <div>
+    <>
       <div className="container">
         <p className={cx("title")}>Edit doc: {data?.title}</p>
         <div className={cx("handler")}>
@@ -209,7 +209,7 @@ const EditDocForm = () => {
           onReload={reloadList}
         ></RemoveVocab>
       )}
-    </div>
+    </>
   );
 };
 

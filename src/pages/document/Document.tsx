@@ -3,11 +3,7 @@ import { Col } from "react-flexbox-grid";
 import styles from "./Document.module.scss";
 import classNames from "classnames/bind";
 import { CategoryPanel, DocCard } from "../../components";
-import {
-  AcademicCapIcon,
-  BookOpenIcon,
-  QueueListIcon,
-} from "@heroicons/react/24/outline";
+import { AcademicCapIcon, QueueListIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getListDocs } from "../../redux/slice/docSlice";

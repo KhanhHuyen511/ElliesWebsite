@@ -6,7 +6,7 @@
   color: var(--text-m-color);
   text-align: center;
   background: var(--bg-b-color);
-  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--Y500);
   border-radius: 8px;
   padding: 12px 7px;
   margin: 2px;
@@ -28,7 +28,7 @@
   &.active,
   &:active {
     color: var(--text-bold-color);
-    background-color: var(--Y400);
+    background-color: var(--O200);
     cursor: default;
 
     & > .icon {

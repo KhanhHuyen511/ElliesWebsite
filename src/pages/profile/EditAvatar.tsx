@@ -19,7 +19,6 @@ const EditAvatar = ({
   isDisplay: boolean;
   onClose: () => void;
 }) => {
-
   const [img, setImg] = useState("");
   const [newImg, setNewImg] = useState<File>();
 
@@ -35,8 +34,7 @@ const EditAvatar = ({
   return (
     <>
       <Popup
-
-        title={"Chỉnh sửa ảnh đại diện"}
+        title="Update Avatar"
         onClose={onClose}
         onSubmit={() => {
           if (data && newImg)
@@ -46,14 +44,12 @@ const EditAvatar = ({
       >
         <div className={cx("avatar-wrapper")}>
           <div className={cx("avatar")}>
-
             <img
               src={
                 newImg
                   ? URL.createObjectURL(newImg)
                   : img
                   ? img
-
                   : "/images/avatar.png"
               }
               className={cx("avatar-img")}
