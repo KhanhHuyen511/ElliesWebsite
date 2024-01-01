@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { LevelType, StudyRoute } from "../../types";
 import { getStudentLevel } from "../../redux/slice/studentSlice";
+import { ArrowUpIcon } from "@heroicons/react/24/outline";
 const cx = classNames.bind(styles);
 
 const Study = () => {
@@ -147,14 +148,23 @@ const Study = () => {
         <p className={cx("title")}>Hi, good day~</p>
         <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
       </div>
+
       {level !== undefined && (
-        <div>
+        <div className={cx("test-level-up")}>
+          <hr />
           Current Level: {LevelType[Number(level)]}
-          <Button isPrimary={false} onClick={navigateToLevelUp}>
+          <Button
+            isPrimary={false}
+            onClick={navigateToLevelUp}
+            className={cx("btn")}
+          >
+            <ArrowUpIcon width={16} height={16} strokeWidth={3} />
             Level up
           </Button>
         </div>
       )}
+
+      <hr />
 
       <Col xs={12} md={8} lg={6}>
         <p className={cx("page-title")}>Route</p>

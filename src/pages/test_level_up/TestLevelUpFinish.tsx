@@ -80,7 +80,7 @@ const TestLevelUpFinish = ({ result }: TestLevelUpFinishProps) => {
 
   return (
     <div>
-      Result:
+      <p className={cx("page-title", "text-center")}>Result:</p>
       <p className={cx("page-number")}>
         <span>{result.filter((result) => result === true).length}/</span>
         {result.length}
@@ -103,14 +103,16 @@ const TestLevelUpFinish = ({ result }: TestLevelUpFinishProps) => {
       {comparison === "upper" && newLevel !== undefined && (
         <p>Congratulation! Do you want upper to {LevelType[newLevel]}</p>
       )}
-      {newLevel !== undefined && comparison !== "same" && (
-        <Button isPrimary onClick={handleChangeLevel}>
-          Accept
+      <div className={cx("button-group")}>
+        {newLevel !== undefined && comparison !== "same" && (
+          <Button isPrimary onClick={handleChangeLevel}>
+            Accept
+          </Button>
+        )}
+        <Button isPrimary={false} onClick={navigateToHome}>
+          Back to Home
         </Button>
-      )}
-      <Button isPrimary={false} onClick={navigateToHome}>
-        Back to Home
-      </Button>
+      </div>
     </div>
   );
 };

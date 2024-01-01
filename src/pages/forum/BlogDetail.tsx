@@ -91,12 +91,12 @@ const BlogDetail = ({
       )}
 
       <p className={cx("keyword-wrapper")}>
-        Từ khoá: <span className={cx("keyword")}>#{data?.keyword}</span>
+        Keyword: <span className={cx("keyword")}>#{data?.keyword}</span>
       </p>
 
       {!noComment && (
         <div className={cx("comment-section")}>
-          <p className={cx("sub-title")}>Bình luận</p>
+          <p className={cx("sub-title")}>Comments</p>
           <ul className={cx("comments")}>
             <li>
               <Comment blogId={id}></Comment>

@@ -43,7 +43,7 @@ const PendingBlogCard = ({ data }: { data: Blog }) => {
               <p className={cx("card-date")}>
                 {data.createDate?.toLocaleDateString()}
                 <span className={cx("card-keyword-wrapper")}>
-                  Từ khoá:{" "}
+                  Keyword:{" "}
                   <span className={cx("keyword")}>#{data.keyword}</span>
                 </span>
               </p>

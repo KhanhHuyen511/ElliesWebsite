@@ -130,7 +130,7 @@ const StudyDetail = () => {
                   }}
                   className={cx("cta-finish-btn")}
                 >
-                  Xem lại
+                  View again
                 </Button>
                 <Button
                   isPrimary
@@ -140,7 +140,7 @@ const StudyDetail = () => {
                   icon="boilt"
                   className={cx("cta-finish-btn")}
                 >
-                  Luyện tập
+                  Exercise
                 </Button>
               </div>
               <div className={cx("home")}>

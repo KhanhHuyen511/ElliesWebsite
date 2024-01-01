@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
-import classNames from 'classnames/bind';
-import styles from './Checkbox.module.scss';
+import classNames from "classnames/bind";
+import styles from "./Checkbox.module.scss";
+import { ChangeEvent } from "react";
 const cx = classNames.bind(styles);
 
 interface Props {
   label?: string;
   isChecked?: boolean;
   value?: string;
-  onChecked?: () => void;
+  onChecked?: (isChecked?: boolean) => void;
 }
 
 const Checkbox = (props: Props) => {
-  const onValueChange = () => {
+  const onValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (props.onChecked) {
-      props.onChecked();
+      props.onChecked(e.target.checked);
     }
   };
 
   return (
-    <div className={cx('wrapper')}>
+    <div className={cx("wrapper")}>
       <label>{props.label}</label>
       <input
-        type='checkbox'
+        type="checkbox"
         checked={props.isChecked}
-        onChange={onValueChange}
-        className={cx('checkbox')}
+        onChange={(e) => onValueChange(e)}
+        className={cx("checkbox")}
       ></input>
     </div>
   );

@@ -24,7 +24,8 @@
 }
 
 .page-title {
-  @include typo-heading-2;
+  @include typo-heading-1;
+  margin-top: 20px;
 }
 
 .route-study-wrapper {
@@ -50,4 +51,18 @@
     margin-top: 8px;
     margin-left: 20%;
   }
+}
+
+.test-level-up {
+  @include typo-heading-3;
+  margin-top: 20px;
+
+  & > .btn {
+    margin-top: 12px;
+  }
+}
+
+hr {
+  border-width: 0.5px;
+  margin-top: 20px;
 }

@@ -30,7 +30,7 @@ const Result = () => {
   });
 
   return (
-    <>
+    <div className="container">
       {userGameRound && (
         <div className={cx("finish-wrapper")}>
           <p className={cx("title")}>Round {nameOfGameRound}</p>
@@ -51,7 +51,7 @@ const Result = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

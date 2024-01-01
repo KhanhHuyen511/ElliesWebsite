@@ -212,7 +212,7 @@ const Profile = () => {
                   }}
                   className={cx("blog-button")}
                 >
-                  My blogs
+                  My posts
                 </Button>
               </div>
             </div>

@@ -168,12 +168,14 @@ const EditSentenceDocForm = () => {
               placeholder={"fill description"}
               register={register("description")}
             ></TextArea>
-            <Button isPrimary={false} onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button isPrimary onClick={() => handleSubmit(onSubmit)}>
-              Save
-            </Button>
+            <div className={cx("cta")}>
+              <Button isPrimary onClick={handleSubmit(onSubmit)}>
+                Save
+              </Button>
+              <Button isPrimary={false} onClick={onCancel}>
+                Cancel
+              </Button>
+            </div>
           </Col>
         </Row>
       </div>

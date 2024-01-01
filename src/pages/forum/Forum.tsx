@@ -37,7 +37,7 @@ const Forum = () => {
 
         <ul className={cx("forum-cate-wrapper")}>
           <CategoryPanel
-            label={"Blogs"}
+            label="Post"
             isActive={tabType === TabType.Blogs}
             classNames={cx("cate-item")}
             icon={<AcademicCapIcon />}
@@ -62,7 +62,7 @@ const Forum = () => {
                   navigate("/forum/create");
                 }}
               >
-                Add blog
+                Add post
               </Button>
             </div>
 

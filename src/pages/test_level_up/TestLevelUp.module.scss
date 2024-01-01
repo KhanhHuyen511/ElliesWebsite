@@ -84,3 +84,13 @@
   margin: 20px 5% 0 0;
   justify-content: right;
 }
+
+.button-group {
+  display: flex;
+  column-gap: 8px;
+  margin-top: 42px;
+}
+
+.text-center {
+  text-align: center;
+}

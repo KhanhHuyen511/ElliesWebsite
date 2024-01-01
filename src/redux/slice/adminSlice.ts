@@ -403,6 +403,7 @@ export const setDocCard = createAsyncThunk(
     doc_id: string;
   }) => {
     console.log("hi");
+    console.log(data);
     let typeCard = "";
 
     // get Type
@@ -1238,33 +1239,33 @@ export const getTestList = createAsyncThunk(
       });
     }
 
-    const getRandom = (arr: any[], n: number) => {
-      var result = new Array(n),
-        len = arr.length,
-        taken = new Array(len);
-      if (n > len)
-        throw new RangeError("getRandom: more elements taken than available");
-      while (n--) {
-        var x = Math.floor(Math.random() * len);
-        result[n] = arr[x in taken ? taken[x] : x];
-        taken[x] = --len in taken ? taken[len] : len;
-      }
-      return result;
-    };
+    // const getRandom = (arr: any[], n: number) => {
+    //   var result = new Array(n),
+    //     len = arr.length,
+    //     taken = new Array(len);
+    //   if (n > len)
+    //     throw new RangeError("getRandom: more elements taken than available");
+    //   while (n--) {
+    //     var x = Math.floor(Math.random() * len);
+    //     result[n] = arr[x in taken ? taken[x] : x];
+    //     taken[x] = --len in taken ? taken[len] : len;
+    //   }
+    //   return result;
+    // };
 
-    const randomQuestions = () => {
-      const basic = list.filter((item) => String(item.level) === "0");
-      const immediate = list.filter((item) => String(item.level) === "1");
-      const advanced = list.filter((item) => String(item.level) === "2");
+    // const randomQuestions = () => {
+    //   const basic = list.filter((item) => String(item.level) === "0");
+    //   const immediate = list.filter((item) => String(item.level) === "1");
+    //   const advanced = list.filter((item) => String(item.level) === "2");
 
-      const basicList = getRandom(basic, 3);
-      const immediateList = getRandom(immediate, 4);
-      const advancedList = getRandom(advanced, 3);
+    //   const basicList = getRandom(basic, 3);
+    //   const immediateList = getRandom(immediate, 4);
+    //   const advancedList = getRandom(advanced, 3);
 
-      list = [...basicList, ...immediateList, ...advancedList];
-    };
+    //   list = [...basicList, ...immediateList, ...advancedList];
+    // };
 
-    randomQuestions();
+    // randomQuestions();
 
     return list;
   }
