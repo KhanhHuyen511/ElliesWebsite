@@ -80,9 +80,11 @@ const StudyCardDetail = ({ card }: { card: StudyCard }) => {
             />
           </div>
         </div>
-        <div className={cx("image")}>
-          <img src={img} alt="" />
-        </div>
+        {img && (
+          <div className={cx("image")}>
+            <img src={img} alt="" />
+          </div>
+        )}
         <p className={cx("meaning")}>{card.meaning}</p>
         <p className={cx("example")}>{card.example}</p>
       </div>

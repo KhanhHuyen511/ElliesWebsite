@@ -25,21 +25,14 @@ const EditSentenceDocForm = () => {
   const data = useSelector((state: RootState) => state.admin.currentDoc);
   const [list, setList] = useState<StudyCard[]>();
 
-  let defaultValues = {
-    title: "",
-    description: "",
-  };
-
-  if (data) {
-    defaultValues = {
-      title: data.title || "",
-      description: data.description || "",
-    };
-  }
-
-  const { register, handleSubmit, reset, getValues } = useForm({
-    defaultValues: defaultValues,
-  });
+  const { register, handleSubmit, reset, getValues, setValue, watch } = useForm(
+    {
+      defaultValues: {
+        title: "",
+        description: "",
+      },
+    }
+  );
 
   const onSubmit = async () => {
     if (data)
@@ -65,19 +58,39 @@ const EditSentenceDocForm = () => {
     if (id) {
       await dispatch(getADocWithType({ doc_id: id, type: "1" })).then(
         (data) => {
-          setList((data.payload as Doc).sentences);
+          const newData = data.payload as Doc;
+
+          setValue("title", newData.title);
+          setValue(
+            "description",
+            newData.description ? newData.description : ""
+          );
+          setList(newData.sentences);
         }
       );
     }
   };
 
   useEffect(() => {
-    if (id) {
-      dispatch(getADocWithType({ doc_id: id, type: "1" }));
+    const getList = async () => {
+      if (id) {
+        const newData = (
+          await dispatch(getADocWithType({ doc_id: id, type: "1" }))
+        ).payload as Doc;
 
-      setList(data?.sentences);
-    }
-  }, [dispatch, id, data?.title, data?.description, data?.sentences]);
+        if (newData) {
+          setValue("title", newData.title);
+          setValue(
+            "description",
+            newData.description ? newData.description : ""
+          );
+          setList(newData.sentences);
+        }
+      }
+    };
+
+    getList();
+  }, [dispatch, id, setValue]);
 
   const [isOpenCard, setIsOpenCard] = useState(false);
   const [isOpenEditCardForm, setIsOpenEditCardForm] = useState(false);
@@ -89,7 +102,7 @@ const EditSentenceDocForm = () => {
   };
 
   return (
-    <div>
+    <>
       <div className="container">
         <p className={cx("title")}>Edit doc: {data?.title}</p>
         <div className={cx("handler")}>
@@ -210,7 +223,7 @@ const EditSentenceDocForm = () => {
           onReload={reloadList}
         ></RemoveVocab>
       )}
-    </div>
+    </>
   );
 };
 

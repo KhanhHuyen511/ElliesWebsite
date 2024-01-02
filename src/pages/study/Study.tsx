@@ -130,7 +130,7 @@ const Study = () => {
             >
               <Route
                 id={item.id}
-                label={"Chặng " + item.name}
+                label={`${item.name}`}
                 state={CheckRouteState(item, index + 1)}
               />
             </li>

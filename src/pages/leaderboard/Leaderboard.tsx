@@ -26,7 +26,7 @@ const Leaderboard = () => {
               <RankItem
                 rank={2}
                 name={data[1].name ? data[1].name : "noname"}
-                avt={"/images/avatar.png"}
+                avt={data[1].avatar}
                 point={data[1].point}
               ></RankItem>
             )}
@@ -34,7 +34,7 @@ const Leaderboard = () => {
               <RankItem
                 rank={1}
                 name={data[0].name ? data[0].name : "noname"}
-                avt={"/images/avatar.png"}
+                avt={data[0].avatar}
                 point={data[0].point}
               ></RankItem>
             )}
@@ -42,7 +42,7 @@ const Leaderboard = () => {
               <RankItem
                 rank={3}
                 name={data[2].name ? data[2].name : "noname"}
-                avt={"/images/avatar.png"}
+                avt={data[2].avatar}
                 point={data[2].point}
               ></RankItem>
             )}
@@ -52,13 +52,13 @@ const Leaderboard = () => {
               {data.slice(3, data.length).map((i, index) => (
                 <div className={cx("item")}>
                   <span className={cx("stt")}>{index + 4}.</span>
-                  <img src="" alt="" />
+                  <img src="/images/avatar.png" alt="" />
                   <span className={cx("name")}>
                     {i.name ? i.name : "noname"}
                   </span>
                   <p className={cx("point")}>
                     <span>Point:</span>
-                    <span>{i.point}</span>
+                    <span>{i.point ? i.point : "0"}</span>
                   </p>
                 </div>
               ))}
