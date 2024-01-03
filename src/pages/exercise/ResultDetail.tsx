@@ -27,7 +27,7 @@ const ResultDetail = () => {
   return (
     <>
       <div className="container">
-        <p className={cx("title")}>Chi tiết kết quả</p>
+        <p className={cx("title")}>Detail Result</p>
         <ul>
           {data?.resultList.map((item, index) => (
             <li key={index}>
@@ -52,9 +52,9 @@ const ResultDetail = () => {
                   : item.vocab?.meaning}
                 "
               </p>
-              <p>Câu trả lời của bạn: {item.userAnswer}</p>
+              <p>Your answer: {item.userAnswer}</p>
               <p>
-                Đáp án đúng:{" "}
+                Right answer:{" "}
                 <span className={cx("answer")}>
                   {item.answer ? item.answer : item.vocab?.display}
                 </span>

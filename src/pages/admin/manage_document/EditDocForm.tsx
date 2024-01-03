@@ -24,12 +24,14 @@ const EditDocForm = () => {
   const data = useSelector((state: RootState) => state.admin.currentDoc);
   const [list, setList] = useState<StudyCard[]>();
 
-  const { register, handleSubmit, reset, getValues, setValue } = useForm({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-  });
+  const { register, handleSubmit, reset, getValues, setValue, watch } = useForm(
+    {
+      defaultValues: {
+        title: "",
+        description: "",
+      },
+    }
+  );
 
   const onSubmit = async () => {
     if (data)
@@ -69,16 +71,26 @@ const EditDocForm = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      dispatch(getADocWithType({ doc_id: id, type: "0" }));
+    const getList = async () => {
+      if (id) {
+        const newData = (
+          await dispatch(getADocWithType({ doc_id: id, type: "0" }))
+        ).payload as Doc;
 
-      if (data) {
-        setValue("title", data.title);
-        setValue("description", data.description ? data.description : "");
-        setList(data.vocabs);
+        if (newData) {
+          console.log("update data");
+          setValue("title", newData.title);
+          setValue(
+            "description",
+            newData.description ? newData.description : ""
+          );
+          setList(newData.vocabs);
+        }
       }
-    }
-  }, [data, dispatch, id, setValue]);
+    };
+
+    getList();
+  }, [dispatch, id, setValue]);
 
   const [isOpenCard, setIsOpenCard] = useState(false);
   const [isOpenEditCardForm, setIsOpenEditCardForm] = useState(false);
@@ -90,7 +102,7 @@ const EditDocForm = () => {
   };
 
   return (
-    <div>
+    <>
       <div className="container">
         <p className={cx("title")}>Edit doc: {data?.title}</p>
         <div className={cx("handler")}>
@@ -169,12 +181,28 @@ const EditDocForm = () => {
               placeholder={"fill description"}
               register={register("description")}
             ></TextArea>
-            <Button isPrimary={false} onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button isPrimary onClick={handleSubmit(onSubmit)}>
-              Save
-            </Button>
+            <div className={cx("cta")}>
+              <Button
+                isPrimary
+                onClick={handleSubmit(onSubmit)}
+                isDisabled={
+                  watch("title") === data?.title &&
+                  watch("description") === data?.description
+                }
+              >
+                Update
+              </Button>
+              <Button
+                isPrimary={false}
+                onClick={onCancel}
+                isDisabled={
+                  watch("title") === data?.title &&
+                  watch("description") === data?.description
+                }
+              >
+                Cancel
+              </Button>
+            </div>
           </Col>
         </Row>
       </div>
@@ -209,7 +237,7 @@ const EditDocForm = () => {
           onReload={reloadList}
         ></RemoveVocab>
       )}
-    </div>
+    </>
   );
 };
 

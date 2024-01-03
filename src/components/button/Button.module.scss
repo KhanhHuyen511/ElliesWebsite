@@ -27,6 +27,8 @@
     background-color: var(--G100);
   }
   &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
   }
 }
 

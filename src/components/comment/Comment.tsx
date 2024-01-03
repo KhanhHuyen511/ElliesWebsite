@@ -79,7 +79,7 @@ const Comment = (prop: Prop) => {
           onChange={(e) => {
             setContent(e.target.value);
           }}
-          placeholder="Nhập bình luận"
+          placeholder="fill your comment"
           isDisabled={prop.data !== undefined}
           classNames={cx("textarea", { empty: prop.data === undefined })}
         />

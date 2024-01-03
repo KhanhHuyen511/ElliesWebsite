@@ -1,5 +1,7 @@
 :root {
-  --Y500: #fbb825;
+  --Y500: #ff914d;
+  --Y450: #fbb825;
+  /* --Y400: #fbc531; */
   --Y400: #fbcf67;
   --Y200: #fbe8c9;
   --Y50: rgb(251 232 201 / 20%);
@@ -39,4 +41,11 @@
   /* DARK THEME */
   --BG-Dark: #292841;
   --BG-m-Dark: #1c1b29;
+
+  /* GRADIENT */
+  --bg-gradient-color: linear-gradient(
+    135deg,
+    rgba(251, 197, 49, 1) 0%,
+    rgba(255, 145, 77, 1) 50%
+  );
 }

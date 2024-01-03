@@ -24,7 +24,7 @@ const Detail = () => {
     }
   }, []);
 
-  return <div>{!isStart ? <Description /> : <Start />}</div>;
+  return <>{!isStart ? <Description /> : <Start />}</>;
 };
 
 export default Detail;

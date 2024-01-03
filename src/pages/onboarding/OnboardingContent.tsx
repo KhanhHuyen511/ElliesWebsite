@@ -116,19 +116,21 @@ const OnboardingContent = ({ onFinish }: OnboardingContentProps) => {
                 : currentQuestion.question.ques}
             </p>
             <ul className={cx("options")}>
-              {currentQuestion.options.map((option, index) => (
-                <li
-                  key={`option-${index}`}
-                  onClick={() => {
-                    setTempOption(option);
-                  }}
-                  className={cx({
-                    active: tempOption === option,
-                  })}
-                >
-                  {option}
-                </li>
-              ))}
+              {currentQuestion.options &&
+                currentQuestion.options.length > 0 &&
+                currentQuestion.options.map((option, index) => (
+                  <li
+                    key={`option-${index}`}
+                    onClick={() => {
+                      setTempOption(option);
+                    }}
+                    className={cx({
+                      active: tempOption === option,
+                    })}
+                  >
+                    {option}
+                  </li>
+                ))}
             </ul>
           </>
         )}

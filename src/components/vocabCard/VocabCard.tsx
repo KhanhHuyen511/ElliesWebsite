@@ -37,9 +37,12 @@ const VocabCard = ({ card }: { card: StudyCard }) => {
             {/* <HeartIcon width={32} height={32} className={cx('heart-icon')} /> */}
           </div>
         </div>
-        <div className={cx("image")}>
-          <img src={img} alt="" />
-        </div>
+
+        {img && (
+          <div className={cx("image")}>
+            <img src={img} alt="" />
+          </div>
+        )}
 
         <p className={cx("meaning")}>{card.meaning}</p>
         <p className={cx("example")}>{card.example}</p>

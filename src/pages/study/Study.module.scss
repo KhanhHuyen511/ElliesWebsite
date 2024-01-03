@@ -1,24 +1,31 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
 
 .title {
   @include typo-heading-1;
   margin-bottom: 26px;
+  z-index: 2;
 }
 
 .check-in-wrapper {
   display: flex;
   justify-content: space-between;
-  column-gap: 8px;
+  column-gap: 2px;
+  overflow-x: auto;
+  width: 100%;
 
   & > .check-in-item {
     width: 100%;
   }
+
+  @include for-desktop {
+    column-gap: 8px;
+  }
 }
 
 .page-title {
-  @include typo-heading-2;
-  margin-top: 58px;
+  @include typo-heading-1;
+  margin-top: 20px;
 }
 
 .route-study-wrapper {
@@ -44,4 +51,18 @@
     margin-top: 8px;
     margin-left: 20%;
   }
+}
+
+.test-level-up {
+  @include typo-heading-3;
+  margin-top: 20px;
+
+  & > .btn {
+    margin-top: 12px;
+  }
+}
+
+hr {
+  border-width: 0.5px;
+  margin-top: 20px;
 }

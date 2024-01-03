@@ -42,7 +42,6 @@ const PathDetail = () => {
   const [name, setName] = useState<string>();
   const [level, setLevel] = useState<string>();
   const [topic, setTopic] = useState<string>();
-  // const [currentStudyRoute, setCurrentStudyRoute] = useState<StudyRoute>();
   const [isOpenRouteForm, setIsOpenRouteForm] = useState<boolean>(false);
   const [isOpenEditRouteForm, setIsOpenEditRouteForm] =
     useState<boolean>(false);
@@ -51,7 +50,13 @@ const PathDetail = () => {
   const [isOpenEditCardForm, setIsOpenEditCardForm] = useState<boolean>(false);
   const [isOpenCardForm, setIsOpenCardForm] = useState<boolean>(false);
   const [selectRoute, setSelectRoute] = useState<StudyRoute>();
-  const [curretntStudyCard, setCurrentStudyCard] = useState<StudyCard>();
+  const [currentStudyCard, setCurrentStudyCard] = useState<StudyCard>();
+
+  const handleCancelUpdatePath = () => {
+    setName(data.name);
+    setLevel(data.level);
+    setTopic(data.topic);
+  };
 
   return (
     <div className={cx("wrapper", "container")}>
@@ -88,16 +93,34 @@ const PathDetail = () => {
                 placeholder="fill level"
               />
             </div>
-            <Button
-              isPrimary
-              preventDefault
-              onClick={() => {
-                dispatch(updateStudyPath({ id: id, name, level, topic }));
-              }}
-              className={cx("submit-btn")}
-            >
-              Update
-            </Button>
+            <div className={cx("cta-button")}>
+              <Button
+                isPrimary
+                preventDefault
+                onClick={() => {
+                  dispatch(updateStudyPath({ id: id, name, level, topic }));
+                }}
+                isDisabled={
+                  name === data.name &&
+                  topic === data.topic &&
+                  level === data.level
+                }
+              >
+                Update
+              </Button>
+              <Button
+                isPrimary={false}
+                isDisabled={
+                  name === data.name &&
+                  topic === data.topic &&
+                  level === data.level
+                }
+                onClick={handleCancelUpdatePath}
+              >
+                Cancel
+              </Button>
+            </div>
+
             <div>
               <div className={cx("handler", "list")}>
                 <Button
@@ -129,7 +152,7 @@ const PathDetail = () => {
                       // dispatch(getStudyRoute({ path_id: id, id: selectRoute }));
                       // setCurrentStudyRoute(currentRoute);
                     }
-                    setIsOpenEditRouteForm(true);
+                    if (selectRoute?.id) setIsOpenEditRouteForm(true);
                   }}
                   preventDefault
                 >
@@ -138,7 +161,7 @@ const PathDetail = () => {
                 <Button
                   isPrimary={false}
                   onClick={() => {
-                    setIsOpenRemoveRouteForm(true);
+                    if (selectRoute?.id) setIsOpenRemoveRouteForm(true);
                   }}
                   preventDefault
                 >
@@ -159,8 +182,12 @@ const PathDetail = () => {
                     <tr key={index}>
                       <td>
                         <Checkbox
-                          onChecked={() => {
+                          onChecked={(isChecked?: boolean) => {
                             setSelectRoute(item);
+
+                            if (isChecked === false) {
+                              setSelectRoute(undefined);
+                            }
                           }}
                         />
                       </td>
@@ -182,7 +209,7 @@ const PathDetail = () => {
                 isPrimary={false}
                 preventDefault
                 onClick={() => {
-                  setIsOpenCardForm(true);
+                  if (selectRoute?.id) setIsOpenCardForm(true);
                 }}
               >
                 Add sentence
@@ -190,7 +217,8 @@ const PathDetail = () => {
               <Button
                 isPrimary={false}
                 onClick={() => {
-                  setIsOpenEditCardForm(true);
+                  if (selectRoute?.id && currentStudyCard?.id)
+                    setIsOpenEditCardForm(true);
                 }}
                 preventDefault
               >
@@ -211,8 +239,12 @@ const PathDetail = () => {
                   <tr key={index}>
                     <td>
                       <Checkbox
-                        onChecked={() => {
+                        onChecked={(isChecked?: boolean) => {
                           setCurrentStudyCard(item);
+
+                          if (isChecked === false) {
+                            setCurrentStudyCard(undefined);
+                          }
                         }}
                       ></Checkbox>
                     </td>
@@ -260,9 +292,9 @@ const PathDetail = () => {
         />
       )}
 
-      {isOpenEditCardForm && id && curretntStudyCard && selectRoute?.id && (
+      {isOpenEditCardForm && id && currentStudyCard && selectRoute?.id && (
         <EditCardForm
-          data={curretntStudyCard}
+          data={currentStudyCard}
           pathID={id}
           routeID={selectRoute.id}
           onClose={() => {

@@ -7,6 +7,9 @@ import classNames from "classnames/bind";
 import style from "./TestLevelUp.module.scss";
 import { Button } from "../../components";
 import { toast } from "react-toastify";
+import { getDownloadURL, ref } from "firebase/storage";
+import { storage } from "../../firebase/config";
+import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
 const cx = classNames.bind(style);
 
 interface TestLevelUpContentProps {
@@ -23,6 +26,20 @@ const TestLevelUpContent = ({ onExit, onFinish }: TestLevelUpContentProps) => {
   const [result, setResult] = useState<boolean[]>([]);
   const [tempOption, setTempOption] = useState<string>();
   const [isFinished, setIsFinished] = useState<boolean>(false);
+
+  const [audio, setAudio] = useState("");
+
+  if (currentQuestion?.audio)
+    getDownloadURL(ref(storage, `audios/${currentQuestion?.audio}`)).then(
+      (url) => {
+        setAudio(url);
+      }
+    );
+
+  const playAudio = () => {
+    var sound = new Audio(audio);
+    sound.play();
+  };
 
   useEffect(() => {
     const fetchList = async () => {
@@ -82,6 +99,9 @@ const TestLevelUpContent = ({ onExit, onFinish }: TestLevelUpContentProps) => {
             <p className={cx("question-ques")}>
               {currentQuestion.question.ques}
             </p>
+            {currentQuestion.audio && (
+              <SpeakerWaveIcon width={24} height={24} onClick={playAudio} />
+            )}
             <ul className={cx("options")}>
               {currentQuestion.options.map((option, index) => (
                 <li

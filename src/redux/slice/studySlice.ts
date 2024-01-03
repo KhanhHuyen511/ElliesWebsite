@@ -65,8 +65,6 @@ export const getStudyRoutes = createAsyncThunk(
       where("level", "==", levelVN)
     );
 
-    const snapshot = await (await getDocs(q1)).docs;
-
     if (user.currentPathId) {
       var routes: StudyRoute[] = [];
       const querySnapshot = await getDocs(
@@ -77,6 +75,8 @@ export const getStudyRoutes = createAsyncThunk(
         route.id = e.id;
         routes.push(route);
       });
+
+      console.log(routes);
 
       return routes;
     }

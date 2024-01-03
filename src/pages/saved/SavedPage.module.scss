@@ -4,8 +4,6 @@
 .wrapper {
   min-height: calc(100vh - 72px);
   width: 100%;
-  background-color: var(--bg-G050-color);
-  padding-top: 24px;
   margin: 0;
 
   @include for-tablet {
@@ -21,8 +19,6 @@
 
 .page-title {
   @include typo-heading-1;
-
-  margin-bottom: 20px;
 }
 
 .search-wrapper {

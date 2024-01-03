@@ -31,7 +31,7 @@ const EditProfile = ({
   return (
     <>
       <Popup
-        title={"Chỉnh sửa thông tin cá nhân"}
+        title="Update Information"
         onClose={onClose}
         onSubmit={() => {
           dispatch(
@@ -59,7 +59,7 @@ const EditProfile = ({
           }}
         />
         <Input
-          label={"Tên"}
+          label="Name"
           value={name}
           placeholder={""}
           onChange={(e) => {
@@ -86,7 +86,7 @@ const EditProfile = ({
           <option value={Gender.Others}>{Gender[2]}</option>
         </select>
         <Input
-          label={"Ngày sinh"}
+          label="Birth"
           type="date"
           value={birth ? formatDate(birth) : undefined}
           placeholder={""}
@@ -95,7 +95,7 @@ const EditProfile = ({
           }}
         />
         <TextArea
-          label={"Tiểu sử"}
+          label="Bio"
           value={bio}
           placeholder={"Nói gì đó về bạn"}
           onChange={(e) => {

@@ -71,52 +71,59 @@ const Register = () => {
   };
 
   return (
-    <Col xs={12} md={6} lg={4} xl={3} className={cx("wrapper", "container")}>
+    <Col xs={12} md={12} lg={9} xl={7} className={cx("wrapper", "container")}>
       <ToastContainer />
       <form onSubmit={(e) => isValid(e)}>
-        <p className={cx("page-name")}>Đăng kí</p>
-        <div className={cx("input")}>
-          <Input
-            label="Email"
-            type="email"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            placeholder="huyen.nguyen"
-          />
-        </div>
-        <div className={cx("input")}>
-          <Input
-            label="Mật khẩu"
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            placeholder="******"
-          />
-        </div>
-        <div className={cx("input")}>
-          <Input
-            label="Nhập lại mật khẩu"
-            type="password"
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-            }}
-            placeholder="******"
-          />
-        </div>
-        {/* <p className={cx('forgot-pass-text')}>Quên mật khẩu</p> */}
-        <div className={cx("button-wrapper")}>
-          <embed src="images/facebook-icon.svg"></embed>
-          <Button
-            type="submit"
-            isPrimary={true}
-            haveIcon={true}
-            onClick={() => {}}
-            className={cx("submit-button")}
-          >
-            Đăng kí
-          </Button>
+        <div className={cx("row-wrapper")}>
+          <div>
+            <p className={cx("page-name")}>Register</p>
+            <div className={cx("input")}>
+              <Input
+                label="Email"
+                type="email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                placeholder="huyen.nguyen"
+              />
+            </div>
+            <div className={cx("input")}>
+              <Input
+                label="Mật khẩu"
+                type="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                placeholder="******"
+              />
+            </div>
+            <div className={cx("input")}>
+              <Input
+                label="Nhập lại mật khẩu"
+                type="password"
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                }}
+                placeholder="******"
+              />
+            </div>
+            {/* <p className={cx('forgot-pass-text')}>Quên mật khẩu</p> */}
+            <div className={cx("button-wrapper")}>
+              {/* <embed src="images/facebook-icon.svg"></embed> */}
+              <Button
+                type="submit"
+                isPrimary={true}
+                haveIcon={true}
+                onClick={() => {}}
+                className={cx("submit-button")}
+              >
+                Create
+              </Button>
+            </div>
+          </div>
+          <div className={cx("logo")}>
+            <img src="/images/login.png" alt="" />
+          </div>
         </div>
       </form>
     </Col>

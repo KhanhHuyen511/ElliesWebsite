@@ -38,14 +38,8 @@ const CreateVocabForm = (props: Props) => {
         data: {
           display: getValues("display"),
           meaning: getValues("meaning"),
-          imageFile:
-            image && (image as unknown as FileList).length > 0
-              ? (image as unknown as FileList)[0]
-              : null,
-          audio:
-            audio && (audio as unknown as FileList).length > 0
-              ? (audio as unknown as FileList)[0]
-              : null,
+          imageFile: image,
+          audio: audio,
         },
         type: props.type,
         doc_id: props.doc_id,

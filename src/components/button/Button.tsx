@@ -24,7 +24,6 @@ interface Props {
 const Button = (props: Props) => {
   return (
     <button
-      disabled={props.isDisabled}
       onClick={(e) => {
         if (props.preventDefault) e.preventDefault();
         props.onClick && props.onClick();
@@ -33,8 +32,10 @@ const Button = (props: Props) => {
         "btn",
         { primary: props.isPrimary },
         { danger: props.isDanger },
+        { disable: props.isDisabled },
         props.className
       )}
+      disabled={props.isDisabled}
     >
       {props.children}
       {props.haveIcon && (

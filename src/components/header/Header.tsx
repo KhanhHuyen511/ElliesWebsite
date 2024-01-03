@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./Header.module.scss";
 import {
   Bars3CenterLeftIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
-  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import classNames from "classnames/bind";
 import Navbar from "../navbar/Navbar";
@@ -120,6 +119,24 @@ const Header = () => {
       });
   };
 
+  const wrapperRef = useRef(null);
+
+  function useOutsideAlerter(ref: any) {
+    useEffect(() => {
+      function handleClickOutside(event: any) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setShowAuthWrapper(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  useOutsideAlerter(wrapperRef);
+
   return (
     <div className={cx("header")}>
       <Bars3CenterLeftIcon
@@ -128,22 +145,33 @@ const Header = () => {
       ></Bars3CenterLeftIcon>
 
       <div className={cx("logo-text")} onClick={() => navigate("/")}>
-        Ellies
+        <img className={cx("logo")} src="/images/logo.png" alt="logo" />
       </div>
 
-      {showMenu && (
+      {currentUserName !== "" && showMenu && (
         <div className={cx("slider-container")}>
-          <div className={cx("back-slide")}>
-            <ChevronLeftIcon
-              onClick={hideMenu}
-              className={cx("back-slide-icon", "icon")}
-            />
+          <div className={cx("slider-header")}>
+            <div
+              className={cx("logo-text-slide")}
+              onClick={() => navigate("/")}
+            >
+              <img className={cx("logo")} src="/images/logo.png" alt="logo" />
+            </div>
+            <div className={cx("back-slide")}>
+              <ChevronLeftIcon
+                onClick={hideMenu}
+                className={cx("back-slide-icon", "icon")}
+              />
+            </div>
           </div>
+
           <Navbar isSlider={true} />
         </div>
       )}
 
-      {showMenu && <div className={cx("modal")}></div>}
+      {currentUserName !== "" && showMenu && (
+        <div className={cx("modal")}></div>
+      )}
 
       <div className={cx("navigation_bar")}>
         <div className={cx("navbar")}>
@@ -168,9 +196,10 @@ const Header = () => {
           <div
             className={cx("user-name-wrapper")}
             onClick={() => toggleAuthWrapper()}
+            ref={wrapperRef}
           >
             <span className={cx("user-name")}>
-              Hi {currentUserName ? currentUserName : "friend"}
+              {currentUserName ? currentUserName : "Unregister User"}
             </span>
             <ChevronDownIcon
               className={cx("dropdown-icon", "icon", {
@@ -181,15 +210,15 @@ const Header = () => {
               <ul className={cx("auth-wrapper")}>
                 {currentUserName ? (
                   <li onClick={logout} className={cx("auth-item")}>
-                    Đăng xuất
+                    Logout
                   </li>
                 ) : (
                   <>
                     <NavLink to="/login" className={cx("auth-item")}>
-                      Đăng nhập
+                      Login
                     </NavLink>
                     <NavLink to="/register" className={cx("auth-item")}>
-                      Đăng kí
+                      Register
                     </NavLink>
                   </>
                 )}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Study.module.scss";
 import { Route, CheckinPanel, Button } from "../../components";
 import classNames from "classnames/bind";
-import { Col, Row } from "react-flexbox-grid";
+import { Col } from "react-flexbox-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { LevelType, StudyRoute } from "../../types";
 import { getStudentLevel } from "../../redux/slice/studentSlice";
+import { ArrowUpIcon } from "@heroicons/react/24/outline";
 const cx = classNames.bind(styles);
 
 const Study = () => {
@@ -129,7 +130,7 @@ const Study = () => {
             >
               <Route
                 id={item.id}
-                label={"Chặng " + item.name}
+                label={`${item.name}`}
                 state={CheckRouteState(item, index + 1)}
               />
             </li>
@@ -142,28 +143,34 @@ const Study = () => {
   };
 
   return (
-    <div className="container">
-      <Row>
-        <Col>
-          <p className={cx("title")}>Hi,</p>
-          <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
-        </Col>
-        {level !== undefined && (
-          <Col>
-            Current Level: {LevelType[Number(level)]}
-            <Button isPrimary={false} onClick={navigateToLevelUp}>
-              Level up
-            </Button>
-          </Col>
-        )}
-      </Row>
-      <Row>
-        <Col xs={12} md={8} lg={6}>
-          <p className={cx("page-title")}>Route</p>
-          <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
-        </Col>
-      </Row>
-    </div>
+    <Col className={cx("container", "wrapper")}>
+      <div>
+        <p className={cx("title")}>Hi, good day~</p>
+        <ul className={cx("check-in-wrapper")}>{generateCheckInList}</ul>
+      </div>
+
+      {level !== undefined && (
+        <div className={cx("test-level-up")}>
+          <hr />
+          Current Level: {LevelType[Number(level)]}
+          <Button
+            isPrimary={false}
+            onClick={navigateToLevelUp}
+            className={cx("btn")}
+          >
+            <ArrowUpIcon width={16} height={16} strokeWidth={3} />
+            Level up
+          </Button>
+        </div>
+      )}
+
+      <hr />
+
+      <Col xs={12} md={8} lg={6}>
+        <p className={cx("page-title")}>Route</p>
+        <ul className={cx("route-study-wrapper")}>{generateRouteList()}</ul>
+      </Col>
+    </Col>
   );
 };
 

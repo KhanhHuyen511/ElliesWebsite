@@ -17,15 +17,15 @@ const CommonFigure = () => {
     <>
       <ul className={cx("figure-list")}>
         <li className={cx("item")}>
-          <p className={cx("figure-title")}>Posted Blogs</p>
+          <p className={cx("figure-title")}>Posted Post</p>
           <p className={cx("figure-value")}>{blogFigure[0]}</p>
         </li>
         <li className={cx("item")}>
-          <p className={cx("figure-title")}>Pending Blogs</p>
+          <p className={cx("figure-title")}>Pending Post</p>
           <p className={cx("figure-value")}>{blogFigure[1]}</p>
         </li>
         <li className={cx("item")}>
-          <p className={cx("figure-title")}>Today Blogs</p>
+          <p className={cx("figure-title")}>Today Post</p>
           <p className={cx("figure-value")}>{blogFigure[2]}</p>
         </li>
         <li className={cx("item")}>

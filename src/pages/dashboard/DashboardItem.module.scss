@@ -2,7 +2,7 @@
 @import "../../assets/theme/shared.css";
 
 .wrapper {
-  background-color: #fff;
+  background-color: var(--bg-b-color);
   border-radius: 16px;
   padding: 16px 16px 26px 20px;
 }
@@ -33,7 +33,11 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, white 79%, transparent 80% 100%),
+  background: radial-gradient(
+      closest-side,
+      var(--bg-b-color) 79%,
+      transparent 80% 100%
+    ),
     conic-gradient(var(--color) var(--i), var(--BL050) 0);
   position: relative;
   margin: auto;

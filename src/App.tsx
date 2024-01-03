@@ -147,6 +147,7 @@ function App() {
               path="/manage_test_update_level"
               element={<ManageTestUpdateLevel />}
             />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
         </BrowserRouter>
       )}

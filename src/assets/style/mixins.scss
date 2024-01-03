@@ -86,3 +86,12 @@
     stroke-width: 2px;
   }
 }
+
+@mixin gradient-color {
+  background: rgb(251, 197, 49);
+  background: linear-gradient(
+    135deg,
+    rgba(251, 197, 49, 1) 0%,
+    rgba(255, 145, 77, 1) 50%
+  );
+}

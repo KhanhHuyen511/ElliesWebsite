@@ -63,16 +63,17 @@ const CreateRouteForm = (props: Props) => {
           placeholder={""}
           register={register("image")}
         ></Input>
-        {(watch("image") as unknown as FileList).length > 0 && (
-          <div>
-            <img
-              src={URL.createObjectURL(
-                (getValues("image") as unknown as FileList)[0]
-              )}
-              alt=""
-            />
-          </div>
-        )}
+        {watch("image") &&
+          (watch("image") as unknown as FileList).length > 0 && (
+            <div>
+              <img
+                src={URL.createObjectURL(
+                  (getValues("image") as unknown as FileList)[0]
+                )}
+                alt=""
+              />
+            </div>
+          )}
       </Popup>
     </>
   );

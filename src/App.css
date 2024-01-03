@@ -20,26 +20,45 @@
   color: var(--text-color);
   position: relative;
   background-color: var(--bg-color);
-}
-
-.container {
-  padding: 0 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
   justify-content: center;
 }
 
-@media screen and (min-width: 1200px) {
-  .container {
-    padding: 0 120px;
-  }
+.app::after {
+  content: "";
+  background-image: url("/public/images/test2.jpg");
+  background-size: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  margin: auto;
+  opacity: 0.15;
 }
 
 .container {
-  padding: 0 16px;
+  padding: 16px 16px 32px;
+  justify-content: center;
+  overflow: hidden;
+  flex-grow: 1 !important;
+  width: 100%;
+  z-index: 1;
+}
+
+@media screen and (min-width: 600px) {
+  .container {
+    padding: 20px 0 42px;
+  }
 }
 
 @media screen and (min-width: 1200px) {
   .container {
-    padding: 0 120px;
+    padding: 24px 120px 60px;
   }
 }
 

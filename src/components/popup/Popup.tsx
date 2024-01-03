@@ -40,10 +40,10 @@ const Popup = (props: Props) => {
               //   props.onClose();
               // }}
             >
-              Xác nhận
+              Submit
             </Button>
             <Button isPrimary={false} onClick={props.onClose} preventDefault>
-              Đóng
+              Cancel
             </Button>
           </div>
         </div>

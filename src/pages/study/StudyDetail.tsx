@@ -69,7 +69,7 @@ const StudyDetail = () => {
     <>
       <div className={cx("container", "wrapper")}>
         <Col xs={12} md={8} lg={6}>
-          <p className={cx("title")}>Chặng {route.name}</p>
+          <p className={cx("title")}>Route {route.name}</p>
           {!studyCards && (
             <>
               <StudyDesc route={route}></StudyDesc>
@@ -91,8 +91,9 @@ const StudyDetail = () => {
                     );
                 }}
                 className={cx("submit")}
+                haveIcon
               >
-                Bắt đầu
+                Start
               </Button>
             </>
           )}
@@ -129,7 +130,7 @@ const StudyDetail = () => {
                   }}
                   className={cx("cta-finish-btn")}
                 >
-                  Xem lại
+                  View again
                 </Button>
                 <Button
                   isPrimary
@@ -139,7 +140,7 @@ const StudyDetail = () => {
                   icon="boilt"
                   className={cx("cta-finish-btn")}
                 >
-                  Luyện tập
+                  Exercise
                 </Button>
               </div>
               <div className={cx("home")}>

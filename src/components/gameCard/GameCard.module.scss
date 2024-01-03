@@ -6,34 +6,35 @@
   background: var(--BL050);
   position: relative;
   height: 126px;
+  margin-top: 20px;
 
   &.finish {
     background: var(--Y50);
   }
 
-  &.withCircle {
-    &::before {
-      content: "";
-      position: absolute;
-      width: 145px;
-      height: 145px;
-      background-color: var(--BL050);
-      border-radius: 50%;
-      top: -82px;
-      left: -87px;
-    }
+  // &.withCircle {
+  //   &::before {
+  //     content: "";
+  //     position: absolute;
+  //     width: 145px;
+  //     height: 145px;
+  //     background-color: var(--BL050);
+  //     border-radius: 50%;
+  //     top: -82px;
+  //     left: -87px;
+  //   }
 
-    &::after {
-      content: "";
-      position: absolute;
-      width: 145px;
-      height: 145px;
-      background-color: var(--BL050);
-      border-radius: 50%;
-      top: 44px;
-      right: -56px;
-    }
-  }
+  //   &::after {
+  //     content: "";
+  //     position: absolute;
+  //     width: 145px;
+  //     height: 145px;
+  //     background-color: var(--BL050);
+  //     border-radius: 50%;
+  //     top: 44px;
+  //     right: -56px;
+  //   }
+  // }
 
   .driver {
     position: absolute;

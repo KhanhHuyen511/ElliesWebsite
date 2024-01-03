@@ -12,7 +12,7 @@ const ExerciseFinish = ({ data }: { data: ExDetail[] }) => {
   return (
     <>
       <div className={cx("wrapper")}>
-        <p>Bạn đã hoàn thành chính xác</p>
+        <p>You finished with right count:</p>
         <p className={cx("result")}>
           <span className={cx("result-right")}>
             {data.filter((o) => o.exRight).length}/
@@ -30,18 +30,18 @@ const ExerciseFinish = ({ data }: { data: ExDetail[] }) => {
           ></HomeIcon>
         </div>
         <div className={cx("result-detail")}>
-          <p className={cx("sub-title")}>Chi tiết</p>
+          <p className={cx("sub-title")}>Detail</p>
           <table>
             <thead>
               <th></th>
-              <th>Đúng</th>
-              <th>Sai</th>
+              <th>True</th>
+              <th>False</th>
             </thead>
             <tbody>
               {data &&
                 data.map((item, index) => (
                   <tr key={index}>
-                    <td>Câu {index + 1}</td>
+                    <td>Ques {index + 1}</td>
                     <td>
                       {item.exRight && (
                         <CheckIcon
