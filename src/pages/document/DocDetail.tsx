@@ -23,7 +23,6 @@ const DocDetail = () => {
           const data = e.payload as Doc;
           switch (type) {
             case StudyCardType.Vocab.toString():
-              console.log("im in");
               setList(data.vocabs);
               break;
             case StudyCardType.Sentence.toString():
