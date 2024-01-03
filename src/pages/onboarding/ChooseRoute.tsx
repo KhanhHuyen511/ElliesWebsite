@@ -43,32 +43,31 @@ const ChooseRoute = ({ level }: ChooseRouteProps) => {
     <>
       <div>
         <p className={cx("sub-title")}>
-          Dựa trên kết quả bài đánh giá, bạn đang ở mức:{" "}
+          By your effort and the result your level is{" "}
           <span className={cx("level")}>{LevelType[level]}</span>
         </p>
         <hr></hr>
         <br></br>
         <p className={cx("sub-title")}>
-          Chúng tôi gợi ý cho bạn lộ trình học theo chủ đề như sau:
+          I recommend for you some topics by your current level:
         </p>
         <ul className={cx("rec-list")}>
           {listTopic.length > 0 && listTopic.map((topic) => <li>{topic}</li>)}
         </ul>
         <br></br>
         <p className={cx("sub-title")}>
-          Nếu đồng ý hãy chọn "Đồng ý với đề xuất trên":
+          If agree with this level, please select "I agree":
         </p>
         <div
           onChange={(e) => setChoose((e.target as any).value)}
           className={cx("option-list")}
         >
           <label>
-            <input type={"radio"} value={"accept"} name="level"></input>
-            Đồng ý với đề xuất trên.
+            <input type={"radio"} value={"accept"} name="level"></input>I agree.
           </label>
           <label>
             <input type={"radio"} value={"deny"} name="level"></input>
-            Chọn mức độ khác:
+            Choose another level:
           </label>
         </div>
         <select
@@ -99,9 +98,7 @@ const ChooseRoute = ({ level }: ChooseRouteProps) => {
         </select>
         {choose === "deny" && (
           <>
-            <p className={cx("sub-title")}>
-              Chúng tôi gợi ý cho bạn lộ trình học theo chủ đề như sau:
-            </p>
+            <p className={cx("sub-title")}>We suggest for you path:</p>
             <ul className={cx("rec-list")}>
               {newListTopic.length > 0 &&
                 newListTopic.map((topic) => <li>{topic}</li>)}
@@ -126,7 +123,7 @@ const ChooseRoute = ({ level }: ChooseRouteProps) => {
           }
         }}
       >
-        Hoàn thành
+        Finish
       </Button>
     </>
   );

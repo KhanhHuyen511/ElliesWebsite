@@ -1030,7 +1030,8 @@ export const getAllStudentsAscendByPoint = createAsyncThunk(
     });
 
     items = items.slice().sort(function (a, b) {
-      if (!a.point || !b.point) return -1;
+      if (!a.point) return 1;
+      if (!b.point) return -1;
 
       if (a.point > b.point) return -1;
 

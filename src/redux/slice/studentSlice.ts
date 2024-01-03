@@ -120,6 +120,26 @@ export const updateAvatar = createAsyncThunk(
   }
 );
 
+export const updateLevel = createAsyncThunk(
+  "student/update_level",
+  async ({ userId, newLevel }: { userId: string; newLevel: number }) => {
+    const q = query(collection(db, "students"), where("id", "==", userId));
+    const querySnapshot = (await getDocs(q)).docs[0];
+
+    const queryPath = query(
+      collection(db, "study_paths"),
+      where("level", "==", newLevel)
+    );
+
+    const path = (await getDocs(queryPath)).docs[0];
+
+    await updateDoc(querySnapshot.ref, {
+      level: newLevel,
+      currentPathId: path.id,
+    });
+  }
+);
+
 const studentSlice = createSlice({
   name: "student",
   initialState,

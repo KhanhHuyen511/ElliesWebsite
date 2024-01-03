@@ -6,7 +6,7 @@ import { LevelType } from "../../types";
 import { Button } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { getStudentLevel } from "../../redux/slice/studentSlice";
+import { getStudentLevel, updateLevel } from "../../redux/slice/studentSlice";
 import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(style);
 
@@ -24,55 +24,66 @@ const TestLevelUpFinish = ({ result }: TestLevelUpFinishProps) => {
   const userID = useSelector((state: RootState) => state.auth.userID) || "";
 
   useEffect(() => {
-    dispatch(getStudentLevel(userID)).then((data) =>
-      setLevel(data.payload as number)
-    );
-
-    const getNewLevel = () => {
-      let point: number = 0;
-
-      result.forEach((i, index) => {
-        if (index in [0, 1, 2]) {
-          if (i === true) {
-            point += 1.5;
-          }
-        } else if (index in [3, 4, 5, 6]) {
-          if (i === true) {
-            point += 1;
-          }
-        } else if (i === true) {
-          point += 0.5;
-        }
+    const getCurrentLevel = async () => {
+      await dispatch(getStudentLevel(userID)).then((data) => {
+        setLevel(data.payload as number);
+        getNewLevel(data.payload as number);
       });
-
-      setNewLevel(getLevel(point));
-      return LevelType[getLevel(point)];
     };
 
-    const getComparison = () => {
-      if (level !== undefined && newLevel !== undefined) {
-        if (level === newLevel) {
-          setComparison("same");
-          return;
-        }
-
-        if (level < newLevel) {
-          setComparison("worsen");
-          return;
-        }
-
-        if (level > newLevel) {
-          setComparison("upper");
-          return;
-        }
-      }
-    };
-
-    getNewLevel();
-    getComparison();
+    getCurrentLevel();
   }, [dispatch, userID]);
 
-  const handleChangeLevel = () => {};
+  const getNewLevel = (curLevel: number) => {
+    let point: number = 0;
+    const level = curLevel;
+
+    result.forEach((i, index) => {
+      if (index in [0, 1, 2]) {
+        if (i === true) {
+          point += 1.5;
+        }
+      } else if (index in [3, 4, 5, 6]) {
+        if (i === true) {
+          point += 1;
+        }
+      } else if (i === true) {
+        point += 0.5;
+      }
+    });
+
+    const nLevel = getLevel(point);
+
+    setNewLevel(nLevel);
+
+    console.log(level);
+
+    if (level !== undefined && nLevel !== undefined) {
+      if (level === newLevel) {
+        setComparison("same");
+        return;
+      }
+
+      if (level < nLevel) {
+        setComparison("upper");
+        return;
+      }
+
+      if (level > nLevel) {
+        setComparison("worsen");
+        return;
+      }
+    }
+
+    return LevelType[getLevel(point)];
+  };
+
+  const handleChangeLevel = () => {
+    if (newLevel !== undefined)
+      dispatch(updateLevel({ userId: userID, newLevel: newLevel }));
+
+    navigate("/study");
+  };
 
   const navigateToHome = () => {
     navigate("/study");
@@ -86,7 +97,7 @@ const TestLevelUpFinish = ({ result }: TestLevelUpFinishProps) => {
         {result.length}
       </p>
       Your new Level: {newLevel}
-      {level !== undefined && newLevel !== undefined && (
+      {level !== undefined && newLevel !== undefined && comparison && (
         <p>
           This level is {comparison} your current level ({LevelType[level]})
         </p>

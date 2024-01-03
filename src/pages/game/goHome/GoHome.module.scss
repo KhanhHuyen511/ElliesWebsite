@@ -154,8 +154,8 @@ h1 {
 
 .question {
   &-wrapper {
-    width: 640px;
-    height: 360px;
+    width: 740px;
+    height: 460px;
     background-color: var(--W);
     border-radius: 20px;
     position: absolute;
@@ -166,7 +166,7 @@ h1 {
     margin: auto;
     z-index: 9;
     text-align: center;
-    padding: 40px 120px;
+    padding: 40px 60px;
 
     .ques {
       @include typo-heading-2;
@@ -186,7 +186,7 @@ h1 {
         padding: 16px;
         color: var(--O500);
         background-color: #fff5dd;
-        width: 128px;
+        width: 240px;
         border-radius: 8px;
         cursor: pointer;
       }
@@ -194,6 +194,10 @@ h1 {
       .option.selected {
         background: var(--Y500);
         color: white;
+      }
+
+      .option:hover {
+        background-color: var(--O200);
       }
     }
 

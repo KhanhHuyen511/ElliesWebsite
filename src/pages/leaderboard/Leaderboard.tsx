@@ -27,7 +27,7 @@ const Leaderboard = () => {
                 rank={2}
                 name={data[1].name ? data[1].name : "noname"}
                 avt={data[1].avatar}
-                point={data[1].point}
+                point={data[1].point ? data[1].point : 0}
               ></RankItem>
             )}
             {data?.length >= 1 && (
@@ -35,7 +35,7 @@ const Leaderboard = () => {
                 rank={1}
                 name={data[0].name ? data[0].name : "noname"}
                 avt={data[0].avatar}
-                point={data[0].point}
+                point={data[0].point ? data[0].point : 0}
               ></RankItem>
             )}
             {data?.length >= 3 && (
@@ -43,7 +43,7 @@ const Leaderboard = () => {
                 rank={3}
                 name={data[2].name ? data[2].name : "noname"}
                 avt={data[2].avatar}
-                point={data[2].point}
+                point={data[2].point ? data[2].point : 0}
               ></RankItem>
             )}
           </div>

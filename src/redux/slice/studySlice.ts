@@ -76,8 +76,6 @@ export const getStudyRoutes = createAsyncThunk(
         routes.push(route);
       });
 
-      console.log(routes);
-
       return routes;
     }
   }
