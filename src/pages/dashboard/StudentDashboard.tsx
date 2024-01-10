@@ -55,7 +55,7 @@ const StudentDashboard = () => {
   };
 
   const getExPercent = () => {
-    return exPercent !== undefined ? exPercent : 0;
+    return exPercent !== undefined ? Math.round(exPercent) : 0;
   };
 
   const getLevel = () => {
