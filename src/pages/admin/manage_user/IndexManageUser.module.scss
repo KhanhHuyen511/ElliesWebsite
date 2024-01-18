@@ -50,3 +50,13 @@
   width: 100%;
   margin-bottom: 12px;
 }
+
+.view-profile-button {
+  font-size: 12px;
+  height: 24px;
+  border-width: 0.5px;
+
+  &:hover {
+    border-width: 0.5px;
+  }
+}

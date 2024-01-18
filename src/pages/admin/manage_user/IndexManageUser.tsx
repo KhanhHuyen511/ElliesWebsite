@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import style from "./IndexManageUser.module.scss";
 import classNames from "classnames/bind";
 import { Button, Checkbox } from "../../../components";
-import { Account, Student } from "../../../types";
+import { Account, LevelType, Student } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import {
+  deleteStudent,
   getAllStudents,
   lockAStudent,
   unlockAStudent,
 } from "../../../redux/slice/adminSlice";
 import EditStudent from "./EditStudent";
 import { getAccountById } from "../../../redux/slice/studentSlice";
+import StudentInfoModal from "../../../components/forum/StudentInfoModal";
 const cx = classNames.bind(style);
 
 const IndexManageUser = () => {
@@ -21,6 +23,7 @@ const IndexManageUser = () => {
   const [isOpenForm, setIsOpenForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Student>();
   const [isLockedStudent, setIsLockedStudent] = useState<boolean>(false);
+  const [isOpenInfoModal, setIsOpenInfoModal] = useState<boolean>();
 
   useEffect(() => {
     dispatch(getAllStudents());
@@ -40,6 +43,19 @@ const IndexManageUser = () => {
       });
   }, [dispatch, selectedItem]);
 
+  const handleCloseInfoModal = () => {
+    setIsOpenInfoModal(false);
+    setSelectedItem(undefined);
+  };
+
+  const handleDeleteAccount = async () => {
+    if (selectedItem?.id !== undefined) {
+      await dispatch(deleteStudent(selectedItem.id));
+      dispatch(getAllStudents());
+      setSelectedItem(undefined);
+    }
+  };
+
   return (
     <>
       <div className="container">
@@ -52,6 +68,13 @@ const IndexManageUser = () => {
             }}
           >
             Edit
+          </Button>
+          <Button
+            isPrimary={false}
+            isDanger={true}
+            onClick={handleDeleteAccount}
+          >
+            Delete Account
           </Button>
           {selectedItem ? (
             !isLockedStudent ? (
@@ -89,7 +112,8 @@ const IndexManageUser = () => {
               <th>Email</th>
               <th>Name</th>
               <th>Level</th>
-              <th>Birth</th>
+              <th>Point</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -109,9 +133,23 @@ const IndexManageUser = () => {
                   </td>
                   <td width={10}>{i + 1}</td>
                   <td>{item.email}</td>
-                  <td>{item.name}</td>
-                  <td>{item.level}</td>
-                  <td>{item.birthday?.toDateString()}</td>
+                  <td>{item.name || "-"}</td>
+                  <td>
+                    {item.level !== undefined ? LevelType[item.level] : "-"}
+                  </td>
+                  <td>{item?.point || "-"}</td>
+                  <td>
+                    <Button
+                      isPrimary={false}
+                      className={cx("view-profile-button")}
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setIsOpenInfoModal(true);
+                      }}
+                    >
+                      View Profile
+                    </Button>
+                  </td>
                 </tr>
               ))}
           </tbody>
@@ -125,6 +163,14 @@ const IndexManageUser = () => {
           }}
           isDisplay={isOpenForm}
           data={selectedItem}
+        />
+      )}
+
+      {selectedItem && isOpenInfoModal && (
+        <StudentInfoModal
+          isDisplay={true}
+          data={selectedItem}
+          onClose={handleCloseInfoModal}
         />
       )}
     </>

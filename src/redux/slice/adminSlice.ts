@@ -1120,6 +1120,27 @@ export const unlockAStudent = createAsyncThunk(
   }
 );
 
+export const deleteStudent = createAsyncThunk(
+  "admin/users/delete_user",
+  async (id: string) => {
+    console.log("hi");
+
+    let q = query(collection(db, "accounts"), where("user_id", "==", id));
+    let account = (await getDocs(q)).docs[0];
+
+    if (id) {
+      await deleteDoc(account.ref);
+    }
+
+    q = query(collection(db, "students"), where("id", "==", id));
+    let student = (await getDocs(q)).docs[0];
+
+    if (id) {
+      await deleteDoc(student.ref);
+    }
+  }
+);
+
 //#endregion
 
 //#region [ONBOARDING]
