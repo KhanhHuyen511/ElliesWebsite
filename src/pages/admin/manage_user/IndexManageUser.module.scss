@@ -28,10 +28,21 @@
   }
 }
 
+.cta-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+
+  & .sharing-button {
+    flex-shrink: 0;
+    display: flex;
+    gap: 8px;
+  }
+}
+
 .handler {
   width: 100%;
   display: flex;
-  margin-bottom: 8px;
   gap: 4px;
 }
 

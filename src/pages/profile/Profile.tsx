@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import style from "./Profile.module.scss";
@@ -6,12 +6,13 @@ import classNames from "classnames/bind";
 import {
   BoltIcon,
   CameraIcon,
+  ChatBubbleLeftEllipsisIcon,
   CheckBadgeIcon,
   FireIcon,
   PencilIcon,
   TrophyIcon,
 } from "@heroicons/react/24/outline";
-import { Button, Input, TextArea } from "../../components";
+import { Button, Input, ShareWithUsModal, TextArea } from "../../components";
 import EditProfile from "./EditProfile";
 import EditAvatar from "./EditAvatar";
 import {
@@ -45,6 +46,7 @@ const Profile = () => {
 
   const [isOpenEditForm, setISOpenEditForm] = useState<boolean>(false);
   const [isOpenEditAvtForm, setISOpenEditAvtForm] = useState<boolean>(false);
+  const [isOpenSharingModal, setISOpenSharingModal] = useState<boolean>(false);
 
   const [img, setImg] = useState("");
 
@@ -278,8 +280,23 @@ const Profile = () => {
                     dark: user?.isPublicSavedList,
                   })}
                 />
-                {/* <p>Reload to apply change</p> */}
               </div>
+            </div>
+
+            <div className={cx("section", "sharing-section")}>
+              <p className={cx("section-title")}>
+                Share With Us
+                <ChatBubbleLeftEllipsisIcon className={cx("icon")} />
+              </p>
+              <Button
+                isPrimary={false}
+                className={cx("button")}
+                onClick={() => {
+                  setISOpenSharingModal(true);
+                }}
+              >
+                Click here to send sharing message
+              </Button>
             </div>
           </Col>
         </Row>
@@ -314,6 +331,13 @@ const Profile = () => {
             isDisplay={isOpenEditAvtForm}
             onClose={() => setISOpenEditAvtForm(false)}
           ></EditAvatar>
+        )}
+        {isOpenSharingModal && user && (
+          <ShareWithUsModal
+            userId={user.id}
+            isDisplay={isOpenSharingModal}
+            onClose={() => setISOpenSharingModal(false)}
+          ></ShareWithUsModal>
         )}
       </div>
     </>

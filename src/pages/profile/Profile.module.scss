@@ -201,3 +201,18 @@
     background-color: var(--Y500);
   }
 }
+
+.sharing-section .section-title {
+  display: flex;
+  gap: 8px;
+}
+
+.sharing-section {
+  & > .button {
+    width: 100%;
+  }
+
+  & .icon {
+    cursor: auto;
+  }
+}

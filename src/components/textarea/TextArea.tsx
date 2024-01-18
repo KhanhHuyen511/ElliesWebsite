@@ -6,7 +6,7 @@ const cx = classNames.bind(style);
 
 interface Props {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   smallText?: string;
   isDisabled?: boolean;
   haveIcon?: boolean;

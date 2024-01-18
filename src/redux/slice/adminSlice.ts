@@ -21,6 +21,7 @@ import {
   Gender,
   LevelType,
   OnboardingType,
+  ShareWithUs,
   Student,
   StudyCard,
   StudyCardType,
@@ -1138,6 +1139,50 @@ export const deleteStudent = createAsyncThunk(
     if (id) {
       await deleteDoc(student.ref);
     }
+  }
+);
+
+export const addShareWithUs = createAsyncThunk(
+  "admin/users/add_share_with_us",
+  async ({ id, message }: { id: string; message: string }) => {
+    console.log("hi");
+
+    await addDoc(collection(db, "share_with_us"), {
+      userId: id,
+      message: message,
+    });
+  }
+);
+
+export const getShareWithUsList = createAsyncThunk(
+  "admin/users/get_share_with_us_list",
+  async () => {
+    console.log("hi");
+
+    const querySnapshot = await getDocs(collection(db, "share_with_us"));
+
+    if (querySnapshot.docs.length > 0) {
+      const list: ShareWithUs[] = [];
+
+      await Promise.all(
+        querySnapshot.docs.map(async (item) => {
+          const data = { ...item.data(), id: item.id } as ShareWithUs;
+
+          const q = query(
+            collection(db, "students"),
+            where("id", "==", data.userId)
+          );
+          const user = (await getDocs(q)).docs[0];
+          data.userName = (user.data() as Student).name;
+
+          list.push(data);
+        })
+      );
+
+      return list;
+    }
+
+    return [];
   }
 );
 

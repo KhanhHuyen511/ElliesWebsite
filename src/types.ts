@@ -268,3 +268,10 @@ export enum TestEnum {
   SortWords,
   Audio,
 }
+
+export interface ShareWithUs {
+  id: string;
+  userId: string;
+  userName?: string;
+  message: string;
+}

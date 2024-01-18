@@ -22,3 +22,5 @@ export { default as Comment } from "./comment/Comment";
 export { default as RankItem } from "./rankItem/RankItem";
 export { default as GameCard } from "./gameCard/GameCard";
 export { default as StudentCard } from "./forum/StudentCard";
+export { default as ShareWithUsModal } from "./profile/ShareWithUsModal";
+export { default as ShareWithUsList } from "./shareWithUs/ShareWithUsList";

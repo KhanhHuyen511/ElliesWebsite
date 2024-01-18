@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "./IndexManageUser.module.scss";
 import classNames from "classnames/bind";
-import { Button, Checkbox } from "../../../components";
+import { Button, Checkbox, ShareWithUsList } from "../../../components";
 import { Account, LevelType, Student } from "../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -14,6 +14,7 @@ import {
 import EditStudent from "./EditStudent";
 import { getAccountById } from "../../../redux/slice/studentSlice";
 import StudentInfoModal from "../../../components/forum/StudentInfoModal";
+import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
 const cx = classNames.bind(style);
 
 const IndexManageUser = () => {
@@ -24,6 +25,8 @@ const IndexManageUser = () => {
   const [selectedItem, setSelectedItem] = useState<Student>();
   const [isLockedStudent, setIsLockedStudent] = useState<boolean>(false);
   const [isOpenInfoModal, setIsOpenInfoModal] = useState<boolean>();
+  const [isOpenShareWithUsModal, setIsOpenShareWithUsModal] =
+    useState<boolean>();
 
   useEffect(() => {
     dispatch(getAllStudents());
@@ -60,50 +63,61 @@ const IndexManageUser = () => {
     <>
       <div className="container">
         <h2 className={cx("title")}>Manage Users</h2>
-        <div className={cx("handler")}>
-          <Button
-            isPrimary={false}
-            onClick={() => {
-              setIsOpenForm(true);
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            isPrimary={false}
-            isDanger={true}
-            onClick={handleDeleteAccount}
-          >
-            Delete Account
-          </Button>
-          {selectedItem ? (
-            !isLockedStudent ? (
-              <Button
-                isPrimary={false}
-                isDanger={true}
-                onClick={() => {
-                  if (selectedItem?.id !== undefined)
-                    dispatch(lockAStudent(selectedItem.id));
-                }}
-              >
-                Deactive account
-              </Button>
+        <div className={cx("cta-wrapper")}>
+          <div className={cx("handler")}>
+            <Button
+              isPrimary={false}
+              onClick={() => {
+                setIsOpenForm(true);
+              }}
+            >
+              Edit
+            </Button>
+            <Button
+              isPrimary={false}
+              isDanger={true}
+              onClick={handleDeleteAccount}
+            >
+              Delete Account
+            </Button>
+            {selectedItem ? (
+              !isLockedStudent ? (
+                <Button
+                  isPrimary={false}
+                  isDanger={true}
+                  onClick={() => {
+                    if (selectedItem?.id !== undefined)
+                      dispatch(lockAStudent(selectedItem.id));
+                  }}
+                >
+                  Deactive account
+                </Button>
+              ) : (
+                <Button
+                  isPrimary={false}
+                  isDanger={true}
+                  onClick={() => {
+                    if (selectedItem?.id !== undefined)
+                      dispatch(unlockAStudent(selectedItem.id));
+                  }}
+                >
+                  Reactive account
+                </Button>
+              )
             ) : (
-              <Button
-                isPrimary={false}
-                isDanger={true}
-                onClick={() => {
-                  if (selectedItem?.id !== undefined)
-                    dispatch(unlockAStudent(selectedItem.id));
-                }}
-              >
-                Reactive account
-              </Button>
-            )
-          ) : (
-            <></>
-          )}
+              <></>
+            )}
+          </div>
+          <Button
+            isPrimary={false}
+            className={cx("sharing-button")}
+            onClick={() => setIsOpenShareWithUsModal(true)}
+          >
+            Share With Us
+            <ChatBubbleLeftEllipsisIcon className={cx("icon")} />
+          </Button>
         </div>
+
         <table className={cx("table")}>
           <thead>
             <tr>
@@ -171,6 +185,15 @@ const IndexManageUser = () => {
           isDisplay={true}
           data={selectedItem}
           onClose={handleCloseInfoModal}
+        />
+      )}
+
+      {isOpenShareWithUsModal && (
+        <ShareWithUsList
+          isDisplay={isOpenShareWithUsModal}
+          onClose={() => {
+            setIsOpenShareWithUsModal(false);
+          }}
         />
       )}
     </>
