@@ -23,6 +23,7 @@ import {
   GoHomeStart,
   GoHomeResult,
   TestLevelUp,
+  EditBlog,
 } from "./pages";
 import { Login, Register, ResetPassword } from "./pages/auth";
 import {
@@ -113,6 +114,7 @@ function App() {
               element={<ExerciseDetail />}
             />
             <Route path="/forum/create" element={<CreateBlog />} />
+            <Route path="/forum/edit/:id" element={<EditBlog />} />
             <Route path="/blog_detail/:id" element={<BlogDetail />} />
             <Route
               path="/exercise/result_detail/:id"

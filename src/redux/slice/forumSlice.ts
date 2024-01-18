@@ -9,7 +9,6 @@ import {
   getDoc,
   getDocs,
   query,
-  setDoc,
   Timestamp,
   updateDoc,
   where,
@@ -69,9 +68,19 @@ export const getListPendingBlogs = createAsyncThunk(
 );
 
 export const setABlog = createAsyncThunk(
-  "forum/setABlog",
+  "forum/set_blog",
   async (data: Blog) => {
     await addDoc(collection(db, "forum"), data);
+  }
+);
+
+export const updateABlog = createAsyncThunk(
+  "forum/update_blog",
+  async ({ newData }: { newData: Blog; note?: string }) => {
+    const docRef = doc(db, "forum", newData.id);
+    await updateDoc(docRef, { ...newData });
+
+    return newData;
   }
 );
 
@@ -163,6 +172,14 @@ export const getABlog = createAsyncThunk(
     });
 
     return item;
+  }
+);
+
+export const deleteBlog = createAsyncThunk(
+  "forum/delete_blog",
+  async (blogId: string) => {
+    const docRef = doc(db, "forum", blogId);
+    await deleteDoc(docRef);
   }
 );
 

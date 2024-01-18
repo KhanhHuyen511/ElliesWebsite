@@ -1,5 +1,10 @@
-@import '../../assets/style/shared.scss';
-@import '../../assets/theme/shared.css';
+@import "../../assets/style/shared.scss";
+@import "../../assets/theme/shared.css";
+
+.title-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
 
 .title {
   @include typo-heading-1;
@@ -88,4 +93,14 @@
   .comments {
     margin-top: 16px;
   }
+}
+
+.edit-icon {
+  color: var(--primary-color);
+  stroke-width: 2px;
+}
+
+.trash-icon {
+  color: var(--R);
+  margin-left: 20px;
 }

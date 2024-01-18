@@ -1,18 +1,22 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import classNames from "classnames/bind";
 import style from "./BlogDetail.module.scss";
-import { HandThumbUpIcon } from "@heroicons/react/24/outline";
-import { useParams } from "react-router-dom";
+import {
+  HandThumbUpIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
+  deleteBlog,
   getABlog,
   removeALike,
-  setAComment,
   setALike,
 } from "../../redux/slice/forumSlice";
-import { Comment } from "../../components";
-import { BlogComment } from "../../types";
+import { Button, Comment } from "../../components";
+import { BlogState } from "../../types";
 const cx = classNames.bind(style);
 
 const BlogDetail = ({
@@ -25,6 +29,7 @@ const BlogDetail = ({
   let { id } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const userID = useSelector((state: RootState) => state.auth.userID);
   const data = useSelector((state: RootState) => state.forum.currentBlog);
@@ -33,9 +38,34 @@ const BlogDetail = ({
     if (id) dispatch(getABlog(id));
   }, [dispatch, id, data?.comments?.length]);
 
+  const navigateToEdit = () => {
+    if (data?.id) navigate("/forum/edit/" + data?.id);
+  };
+
+  const onDelete = async () => {
+    if (id) await dispatch(deleteBlog(id));
+
+    navigate(-1);
+  };
+
   return (
     <div className="container">
-      <p className={cx("title")}>{data?.title}</p>
+      <div className={cx("title-wrapper")}>
+        <p className={cx("title")}>{data?.title}</p>
+        <div>
+          {userID === data?.userId && data.state === BlogState.Pending && (
+            <span onClick={navigateToEdit}>
+              <PencilIcon className={cx("icon", "edit-icon")} />
+            </span>
+          )}
+          {userID === data?.userId && (
+            <span onClick={onDelete}>
+              <TrashIcon className={cx("icon", "trash-icon")} />
+            </span>
+          )}
+        </div>
+      </div>
+
       <div className={cx("blog-info")}>
         <span className={cx("author")}>{data?.userName}</span>
         <div className={cx("other-infos")}>
