@@ -37,10 +37,12 @@
   --text-bold-color: var(--G900);
   --text-medium-color: var(--G800);
   --text-light-color: var(--G500);
+  --header-color: rgba(243, 243, 243, 0.6);
 
   /* DARK THEME */
   --BG-Dark: #292841;
   --BG-m-Dark: #1c1b29;
+  --header-color-dark: rgba(255, 255, 255, 0.3);
 
   /* GRADIENT */
   --bg-gradient-color: linear-gradient(

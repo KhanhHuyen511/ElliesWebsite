@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import { Header } from "./components";
 import {
@@ -52,10 +52,17 @@ function App() {
   const uRole = useSelector((state: RootState) => state.auth.userRole);
   const [theme, setTheme] = useState<string | null>("light");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (userID) setUserRole(uRole);
     if (localStorage.getItem("theme") !== null) {
       setTheme(localStorage.getItem("theme"));
+    }
+
+    if (!!userID) {
+      if (userRole === "admin") navigate("/dashboard");
+      else navigate("/study");
     }
   }, [userID, uRole, theme]);
 
@@ -77,13 +84,14 @@ function App() {
               "--bg-save-light": DarkTheme.bgSaveLight,
               "--bg-G050-color": DarkTheme.bgG050Color,
               "--icon-m-color": DarkTheme.iconMediumColor,
+              "--header-color": DarkTheme.headerColor,
             }
           : {}
       }
     >
       <ToastContainer />
       {userRole === "student" && (
-        <BrowserRouter>
+        <>
           <Header />
           <Routes>
             <Route path="" element={<Login />} />
@@ -119,10 +127,10 @@ function App() {
             <Route path="/go_home/:id/result" element={<GoHomeResult />} />
             <Route path="/test_level_up" element={<TestLevelUp />} />
           </Routes>
-        </BrowserRouter>
+        </>
       )}
       {userRole === "admin" && (
-        <BrowserRouter>
+        <>
           <Header />
           <Routes>
             <Route path="" element={<Login />} />
@@ -151,7 +159,7 @@ function App() {
             />
             <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
-        </BrowserRouter>
+        </>
       )}
     </div>
   );

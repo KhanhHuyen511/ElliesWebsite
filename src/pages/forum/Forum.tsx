@@ -3,17 +3,23 @@ import classNames from "classnames/bind";
 import style from "./Forum.module.scss";
 import { Col } from "react-flexbox-grid";
 import { BlogCard, Button, CategoryPanel } from "../../components";
-import { AcademicCapIcon, FireIcon } from "@heroicons/react/24/outline";
+import {
+  AcademicCapIcon,
+  FireIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getListBlogs } from "../../redux/slice/forumSlice";
 import PersonalBlogManage from "./PersonalBlogManage";
+import Community from "./Community";
 const cx = classNames.bind(style);
 
 enum TabType {
   Blogs,
   Yours,
+  Community,
 }
 
 const Forum = () => {
@@ -42,6 +48,13 @@ const Forum = () => {
             classNames={cx("cate-item")}
             icon={<AcademicCapIcon />}
             onClick={() => setTabType(TabType.Blogs)}
+          />
+          <CategoryPanel
+            label={"Community"}
+            isActive={tabType === TabType.Community}
+            classNames={cx("cate-item")}
+            icon={<UserGroupIcon />}
+            onClick={() => setTabType(TabType.Community)}
           />
           <CategoryPanel
             label={"Yours"}
@@ -76,8 +89,10 @@ const Forum = () => {
                 ))}
             </ul>
           </>
-        ) : (
+        ) : tabType === TabType.Yours ? (
           <PersonalBlogManage />
+        ) : (
+          <Community />
         )}
       </div>
     </>

@@ -1125,7 +1125,7 @@ export const unlockAStudent = createAsyncThunk(
 //#region [ONBOARDING]
 
 export const getOnboardingList = createAsyncThunk(
-  "admin/onboard/get_onboarding_list",
+  "onboard/get_onboarding_list",
   async () => {
     console.log("hi");
 
@@ -1171,6 +1171,30 @@ export const getOnboardingList = createAsyncThunk(
     };
 
     randomQuestions();
+
+    return list;
+  }
+);
+
+export const getOnboardingListAdmin = createAsyncThunk(
+  "admin/onboard/get_onboarding_list",
+  async () => {
+    console.log("hi");
+
+    const colRef = await getDocs(collection(db, "onboarding"));
+    const rawList = colRef.docs;
+
+    let list: OnboardingType[] = [];
+
+    if (rawList.length > 0) {
+      list = rawList.map((doc) => {
+        const item = doc.data() as OnboardingType;
+
+        item.id = doc.id;
+
+        return item;
+      });
+    }
 
     return list;
   }
@@ -1228,7 +1252,7 @@ export const deleteOnboardingQuestion = createAsyncThunk(
 //#region [TEST UPDATE LEVEL]
 
 export const getTestList = createAsyncThunk(
-  "admin/test/get_test_update_level_list",
+  "test/get_test_update_level_list",
   async () => {
     console.log("hi");
 
@@ -1274,6 +1298,30 @@ export const getTestList = createAsyncThunk(
     };
 
     randomQuestions();
+
+    return list;
+  }
+);
+
+export const getTestListAdmin = createAsyncThunk(
+  "admin/test/get_test_update_level_list",
+  async () => {
+    console.log("hi");
+
+    const colRef = await getDocs(collection(db, "test_level_up"));
+    const rawList = colRef.docs;
+
+    let list: TestType[] = [];
+
+    if (rawList.length > 0) {
+      list = rawList.map((doc) => {
+        const item = doc.data() as TestType;
+
+        item.id = doc.id;
+
+        return item;
+      });
+    }
 
     return list;
   }

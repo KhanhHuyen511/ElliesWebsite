@@ -14,7 +14,10 @@ import {
 import { Button, Input, TextArea } from "../../components";
 import EditProfile from "./EditProfile";
 import EditAvatar from "./EditAvatar";
-import { getCurrentStudent } from "../../redux/slice/studentSlice";
+import {
+  getCurrentStudent,
+  updatePublicSavedList,
+} from "../../redux/slice/studentSlice";
 import { formatDate, getDate } from "../../utils/utils";
 import { getDownloadURL, ref } from "firebase/storage";
 import { auth, storage } from "../../firebase/config";
@@ -72,6 +75,16 @@ const Profile = () => {
       });
       return ((right / total) * 100).toFixed();
     }
+  };
+
+  const handleUpdatePublicSavedList = async () => {
+    if (user)
+      await dispatch(
+        updatePublicSavedList({
+          userId: user.id,
+          newValue: !user?.isPublicSavedList,
+        })
+      );
   };
 
   return (
@@ -169,14 +182,12 @@ const Profile = () => {
                 <Input
                   label="Name"
                   value={user?.name}
-                  placeholder={""}
                   onChange={() => {}}
                   isDisabled
                 />
                 <Input
                   label="Gender"
                   value={user?.gender ? Gender[user.gender] : undefined}
-                  placeholder={""}
                   onChange={() => {}}
                   isDisabled
                 />
@@ -186,7 +197,6 @@ const Profile = () => {
                   value={
                     user?.birthday ? formatDate(user?.birthday) : undefined
                   }
-                  placeholder={""}
                   onChange={(e) => {}}
                   isDisabled
                 />
@@ -253,6 +263,22 @@ const Profile = () => {
                   })}
                 />
                 <p>Reload to apply change</p>
+              </div>
+            </div>
+
+            <div className={cx("section")}>
+              <p className={cx("section-title")}>
+                Public Saved list: {user?.isPublicSavedList ? "ON" : "OFF"}
+              </p>
+              <div className={cx("theme-wrapper")}>
+                <div
+                  onClick={handleUpdatePublicSavedList}
+                  className={cx("theme", {
+                    light: !user?.isPublicSavedList,
+                    dark: user?.isPublicSavedList,
+                  })}
+                />
+                {/* <p>Reload to apply change</p> */}
               </div>
             </div>
           </Col>

@@ -54,6 +54,7 @@ export interface Student {
   currentPathId?: string;
   level?: LevelType;
   savedList: [];
+  isPublicSavedList?: boolean;
   point: number;
 }
 

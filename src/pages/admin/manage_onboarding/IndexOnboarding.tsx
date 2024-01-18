@@ -8,7 +8,10 @@ import { Button, Checkbox } from "../../../components";
 import { OnboardingType } from "../../../types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import { getOnboardingList } from "../../../redux/slice/adminSlice";
+import {
+  getOnboardingList,
+  getOnboardingListAdmin,
+} from "../../../redux/slice/adminSlice";
 const cx = classNames.bind(style);
 
 const IndexOnboarding = () => {
@@ -22,7 +25,7 @@ const IndexOnboarding = () => {
 
   useEffect(() => {
     const fetchList = async () => {
-      const { payload: data } = await dispatch(getOnboardingList());
+      const { payload: data } = await dispatch(getOnboardingListAdmin());
 
       setList(data as OnboardingType[]);
     };
@@ -35,7 +38,7 @@ const IndexOnboarding = () => {
   };
 
   const reloadList = async () => {
-    const { payload: data } = await dispatch(getOnboardingList());
+    const { payload: data } = await dispatch(getOnboardingListAdmin());
 
     setList(data as OnboardingType[]);
   };

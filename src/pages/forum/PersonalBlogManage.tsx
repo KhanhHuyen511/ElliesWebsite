@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Blog, BlogState } from "../../types";
 import style from "./PersonalBlogManage.module.scss";
 import classNames from "classnames/bind";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { useNavigate } from "react-router-dom";
 import { getListBlogsByUserId } from "../../redux/slice/forumSlice";
 import { BlogCard } from "../../components";
 const cx = classNames.bind(style);

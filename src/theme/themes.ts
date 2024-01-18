@@ -11,6 +11,7 @@ interface Theme {
   bgCardLight: string;
   bgSaveLight: string;
   bgG050Color: string;
+  headerColor: string;
 }
 
 export const LightTheme: Theme = {
@@ -26,6 +27,7 @@ export const LightTheme: Theme = {
   bgSaveLight: "var(--BL050)",
   bgG050Color: "var(--G050)",
   iconMediumColor: "var(--text-bold-color)",
+  headerColor: "var(--header-color)",
 };
 
 export const DarkTheme: Theme = {
@@ -41,4 +43,5 @@ export const DarkTheme: Theme = {
   bgSaveLight: "var(--BG-m-Dark)",
   bgG050Color: "var(--BG-Dark)",
   iconMediumColor: "var(--G100)",
+  headerColor: "var(--header-color-dark)",
 };

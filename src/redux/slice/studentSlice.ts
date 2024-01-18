@@ -140,6 +140,22 @@ export const updateLevel = createAsyncThunk(
   }
 );
 
+export const updatePublicSavedList = createAsyncThunk(
+  "student/update_public_saved_list",
+  async ({ userId, newValue }: { userId: string; newValue: boolean }) => {
+    const q = query(collection(db, "students"), where("id", "==", userId));
+    const querySnapshot = (await getDocs(q)).docs[0];
+
+    const data = querySnapshot.data() as Student;
+
+    await updateDoc(querySnapshot.ref, {
+      isPublicSavedList: newValue,
+    });
+
+    return { ...data, isPublicSavedList: newValue };
+  }
+);
+
 const studentSlice = createSlice({
   name: "student",
   initialState,
@@ -156,6 +172,9 @@ const studentSlice = createSlice({
       state.currentAccount = action.payload;
     });
     builder.addCase(updateAvatar.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+    });
+    builder.addCase(updatePublicSavedList.fulfilled, (state, action) => {
       state.currentUser = action.payload;
     });
   },

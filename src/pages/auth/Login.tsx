@@ -22,6 +22,7 @@ import {
   getCurrentStudent,
 } from "../../redux/slice/studentSlice";
 import { Account, Student } from "../../types";
+import { REMOVE_ACTIVE_USER } from "../../redux/slice/authSlice";
 
 const cx = classNames.bind(styles);
 
@@ -40,6 +41,7 @@ const Login = () => {
 
         // update current Student
         dispatch(REMOVE_ACTIVE_STUDENT({}));
+        dispatch(REMOVE_ACTIVE_USER({}));
         navigate("/login");
       })
       .catch((error) => {
@@ -55,13 +57,17 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        toast.success("Đăng nhập thành công!");
+        toast.success("Login Successfully!!");
 
         return user;
       })
       .then(async (user) => {
         // check if account is locked, then log out.
         await dispatch(getCurrentAccount(user.uid)).then(async (data) => {
+          if ((data.payload as Account).role === "admin") {
+            navigate("/dashboard");
+            return;
+          }
           if (
             (data.payload as Account).role === "student" &&
             (data.payload as Account).isLocked &&
@@ -79,7 +85,7 @@ const Login = () => {
                 navigate("/onboarding");
               } else {
                 // if no
-                navigate("/");
+                navigate("/study");
               }
             });
           }
@@ -94,7 +100,7 @@ const Login = () => {
   const loginByFacebook = () => {
     signInWithPopup(auth, new FacebookAuthProvider())
       .then((result) => {
-        toast.success("Đăng nhập thành công!");
+        toast.success("Login Successfully!!");
         navigate("/");
       })
       .catch((error) => {
@@ -106,7 +112,7 @@ const Login = () => {
   const loginByGoogle = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
-        toast.success("Đăng nhập thành công!");
+        toast.success("Login Successfully!!");
         navigate("/");
       })
       .catch((error) => {

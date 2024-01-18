@@ -1,15 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  addDoc,
-  collection,
-  doc,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import { db } from "../../firebase/config";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { stat } from "fs";
 
 const initialState = {
   isLoggedIn: false,

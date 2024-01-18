@@ -241,7 +241,7 @@ const Start = () => {
           <div className={cx("point-wrapper")}>Point: {point}</div>
         </div>
       </section>
-      <h1>Round {round?.name}</h1>
+      <h1 className={cx("round-name")}>Round {round?.name}</h1>
       <section>
         <span
           className={cx("driver")}

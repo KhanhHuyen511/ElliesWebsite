@@ -5,7 +5,7 @@ import { Button, Checkbox } from "../../../components";
 import { TestType } from "../../../types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import { getTestList } from "../../../redux/slice/adminSlice";
+import { getTestList, getTestListAdmin } from "../../../redux/slice/adminSlice";
 import CreateTestForm from "./CreateTestForm";
 import EditTestForm from "./EditTestForm";
 import DeleteTestForm from "./DeleteTestForm";
@@ -22,7 +22,7 @@ const IndexTestUpdateLevel = () => {
 
   useEffect(() => {
     const fetchList = async () => {
-      const { payload: data } = await dispatch(getTestList());
+      const { payload: data } = await dispatch(getTestListAdmin());
 
       setList(data as TestType[]);
     };
@@ -35,7 +35,7 @@ const IndexTestUpdateLevel = () => {
   };
 
   const reloadList = async () => {
-    const { payload: data } = await dispatch(getTestList());
+    const { payload: data } = await dispatch(getTestListAdmin());
 
     setList(data as TestType[]);
   };

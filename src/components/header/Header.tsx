@@ -110,6 +110,7 @@ const Header = () => {
 
         // update current Student
         dispatch(REMOVE_ACTIVE_STUDENT({}));
+        dispatch(REMOVE_ACTIVE_USER({}));
         currentUser = undefined;
         navigate("/login");
       })
