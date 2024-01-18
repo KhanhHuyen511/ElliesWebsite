@@ -32,6 +32,7 @@ const BlogDetail = ({
   const navigate = useNavigate();
 
   const userID = useSelector((state: RootState) => state.auth.userID);
+  const userRole = useSelector((state: RootState) => state.auth.userRole);
   const data = useSelector((state: RootState) => state.forum.currentBlog);
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const BlogDetail = ({
               <PencilIcon className={cx("icon", "edit-icon")} />
             </span>
           )}
-          {userID === data?.userId && (
+          {(userID === data?.userId || userRole === "admin") && (
             <span onClick={onDelete}>
               <TrashIcon className={cx("icon", "trash-icon")} />
             </span>
