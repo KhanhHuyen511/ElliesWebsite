@@ -49,7 +49,6 @@ const Dashboard = () => {
           <Col lg={9} className={cx("bar-chart-wrapper")}>
             <p className={cx("sub-title")}>Students</p>
             <StudentChart filter={filterOptions} />
-            <div className={cx("detail")}>Detail</div>
           </Col>
           <Col lg={3}>
             <div className={cx("pie-chart-wrapper")}>
